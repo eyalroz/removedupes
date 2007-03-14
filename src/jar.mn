@@ -1,0 +1,23 @@
+removedupes.jar:
+*   content/removedupes/removedupes-dialog.js                     (chrome/content/removedupes/removedupes-dialog.js)
+*   content/removedupes/removedupes.js                            (chrome/content/removedupes/removedupes.js)
+*   content/removedupes/removedupes-common.js                     (chrome/content/removedupes/removedupes-common.js)
+*   content/removedupes/removedupes-prefs.js                      (chrome/content/removedupes/removedupes-prefs.js)
+*   content/removedupes/removedupes-dialog.xul                    (chrome/content/removedupes/removedupes-dialog.xul)
+*   content/removedupes/removedupes-mailWindowOverlay.xul         (chrome/content/removedupes/removedupes-mailWindowOverlay.xul)
+*   locale/en-US/removedupes/removedupes.dtd                      (chrome/locale/en-US/removedupes/removedupes.dtd)
+*   locale/en-US/removedupes/removedupes-prefs.dtd                (chrome/locale/en-US/removedupes/removedupes-prefs.dtd)
+*   locale/en-US/removedupes/removedupes.properties               (chrome/locale/en-US/removedupes/removedupes.properties)
+*   content/removedupes/removedupes-prefs.xul                     (chrome/content/removedupes/removedupes-prefs.xul)
+#ifdef MOZ_THUNDERBIRD
+    skin/classic/removedupes/removedupes-dialog.css               (chrome/skin/classic/removedupes/removedupes-dialog-tbird.css)
+#else
+    skin/classic/removedupes/removedupes-dialog.css               (chrome/skin/classic/removedupes/removedupes-dialog-suite.css)
+*   content/removedupes/removedupes-preftree.xul                  (chrome/content/removedupes/removedupes-preftree.xul)
+*   content/removedupes/contents.rdf                              (chrome/content/removedupes/contents.rdf)
+*   skin/classic/removedupes/contents.rdf                         (chrome/skin/classic/removedupes/contents.rdf)
+*   locale/en-US/removedupes/contents.rdf                         (chrome/locale/en-US/removedupes/contents.rdf)
+#endif
+#ifdef REMOVE_THIS_IFDEF_WHEN_YOU_HAVE_AN_ICON
+    content/removedupes/removedupes-redome.png                    (chrome/content/removedupes/removedupes-redome.png)
+#endif

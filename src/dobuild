@@ -1,0 +1,90 @@
+#!/bin/bash
+
+SHORTNAME="removedupes"
+VERSION="0.1"
+
+TARGET="$1"
+case "$TARGET" in
+    tbird | tb | thunderbird)
+        TARGET=tbird
+        DEFS="-DMOZ_THUNDERBIRD"
+        ;;
+    suite | sm | seamonkey)
+        TARGET=suite
+        DEFS="-DMOZ_SEAMONKEY"
+        ;;
+    *)
+	echo "please specify either tbird or suite"
+	exit 1
+	;;
+esac
+
+shift 1
+
+if [ -n "$1" ]; then
+	DEFS+=" -DDEBUG"
+	while [ -n "$1" ]; do
+		DEFS="$DEFS -DDEBUG_$1"
+		shift 1
+	done
+fi
+
+DEFS="$DEFS -DVERSION=$VERSION -DSHORTNAME=$SHORTNAME"
+echo -e "Building the XPI with the following definitions:\n\n$DEFS\n"
+BUILDDIR="build/$TARGET"
+XPINAME="${SHORTNAME}_${TARGET}.xpi"
+BUILDTOOLSDIR="buildtools"
+export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
+
+rm -rf $BUILDDIR/*
+rm -rf $BUILDDIR
+mkdir $BUILDDIR
+
+$BUILDTOOLSDIR/preprocessor.pl $DEFS jar.mn > $BUILDDIR/jar.mn
+$BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $DEFS"  -s . -d . < $BUILDDIR/jar.mn || exit
+echo -e "\nJAR files ready\n"
+$BUILDTOOLSDIR/preprocessor.pl $DEFS install.rdf > $BUILDDIR/install.rdf
+rm -rf ${SHORTNAME}
+#rm -rf bidimailpack-mac-skin
+rm -f installed-chrome.txt
+
+mkdir $BUILDDIR/defaults
+mkdir $BUILDDIR/defaults/preferences
+cp defaults/preferences/${SHORTNAME}.js $BUILDDIR/defaults/preferences
+mkdir $BUILDDIR/chrome
+mv ${SHORTNAME}.jar $BUILDDIR/chrome/${SHORTNAME}.jar
+
+cp COPYING $BUILDDIR
+
+case "$TARGET" in
+    tbird)
+#        mkdir $BUILDDIR/platform/
+#        mkdir $BUILDDIR/platform/Darwin
+#        mkdir $BUILDDIR/platform/Darwin/chrome
+#        mv bidimailpack-mac-skin.jar $BUILDDIR/platform/Darwin/chrome
+        cp chrome.manifest $BUILDDIR/
+#        cp platform/Darwin/chrome.manifest $BUILDDIR/platform/Darwin/chrome.manifest
+        cd $BUILDDIR
+#         not added to zip:      
+#	  platform/Darwin/chrome.manifest \
+#	  platform/Darwin/chrome/bidimailpack-mac-skin.jar \
+	zip -r $XPINAME  \
+	  COPYING \
+	  chrome/${SHORTNAME}.jar \
+	  defaults/ \
+	  install.rdf \
+	  chrome.manifest || exit
+        ;;
+    suite)
+        $BUILDTOOLSDIR/preprocessor.pl $DEFS install.js > $BUILDDIR/install.js
+        cd $BUILDDIR
+	zip -r $XPINAME  \
+	  COPYING \
+	  chrome/${SHORTNAME}.jar \
+	  defaults/ \
+	  install.rdf \
+	  install.js || exit
+        ;;
+esac
+
+echo -e "\nXPI ready\n"

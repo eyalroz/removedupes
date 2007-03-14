@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://communicator/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://messenger/skin/prefPanels.css" type="text/css"?>
+<?xml-stylesheet href="chrome://removedupes/skin/removedupes-dialog.css" type="text/css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://removedupes/locale/removedupes.dtd">
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="initShowMessagesDialog();"
+        buttons="accept,cancel"
+        ondialogaccept="onAccept();"
+        ondialogcancel="onCancel();"
+        id="removeDuplicatesReviewDialog"
+        title="&removedupes_dialog.dialog_title;">
+
+  <script type="application/x-javascript" src="chrome://removedupes/content/removedupes.js"/>
+  <script type="application/x-javascript" src="chrome://removedupes/content/removedupes-common.js"/>
+  <script type="application/x-javascript" src="chrome://removedupes/content/removedupes-dialog.js"/>
+
+
+  <hbox flex="1">
+    <vbox flex="1">
+      <description>&removedupes_dialog.tree_label;</description>
+      <spacer />
+      <tree id="dupeSequencesTree"
+            enableColumnDrag="true"
+            height="250"
+            width="700"
+            flex="1"
+            ondblclick="onDoubleClick();">
+
+        <treecols>
+          <!-- add num lines col -->
+          <treecol width="40" id="dummyCell" primary="true"/>
+          <treecol id="treeLineIndex"
+                   label="&removedupes_dialog.id;" hidden="true"/>
+          <splitter class="tree-splitter"/>
+          <treecol id="keepColumn" width="60" label="&removedupes_dialog.keep_flag;"/>
+          <splitter class="tree-splitter"/>
+          <treecol id="senderColumn"
+                   label="&removedupes_dialog.sender;" flex="5"/>
+          <splitter class="tree-splitter"/>
+          <treecol id="subjectColumn"
+                   label="&removedupes_dialog.subject;" flex="5"/>
+          <splitter class="tree-splitter"/>
+          <treecol id="folderColumn"
+                   label="&removedupes_dialog.folder;" flex="2"/>
+          <splitter class="tree-splitter"/>
+          <treecol id="dateColumn"  width="150"
+                   label="&removedupes_dialog.date;" flex="3"/>
+          <splitter class="tree-splitter"/>
+          <treecol id="lineCountColumn"
+                   label="&removedupes_dialog.line_count;" flex="2"/>
+        </treecols>
+        <treechildren id="dupeSequencesTreeChildren"/>
+      </tree>
+      <spacer />
+      <checkbox id="delete_permanently" label="&delete_permanently.label;" accesskey="&delete_permanently.accesskey;"/>
+    </vbox>
+    <vbox width="40">
+      <description  width="40">
+        &removedupes_dialog.keep_label;
+      </description>
+      <button id="keepFirstButton" label="&removedupes_dialog.keep_first.label;" oncommand="markKeepOneInEveryDupeSet();"/>
+      <button id="keepAllButton" label="&removedupes_dialog.keep_all.label;" oncommand="markNoDupesForDeletion();"/>
+      <button id="keepNoneButton"  label="&removedupes_dialog.keep_none.label;" oncommand="markAllDupesForDeletion();"/>
+      <spacer flex="1"/>
+    </vbox>
+  </hbox>
+</dialog>

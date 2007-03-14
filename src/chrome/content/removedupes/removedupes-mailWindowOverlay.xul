@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE dialog [
+<!ENTITY % removedupesDTD SYSTEM "chrome://removedupes/locale/removedupes.dtd">
+%removedupesDTD;
+]>
+
+<overlay id="removedupesOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript" src="chrome://removedupes/content/removedupes.js"/>
+  <script type="application/x-javascript" src="chrome://removedupes/content/removedupes-common.js"/>
+
+  <popup id="folderPaneContext">
+     <menuitem id="removeDuplicatesMenuItem" 
+               label="&removedupes.remove_duplicates_menuitem.label;"
+               insertafter="folderPaneContext-copy-location"
+               oncommand="searchAndRemoveDuplicateMessages();"/> 
+     <menuseparator id="folderPaneContext-removedupes-separator" insertafter="folderPaneContext-copy-location"/>  
+  </popup> 
+</overlay>

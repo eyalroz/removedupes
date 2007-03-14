@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://removedupes/locale/removedupes-prefs.dtd">
+
+<overlay id="removedupesPrefTreeOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <treechildren id="messengerChildren">
+    <treeitem id="removeDupesPrefTree" 
+              container="false">
+      <treerow>
+        <treecell url="chrome://removedupes/content/removedupes-prefs.xul" 
+                  label="&removedupes-preftree-label;"/>
+      </treerow>
+    </treeitem>
+  </treechildren>
+</overlay>

@@ -1,0 +1,12 @@
+treechildren::-moz-tree-cell(keep) {
+  list-style-image: url("chrome://messenger/skin/icons/check.png");
+  background: url("chrome://messenger/skin/icons/check.png") no-repeat;
+  background-position: center center;
+}
+
+treechildren::-moz-tree-cell(delete) {
+  list-style-image: url("chrome://messenger/skin/icons/notchecked.png");
+  background: url("chrome://messenger/skin/icons/notchecked.png") no-repeat;
+  background-position: center center;
+}
+
