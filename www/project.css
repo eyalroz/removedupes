@@ -13,3 +13,7 @@ a.download-xpi {
   margin-top: 2%;
   margin-bottom: 2%;
 }
+
+p#mozdev-feedback {
+  display: none;
+}
