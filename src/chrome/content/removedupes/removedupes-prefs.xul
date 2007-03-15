@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/"?>
+<?xml-stylesheet href="chrome://messenger/skin/preferences/preferences.css"?>
+
+#ifdef MOZ_THUNDERBIRD
+<!DOCTYPE prefwindow [
+  <!ENTITY % removedupesDTD SYSTEM
+             "chrome://removedupes/locale/removedupes-prefs.dtd">
+  %removedupesDTD;
+]>
+#else
+<!DOCTYPE page SYSTEM "chrome://removedupes/locale/removedupes-prefs.dtd">
+#endif
+
+#ifdef MOZ_THUNDERBIRD
+<prefwindow xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+            title="&prefs_dialog_title;"
+            dlgbuttons="accept,cancel">
+  <prefpane id="removeDupesPrefPane"
+            helpURI="&guide-url;"
+            onpaneload="gRemoveDupesPrefPane.init();">
+    <preferences id="removedupesPrefs">
+      <preference id="removedupes.mail.comparison_criteria.from"
+                  name="removedupes.mail.comparison_criteria.from"
+                  type="bool"/>
+      <preference id="removedupes.mail.comparison_criteria.message_id"
+                  name="removedupes.mail.comparison_criteria.message_id"
+                  type="bool"/>
+      <preference id="removedupes.mail.comparison_criteria.num_lines"
+                  name="removedupes.mail.comparison_criteria.num_lines"
+                  type="bool"/>
+      <preference id="removedupes.mail.comparison_criteria.send_time"
+                  name="removedupes.mail.comparison_criteria.send_time"
+                  type="bool"/>
+      <preference id="removedupes.mail.comparison_criteria.subject"
+                  name="removedupes.mail.comparison_criteria.subject"
+                  type="bool"/>
+      <preference id="removedupes.mail.confirm_search_and_deletion"
+                  name="removedupes.mail.confirm_search_and_deletion"
+                  type="bool"/>
+      <preference id="removedupes.mail.search_subfolders_first"
+                  name="removedupes.mail.search_subfolders_first"
+                  type="bool"/>
+      <preference id="removedupes.mail.move_to_trash_by_default"
+                  name="removedupes.mail.move_to_trash_by_default"
+                  type="bool"/>
+    </preferences>
+#else
+<page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      onload="parent.initPanel(panel);"
+      onunload="gBDMPrefPane.onunload();"
+      headertitle="&removedupes-preftree-page-title;">
+
+#endif
+
+    <script type="application/x-javascript"
+      src="chrome://removedupes/content/removedupes-prefs.js"/>
+#ifndef MOZ_THUNDERBIRD
+    <script type="application/x-javascript">
+      var panel = "chrome://removedupes/content/removedupes-prefs.xul";
+      var _elementIDs = ["removedupes.mail.search_subfolders_first",
+                         "removedupes.mail.confirm_search_and_deletion",
+                         "removedupes.mail.move_to_trash_by_default",
+                         "removedupes.mail.comparison_criteria.from",
+                         "removedupes.mail.comparison_criteria.message_id",
+                         "removedupes.mail.comparison_criteria.num_lines",
+                         "removedupes.mail.comparison_criteria.send_time",
+                         "removedupes.mail.comparison_criteria.subject"];
+    </script>
+#endif
+
+
+    <tabbox flex="1">
+
+      <tabs id="prefTabBox">
+        <tab id="general_settings_tab"  label="&general_settings.tab_title;"/>
+        <tab id="message_comparison_tab" label="&message_comparison.tab_title;"/>
+      </tabs>
+
+      <tabpanels flex="1">
+        <tabpanel id="general_settings_panel">
+          <vbox flex="1">
+            <checkbox preference="removedupes.mail.search_subfolders_first"
+              prefstring="removedupes.mail.search_subfolders_first"
+              id="removedupes.mail.search_subfolders_first"
+              label="&general_settings.search_subfolders_first.label;"
+              accesskey="&general_settings.search_subfolders_first.access_key;"
+              autostretch="never"/>
+            <checkbox preference="removedupes.mail.confirm_search_and_deletion"
+              prefstring="removedupes.mail.confirm_search_and_deletion"
+              id="removedupes.mail.confirm_search_and_deletion"
+              label="&general_settings.confirm_search_and_deletion.label;"
+              accesskey="&general_settings.confirm_search_and_deletion.access_key;"
+              autostretch="never"/>
+            <spacer/>
+            <description>&general_settings.move_to_trash_by_default.description;</description>
+            <hbox class="indent">
+              <radiogroup preference="removedupes.mail.move_to_trash_by_default"
+                prefstring="removedupes.mail.move_to_trash_by_default"
+                preftype="bool"
+                id="removedupes.mail.move_to_trash_by_default">              
+                <radio value="true" label="&general_settings.move_to_trash_by_default.true.label;" accesskey="&general_settings.move_to_trash_by_default.true.accesskey;"/>
+                <radio value="false" label="&general_settings.move_to_trash_by_default.false.label;" accesskey="&general_settings.move_to_trash_by_default.false.accesskey;"/>
+              </radiogroup>
+            </hbox>
+          </vbox>
+        </tabpanel>
+
+        <tabpanel id="changelog">
+          <vbox flex="1">
+            <description>&message_comparison.tab_description;</description>
+            <checkbox preference="removedupes.mail.comparison_criteria.from"
+              prefstring="removedupes.mail.comparison_criteria.from"
+              id="removedupes.mail.comparison_criteria.from"
+              label="&message_comparison.from.label;"
+              accesskey="&message_comparison.from.access_key;"
+              autostretch="never"/>
+            <checkbox preference="removedupes.mail.comparison_criteria.message_id"
+              prefstring="removedupes.mail.comparison_criteria.message_id"
+              id="removedupes.mail.comparison_criteria.message_id"
+              label="&message_comparison.message_id.label;"
+              accesskey="&message_comparison.message_id.access_key;"
+              autostretch="never"/>
+            <checkbox preference="removedupes.mail.comparison_criteria.num_lines"
+              prefstring="removedupes.mail.comparison_criteria.num_lines"
+              id="removedupes.mail.comparison_criteria.num_lines"
+              label="&message_comparison.num_lines.label;"
+              accesskey="&message_comparison.num_lines.access_key;"
+              autostretch="never"/>
+            <checkbox preference="removedupes.mail.comparison_criteria.send_time"
+              prefstring="removedupes.mail.comparison_criteria.send_time"
+              id="removedupes.mail.comparison_criteria.send_time"
+              label="&message_comparison.send_time.label;"
+              accesskey="&message_comparison.send_time.access_key;"
+              autostretch="never"/>
+            <checkbox preference="removedupes.mail.comparison_criteria.subject"
+              prefstring="removedupes.mail.comparison_criteria.subject"
+              id="removedupes.mail.comparison_criteria.subject"
+              label="&message_comparison.subject.label;"
+              accesskey="&message_comparison.subject.access_key;"
+              autostretch="never"/>
+          </vbox>
+        </tabpanel>
+      </tabpanels>
+    </tabbox>
+#ifdef MOZ_THUNDERBIRD
+  </prefpane>
+</prefwindow>
+#else
+
+</page>
+#endif
