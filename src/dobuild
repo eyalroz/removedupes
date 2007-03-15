@@ -33,7 +33,7 @@ DEFS="$DEFS -DVERSION=$VERSION -DSHORTNAME=$SHORTNAME"
 echo -e "Building the XPI with the following definitions:\n\n$DEFS\n"
 BUILDDIR="build/$TARGET"
 XPINAME="${SHORTNAME}_${TARGET}.xpi"
-BUILDTOOLSDIR="buildtools"
+BUILDTOOLSDIR="../buildtools"
 export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
 
 rm -rf $BUILDDIR/*
