@@ -187,15 +187,28 @@ function sortAndFindDuplicates(messageRecords,dupeMessageRecords,dupeInSequenceI
   dupeIndicators = new Array(messageRecords.length);
 
   for (var i=0; i < messageRecords.length-1; i++) {
-    if (!(areDupes(messageRecords[i],messageRecords[i+1])))
+    // at this point, messageRecords[i] is not a dupe of any previous message
+    if (!(areDupes(messageRecords[i],messageRecords[i+1]))) {
+      // so messageRecords[i] is not a dupe of any message at all
+#ifdef DEBUG_sortAndFindDuplicates
+      jsConsoleService.logStringMessage('record ' + i + ' not a dupe');
+#endif
       continue;
+    }
+    // messageRecords[i] is the first dupe in a sequence of dupes
     dupeMessageRecords.push(messageRecords[i]);
-    dupeInSequenceIndicators[i] = false;
+    dupeInSequenceIndicators[dupeMessageRecords.length-1] = false;
       // the first dupe is not 'in sequence' to other dupes
+#ifdef DEBUG_sortAndFindDuplicates
+      jsConsoleService.logStringMessage('record ' + i + ' starts dupe sequence');
+#endif
     do {
       i++;
       dupeMessageRecords.push(messageRecords[i]);
-      dupeInSequenceIndicators[i] = true;
+      dupeInSequenceIndicators[dupeMessageRecords.length-1] = true;
+#ifdef DEBUG_sortAndFindDuplicates
+      jsConsoleService.logStringMessage('record ' + i + ' in dupe sequence');
+#endif
     } while (   (i < messageRecords.length-1) 
              && (areDupes(messageRecords[i],messageRecords[i+1])) );
   }
