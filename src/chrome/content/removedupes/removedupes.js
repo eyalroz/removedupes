@@ -100,7 +100,7 @@ function searchAndRemoveDuplicateMessages()
   delete messageRecords;
   if (dupeMessageRecords.length == 0) {
     // maybe this would be better as a message in the bottom status bar
-    alert(gRemoveDupesStrings.GetStringFromName("no_duplicates_found"));
+    alert(gRemoveDupesStrings.GetStringFromName("removedupes.no_duplicates_found"));
   }
   else reviewAndRemove(dupeMessageRecords,dupeInSequenceIndicators);
   delete dupeMessageRecords;
@@ -110,6 +110,9 @@ function searchAndRemoveDuplicateMessages()
 
 function addSearchFolders(folder, searchFolders, postOrderTraversal)
 {
+#ifdef DEBUG_addSearchFolders
+  jsConsoleService.logStringMessage('addSearchFolders for folder ' + folder.abbreviatedName);
+#endif
   // TODO: what we really need to be doing is check among the initial
   // selected folder whether one of them is one of the four folders below,
   // _or_a_subfolder_thereof_; we don't need this checked in every run
@@ -120,8 +123,12 @@ function addSearchFolders(folder, searchFolders, postOrderTraversal)
       || (folder.abbreviatedName == gRemoveDupesStrings.GetStringFromName("removedupes.sent_folder_name")) )
     return;
 
-  if (!postOrderTraversal)
+  if (!postOrderTraversal) {
+#ifdef DEBUG_addSearchFolders
+    jsConsoleService.logStringMessage('not postorder; pushing folder ' + folder.abbreviatedName);
+#endif
     searchFolders.push(folder);
+  }
     
   // traverse the children
 
@@ -129,15 +136,23 @@ function addSearchFolders(folder, searchFolders, postOrderTraversal)
     var subFoldersIterator = folder.GetSubFolders();
     do {
       addSearchFolders(
-        subFolders.currentItem().QueryInterface(Components.interfaces.nsIMsgFolder),
+        subFoldersIterator.currentItem().QueryInterface(Components.interfaces.nsIMsgFolder),
         searchFolders,
-        subfoldersFirst);
-      subFoldersIterator.next();
-    } while(!subFoldersIterator.isDone());
+        postOrderTraversal);
+      try {
+        subFoldersIterator.next();
+      } catch (ex) {
+        break;
+      }
+    } while(true);
   }
   
-  if (postOrderTraversal)
+  if (postOrderTraversal) {
+#ifdef DEBUG_addSearchFolders
+    jsConsoleService.logStringMessage('postorder; pushing folder ' + folder.abbreviatedName);
+#endif
     searchFolders.push(folder);
+  }
 }
 
 function collectMessages(topFolders,collectedRecords,subfoldersFirst)
