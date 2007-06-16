@@ -33,3 +33,6 @@ locale removedupes en-US jar:chrome/removedupes.jar!/locale/en-US/removedupes/
 skin removedupes classic/1.0 jar:chrome/removedupes.jar!/skin/classic/removedupes/
 overlay chrome://messenger/content/mailWindowOverlay.xul chrome://removedupes/content/removedupes-mailWindowOverlay.xul
 style chrome://removedupes/content/removedupes-dialog.xul chrome://removedupes/skin/style.css
+#ifdef MOZ_TOOLKIT_SEAMONKEY
+overlay chrome://communicator/content/pref/preftree.xul chrome://removedupes/content/removedupes-preftree.xul
+#endif
