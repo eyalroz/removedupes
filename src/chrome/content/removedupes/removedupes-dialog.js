@@ -16,6 +16,10 @@ const gDateService =
   Components.classes["@mozilla.org/intl/scriptabledateformat;1"]
             .getService(Components.interfaces.nsIScriptableDateFormat);
 
+const gHeaderParser = 
+  Components.classes["@mozilla.org/messenger/headerparser;1"]
+            .getService(Components.interfaces.nsIMsgHeaderParser);
+
 
 function initShowMessagesDialog()
 {
@@ -96,7 +100,7 @@ function rebuildDuplicateSetsTree()
 #ifdef DEBUG_rebuildDuplicateSetsTree
       jsConsoleService.logStringMessage('dupeMessageRecords.length = ' + dupeMessageRecords.length);
    for (var i=0; i<dupeMessageRecords.length; i++ ) {
-     jsConsoleService.logStringMessage('dupeInSequenceIndicators[i] = ' + dupeInSequenceIndicators[i] + ' ; deletionIndicators[i] = ' + deletionIndicators[i]);
+     jsConsoleService.logStringMessage('dupeInSequenceIndicators[' + i + '] = ' + dupeInSequenceIndicators[i] + ' ; deletionIndicators[' + i + '] = ' + deletionIndicators[i]);
    }
 #endif
 
@@ -147,8 +151,12 @@ function createMessageTreeRow(messageRecord, deleteIt, treeLineIndex)
   // recall we set the child nodes order in createMessageRowTemplate()
   
   row.childNodes.item(1).setAttribute("label", treeLineIndex);
+  // this next line allows us to use the css to choose whether to 
+  // use a [ ] image or a [v] image
   row.childNodes.item(2).setAttribute("properties", (deleteIt ? "delete" : "keep"));
-  row.childNodes.item(3).setAttribute("label", messageRecord.author); 
+//  row.childNodes.item(3).setAttribute("label", messageRecord.author); 
+  row.childNodes.item(3).setAttribute("label", 
+    gHeaderParser.extractHeaderAddressMailboxes(null, messageRecord.author));
   row.childNodes.item(4).setAttribute("label", messageRecord.subject);
   row.childNodes.item(5).setAttribute("label", messageRecord.folderName);
   row.childNodes.item(6).setAttribute("label", formatSendTime(messageRecord.sendTime));
@@ -207,6 +215,30 @@ function findTreeRow(node, rowIndex )
   }
 
   return null;
+}
+
+function onClick()
+{
+#ifdef DEBUG_onClick
+  jsConsoleService.logStringMessage('in onClick()');
+#endif
+
+  var currentTreeIndex = gTree.currentIndex;
+
+  var view = gTree.view;
+  var recordIndex;
+
+  recordIndex = view.getCellText(currentTreeIndex, gtreeLineIndexColumn);
+  if (recordIndex == null)
+    return;
+
+  //messageHeader = messenger.messageServiceFromURI(dupeMessageRecords[recordIndex].uri).messageURIToMsgHdr(dupeMessageRecords[recordIndex].uri);
+  msgWindow.SelectFolder(messenger.msgHdrFromURI(dupeMessageRecords[recordIndex].uri).folder.URI);
+  msgWindow.SelectMessage(dupeMessageRecords[recordIndex].uri);
+//  msgWindow.SelectMessage(dupeMessageRecords[recordIndex].uri);
+#ifdef DEBUG_onClick
+  jsConsoleService.logStringMessage('done with onClick()');
+#endif
 }
 
 function onDoubleClick()

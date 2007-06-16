@@ -28,10 +28,10 @@
             height="250"
             width="700"
             flex="1"
+            onclick="onClick();"
             ondblclick="onDoubleClick();">
 
         <treecols>
-          <!-- add num lines col -->
           <treecol width="40" id="dummyCell" primary="true"/>
           <treecol id="treeLineIndex"
                    label="&removedupes_dialog.id;" hidden="true"/>
