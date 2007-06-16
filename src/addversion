@@ -21,8 +21,8 @@ mkdir ${DOWNLOADS}/${VERSION}
 ./dobuild suite && ./dobuild tbird && ./dobuild suiterunner
 #or quit...
 
-cp build/tbird/${SHORTNAME}_tbird.xpi build/suite/${SHORTNAME}_suite.xpi ${DOWNLOADS}/${VERSION}/ 
-cp -f build/tbird/${SHORTNAME}_tbird.xpi build/suite/${SHORTNAME}_suite.xpi ${DOWNLOADS}/latest/
+cp build/tbird/${SHORTNAME}_tbird.xpi build/suite/${SHORTNAME}_suite.xpi build/suiterunner/${SHORTNAME}_suiterunner.xpi ${DOWNLOADS}/${VERSION}/ 
+cp -f build/tbird/${SHORTNAME}_tbird.xpi build/suite/${SHORTNAME}_suite.xpi build/suiterunner/${SHORTNAME}_suiterunner.xpi ${DOWNLOADS}/latest/
 
 cvs -d :pserver:eyalroz@mozdev.org/cvs tag  ${RELEASE_TAG}
 
