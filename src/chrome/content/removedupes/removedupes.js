@@ -90,6 +90,9 @@ function searchAndRemoveDuplicateMessages()
 
   var selectedFolders = GetSelectedMsgFolders();
   var messageRecords = new Array;
+#ifdef DEBUG_searchAndRemoveDuplicateMessages
+  jsConsoleService.logStringMessage('calling collectMessages for selectedFolders = ' + selectedFolders);
+#endif
   collectMessages(selectedFolders,messageRecords,gRemoveDupesPrefs.getBoolPref("search_subfolders_first", false));
   // not sure if we need this or not
   SelectFolder(selectedFolders[0].URI);
@@ -153,6 +156,9 @@ function addSearchFolders(folder, searchFolders, postOrderTraversal)
 #endif
     searchFolders.push(folder);
   }
+#ifdef DEBUG_addSearchFolders
+  jsConsoleService.logStringMessage('returning from addSearchFolders for folder ' + folder.abbreviatedName);
+#endif
 }
 
 function collectMessages(topFolders,collectedRecords,subfoldersFirst)
@@ -165,9 +171,11 @@ function collectMessages(topFolders,collectedRecords,subfoldersFirst)
   }
 
   for(var i = 0; i < searchFolders.length; i++) {
+   if (searchFolders[i].isServer == true) continue;
     // add records for the messages in the i'th search folder
     var folderMessageHdrsIterator =
       searchFolders[i].getMessages(msgWindow);
+
     while (folderMessageHdrsIterator.hasMoreElements()) {
       var messageHdr = 
         folderMessageHdrsIterator.getNext()
