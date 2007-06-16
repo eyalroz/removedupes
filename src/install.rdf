@@ -56,13 +56,24 @@
        <em:maxVersion>2.0.*</em:maxVersion>
      </Description>
     </em:targetApplication>
-#else
+#endif
+#ifdef MOZ_PRETOOLKIT_SEAMONKEY
     <!-- Seamonkey -->
     <em:targetApplication>
      <Description>
        <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
        <em:minVersion>1.0</em:minVersion>
-       <em:maxVersion>1.1</em:maxVersion>
+       <em:maxVersion>1.*</em:maxVersion>
+     </Description>
+    </em:targetApplication>
+#endif
+#ifdef MOZ_TOOLKIT_SEAMONKEY
+    <!-- Seamonkey -->
+    <em:targetApplication>
+     <Description>
+       <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
+       <em:minVersion>1.0</em:minVersion>
+       <em:maxVersion>2.0.*</em:maxVersion>
      </Description>
     </em:targetApplication>
 #endif
