@@ -1,0 +1,37 @@
+#!/bin/sh -x
+#
+# run this from the src/ directory!
+
+DOWNLOADS="../downloads"
+BUILDTOOLS="../buildtools"
+
+# determine version number
+VERSION=`grep VERSION=\" dobuild | cut -d\" -f2`
+SHORTNAME=`grep SHORTNAME=\" dobuild | cut -d\" -f2`
+USCORED_VERSION=`echo $VERSION | tr . _`
+CAPS_SHORTNAME=`echo ${SHORTNAME} | tr a-z A-Z`
+RELEASE_TAG="${CAPS_SHORTNAME}_${USCORED_VERSION}"
+
+
+# create new version directory
+
+mkdir ${DOWNLOADS}/${VERSION}
+
+# dobuild
+./dobuild suite && ./dobuild tbird && ./dobuild suiterunner
+#or quit...
+
+cp build/tbird/${SHORTNAME}_tbird.xpi build/suite/${SHORTNAME}_suite.xpi ${DOWNLOADS}/${VERSION}/ 
+cp -f build/tbird/${SHORTNAME}_tbird.xpi build/suite/${SHORTNAME}_suite.xpi ${DOWNLOADS}/latest/
+
+cvs -d :pserver:eyalroz@mozdev.org/cvs tag  ${RELEASE_TAG}
+
+cd ${BUILDTOOLS}
+
+cvs -d :pserver:eyalroz@mozdev.org/cvs tag  ${RELEASE_TAG}
+
+cd ${DOWNLOADS}
+cvs -d :pserver:eyalroz@mozdev.org/cvs add ${VERSION}/ 
+cvs -d :pserver:eyalroz@mozdev.org/cvs add ${VERSION}/${SHORTNAME}_tbird.xpi ${VERSION}/${SHORTNAME}_suite.xpi 
+cvs -d :pserver:eyalroz@mozdev.org/cvs ci
+
