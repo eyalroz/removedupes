@@ -32,6 +32,6 @@ cvs -d :pserver:eyalroz@mozdev.org/cvs tag  ${RELEASE_TAG}
 
 cd ${DOWNLOADS}
 cvs -d :pserver:eyalroz@mozdev.org/cvs add ${VERSION}/ 
-cvs -d :pserver:eyalroz@mozdev.org/cvs add ${VERSION}/${SHORTNAME}_tbird.xpi ${VERSION}/${SHORTNAME}_suite.xpi 
+cvs -d :pserver:eyalroz@mozdev.org/cvs add ${VERSION}/${SHORTNAME}_tbird.xpi ${VERSION}/${SHORTNAME}_suite.xpi ${VERSION}/${SHORTNAME}_suiterunner.xpi
 cvs -d :pserver:eyalroz@mozdev.org/cvs ci
 
