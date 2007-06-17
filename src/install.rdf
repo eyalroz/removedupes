@@ -78,9 +78,7 @@
     </em:targetApplication>
 #endif
 
-#ifdef REMOVE_THIS_IFDEF_WHEN_YOU_HAVE_AN_ICON
     <em:iconURL>chrome://removedupes/content/removedupes.png</em:iconURL>
-#endif
 
 #ifdef MOZ_THUNDERBIRD
     <em:optionsURL>chrome://removedupes/content/removedupes-prefs.xul</em:optionsURL>
