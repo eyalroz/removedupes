@@ -16,11 +16,6 @@ const gDateService =
   Components.classes["@mozilla.org/intl/scriptabledateformat;1"]
             .getService(Components.interfaces.nsIScriptableDateFormat);
 
-const gHeaderParser = 
-  Components.classes["@mozilla.org/messenger/headerparser;1"]
-            .getService(Components.interfaces.nsIMsgHeaderParser);
-
-
 function initShowMessagesDialog()
 {
   // TODO: If we're only using some of the fields for comparison,
@@ -154,9 +149,7 @@ function createMessageTreeRow(messageRecord, deleteIt, treeLineIndex)
   // this next line allows us to use the css to choose whether to 
   // use a [ ] image or a [v] image
   row.childNodes.item(2).setAttribute("properties", (deleteIt ? "delete" : "keep"));
-//  row.childNodes.item(3).setAttribute("label", messageRecord.author); 
-  row.childNodes.item(3).setAttribute("label", 
-    gHeaderParser.extractHeaderAddressMailboxes(null, messageRecord.author));
+  row.childNodes.item(3).setAttribute("label", messageRecord.author); 
   row.childNodes.item(4).setAttribute("label", messageRecord.subject);
   row.childNodes.item(5).setAttribute("label", messageRecord.folderName);
   row.childNodes.item(6).setAttribute("label", formatSendTime(messageRecord.sendTime));
