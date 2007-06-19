@@ -31,11 +31,11 @@ function messageRecord(messageHdr,recordIndex)
   // the index is used for comparing collection order
   this.recordIndex = recordIndex;
   
-  this.messageId   = (useMessagedId  ? messageHdr.messageId     : null);
-  this.sendTime    = (useSendTime    ? messageHdr.dateInSeconds : null);
-  this.subject     = (useSubject     ? messageHdr.subject       : null);
-  this.author      = (useAuthor      ? messageHdr.author        : null);
-  this.lineCount   = (useLineCount   ? messageHdr.lineCount     : null);
+  this.messageId   = (useMessagedId  ? messageHdr.messageId             : null);
+  this.sendTime    = (useSendTime    ? messageHdr.dateInSeconds         : null);
+  this.subject     = (useSubject     ? messageHdr.mime2DecodedSubject   : null);
+  this.author      = (useAuthor      ? messageHdr.mime2DecodedAuthor    : null);
+  this.lineCount   = (useLineCount   ? messageHdr.lineCount             : null);
 }
 
 // ... note, however, even this may be too much if we're short on memory,
