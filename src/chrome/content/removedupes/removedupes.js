@@ -3,6 +3,10 @@
 var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
 jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 
+// used for rough profiling
+var gStartTime;
+var gEndTime;
+
 #endif
 
 // can't we use
@@ -10,37 +14,11 @@ jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 // isn't it a string bundle somewhere?
 
 // which information will we use for comparing messages?
-var useMessagedId;
+var useMessageId;
 var useSendTime;
 var useSubject;
 var useAuthor;
 var useLineCount;
-
-// We will be checking for dupes by building an array of records for messages
-// in the folders of interest, which we first sort, then decide which 
-// contiguous subsequences are sequences of dupes. We don't want to create an
-// array of msgHdr's, because they might be too big, plus accessing their fields
-// might be costly (or not, I dunno); we use message records whose constructor
-// is the following:
-
-function messageRecord(messageHdr,recordIndex)
-{
-  this.uri         = messageHdr.folder.getUriForMsg(messageHdr);
-  this.folderName  = messageHdr.folder.abbreviatedName;
-
-  // the index is used for comparing collection order
-  this.recordIndex = recordIndex;
-  
-  this.messageId   = (useMessagedId  ? messageHdr.messageId             : null);
-  this.sendTime    = (useSendTime    ? messageHdr.dateInSeconds         : null);
-  this.subject     = (useSubject     ? messageHdr.mime2DecodedSubject   : null);
-  this.author      = (useAuthor      ? messageHdr.mime2DecodedAuthor    : null);
-  this.lineCount   = (useLineCount   ? messageHdr.lineCount             : null);
-}
-
-// ... note, however, even this may be too much if we're short on memory,
-// and then we could, say, only keep the URI and generate everything from
-// that on the fly
 
 // This is what we use to compare two records; one could think of having
 // the prefs UI define different sort orders (e.g. earlier first, unread first,
@@ -82,32 +60,45 @@ function searchAndRemoveDuplicateMessages()
 {
   dfBundle = document.getElementById("removedupesStrings");
 
-  useMessagedId  = gRemoveDupesPrefs.getBoolPref("comparison_criteria.message_id", true);
+  useMessageId  = gRemoveDupesPrefs.getBoolPref("comparison_criteria.message_id", true);
   useSendTime    = gRemoveDupesPrefs.getBoolPref("comparison_criteria.send_time", true);
   useSubject     = gRemoveDupesPrefs.getBoolPref("comparison_criteria.subject", true);
   useAuthor      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.from", true);
   useLineCount   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.num_lines", false);
 
   var selectedFolders = GetSelectedMsgFolders();
-  var messageRecords = new Array;
+  var dupeSetsHashMap = new Object;
 #ifdef DEBUG_searchAndRemoveDuplicateMessages
   jsConsoleService.logStringMessage('calling collectMessages for selectedFolders = ' + selectedFolders);
 #endif
-  collectMessages(selectedFolders,messageRecords,gRemoveDupesPrefs.getBoolPref("search_subfolders_first", false));
+#ifdef DEBUG_profile
+  gStartTime = (new Date()).getTime();
+#endif
+  collectMessages(
+    selectedFolders,
+    dupeSetsHashMap,
+    gRemoveDupesPrefs.getBoolPref("search_subfolders_first", false));
+#ifdef DEBUG_profile
+  gEndTime = (new Date()).getTime();
+  jsConsoleService.logStringMessage('collectMessages time = ' + (gEndTime-gStartTime));
+  gStartTime = (new Date()).getTime();
+#endif
   // not sure if we need this or not
-  SelectFolder(selectedFolders[0].URI);
+  //SelectFolder(selectedFolders[0].URI);
   delete selectedFolders;
-  var dupeMessageRecords = new Array;
-  var dupeInSequenceIndicators = new Array;
-  sortAndFindDuplicates(messageRecords,dupeMessageRecords,dupeInSequenceIndicators);
-  delete messageRecords;
-  if (dupeMessageRecords.length == 0) {
+  
+  // TODO: isn't there a more decent way to check for emptyness of an Object?
+  var noDupeSets = true;
+  for (var hashValue in dupeSetsHashMap) {
+    noDupeSets = false;
+    break;
+  }
+  
+  if (noDupeSets) {
     // maybe this would be better as a message in the bottom status bar
     alert(gRemoveDupesStrings.GetStringFromName("removedupes.no_duplicates_found"));
   }
-  else reviewAndRemove(dupeMessageRecords,dupeInSequenceIndicators);
-  delete dupeMessageRecords;
-  delete dupeInSequenceIndicators;
+  else reviewAndRemove(dupeSetsHashMap);
 }
 
 
@@ -161,7 +152,7 @@ function addSearchFolders(folder, searchFolders, postOrderTraversal)
 #endif
 }
 
-function collectMessages(topFolders,collectedRecords,subfoldersFirst)
+function collectMessages(topFolders,dupeSetsHashMap,subfoldersFirst)
 {
   // TODO: check we haven't selected some folders along with
   // their subfolders - this would mean false dupes!
@@ -170,64 +161,90 @@ function collectMessages(topFolders,collectedRecords,subfoldersFirst)
     addSearchFolders(topFolders[i],searchFolders,subfoldersFirst);
   }
 
+  var messageUriHashmap = new Object;
+
+#ifdef DEBUG_profile
+  var numMessages = 0;
+#endif
+
   for(var i = 0; i < searchFolders.length; i++) {
    if (searchFolders[i].isServer == true) continue;
     // add records for the messages in the i'th search folder
-    var folderMessageHdrsIterator =
-      searchFolders[i].getMessages(msgWindow);
+    var folderMessageHdrsIterator;
+    try {
+      folderMessageHdrsIterator =
+        searchFolders[i].getMessages(msgWindow);
+    } catch(ex) {
+#ifdef DEBUG
+      jsConsoleService.logStringMessage('getMessages() failed for folder ' + searchFolders[i].abbreviatedName + ':' + ex);
+#else
+      alert('failed to get messages from folder' + searchFolders[i].abbreviatedName);
+#endif
+    }
 
     while (folderMessageHdrsIterator.hasMoreElements()) {
       var messageHdr = 
         folderMessageHdrsIterator.getNext()
                                  .QueryInterface(Components.interfaces.nsIMsgDBHdr);
-      collectedRecords.push(
-        new messageRecord(messageHdr,collectedRecords.length));
+      // note that there could theoretically be two messages which should not
+      // have the same hash, but do have it, if the subject includes the string
+      // |6xX$\WG-C?| or the author includes the string '|^#=)A?mUi5|' ; this
+      // is however highly unlikely... about as unlikely as collisions of
+      // a hash function, except that we haven't randomized; still,
+      // if a malicious user sent you e-mail with these strings in the author
+      // or subject fields, you probably don't care about deleting them anyways
+#ifdef DEBUG_profile
+      numMessages++;
+#endif
+      
+      var sillyHash = '';
+      if (useMessageId)
+        sillyHash += messageHdr.messageId + '|';
+      if (useSendTime)
+        sillyHash += messageHdr.dateInSeconds + '|';
+      if (useSubject)
+        sillyHash += messageHdr.subject + '|6xX$\WG-C?|';
+      if (useAuthor)
+        sillyHash += messageHdr.author + '|^#=)A?mUi5|';
+      if (useLineCount)
+        sillyHash += messageHdr.lineCount;
+      var uri = searchFolders[i].getUriForMsg(messageHdr);
+      if (sillyHash in messageUriHashmap) {
+        if (sillyHash in dupeSetsHashMap) {
+#ifdef DEBUG_collectMessages
+      jsConsoleService.logStringMessage('sillyHash \n' + sillyHash + '\nis a third-or-later dupe');
+#endif
+          // just add the current message's URI, no need to copy anything
+          dupeSetsHashMap[sillyHash].push(uri);
+        } else {
+#ifdef DEBUG_collectMessages
+      jsConsoleService.logStringMessage('sillyHash \n' + sillyHash + '\nis a second dupe');
+#endif
+          // the URI in messageUriHashmap[sillyMap] has not been copied to
+          // the dupes hash since until now we did not know it was a dupe;
+          // copy it together with our current message's URI
+          dupeSetsHashMap[sillyHash] = new Array(messageUriHashmap[sillyHash], uri);
+        }
+      } else {
+#ifdef DEBUG_collectMessages
+      jsConsoleService.logStringMessage('sillyHash \n' + sillyHash + '\nis not a dupe (or a first dupe)');
+#endif
+        messageUriHashmap[sillyHash] = uri;
+      }
     }
   }
 
+#ifdef DEBUG_profile
+    jsConsoleService.logStringMessage('processed ' + numMessages + ' messages in ' + searchFolders.length + ' folders');
+#endif
   delete searchFolders;
 }
 
-function sortAndFindDuplicates(messageRecords,dupeMessageRecords,dupeInSequenceIndicators)
-{
-  messageRecords.sort(compareMessageRecords);
-  
-  dupeIndicators = new Array(messageRecords.length);
-
-  for (var i=0; i < messageRecords.length-1; i++) {
-    // at this point, messageRecords[i] is not a dupe of any previous message
-    if (!(areDupes(messageRecords[i],messageRecords[i+1]))) {
-      // so messageRecords[i] is not a dupe of any message at all
-#ifdef DEBUG_sortAndFindDuplicates
-      jsConsoleService.logStringMessage('record ' + i + ' not a dupe');
-#endif
-      continue;
-    }
-    // messageRecords[i] is the first dupe in a sequence of dupes
-    dupeMessageRecords.push(messageRecords[i]);
-    dupeInSequenceIndicators[dupeMessageRecords.length-1] = false;
-      // the first dupe is not 'in sequence' to other dupes
-#ifdef DEBUG_sortAndFindDuplicates
-      jsConsoleService.logStringMessage('record ' + i + ' starts dupe sequence');
-#endif
-    do {
-      i++;
-      dupeMessageRecords.push(messageRecords[i]);
-      dupeInSequenceIndicators[dupeMessageRecords.length-1] = true;
-#ifdef DEBUG_sortAndFindDuplicates
-      jsConsoleService.logStringMessage('record ' + i + ' in dupe sequence');
-#endif
-    } while (   (i < messageRecords.length-1) 
-             && (areDupes(messageRecords[i],messageRecords[i+1])) );
-  }
-}
-
-function reviewAndRemove(dupeMessageRecords,dupeInSequenceIndicators)
+function reviewAndRemove(dupeSetsHashMap/*,dupeInSequenceIndicators*/)
 {
   // this function is only called if there do exist some dupes
 #ifdef DEBUG_reviewAndRemove
-  jsConsoleService.logStringMessage('in reviewAndRemove\ndupeMessageRecords.length = '+ dupeMessageRecords.length);
-  jsConsoleService.logStringMessage('dupeMessageRecords[0].uri = ' + dupeMessageRecords[0].uri);
+  jsConsoleService.logStringMessage('in reviewAndRemove');
 #endif
 
   if (!gRemoveDupesPrefs.getBoolPref("confirm_search_and_deletion", true))
@@ -236,9 +253,10 @@ function reviewAndRemove(dupeMessageRecords,dupeInSequenceIndicators)
     // without user confirmation or review; we're keeping the first dupe
     // in every sequence of dupes and deleting the rest
     removeDuplicates(
-      dupeMessageRecords,
-      dupeInSequenceIndicators,
-      gRemoveDupesPrefs.getBoolPref("move_to_trash_by_default", true));
+      dupeSetsHashMap,
+      gRemoveDupesPrefs.getBoolPref("move_to_trash_by_default", true),
+      false // the uri's have not been replaced with messageRecords
+      );
   }
   else {
     // open up a dialog in which the user sees all dupes we've found,
@@ -249,9 +267,65 @@ function reviewAndRemove(dupeMessageRecords,dupeInSequenceIndicators)
       "chrome,resizable=yes",
       messenger,
       msgWindow,
-      dupeMessageRecords,
-      dupeInSequenceIndicators);
+      dupeSetsHashMap);
   }
 }
 
 
+#ifdef DEBUG_secondMenuItem
+function secondMenuItem()
+{
+  stime = (new Date()).getTime();
+  alert("hello, world!");
+  etime = (new Date()).getTime();
+  alert("it was " + (etime - stime) + " miliseconds");
+}
+#endif
+
+#ifdef DEBUG_profile
+
+function str2arr(str)
+{
+  var bin = Array(str.length);
+  for(var i = 0; i < str.length; i++)
+    bin[i] = str.charCodeAt(i);
+  return bin;
+}
+
+function hashTest2(messageRecords)
+{
+  gStartTime = (new Date()).getTime();
+  var messageUriHashmap = new Object;
+  var dupeUriHashmap = new Object;
+  //var hasher = Cc["@mozilla.org/security/hash;1"].createInstance(Ci.nsICryptoHash);
+  //var algorithm = Ci.nsICryptoHash.MD5;
+  for (var i = 0; i < messageRecords.length; i++) {
+    //hasher.init(algorithm);
+    
+    //hashes[i] = hasher.finish(false /* not b64 encoded */);
+    var sillyHash = messageRecords[i].messageId 
+      + messageRecords[i].sendTime 
+      + messageRecords[i].author 
+      + messageRecords[i].subject 
+      + messageRecords[i].lineCount;
+    if (sillyHash in messageUriHashmap) {
+      if (sillyHash in dupeUriHashmap) {
+        // just add the current message's URI, no need to copy anything
+        dupeUriHashmap[sillyHash].push(messageRecords[i].uri);
+      } else {
+        // the URI in messageUriHashmap[sillyMap] has not been copied to
+        // the dupes hash since until now we did not know it was a dupe;
+        // copy it together with our current message's URI
+        sillyHashMessages = new Array(messageUriHashmap[sillyHash], messageRecords[i].uri);
+      }
+    } else {
+      messageUriHashmap[sillyHash] = messageRecords[i].uri;
+    }
+  }
+  gEndTime = (new Date()).getTime();
+  jsConsoleService.logStringMessage('time to populate dupe lists for ' + messageRecords.length + ' messages = ' + (gEndTime-gStartTime));
+  gStartTime = (new Date()).getTime();
+}
+
+
+#endif

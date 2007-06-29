@@ -1,9 +1,15 @@
+// XPCOM Shorthands
+
+const Cc = Components.classes;
+const Ci = Components.interfaces;
+
+
 // localized strings
 
 var gRemoveDupesStrings =
-  Components.classes["@mozilla.org/intl/stringbundle;1"]
-            .getService(Components.interfaces.nsIStringBundleService)
-            .createBundle("chrome://removedupes/locale/removedupes.properties");
+  Cc["@mozilla.org/intl/stringbundle;1"]
+    .getService(Ci.nsIStringBundleService)
+    .createBundle("chrome://removedupes/locale/removedupes.properties");
 
 //---------------------------------------------------------
 
@@ -73,37 +79,76 @@ var gRemoveDupesPrefs = {
 
 //---------------------------------------------------------
 
-function removeDuplicates(dupeMessageRecords,deletionIndicators,justMoveToTrah)
+function clone(myObject)
 {
+  if(typeof(myObject) != 'object')
+    return myObject;
+  if(myObject == null)
+    return myObject;
+
+  var newObject = new Object();
+
+  for(var i in myObject)
+    newObject[i] = clone(myObject[i]);
+
+  return newObject;
+}
+
+// This function is called either after the dupes are collected,
+// without displaying the dialog, in which each element in the hash is
+// an array of Uri's, or after displaying it, in which case the elements have
+// been replaced with messageRecord objects (which also include indications
+// of which messages to keep)
+function removeDuplicates(dupeSetsHashMap,justMoveToTrah,haveMessageRecords)
+{
+  // note that messenger and msgWindow have to be defined! if we're running from the
+  // overlay of the 3-pane window, then this is ensured; otherwise,
+  // the dupes review dialog should have gotten it as a parameter
+  // and set a global window-global variable of its own
+
 #ifdef DEBUG_removeDuplicates
-  jsConsoleService.logStringMessage('in reviewAndRemove\ndupeMessageRecords.length = '+ dupeMessageRecords.length);
+  jsConsoleService.logStringMessage('in removeDuplicates');
 #endif
 
   var removalMessageHdrs =
-    Components.classes["@mozilla.org/supports-array;1"]
-              .createInstance(Components.interfaces.nsISupportsArray);
-  for ( var i=0; i<dupeMessageRecords.length; i++ ) {
-    if ( deletionIndicators[i] ) {
-      // note that messenger and msgWindow have to be defined! if we're running from the
-      // overlay of the 3-pane window, then this is ensured; otherwise,
-      // the dupes review dialog should have gotten it as a parameter
-      // and set a global window-global variable of its own
+    Cc["@mozilla.org/supports-array;1"].createInstance(Ci.nsISupportsArray);
+
+  if (haveMessageRecords) {
+    for ( var hashValue in dupeSetsHashMap ) {
+      var dupeSet = dupeSetsHashMap[hashValue];
+      for(var i = 0; i < dupeSet.length; i++) {
+        if (!dupeSet[i].toKeep) {
 #ifdef DEBUG_removeDuplicates
-      jsConsoleService.logStringMessage('getting Hdr');
+          jsConsoleService.logStringMessage('appending URI' + dupeSet[i].uri);
 #endif
-      var messageHdr = messenger.msgHdrFromURI(dupeMessageRecords[i].uri)
+          removalMessageHdrs.AppendElement(messenger.msgHdrFromURI(dupeSet[i].uri));
+        }
+      }
+    }
+  }  
+  else for ( var hashValue in dupeSetsHashMap ) {
+    var dupeSet = dupeSetsHashMap[hashValue];
+    for(var i = 1; i < dupeSet.length; i++) {
 #ifdef DEBUG_removeDuplicates
-      jsConsoleService.logStringMessage('appending to removal Hdrs');
+      jsConsoleService.logStringMessage('appending URI' + dupeSet[i]);
 #endif
-      removalMessageHdrs.AppendElement(messageHdr);
+      removalMessageHdrs.AppendElement(messenger.msgHdrFromURI(dupeSet[i]));
     }
   }
+  
+  // can't figure out a better way to get some arbitrary URI
+  for ( var hashValue in dupeSetsHashMap ) {
+    var dupeSet = dupeSetsHashMap[hashValue];
+    arbitraryUri = (haveMessageRecords ? dupeSet[0].uri : dupeSet[0]);
+  }
+    
   
   if (removalMessageHdrs.Count() > 0) {
 #ifdef DEBUG_removeDuplicates
       jsConsoleService.logStringMessage('getting folder');
+      jsConsoleService.logStringMessage('arbitraryUri = ' + arbitraryUri);
 #endif
-    var firstMessageFolder = messenger.msgHdrFromURI(dupeMessageRecords[0].uri).folder;
+    var firstMessageFolder = messenger.msgHdrFromURI(arbitraryUri).folder;
     // if justMoveToTrash is true, this moves the messages to the trash fodler;
     // otherwise this deletes the messages permanently;
     // also there's the weird fact that you need to use a folder 
@@ -118,21 +163,4 @@ function removeDuplicates(dupeMessageRecords,deletionIndicators,justMoveToTrah)
 #ifdef DEBUG_removeDuplicates
       jsConsoleService.logStringMessage('done');
 #endif
-}
-
-//---------------------------------------------------------
-
-function clone(myObject)
-{
-  if(typeof(myObject) != 'object')
-    return myObject;
-  if(myObject == null)
-    return myObject;
-
-  var newObject = new Object();
-
-  for(var i in myObject)
-    newObject[i] = clone(myObject[i]);
-
-  return newObject;
 }
