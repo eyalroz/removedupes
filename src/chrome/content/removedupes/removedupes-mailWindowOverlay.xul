@@ -15,6 +15,12 @@
                label="&removedupes.remove_duplicates_menuitem.label;"
                insertafter="folderPaneContext-copy-location"
                oncommand="searchAndRemoveDuplicateMessages();"/> 
+#ifdef DEBUG_secondMenuItem
+     <menuitem id="removeDuplicatesSecondMenuItem" 
+               label="removedupes second item..."
+               insertafter="removeDuplicatesMenuItem"
+               oncommand="secondMenuItem();"/> 
+#endif
      <menuseparator id="folderPaneContext-removedupes-separator" insertafter="folderPaneContext-copy-location"/>  
   </popup> 
 </overlay>
