@@ -2,22 +2,56 @@
 
 var messenger;
 var msgWindow;
-var dupeMessageRecords;
-var dupeInSequenceIndicators;
-var deletionIndicators;
+var dupeSetsHashMap;
 
 var gTree;
 var gTreeChildren;
 var gMessageRowTemplate;
-var gtreeLineIndexColumn;
+var gtreeLineUriColumn;
+
+// statistical info displayed on the status bar
+
+var gNumberOfDupeSets;
+var gTotalNumberOfDupes;
+var gNumberToKeep;
+
+// indices of columns in dupe tree rows
+
+const toKeepColumnIndex      = 1;
+const authorColumnIndex      = 2;
+const subjectColumnIndex     = 3;
+const folderNameColumnIndex  = 4;
+const sendTimeColumnIndex    = 5;
+const lineCountColumnIndex   = 6;
+
 
 
 const gDateService = 
-  Components.classes["@mozilla.org/intl/scriptabledateformat;1"]
-            .getService(Components.interfaces.nsIScriptableDateFormat);
+  Cc["@mozilla.org/intl/scriptabledateformat;1"]
+    .getService(Ci.nsIScriptableDateFormat);
 
-function initShowMessagesDialog()
+
+function dupeMessageRecord(messageUri)
 {
+  var messageHdr  = messenger.msgHdrFromURI(messageUri);
+  
+  this.uri         = messageUri;
+  this.folderName  = messageHdr.folder.abbreviatedName;
+  this.messageId   = messageHdr.messageId;
+  this.sendTime    = formatSendTime(messageHdr.dateInSeconds);
+  this.subject     = messageHdr.mime2DecodedSubject;
+  this.author      = messageHdr.mime2DecodedAuthor;
+  this.lineCount   = messageHdr.lineCount;
+  // by default, we're deleting dupes, but see also below
+  this.toKeep      = false; 
+}
+
+function initDupeReviewDialog()
+{
+#ifdef DEBUG_profile
+  gStartTime = (new Date()).getTime();
+#endif
+
   // TODO: If we're only using some of the fields for comparison,
   // our messageRecords currently have 'null' instead of actual values
   // so either we make the columns go away, or we show the non-compared
@@ -25,29 +59,56 @@ function initShowMessagesDialog()
 
   messenger                 = window.arguments[0];
   msgWindow                 = window.arguments[1];
-  dupeMessageRecords        = window.arguments[2];
-  dupeInSequenceIndicators  = window.arguments[3];
+  dupeSetsHashMap           = window.arguments[2];
   
-  // initially, we mark for deletion every dupe which isn't
-  // beginning a sequence
-  
-  deletionIndicators  = new Array(dupeInSequenceIndicators.length);
-  for(var i=0; i<dupeInSequenceIndicators.length; i++)
-    deletionIndicators[i] = dupeInSequenceIndicators[i];
+  // let's replace the URI's with all the necessary information
+  // for the display dialog:
 
+  gNumberOfDupeSets = 0;
+  gTotalNumberOfDupes = 0;
+  for (hashValue in dupeSetsHashMap) {
+    gNumberOfDupeSets++;
+    var dupeSet = dupeSetsHashMap[hashValue];
+    for (var i=0; i < dupeSet.length; i++) {
+      dupeSet[i] = new dupeMessageRecord(dupeSet[i]);
+      gTotalNumberOfDupes++;
+#ifdef DEBUG_initDupeReviewDialog
+      jsConsoleService.logStringMessage('dupe ' + i + ' for hash value ' + hashValue + ':\n' + dupeSet[i].uri);
+#endif
+      
+    }
+    // first dupe in a dupe set is kept by default
+    dupeSet[0].toKeep = true;
+  }
+#ifdef DEBUG_profile
+  gEndTime = (new Date()).getTime();
+  jsConsoleService.logStringMessage('dupe sets hash decoration time = ' + (gEndTime-gStartTime));
+  gStartTime = (new Date()).getTime();
+#endif
+  
   document.getElementById("delete_permanently").checked =
     !(gRemoveDupesPrefs.getBoolPref("move_to_trash_by_default", true));
   
-  // we've already searched for dupes (they're in messageTable); let's
-  // show them to the user, and let her/him decide what to do with them
+  // now let's show the information about the dupes to the user,
+  // and let her/him decide what to do with them
 
-  gTree = document.getElementById("dupeSequencesTree");
+  gTree = document.getElementById("dupeSetsTree");
+#ifdef DEBUG_initDupeReviewDialog
+  jsConsoleService.logStringMessage('gTree = ' + gTree);
+#endif
   gTree.currentItem = null;
-  gTreeChildren = document.getElementById("dupeSequencesTreeChildren");
-  gtreeLineIndexColumn = gTree.columns.getNamedColumn("treeLineIndex");
+  gTreeChildren = document.getElementById("dupeSetsTreeChildren");
+#ifdef DEBUG_initDupeReviewDialog
+  jsConsoleService.logStringMessage('gTreeChildren = ' + gTreeChildren);
+#endif
 
   createMessageRowTemplate();
   rebuildDuplicateSetsTree();
+#ifdef DEBUG_profile
+  gEndTime = (new Date()).getTime();
+  jsConsoleService.logStringMessage('rebuildDuplicateSetsTree time = ' + (gEndTime-gStartTime));
+  gStartTime = (new Date()).getTime();
+#endif
 }
 
 function createMessageRowTemplate()
@@ -60,9 +121,6 @@ function createMessageRowTemplate()
   var dummyCell         = document.createElement("treecell");
    // the dummy column stores no information but shows the [+] box
    // for expansion and the lines to the expanded rows
-  var treeLineIndexCell     = document.createElement("treecell");
-  treeLineIndexCell.setAttribute("id", "treeLineIndexCell");
-  treeLineIndexCell.setAttribute("hidden", true);
   var keepIndicatorCell = document.createElement("treecell");
   keepIndicatorCell.setAttribute("id", "keepIndicatorCell");
   //keepIndicatorCell.setAttribute("src", "chrome://messenger/skin/icons/notchecked.gif");
@@ -79,81 +137,117 @@ function createMessageRowTemplate()
 
   gMessageRowTemplate = document.createElement("treerow");
   gMessageRowTemplate.appendChild(dummyCell);
-  gMessageRowTemplate.appendChild(treeLineIndexCell);
   gMessageRowTemplate.appendChild(keepIndicatorCell);
   gMessageRowTemplate.appendChild(authorCell);
   gMessageRowTemplate.appendChild(subjectCell);
   gMessageRowTemplate.appendChild(folderCell);
   gMessageRowTemplate.appendChild(sendTimeCell);
   gMessageRowTemplate.appendChild(lineCountCell);
-
+  gMessageRowTemplate.setAttribute('indexInDupeSet', 0);
 }
 
 
 function rebuildDuplicateSetsTree()
 {
 #ifdef DEBUG_rebuildDuplicateSetsTree
-      jsConsoleService.logStringMessage('dupeMessageRecords.length = ' + dupeMessageRecords.length);
-   for (var i=0; i<dupeMessageRecords.length; i++ ) {
-     jsConsoleService.logStringMessage('dupeInSequenceIndicators[' + i + '] = ' + dupeInSequenceIndicators[i] + ' ; deletionIndicators[' + i + '] = ' + deletionIndicators[i]);
-   }
+      jsConsoleService.logStringMessage('in rebuildDuplicateSetsTree');
 #endif
 
   while (gTreeChildren.firstChild)
    gTreeChildren.removeChild(gTreeChildren.firstChild);
 
-  for (var i=0; i<dupeMessageRecords.length; i++ ) {
-    // at this point, dupeMessageRecords[i] is always
-    // the first message in a sequence of dupes
+  document.getElementById("total-status-panel").setAttribute("label", "");
+  document.getElementById("sets-status-panel").setAttribute("label", "");
+  document.getElementById("keeping-status-panel").setAttribute("label", "");
+  document.getElementById("main-status-panel").setAttribute("label", "Populating list...");
 
-    var firstDupeMessageRow = createMessageTreeRow(dupeMessageRecords[i], deletionIndicators[i], i);
-    var firstDupeMessageTreeItem = document.createElement("treeitem");
-    var dummySequenceRow   = document.createElement("treerow");
-    var sequenceRowsTreeChildren  = document.createElement("treechildren");
+  gNumberToKeep = 0;
 
-    firstDupeMessageTreeItem.appendChild(firstDupeMessageRow);
-    sequenceRowsTreeChildren.appendChild(firstDupeMessageTreeItem);
+  for (hashValue in dupeSetsHashMap) {
+
+    var dupeSet = dupeSetsHashMap[hashValue];
+
+    // Every XUL tree has a single treechildren element. The treechildren
+    // for the global tree of the 'removedupes' dialog has a treeitem for every
+    // dupe set. Now things get a bit complicated, as for each dupe set we
+    // have an internal tree (so that we can collapse/expand the elements of a
+    // dupe set):
+    //
+    //  tree
+    //   \---treechildren (global)
+    //         +--treeitem (for 1st dupe set)
+    //         +--treeitem (for 2nd dupe set)
+    //         |     \---treechildren
+    //         |            +---treeitem (for 1st message in 2nd set; not expanded here)
+    //         |            +---treeitem (for 2nd message in 2nd set)
+    //         |            |      \---treerow (for 2nd message in 2nd set)
+    //         |            |             +---treecell (some bit of info about 2nd message in 2nd set)
+    //         |            |             \---treecell (other bit of info about 2nd message in 2nd set)
+    //         |            \---treeitem (for 3rd message in 2nd set; not expanded here)
+    //         \--treeitem (for 3rd dupe set; not expanded here)
+
+    var dupeSetTreeChildren  = document.createElement("treechildren");
+    
+    for (var i=0; i < dupeSet.length; i++) {
+      if (dupeSet[i].toKeep) gNumberToKeep++;
+      var dupeInSetRow = createMessageTreeRow(dupeSet[i], i);
+      var dupeInSetTreeItem = document.createElement("treeitem");
+      dupeInSetTreeItem.setAttribute('indexInDupeSet', i);
+        // TODO: does anyone know a simple way of getting the index of a treeitem within
+        // its parent's childNodes?
+      dupeInSetTreeItem.appendChild(dupeInSetRow);
+      dupeSetTreeChildren.appendChild(dupeInSetTreeItem);
+    }
   
-    do {
-      // there is always at least one dupe after the first one... so
-      // this is a do-while, not while-do
-      i++;
-      var additionalSequenceMessageRow = createMessageTreeRow(dupeMessageRecords[i], deletionIndicators[i], i);
-      var additionalSequenceMessageTreeItem = document.createElement("treeitem");
-      additionalSequenceMessageTreeItem.appendChild(additionalSequenceMessageRow);
-      sequenceRowsTreeChildren.appendChild(additionalSequenceMessageTreeItem);
-    } while ( (i<dupeMessageRecords.length-1) && dupeInSequenceIndicators[i+1] );
-  
-    var sequenceTreeItem  = document.createElement("treeitem");
-
-    sequenceTreeItem.appendChild(sequenceRowsTreeChildren);
-    sequenceTreeItem.setAttribute("container", true);
-    sequenceTreeItem.setAttribute("open", true);
+    var dupeSetTreeItem  = document.createElement("treeitem");
+    dupeSetTreeItem.setAttribute('commonHashValue',hashValue);
+    dupeSetTreeItem.appendChild(dupeSetTreeChildren);
+    dupeSetTreeItem.setAttribute("container", true);
+    dupeSetTreeItem.setAttribute("open", true);
    
-    gTreeChildren.appendChild(sequenceTreeItem);
+    gTreeChildren.appendChild(dupeSetTreeItem);
   }
+  updateStatusBar();
 }
 
-function createMessageTreeRow(messageRecord, deleteIt, treeLineIndex)
+function updateStatusBar()
+{
+  document.getElementById("sets-status-panel").setAttribute("label", "Sets: " + gNumberOfDupeSets);
+  document.getElementById("total-status-panel").setAttribute("label", "Total: " + gTotalNumberOfDupes);
+  document.getElementById("keeping-status-panel").setAttribute("label", "Keeping: " + gNumberToKeep);
+  document.getElementById("main-status-panel").setAttribute("label", "");
+
+}
+
+function createMessageTreeRow(messageRecord)
 {
 #ifdef DEBUG_createMessageTreeRow
-  jsConsoleService.logStringMessage('makeNewRow (\nmessageRecord=\n' + messageRecord + '\ndeleteIt = ' + deleteIt + ' treeLineIndex = ' + treeLineIndex + ')' );
+  jsConsoleService.logStringMessage('makeNewRow');
 #endif
 
   var row = gMessageRowTemplate.cloneNode(true);
-    // a shallow clone should be enough, I think
-  
+    // a shallow clone is enough here
+
   // recall we set the child nodes order in createMessageRowTemplate()
-  
-  row.childNodes.item(1).setAttribute("label", treeLineIndex);
+
+  // first there's the dummy cell we don't touch  
   // this next line allows us to use the css to choose whether to 
   // use a [ ] image or a [v] image
-  row.childNodes.item(2).setAttribute("properties", (deleteIt ? "delete" : "keep"));
-  row.childNodes.item(3).setAttribute("label", messageRecord.author); 
-  row.childNodes.item(4).setAttribute("label", messageRecord.subject);
-  row.childNodes.item(5).setAttribute("label", messageRecord.folderName);
-  row.childNodes.item(6).setAttribute("label", formatSendTime(messageRecord.sendTime));
-  row.childNodes.item(7).setAttribute("label", messageRecord.lineCount);
+  row.childNodes.item(toKeepColumnIndex)
+     .setAttribute("properties", (messageRecord.toKeep ? "keep" : "delete") );
+  // the author and subject should be decoded from the
+  // proper charset and transfer encoding
+  row.childNodes.item(authorColumnIndex)
+     .setAttribute("label", messageRecord.author); 
+  row.childNodes.item(subjectColumnIndex)
+     .setAttribute("label", messageRecord.subject);
+  row.childNodes.item(folderNameColumnIndex)
+     .setAttribute("label", messageRecord.folderName);
+  // the send time is already formatted
+  row.childNodes.item(sendTimeColumnIndex)
+     .setAttribute("label", messageRecord.sendTime);
+  row.childNodes.item(lineCountColumnIndex)
+     .setAttribute("label", messageRecord.lineCount);
 #ifdef DEBUG_createMessageTreeRow
   jsConsoleService.logStringMessage('messageRecord.lineCount = ' + messageRecord.lineCount);
 #endif
@@ -188,47 +282,69 @@ function formatSendTime(sendTimeInSeconds)
     sendTimeInSeconds_in_seconds.getSeconds() );
 }
 
-function findTreeRow(node, rowIndex )
-{
-  // TODO: use xpath to get this, or get all elements of name treecell, and search their id and label
-  // see http://developer.mozilla.org/en/docs/Introduction_to_using_XPath_in_JavaScript
-  
-  if (   (node.nodeName == "treecell")
-      && (node.getAttribute("id") == "treeLineIndexCell")
-      && (node.getAttribute("label") == rowIndex) ) {
-    return node.parentNode;
-  }
-
-  var node = node.firstChild;
-  while(node != null) {
-    var row = findTreeRow(node, rowIndex);
-    if (row != null)
-      return row;
-    node = node.nextSibling;
-  }
-
-  return null;
-}
-
 function onClick()
 {
 #ifdef DEBUG_onClick
   jsConsoleService.logStringMessage('in onClick()');
 #endif
 
-  var currentTreeIndex = gTree.currentIndex;
+  // when we click somewhere in the tree, the focused element should be an inner 'treeitem'
+  var focusedTreeItem = gTree.contentView.getItemAtIndex(gTree.currentIndex);
+#ifdef DEBUG_onClick
+  var node = focusedTreeItem;
+  jsConsoleService.logStringMessage('focusedTreeItem: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+  var node = focusedTreeItem.parentNode;
+  jsConsoleService.logStringMessage('focusedTreeItem.parentNode: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+#endif
+  var messageIndexInDupeSet = focusedTreeItem.getAttribute('indexInDupeSet');
+#ifdef DEBUG_onClick
+  jsConsoleService.logStringMessage('messageIndexInDupeSet = ' + messageIndexInDupeSet );
+#endif
+  var dupeSetTreeItem = focusedTreeItem.parentNode.parentNode;
+#ifdef DEBUG_onClick
+  var node = dupeSetTreeItem ;
+  jsConsoleService.logStringMessage('dupeSetTreeItem: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+  var node = dupeSetTreeItem.parentNode;
+  jsConsoleService.logStringMessage('dupeSetTreeItem.parentNode: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+  var node = dupeSetTreeItem.parentNode.parentNode;
+  jsConsoleService.logStringMessage('dupeSetTreeItem.parentNode.parentNode: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+#endif
+  var dupeSetHashValue = dupeSetTreeItem.getAttribute('commonHashValue');
+#ifdef DEBUG_onClick
+  jsConsoleService.logStringMessage('dupeSetHashValue = ' + dupeSetHashValue );
+#endif
+  var dupeSetItem = dupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
+#ifdef DEBUG_onClick
+  jsConsoleService.logStringMessage('dupeSetItem  = ' + dupeSetItem );
+#endif
+  var messageUri = dupeSetItem.uri;
+#ifdef DEBUG_onClick
+  jsConsoleService.logStringMessage('messageUri is ' + messageUri);
+  jsConsoleService.logStringMessage('msgWindow is ' + msgWindow);
+#endif
+  var folder = messenger.msgHdrFromURI(messageUri).folder;
+  //msgFolder = folder.QueryInterface(Components.interfaces.nsIMsgFolder);
+  //msgWindow.RerootFolderForStandAlone(folder.uri);
+  //msgWindow.RerootFolder(folder.uri, msgFolder, gCurrentLoadingFolderViewType, gCurrentLoadingFolderViewFlags, gCurrentLoadingFolderSortType, gCurrentLoadingFolderSortOrder);
 
-  var view = gTree.view;
-  var recordIndex;
-
-  recordIndex = view.getCellText(currentTreeIndex, gtreeLineIndexColumn);
-  if (recordIndex == null)
-    return;
-
-  //messageHeader = messenger.messageServiceFromURI(dupeMessageRecords[recordIndex].uri).messageURIToMsgHdr(dupeMessageRecords[recordIndex].uri);
-  msgWindow.SelectFolder(messenger.msgHdrFromURI(dupeMessageRecords[recordIndex].uri).folder.URI);
-  msgWindow.SelectMessage(dupeMessageRecords[recordIndex].uri);
-//  msgWindow.SelectMessage(dupeMessageRecords[recordIndex].uri);
+//nsIMsgWindow
+  msgWindow = msgWindow.QueryInterface(Components.interfaces.nsIMsgWindow);
+  try {
+    msgWindow.SelectFolder(folder.URI);
+  } catch(ex) {
+#ifdef DEBUG_onClick
+  jsConsoleService.logStringMessage('Exception: ' + ex);
+#endif
+    dump(ex); 
+  }
+  try {
+    msgWindow.SelectMessage(messageUri);
+  } catch(ex) {
+#ifdef DEBUG_onClick
+  jsConsoleService.logStringMessage('Exception: ' + ex);
+#endif
+    dump(ex); 
+  }
 #ifdef DEBUG_onClick
   jsConsoleService.logStringMessage('done with onClick()');
 #endif
@@ -239,77 +355,87 @@ function onDoubleClick()
   // If the user has double-clicked a message row, change it status
   // from 'Keep' to 'Delete' or vice-versa; otherwise do nothing
   
-  var currentTreeIndex = gTree.currentIndex;
-
-  var view = gTree.view;
-  var recordIndex;
-
-  recordIndex = view.getCellText(currentTreeIndex, gtreeLineIndexColumn);
-  if (recordIndex == null)
-    return;
-
+  var focusedTreeItem = gTree.contentView.getItemAtIndex(gTree.currentIndex);
 #ifdef DEBUG_onDoubleClick
- // This doesn't work in tbird - no XPath support!
- var iterator = new XPathEvaluator();
- node = iterator.evaluate(
-   '//treecell[id="treeLineIndexCell" and label="' + recordIndex + '"]',
-   gTreeChildren, null, XPathResult.ANY_UNORDERED_NODE_TYPE, null ).singleNodeValue;
-
- if (node != null)
-   jsConsoleService.logStringMessage('result node: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
- else jsConsoleService.logStringMessage('null result');
+  jsConsoleService.logStringMessage('focusedTreeItem = ' + focusedTreeItem);
 #endif
-   
-  var row = findTreeRow(gTreeChildren, recordIndex);
-  if (row == null)
-    return;
-
-  deletionIndicators[recordIndex] = !deletionIndicators[recordIndex];
-
-  row.childNodes.item(2).setAttribute(
-    "properties", (deletionIndicators[recordIndex] ? "delete" : "keep"));
+  var messageIndexInDupeSet = focusedTreeItem.getAttribute('indexInDupeSet');
+#ifdef DEBUG_onDoubleClick
+  jsConsoleService.logStringMessage('messageIndexInDupeSet = ' + messageIndexInDupeSet );
+#endif
+  var dupeSetTreeItem = focusedTreeItem.parentNode.parentNode;
+#ifdef DEBUG_onDoubleClick
+  jsConsoleService.logStringMessage('dupeSetTreeItem = ' + dupeSetTreeItem );
+#endif
+  var dupeSetHashValue = dupeSetTreeItem.getAttribute('commonHashValue');
+#ifdef DEBUG_onDoubleClick
+  jsConsoleService.logStringMessage('dupeSetHashValue = ' + dupeSetHashValue );
+#endif
+  var dupeSetItem = dupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
+#ifdef DEBUG_onDoubleClick
+  jsConsoleService.logStringMessage('dupeSetItem  = ' + dupeSetItem );
+#endif
+  
+  if (dupeSetItem.toKeep) {
+    dupeSetItem.toKeep = false;
+    gNumberToKeep--;  
+  }
+  else {
+    dupeSetItem.toKeep = true;
+    gNumberToKeep++;  
+  }
+  focusedRow = focusedTreeItem.firstChild;
+  focusedRow.childNodes.item(toKeepColumnIndex).setAttribute(
+    "properties", (dupeSetItem.toKeep ? "keep" : "delete"));
+    
+  updateStatusBar();
 }
 
 function onCancel()
 {
-  delete dupeMessageRecords;
-  delete dupeInSequenceIndicators;
-  delete deletionIndicators;
+  delete dupeSetsHashMap;
 }
 
 function onAccept()
 {
-  removeDuplicates(dupeMessageRecords,deletionIndicators,!(document.getElementById("delete_permanently").checked));
+  removeDuplicates(
+    dupeSetsHashMap,
+    !(document.getElementById("delete_permanently").checked),
+    true // the uri's have been replaced with messageRecords
+    );
+  delete dupeSetsHashMap;
 }
 
 
 function markAllDupesForDeletion()
 {
-  for ( var i=0; i<dupeMessageRecords.length; i++ )
-    deletionIndicators[i] = true;
-
+  for (hashValue in dupeSetsHashMap) {
+    var dupeSet = dupeSetsHashMap[hashValue];
+    for (var i=0; i<dupeSet.length; i++ )
+      dupeSet[i].toKeep = false;
+  }
   rebuildDuplicateSetsTree();
 }
 
 function markKeepOneInEveryDupeSet()
 {
-  // the sequence indicators are exactly what we need,
-  // since they're false for the first in the sequence,
-  // true for all other messages, i.e. one is kept, the rest
-  // deleted
-
-  for(var i=0; i<dupeInSequenceIndicators.length; i++)
-    deletionIndicators[i] = dupeInSequenceIndicators[i];
+  for (hashValue in dupeSetsHashMap) {
+    var dupeSet = dupeSetsHashMap[hashValue];
+    dupeSet[0].toKeep = true;
+    for (var i=1; i<dupeSet.length; i++ )
+      dupeSet[i].toKeep = false;
+  }
   
   rebuildDuplicateSetsTree();
 }
 
-
-
 function markNoDupesForDeletion ()
 {
-  for ( var i=0; i<dupeMessageRecords.length; i++ )
-    deletionIndicators[i] = false;
+  for (hashValue in dupeSetsHashMap) {
+    var dupeSet = dupeSetsHashMap[hashValue];
+    for (var i=0; i<dupeSet.length; i++ )
+      dupeSet[i].toKeep = true;
+  }
 
   rebuildDuplicateSetsTree();
 }
