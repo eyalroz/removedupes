@@ -89,6 +89,7 @@
       <Description about="urn:mozilla:extension:file:removedupes.jar">
         <em:package>content/removedupes/</em:package>
         <em:locale>locale/en-US/removedupes/</em:locale>
+        <em:locale>locale/de-DE/removedupes/</em:locale>
       </Description>
     </em:file>
   </Description>      
