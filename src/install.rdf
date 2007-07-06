@@ -42,7 +42,7 @@
     <em:name>Remove Duplicate Messages (Alternate)</em:name>
     <em:description>Finds duplicate messages in mail folders and removes them.</em:description>
     <em:creator>Eyal Rozenberg</em:creator>
-    <em:homepageURL>https://earendil.ath.cx/</em:homepageURL>
+    <em:homepageURL>https://removedupes.mozdev.org/</em:homepageURL>
 
     <!-- Target Application this extension can install into, 
          with minimum and maximum supported versions. --> 
