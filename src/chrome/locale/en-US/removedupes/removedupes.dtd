@@ -14,6 +14,9 @@
 <!ENTITY removedupes_dialog.keep_all.label              "All copies">
 <!ENTITY removedupes_dialog.tree_label                  "Duplicate message sets:">
 <!ENTITY removedupes_dialog.keep_flag                   "Keep?">
+<!ENTITY removedupes_dialog.action_label                "Action:">
 
-<!ENTITY delete_permanently.label                       "Delete permanently (do not move to Trash folder)">
-<!ENTITY delete_permanently.accesskey                   "p">
+<!ENTITY action.delete_permanently.label                "Delete permanently">
+<!ENTITY action.delete_permanently.accesskey            "p">
+<!ENTITY action.move.label                              "Move to:">
+<!ENTITY action.move.accesskey                          "m">
