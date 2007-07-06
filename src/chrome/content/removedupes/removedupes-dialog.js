@@ -2,6 +2,8 @@
 
 var messenger;
 var msgWindow;
+var gMessengerBundle;
+var gDBView;
 var dupeSetsHashMap;
 
 var gTree;
@@ -37,6 +39,7 @@ function dupeMessageRecord(messageUri)
   
   this.uri         = messageUri;
   this.folderName  = messageHdr.folder.abbreviatedName;
+  this.folderUri   = messageHdr.folder.URI;
   this.messageId   = messageHdr.messageId;
   this.sendTime    = formatSendTime(messageHdr.dateInSeconds);
   this.subject     = messageHdr.mime2DecodedSubject;
@@ -59,13 +62,19 @@ function initDupeReviewDialog()
 
   messenger                 = window.arguments[0];
   msgWindow                 = window.arguments[1];
-  dupeSetsHashMap           = window.arguments[2];
+  gMessengerBundle          = window.arguments[2];
+  gDBView                   = window.arguments[3];
+  dupeSetsHashMap           = window.arguments[4];
   
   // let's replace the URI's with all the necessary information
   // for the display dialog:
 
   gNumberOfDupeSets = 0;
   gTotalNumberOfDupes = 0;
+  
+  initializeFolderPicker();
+  document.getElementById('action').value  = gRemoveDupesPrefs.getCharPref('default_action', 'move');
+  
   for (hashValue in dupeSetsHashMap) {
     gNumberOfDupeSets++;
     var dupeSet = dupeSetsHashMap[hashValue];
@@ -86,8 +95,6 @@ function initDupeReviewDialog()
   gStartTime = (new Date()).getTime();
 #endif
   
-  document.getElementById("delete_permanently").checked =
-    !(gRemoveDupesPrefs.getBoolPref("move_to_trash_by_default", true));
   
   // now let's show the information about the dupes to the user,
   // and let her/him decide what to do with them
@@ -398,11 +405,17 @@ function onCancel()
 
 function onAccept()
 {
+  var uri = document.getElementById('targetFolderPicker').getAttribute('uri');
+  var deletePermanently =
+    (document.getElementById('action').getAttribute('value') == 'delete_permanently');
   removeDuplicates(
     dupeSetsHashMap,
-    !(document.getElementById("delete_permanently").checked),
+    deletePermanently,
+    uri,
     true // the uri's have been replaced with messageRecords
     );
+  //if (!deletePermanently) 
+  //  gRemoveDupesPrefs.setCharPref('default_target_folder', uri);
   delete dupeSetsHashMap;
 }
 
@@ -429,7 +442,7 @@ function markKeepOneInEveryDupeSet()
   rebuildDuplicateSetsTree();
 }
 
-function markNoDupesForDeletion ()
+function markNoDupesForDeletion()
 {
   for (hashValue in dupeSetsHashMap) {
     var dupeSet = dupeSetsHashMap[hashValue];
@@ -438,4 +451,22 @@ function markNoDupesForDeletion ()
   }
 
   rebuildDuplicateSetsTree();
+}
+
+function initializeFolderPicker()
+{
+  var uri = gRemoveDupesPrefs.getCharPref('default_target_folder', null);
+    
+#ifdef DEBUG_initializeFolderPicker
+  jsConsoleService.logStringMessage('setting folder picker to uri:\n' + uri);
+#endif
+    
+  // TODO: perhaps we don't need this when also calling SetFolderPicker ?
+  //MsgFolderPickerOnLoad('targetFolderPicker');
+
+  if ( (uri == null) || (uri == "") )
+    return;
+
+  //var msgFolder = GetMsgFolderFromUri(uri, false);
+  SetFolderPicker(uri, 'targetFolderPicker');
 }

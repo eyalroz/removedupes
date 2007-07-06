@@ -4,6 +4,8 @@
 <?xml-stylesheet href="chrome://messenger/skin/prefPanels.css" type="text/css"?>
 <?xml-stylesheet href="chrome://removedupes/skin/removedupes-dialog.css" type="text/css"?>
 
+<?xul-overlay href="chrome://messenger/content/msgFolderPickerOverlay.xul"?>
+
 <!DOCTYPE dialog SYSTEM "chrome://removedupes/locale/removedupes.dtd">
 
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
@@ -62,7 +64,22 @@
         <spacer width="2.5" />
       </hbox>
       <spacer height="10"/>
-      <checkbox id="delete_permanently" label="&delete_permanently.label;" accesskey="&delete_permanently.accesskey;"/>
+      <groupbox>
+        <caption label="&removedupes_dialog.action_label;"/>
+        <radiogroup id="action">
+          <hbox>
+            <radio id="delete_permanently_action"
+                   value="delete_permanently"
+                   label="&action.delete_permanently.label;"
+                   accesskey="&action.delete_permanently.accesskey;"/>
+            <radio id="move_to_folder_action"
+                   value="move"
+                   label="&action.move.label;"
+                   accesskey="&action.move.accesskey;"/>
+            <menulist id="targetFolderPicker" flex="1"/>
+          </hbox>
+        </radiogroup>
+        </groupbox>
     </vbox>
     <vbox width="40">
       <description  width="40">
