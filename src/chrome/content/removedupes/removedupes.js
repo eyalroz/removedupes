@@ -6,6 +6,8 @@ jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 // used for rough profiling
 var gStartTime;
 var gEndTime;
+var gAllowedSpecialFolders;
+  
 
 #endif
 
@@ -32,6 +34,8 @@ function searchAndRemoveDuplicateMessages()
   useSubject     = gRemoveDupesPrefs.getBoolPref("comparison_criteria.subject", true);
   useAuthor      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.from", true);
   useLineCount   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.num_lines", false);
+  
+  gAllowedSpecialFolders = new RegExp(gRemoveDupesPrefs.getCharPref('allowed_special_folders', ''));
 
   var selectedFolders = GetSelectedMsgFolders();
   var dupeSetsHashMap = new Object;
@@ -74,15 +78,12 @@ function addSearchFolders(folder, searchFolders, postOrderTraversal)
 #ifdef DEBUG_addSearchFolders
   jsConsoleService.logStringMessage('addSearchFolders for folder ' + folder.abbreviatedName);
 #endif
-  // TODO: what we really need to be doing is check among the initial
-  // selected folder whether one of them is one of the four folders below,
-  // _or_a_subfolder_thereof_; we don't need this checked in every run
-  // of addSearchFolders
-  if (   (folder.abbreviatedName == gRemoveDupesStrings.GetStringFromName("removedupes.trash_folder_name"))
-      || (folder.abbreviatedName == gRemoveDupesStrings.GetStringFromName("removedupes.junk_folder_name"))
-      || (folder.abbreviatedName == gRemoveDupesStrings.GetStringFromName("removedupes.drafts_folder_name"))
-      || (folder.abbreviatedName == gRemoveDupesStrings.GetStringFromName("removedupes.sent_folder_name")) )
-    return;
+
+ if (!folder.canRename) {
+   // it's a special folder
+   if (!gAllowedSpecialFolders.test(topFolder.abbreviatedName))
+     return;
+ }
 
   if (!postOrderTraversal) {
 #ifdef DEBUG_addSearchFolders
@@ -124,6 +125,7 @@ function collectMessages(topFolders,dupeSetsHashMap,subfoldersFirst)
   // TODO: check we haven't selected some folders along with
   // their subfolders - this would mean false dupes!
   var searchFolders = new Array;
+  
   for(var i = 0; i < topFolders.length; i++) {
     addSearchFolders(topFolders[i],searchFolders,subfoldersFirst);
   }
