@@ -11,3 +11,6 @@ pref("removedupes.mail.default_action", true);
 
 // hidden prefs
 
+pref("removedupes.mail.allowed_special_folders", '^Inbox$');
+pref('removedupes.mail.default_target_folder', 'mailbox://nobody@Local%20Folders/Trash');
+

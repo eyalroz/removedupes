@@ -81,7 +81,7 @@ function addSearchFolders(folder, searchFolders, postOrderTraversal)
 
  if (!folder.canRename) {
    // it's a special folder
-   if (!gAllowedSpecialFolders.test(topFolder.abbreviatedName))
+   if (!gAllowedSpecialFolders.test(folder.abbreviatedName))
      return;
  }
 
