@@ -13,8 +13,10 @@ var gRemoveDupesPrefPane = {
     if (header)
       header.setAttribute("description", this._extVersion);
 
-    parent.hPrefWindow
-          .registerOKCallbackFunc(gBDMPrefPane.saveSpaceBetweenParagraphsPrefs);
+#ifdef DEBUG
+    //parent.hPrefWindow
+    //      .registerOKCallbackFunc(myCallbackFunction);
+#endif
 
 #endif
   },

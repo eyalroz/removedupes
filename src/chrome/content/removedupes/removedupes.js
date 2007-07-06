@@ -19,40 +19,7 @@ var useSendTime;
 var useSubject;
 var useAuthor;
 var useLineCount;
-
-// This is what we use to compare two records; one could think of having
-// the prefs UI define different sort orders (e.g. earlier first, unread first,
-// and even which fields are more important than others when sorting)
-
-function compareMessageRecords(lhs,rhs)
-{
-  if (lhs.messageId == rhs.messageId) {
-    if (lhs.sendTime == rhs.sendTime) {
-      if (lhs.author == rhs.author) {
-        if (lhs.subject == rhs.subject) {
-          if (lhs.lineCount == rhs.lineCount) {
-            return lhs.recordIndex - rhs.recordIndex;
-          }
-          return (lhs.lineCount - rhs.lineCount);
-        }  
-        return (lhs.subject < rhs.subject ? -1 : 1);
-      }  
-      return (lhs.author < rhs.author ? -1 : 1);
-    }  
-     return (lhs.sendTime < rhs.sendTime ? -1 : 1);
-  }  
-  return (lhs.messageId < rhs.messageId ? -1 : 1);
-}
-
-function areDupes(lhs,rhs)
-{
-  return(
-       (lhs.messageId == rhs.messageId)
-    && (lhs.sendTime == rhs.sendTime)
-    && (lhs.author == rhs.author)
-    && (lhs.subject == rhs.subject)
-    && (lhs.lineCount == rhs.lineCount));
-}
+var useFolder;
 
 // this is about the function called from outside this file
 
@@ -202,6 +169,8 @@ function collectMessages(topFolders,dupeSetsHashMap,subfoldersFirst)
         sillyHash += messageHdr.messageId + '|';
       if (useSendTime)
         sillyHash += messageHdr.dateInSeconds + '|';
+      if (useFolder)
+        sillyHash += searchFolders[i].uri + '|';
       if (useSubject)
         sillyHash += messageHdr.subject + '|6xX$\WG-C?|';
       if (useAuthor)
@@ -240,7 +209,7 @@ function collectMessages(topFolders,dupeSetsHashMap,subfoldersFirst)
   delete searchFolders;
 }
 
-function reviewAndRemove(dupeSetsHashMap/*,dupeInSequenceIndicators*/)
+function reviewAndRemove(dupeSetsHashMap)
 {
   // this function is only called if there do exist some dupes
 #ifdef DEBUG_reviewAndRemove
@@ -254,11 +223,15 @@ function reviewAndRemove(dupeSetsHashMap/*,dupeInSequenceIndicators*/)
     // in every sequence of dupes and deleting the rest
     removeDuplicates(
       dupeSetsHashMap,
-      gRemoveDupesPrefs.getBoolPref("move_to_trash_by_default", true),
+      (gRemoveDupesPrefs.getCharPref('default_action', 'move') == 'delete_permanently'),
+      gRemoveDupesPrefs.getCharPref('default_target_folder', null),
       false // the uri's have not been replaced with messageRecords
       );
   }
   else {
+    if (!gMessengerBundle)
+      gMessengerBundle = document.getElementById("bundle_messenger");
+
     // open up a dialog in which the user sees all dupes we've found,
     // and can decide which to delete
     window.openDialog(
@@ -267,6 +240,8 @@ function reviewAndRemove(dupeSetsHashMap/*,dupeInSequenceIndicators*/)
       "chrome,resizable=yes",
       messenger,
       msgWindow,
+      gMessengerBundle,
+      gDBView,
       dupeSetsHashMap);
   }
 }
@@ -326,6 +301,5 @@ function hashTest2(messageRecords)
   jsConsoleService.logStringMessage('time to populate dupe lists for ' + messageRecords.length + ' messages = ' + (gEndTime-gStartTime));
   gStartTime = (new Date()).getTime();
 }
-
 
 #endif

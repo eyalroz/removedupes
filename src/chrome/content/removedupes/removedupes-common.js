@@ -3,6 +3,9 @@
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 
+var gCopyService =
+  Cc["@mozilla.org/messenger/messagecopyservice;1"]
+    .getService(Ci.nsIMsgCopyService);
 
 // localized strings
 
@@ -99,7 +102,11 @@ function clone(myObject)
 // an array of Uri's, or after displaying it, in which case the elements have
 // been replaced with messageRecord objects (which also include indications
 // of which messages to keep)
-function removeDuplicates(dupeSetsHashMap,justMoveToTrah,haveMessageRecords)
+function removeDuplicates(
+  dupeSetsHashMap,
+  deletePermanently,
+  targetFolderUri,
+  haveMessageRecords)
 {
   // note that messenger and msgWindow have to be defined! if we're running from the
   // overlay of the 3-pane window, then this is ensured; otherwise,
@@ -107,60 +114,133 @@ function removeDuplicates(dupeSetsHashMap,justMoveToTrah,haveMessageRecords)
   // and set a global window-global variable of its own
 
 #ifdef DEBUG_removeDuplicates
-  jsConsoleService.logStringMessage('in removeDuplicates');
+  jsConsoleService.logStringMessage('in removeDuplicates\ntargetFolderUri = ' + targetFolderUri + '\ndeletePermanently = ' + deletePermanently);
 #endif
 
-  var removalMessageHdrs =
-    Cc["@mozilla.org/supports-array;1"].createInstance(Ci.nsISupportsArray);
-
-  if (haveMessageRecords) {
-    for ( var hashValue in dupeSetsHashMap ) {
-      var dupeSet = dupeSetsHashMap[hashValue];
-      for(var i = 0; i < dupeSet.length; i++) {
-        if (!dupeSet[i].toKeep) {
+  var targetFolder;
+  if (!deletePermanently) {
+    if ((targetFolderUri == null) || (targetFolderUri == ""))
+      targetFolderUri = 'mailbox://nobody@Local%20Folders/Trash';
+    targetFolder = GetMsgFolderFromUri(targetFolderUri, true);
+    if (!targetFolder) {
+      alert(gRemoveDupesStrings.GetStringFromName('removedupes.no_such_folder')  + targetFolderUri);
+      return;
+    }
+  }
+  
+  // TODO: re-hash the messages by folder, then delete all messages in a folder at once
+  
+  var dupesByFolderHashMap = new Object;
+  var messageHeader;
+  var previousFolderUri = null;
+  
+  for (var hashValue in dupeSetsHashMap) {
+    var dupeSet = dupeSetsHashMap[hashValue];
 #ifdef DEBUG_removeDuplicates
-          jsConsoleService.logStringMessage('appending URI' + dupeSet[i].uri);
+    jsConsoleService.logStringMessage('hash value ' + hashValue + '\nnumber of dupes: ' + dupeSet.length);
 #endif
-          removalMessageHdrs.AppendElement(messenger.msgHdrFromURI(dupeSet[i].uri));
+    if (haveMessageRecords) {
+      for(var i = 0; i < dupeSet.length; i++) {
+        messageRecord = dupeSet[i];
+        if (!messageRecord.toKeep) {
+#ifdef DEBUG_removeDuplicates
+          jsConsoleService.logStringMessage('processing URI ' + messageRecord.uri);
+#endif
+          messageHeader = messenger.msgHdrFromURI(messageRecord.uri);
+          if (!(messageRecord.folderUri in dupesByFolderHashMap)) {
+            var folderDupesInfo = new Object; 
+            folderDupesInfo.folder = messageHeader.folder;
+            folderDupesInfo.previousFolderUri = previousFolderUri;
+            previousFolderUri = messageRecord.folderUri;
+            folderDupesInfo.removalHeaders =
+              Cc["@mozilla.org/supports-array;1"].createInstance(Ci.nsISupportsArray);
+            dupesByFolderHashMap[messageRecord.folderUri] = folderDupesInfo;
+          }
+          dupesByFolderHashMap[messageRecord.folderUri]
+            .removalHeaders.AppendElement(messageHeader);
         }
       }
     }
-  }  
-  else for ( var hashValue in dupeSetsHashMap ) {
-    var dupeSet = dupeSetsHashMap[hashValue];
-    for(var i = 1; i < dupeSet.length; i++) {
+    else {
+      for(var i = 1; i < dupeSet.length; i++) {
 #ifdef DEBUG_removeDuplicates
-      jsConsoleService.logStringMessage('appending URI' + dupeSet[i]);
+        jsConsoleService.logStringMessage('processing URI ' + dupeSet[i]);
 #endif
-      removalMessageHdrs.AppendElement(messenger.msgHdrFromURI(dupeSet[i]));
+        messageHeader = messenger.msgHdrFromURI(dupeSet[i]);
+        var folderUri = messageHeader.folder.URI;
+        if (!dupesByFolderHashMap[folderUri]) {
+          var folderDupesInfo = new Object;
+          folderDupesInfo.folder = messageHeader.folder;
+          folderDupesInfo.previousFolderUri = previousFolderUri;
+          previousFolderUri = folderUri;
+          folderDupesInfo.removalHeaders =
+            Cc["@mozilla.org/supports-array;1"].createInstance(Ci.nsISupportsArray);
+          dupesByFolderHashMap[folderUri] = folderDupesInfo;
+        }
+        dupesByFolderHashMap[folderUri]
+            .removalHeaders.AppendElement(messageHeader);
+      }
     }
   }
-  
-  // can't figure out a better way to get some arbitrary URI
-  for ( var hashValue in dupeSetsHashMap ) {
-    var dupeSet = dupeSetsHashMap[hashValue];
-    arbitraryUri = (haveMessageRecords ? dupeSet[0].uri : dupeSet[0]);
+
+
+  for (folderUri in dupesByFolderHashMap) {
+    removeDupesFromSingleFolder(
+      dupesByFolderHashMap[folderUri].folder,
+      dupesByFolderHashMap[folderUri].removalHeaders,
+      targetFolder,
+      deletePermanently);
   }
-    
-  
-  if (removalMessageHdrs.Count() > 0) {
+
 #ifdef DEBUG_removeDuplicates
-      jsConsoleService.logStringMessage('getting folder');
-      jsConsoleService.logStringMessage('arbitraryUri = ' + arbitraryUri);
+  jsConsoleService.logStringMessage('done');
 #endif
-    var firstMessageFolder = messenger.msgHdrFromURI(arbitraryUri).folder;
-    // if justMoveToTrash is true, this moves the messages to the trash fodler;
-    // otherwise this deletes the messages permanently;
-    // also there's the weird fact that you need to use a folder 
-    // object to delete messages, but the messages don't have to be in that folder...
-    // very intuitive right?
+}
+
+function removeDupesFromSingleFolder(
+  sourceFolder,
+  removalMessageHdrs,
+  targetFolder,
+  deletePermanently)
+{
 #ifdef DEBUG_removeDuplicates
-      jsConsoleService.logStringMessage('deleting');
+//  jsConsoleService.logStringMessage('removalMessageHdrs.GetElementAt(0) = ' + removalMessageHdrs.GetElementAt(0));
 #endif
-    firstMessageFolder.deleteMessages(
-      removalMessageHdrs, msgWindow, !justMoveToTrah, false, null, true);
+  if (deletePermanently) {
+    try{
+      sourceFolder.deleteMessages(
+        removalMessageHdrs, 
+        msgWindow,
+        true, // delete permanently
+        false, // delete storage - what does this mean? 
+        null, // no listener
+        true // allow undo... will this be possible at all?
+        );
+    } catch(ex) {
+      alert(gRemoveDupesStrings.GetStringFromName('removedupes.failed_to_erase'));
+      throw(ex);
+    }
   }
+  else {
+    try {
 #ifdef DEBUG_removeDuplicates
-      jsConsoleService.logStringMessage('done');
+  jsConsoleService.logStringMessage('targetFolder URI = ' + targetFolder.URI + '\nsourceFolder URI = ' + sourceFolder.URI +
+                                    '\nremovalMessageHdrs has ' + removalMessageHdrs.Count() + ' elements, first element is\n' +
+                                    removalMessageHdrs.GetElementAt(0));
+  
 #endif
+      gCopyService.CopyMessages(
+        sourceFolder,
+        removalMessageHdrs,
+        targetFolder,
+        true, // moving, not copying
+        null, // no listener
+        msgWindow,
+        true // allow undo... what does this mean exactly?
+        );
+    } catch(ex) {
+      alert(gRemoveDupesStrings.GetStringFromName('removedupes.failed_to_move_to_folder') + '\n' + targetFolder.URI);
+      throw(ex);
+    }
+  }
 }

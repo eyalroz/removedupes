@@ -36,15 +36,18 @@
       <preference id="removedupes.mail.comparison_criteria.subject"
                   name="removedupes.mail.comparison_criteria.subject"
                   type="bool"/>
+      <preference id="removedupes.mail.comparison_criteria.folder"
+                  name="removedupes.mail.comparison_criteria.folder"
+                  type="bool"/>
       <preference id="removedupes.mail.confirm_search_and_deletion"
                   name="removedupes.mail.confirm_search_and_deletion"
                   type="bool"/>
       <preference id="removedupes.mail.search_subfolders_first"
                   name="removedupes.mail.search_subfolders_first"
                   type="bool"/>
-      <preference id="removedupes.mail.move_to_trash_by_default"
-                  name="removedupes.mail.move_to_trash_by_default"
-                  type="bool"/>
+      <preference id="removedupes.mail.default_action"
+                  name="removedupes.mail.default_action"
+                  type="string"/>
     </preferences>
 #else
 <page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
@@ -62,12 +65,13 @@
       var panel = "chrome://removedupes/content/removedupes-prefs.xul";
       var _elementIDs = ["removedupes.mail.search_subfolders_first",
                          "removedupes.mail.confirm_search_and_deletion",
-                         "removedupes.mail.move_to_trash_by_default",
+                         "removedupes.mail.default_action",
                          "removedupes.mail.comparison_criteria.from",
                          "removedupes.mail.comparison_criteria.message_id",
                          "removedupes.mail.comparison_criteria.num_lines",
                          "removedupes.mail.comparison_criteria.send_time",
-                         "removedupes.mail.comparison_criteria.subject"];
+                         "removedupes.mail.comparison_criteria.subject",
+                         "removedupes.mail.comparison_criteria.folder"];
     </script>
 #endif
 
@@ -95,14 +99,14 @@
               accesskey="&general_settings.confirm_search_and_deletion.access_key;"
               autostretch="never"/>
             <spacer/>
-            <description>&general_settings.move_to_trash_by_default.description;</description>
+            <description>&general_settings.default_action.description;</description>
             <hbox class="indent">
-              <radiogroup preference="removedupes.mail.move_to_trash_by_default"
-                prefstring="removedupes.mail.move_to_trash_by_default"
-                preftype="bool"
-                id="removedupes.mail.move_to_trash_by_default">              
-                <radio value="true" label="&general_settings.move_to_trash_by_default.true.label;" accesskey="&general_settings.move_to_trash_by_default.true.accesskey;"/>
-                <radio value="false" label="&general_settings.move_to_trash_by_default.false.label;" accesskey="&general_settings.move_to_trash_by_default.false.accesskey;"/>
+              <radiogroup preference="removedupes.mail.default_action"
+                prefstring="removedupes.mail.default_action"
+                id="removedupes.mail.default_action">
+                <radio value="move" label="&general_settings.default_action.move.label;" accesskey="&general_settings.default_action.move.accesskey;"/>
+                <!-- add here: folder picker! -->
+                <radio value="delete_permanently" label="&general_settings.default_action.delete_permanently.label;" accesskey="&general_settings.default_action.delete_permanently.accesskey;"/>
               </radiogroup>
             </hbox>
           </vbox>
@@ -140,6 +144,12 @@
               id="removedupes.mail.comparison_criteria.subject"
               label="&message_comparison.subject.label;"
               accesskey="&message_comparison.subject.access_key;"
+              autostretch="never"/>
+            <checkbox preference="removedupes.mail.comparison_criteria.folder"
+              prefstring="removedupes.mail.comparison_criteria.folder"
+              id="removedupes.mail.comparison_criteria.folder"
+              label="&message_comparison.folder.label;"
+              accesskey="&message_comparison.folder.access_key;"
               autostretch="never"/>
           </vbox>
         </tabpanel>
