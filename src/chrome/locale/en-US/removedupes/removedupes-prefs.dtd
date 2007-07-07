@@ -28,5 +28,5 @@
 <!ENTITY general_settings.search_subfolders_first.access_key            "s">
 <!ENTITY general_settings.confirm_search_and_deletion.access_key        "c">
 
-<!ENTITY removedupes-preftree-label                                     "Remove Dupes">
+<!ENTITY removedupes-preftree-label                                     "Remove Duplicates">
 <!ENTITY removedupes-preftree-page-title                                "Remove Duplicate Messages (Alternate)">
