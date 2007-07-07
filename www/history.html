@@ -5,6 +5,20 @@
 
 <ul id="version-history">
 
+<li><a name="0.1.4">version 0.1.4</a>
+  <ul>
+    <li>Completely reworked dupe finding algorithm, with x4 and better performance boost:<br>This version processes ~45,000 messages in 50 folders with ~2800 dupes in ~10 seconds (+ ~5.5 seconds for constructing the review and confirmation dialog).
+    <li>Added a sunflower field logo.
+    <li>Non-ASCII headers (author, subject) are now handled and displayed properly.
+    <li>The review & confirmation dialog now shows the number of total dupes, dupe sets, and dupes to be kept.
+    <li>The review & confirmation dialog now has a folder picker for selecting a target folder other than the trash - but, alas, it is not yet working; an alternate folder can be used only by manually editing the hidden pref <code>removedupes.mail.default_target_folder</code>.
+    <li>German (de-DE) localization, thanks to <code>AlfonsName [at] netscape.net</code> and the denizens of <code>#mozilla.de@irc.mozilla.org</code>.
+    <li>A message's folder can now also be used as one of the comparison criteria (e.g. to prevent detecting messages from different folders as dupes).
+    <li>A message's folder can now also be used as one of the comparison criteria.
+    <li>The mechanism for deciding which special folders (Inbox, Trash etc.) to include in a search for dupes has been revamped. It is now controlled by the hidden preference <code>removedupes.mail.allowed_special_folders</code>.
+  </ul>
+</li>
+
 <li><a name="0.1.3">version 0.1.3</a>
   <ul>
     <li>Added suiterunner support.
