@@ -145,7 +145,7 @@ function removeDuplicates(
       targetFolderUri = 'mailbox://nobody@Local%20Folders/Trash';
     targetFolder = GetMsgFolderFromUri(targetFolderUri, true);
     if (!targetFolder) {
-      alert(gRemoveDupesStrings.GetStringFromName('removedupes.no_such_folder')  + targetFolderUri);
+      alert(gRemoveDupesStrings.formatStringFromName('removedupes.no_such_folder', [targetFolderUri], 1));
       return;
     }
   }
@@ -261,7 +261,7 @@ function removeDupesFromSingleFolder(
         true // allow undo... what does this mean exactly?
         );
     } catch(ex) {
-      alert(gRemoveDupesStrings.GetStringFromName('removedupes.failed_to_move_to_folder') + '\n' + targetFolder.URI);
+      alert(gRemoveDupesStrings.formatStringFromName('removedupes.failed_to_move_to_folder', [targetFolder.URI], 1));
       throw(ex);
     }
   }
