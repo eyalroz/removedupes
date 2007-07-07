@@ -1,4 +1,4 @@
-<!ENTITY removedupes.title                              "Entfernung doppelter Nachrichten (Alternative)">
+﻿<!ENTITY removedupes.title                              "Entfernung doppelter Nachrichten (Alternative)">
 <!ENTITY removedupes.remove_duplicates_menuitem.label   "Duplikate entfernen...">
 
 <!ENTITY removedupes_dialog.dialog_title                "Entfernung von Duplikaten">
@@ -14,6 +14,10 @@
 <!ENTITY removedupes_dialog.keep_all.label              "Alle Exemplare">
 <!ENTITY removedupes_dialog.tree_label                  "Gruppen von Duplikaten:">
 <!ENTITY removedupes_dialog.keep_flag                   "Behalten?">
+<!ENTITY removedupes_dialog.action_label                "Action:">
 
-<!ENTITY delete_permanently.label                       "Entferne dauerhaft (verschiebe nicht in den Papierkorb)">
-<!ENTITY delete_permanently.accesskey                   "d">
+<!ENTITY action.delete_permanently.label                "Entferne dauerhaft (verschiebe nicht in den Papierkorb)">
+<!ENTITY action.delete_permanently.accesskey            "d">
+<!ENTITY action.move.label                              "Verschieben nach:">
+<!ENTITY action.move.accesskey                          "V">
+
