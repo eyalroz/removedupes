@@ -66,6 +66,19 @@ var gRemoveDupesPrefs = {
     }
   },
 
+  getLocalizedStringPref: function(prefName, defaultValue) {
+    try {
+      return this.prefService
+                 .getComplexValue(
+                   preferencePrefix + prefName,Ci.nsIPrefLocalizedString).data;
+    } catch(ex) {
+      if (defaultValue != undefined)
+        return defaultValue;
+
+      throw(ex);
+    }
+  },
+
   setBoolPref: function(prefName, val) {
     this.prefService.setBoolPref(preferencePrefix + prefName, val);
   },
@@ -77,6 +90,15 @@ var gRemoveDupesPrefs = {
   setIntPref: function(prefName, val) {
     this.prefService.setIntPref(preferencePrefix + prefName, val);
   },
+  
+  setLocalizedStringPref: function (prefName, val) {
+    var pls = Components.classes["@mozilla.org/pref-localizedstring;1"]
+                        .createInstance(Ci.nsIPrefLocalizedString);
+    pls.data = val;
+    this.prefService
+        .setComplexValue(
+          preferencePrefix + prefName,Ci.nsIPrefLocalizedString, pls);
+  }
 
 }
 

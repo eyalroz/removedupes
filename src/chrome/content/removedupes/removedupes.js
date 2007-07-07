@@ -6,10 +6,9 @@ jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 // used for rough profiling
 var gStartTime;
 var gEndTime;
-var gAllowedSpecialFolders;
-  
-
 #endif
+
+var gAllowedSpecialFolders;
 
 // can't we use
 // mail/locales/en-US/chrome/messenger/messenger.properties ... isn't that some
@@ -29,13 +28,18 @@ function searchAndRemoveDuplicateMessages()
 {
   dfBundle = document.getElementById("removedupesStrings");
 
-  useMessageId  = gRemoveDupesPrefs.getBoolPref("comparison_criteria.message_id", true);
+  useMessageId   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.message_id", true);
   useSendTime    = gRemoveDupesPrefs.getBoolPref("comparison_criteria.send_time", true);
+  useFolder      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.folder", true);
   useSubject     = gRemoveDupesPrefs.getBoolPref("comparison_criteria.subject", true);
   useAuthor      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.from", true);
   useLineCount   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.num_lines", false);
   
-  gAllowedSpecialFolders = new RegExp(gRemoveDupesPrefs.getCharPref('allowed_special_folders', ''));
+  gAllowedSpecialFolders = 
+    new RegExp(gRemoveDupesPrefs.getLocalizedStringPref('allowed_special_folders', ''));
+#ifdef DEBUG_searchAndRemoveDuplicateMessages
+  jsConsoleService.logStringMessage('gAllowedSpecialFolders = ' + gAllowedSpecialFolders);
+#endif
 
   var selectedFolders = GetSelectedMsgFolders();
   var dupeSetsHashMap = new Object;
