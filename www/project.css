@@ -1,5 +1,9 @@
 @import url("http://www.mozdev.org/project.css");
 
+a.download-xpi{
+  text-decoration: none;
+}
+
 a.download-xpi {
   text-align:center;
   display: block;
@@ -14,6 +18,12 @@ a.download-xpi {
   margin-bottom: 2%;
   font-size: 1.2em;
 }
+
+a.download-xpi:hover,a.download-xpi:active{
+  border: 3px solid red;
+  background: rgb(255,160,160);
+}
+
 
 p#mozdev-feedback {
   display: none;
