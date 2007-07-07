@@ -37,12 +37,11 @@ DEFS="$DEFS -DVERSION=$VERSION -DSHORTNAME=$SHORTNAME"
 echo -e "Building the XPI with the following definitions:\n\n$DEFS\n"
 BUILDDIR="build/$TARGET"
 XPINAME="${SHORTNAME}_${TARGET}.xpi"
-BUILDTOOLSDIR="../buildtools"
+BUILDTOOLSDIR="buildtools"
 export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
 
-rm -rf $BUILDDIR/*
-rm -rf $BUILDDIR
-mkdir $BUILDDIR
+if [ ! -d build ] ; then mkdir build; fi
+if [ ! -d $BUILDDIR ] ; then mkdir $BUILDDIR; else rm -rf $BUILDDIR/*; fi
 
 $BUILDTOOLSDIR/preprocessor.pl $DEFS jar.mn > $BUILDDIR/jar.mn
 $BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $DEFS"  -s . -d . < $BUILDDIR/jar.mn || exit
