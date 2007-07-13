@@ -28,11 +28,11 @@ p#mozdev-feedback {
   display: none;
 }
 
-h2 a:active {
+#main-content h2 a:active {
   text-decoration: none;
 }
   
-h2 a:hover {
+#main-content h2 a:hover {
   text-decoration: none;
 }
 
