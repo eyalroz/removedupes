@@ -38,12 +38,12 @@ p#mozdev-feedback {
 
 ul#version-history > li   {
   font-size: normal;
-  list-style-type: none !important;
+  list-style-type: none;
   padding-bottom: 5pt;
 }
 
 ul#version-history li {
-  list-style-type: square !important;
+  list-style-type: square;
   list-style-position: outside;
 }
 
