@@ -1,3 +1,70 @@
+#project-navigation a {
+  border-left: 1px solid black;
+  padding-left: 6px;
+  padding-right: 5px;
+}
+
+#project-navigation a.first-item {
+  border-left: none;
+}
+
+#project-navigation th {
+  margin-right: 3px;
+}
+
+/* h1#content, */
+.project-name {
+ /* background: inherit;
+  color: #900; */
+  padding: 0;
+}
+.project-name:after {
+  content: url(http://www.mozdev.org/sharedimages/boxes.gif);
+  padding-left: 1.1em;
+}
+
+.project-navigations {
+  border: none; /* work around weird ns4 bug */
+  font-size: smaller;
+  margin-bottom: 2em;
+}
+
+#project-navigation th {
+  background-color: inherit;
+  background-image: url(http://www.mozdev.org/sharedimages/nav-icon.png);
+  background-repeat: no-repeat;
+  color: #900;
+  padding-left: 18px;
+  padding-top: 0;
+  margin-bottom: 0;
+  margin-top: 0;
+  vertical-align: top;
+}
+
+
+#infoTabs {
+  float: right;
+  margin-right: -1em;
+}
+
+.infoTab {
+  margin: 10px;
+  width: 154px;
+}
+
+.infoTab .infoHeader {
+  background: #f90 no-repeat url(http://www.mozdev.org/sharedimages/infotab_top.png);
+  color: #fff;
+  text-align: center;
+}
+
+.infoTab .infoItems div {
+  background: #fff no-repeat url(http://www.mozdev.org/sharedimages/bullet.gif);
+  color: inherit;
+  padding-left: 16px;
+  padding-bottom: 5px;
+}
+
 a.download-xpi{
   text-decoration: none;
 }
@@ -61,4 +128,4 @@ ul#version-history ul {
   padding-bottom: 10pt;
 }
 
-@import url("http://www.mozdev.org/project.css");
+
