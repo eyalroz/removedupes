@@ -40,12 +40,12 @@ h2 a:hover {
 
 ul#version-history > li   {
   font-size: normal;
-  list-style-type: none;
+  list-style-type: none !important;
   padding-bottom: 5pt;
 }
 
-#main-content ul li{
-  list-style-type: square;
+ul#version-history li {
+  list-style-type: square !important;
   list-style-position: outside;
 }
 
@@ -54,22 +54,12 @@ ul#version-history > li   {
 #main-content ul {
 /*  font-size: smaller;*/
 /*  list-style-image: url("http://www.mozdev.org/sharedimages/bullet.gif");*/
-/*  padding-left: 5px;
-  margin-left: 5px;
-  padding-right: 5px;
-  margin-right: 5px;*/
-}
-
-#main-content-no-nav li,
-#main-content li {
   padding-left: 5px;
   margin-left: 5px;
   padding-right: 5px;
   margin-right: 5px;
-  text-indent: 15px;
-  /*padding-bottom: 15px;*/
 }
 
 #main-content ol li {
-  padding-bottom: 5px;
+  padding-bottom: 10pt;
 }
