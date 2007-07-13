@@ -1,5 +1,3 @@
-@import url("http://www.mozdev.org/project.css");
-
 a.download-xpi{
   text-decoration: none;
 }
@@ -63,3 +61,5 @@ ul#version-history li {
 #main-content ol li {
   padding-bottom: 10pt;
 }
+
+@import url("http://www.mozdev.org/project.css");
