@@ -39,20 +39,25 @@ h2 a:hover {
 }
 
 ul#version-history > li   {
+  font-size: normal;
   list-style-type: none;
+  padding-bottom: 5pt;
+}
+
+#main-content ul li{
+  list-style-type: square;
+  list-style-position: outside;
 }
 
 
 #main-content-no-nav ul,
 #main-content ul {
 /*  font-size: smaller;*/
-  list-style-type: square;
 /*  list-style-image: url("http://www.mozdev.org/sharedimages/bullet.gif");*/
-  list-style-position: inside;
-  padding-left: 5px;
+/*  padding-left: 5px;
   margin-left: 5px;
   padding-right: 5px;
-  margin-right: 5px;
+  margin-right: 5px;*/
 }
 
 #main-content-no-nav li,
