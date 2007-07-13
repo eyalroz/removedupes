@@ -48,8 +48,7 @@ ul#version-history li {
 }
 
 
-#main-content-no-nav ul,
-#main-content ul {
+ul#version-history ul {
 /*  font-size: smaller;*/
 /*  list-style-image: url("http://www.mozdev.org/sharedimages/bullet.gif");*/
   padding-left: 5px;
