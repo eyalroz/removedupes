@@ -1,18 +1,13 @@
-// XPCOM Shorthands
-
-const Cc = Components.classes;
-const Ci = Components.interfaces;
-
 var gCopyService =
-  Cc["@mozilla.org/messenger/messagecopyservice;1"]
-    .getService(Ci.nsIMsgCopyService);
+  Components.classes["@mozilla.org/messenger/messagecopyservice;1"]
+            .getService(Components.interfaces.nsIMsgCopyService);
 
 // localized strings
 
 var gRemoveDupesStrings =
-  Cc["@mozilla.org/intl/stringbundle;1"]
-    .getService(Ci.nsIStringBundleService)
-    .createBundle("chrome://removedupes/locale/removedupes.properties");
+  Components.classes["@mozilla.org/intl/stringbundle;1"]
+            .getService(Components.interfaces.nsIStringBundleService)
+            .createBundle("chrome://removedupes/locale/removedupes.properties");
 
 //---------------------------------------------------------
 
@@ -70,7 +65,7 @@ var gRemoveDupesPrefs = {
     try {
       return this.prefService
                  .getComplexValue(
-                   preferencePrefix + prefName,Ci.nsIPrefLocalizedString).data;
+                   preferencePrefix + prefName,Components.interfaces.nsIPrefLocalizedString).data;
     } catch(ex) {
       if (defaultValue != undefined)
         return defaultValue;
@@ -93,11 +88,11 @@ var gRemoveDupesPrefs = {
   
   setLocalizedStringPref: function (prefName, val) {
     var pls = Components.classes["@mozilla.org/pref-localizedstring;1"]
-                        .createInstance(Ci.nsIPrefLocalizedString);
+                        .createInstance(Components.interfaces.nsIPrefLocalizedString);
     pls.data = val;
     this.prefService
         .setComplexValue(
-          preferencePrefix + prefName,Ci.nsIPrefLocalizedString, pls);
+          preferencePrefix + prefName,Components.interfaces.nsIPrefLocalizedString, pls);
   }
 
 }
@@ -175,7 +170,7 @@ function removeDuplicates(
             folderDupesInfo.previousFolderUri = previousFolderUri;
             previousFolderUri = messageRecord.folderUri;
             folderDupesInfo.removalHeaders =
-              Cc["@mozilla.org/supports-array;1"].createInstance(Ci.nsISupportsArray);
+              Components.classes["@mozilla.org/supports-array;1"].createInstance(Components.interfaces.nsISupportsArray);
             dupesByFolderHashMap[messageRecord.folderUri] = folderDupesInfo;
           }
           dupesByFolderHashMap[messageRecord.folderUri]
@@ -196,7 +191,7 @@ function removeDuplicates(
           folderDupesInfo.previousFolderUri = previousFolderUri;
           previousFolderUri = folderUri;
           folderDupesInfo.removalHeaders =
-            Cc["@mozilla.org/supports-array;1"].createInstance(Ci.nsISupportsArray);
+            Components.classes["@mozilla.org/supports-array;1"].createInstance(Components.interfaces.nsISupportsArray);
           dupesByFolderHashMap[folderUri] = folderDupesInfo;
         }
         dupesByFolderHashMap[folderUri]

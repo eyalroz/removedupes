@@ -29,8 +29,8 @@ const lineCountColumnIndex   = 6;
 
 
 const gDateService = 
-  Cc["@mozilla.org/intl/scriptabledateformat;1"]
-    .getService(Ci.nsIScriptableDateFormat);
+  Components.classes["@mozilla.org/intl/scriptabledateformat;1"]
+            .getService(Components.interfaces.nsIScriptableDateFormat);
 
 
 function dupeMessageRecord(messageUri)
@@ -405,7 +405,7 @@ function onCancel()
 
 function onAccept()
 {
-  var uri = document.getElementById('targetFolderPicker').getAttribute('uri');
+  var uri = document.getElementById('msgTrashFolderPicker').getAttribute('uri');
   var deletePermanently =
     (document.getElementById('action').getAttribute('value') == 'delete_permanently');
   removeDuplicates(
@@ -462,11 +462,11 @@ function initializeFolderPicker()
 #endif
     
   // TODO: perhaps we don't need this when also calling SetFolderPicker ?
-  //MsgFolderPickerOnLoad('targetFolderPicker');
+  MsgFolderPickerOnLoad('msgTrashFolderPicker');
 
   if ( (uri == null) || (uri == "") )
     return;
 
   //var msgFolder = GetMsgFolderFromUri(uri, false);
-  SetFolderPicker(uri, 'targetFolderPicker');
+  SetFolderPicker(uri, 'msgTrashFolderPicker');
 }
