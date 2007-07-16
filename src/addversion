@@ -3,7 +3,7 @@
 # run this from the src/ directory!
 
 DOWNLOADS="../downloads"
-BUILDTOOLS="../buildtools"
+BUILDTOOLS="buildtools"
 
 # determine version number
 VERSION=`grep VERSION=\" dobuild | cut -d\" -f2`
@@ -15,14 +15,21 @@ RELEASE_TAG="${CAPS_SHORTNAME}_${USCORED_VERSION}"
 
 # create new version directory
 
-mkdir ${DOWNLOADS}/${VERSION}
+if [ ! -d ${DOWNLOADS}/${VERSION} ]; then
+	mkdir ${DOWNLOADS}/${VERSION}
+fi
 
 # dobuild
 ./dobuild suite && ./dobuild tbird && ./dobuild suiterunner
 #or quit...
 
-cp build/tbird/${SHORTNAME}_tbird.xpi build/suite/${SHORTNAME}_suite.xpi build/suiterunner/${SHORTNAME}_suiterunner.xpi ${DOWNLOADS}/${VERSION}/ 
-cp -f build/tbird/${SHORTNAME}_tbird.xpi build/suite/${SHORTNAME}_suite.xpi build/suiterunner/${SHORTNAME}_suiterunner.xpi ${DOWNLOADS}/latest/
+for target in tbird suite suiterunner; do
+	cp build/tbird/${SHORTNAME}_${target}.xpi ${DOWNLOADS}/${VERSION}/${SHORTNAME}_${VERSION}_${target}.xpi 
+	cp build/tbird/${SHORTNAME}_${target}.xpi ${DOWNLOADS}/latest/
+done
+	
+#cp build/tbird/${SHORTNAME}_tbird.xpi build/suite/${SHORTNAME}_suite.xpi build/suiterunner/${SHORTNAME}_suiterunner.xpi ${DOWNLOADS}/${VERSION}/ 
+#cp -f build/tbird/${SHORTNAME}_tbird.xpi build/suite/${SHORTNAME}_suite.xpi build/suiterunner/${SHORTNAME}_suiterunner.xpi ${DOWNLOADS}/latest/
 
 cvs -d :pserver:eyalroz@mozdev.org/cvs tag  ${RELEASE_TAG}
 
