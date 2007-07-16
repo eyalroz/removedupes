@@ -1,6 +1,7 @@
 #ifdef DEBUG
 // The following 2 lines enable logging messages to the javascript console:
-var jsConsoleService = Components.classes['@mozilla.org/consoleservice;1'].getService();
+var jsConsoleService = 
+  Components.classes['@mozilla.org/consoleservice;1'].getService()
 jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 
 // used for rough profiling
@@ -83,7 +84,7 @@ function addSearchFolders(folder, searchFolders, postOrderTraversal)
   jsConsoleService.logStringMessage('addSearchFolders for folder ' + folder.abbreviatedName);
 #endif
 
- if (!folder.canRename) {
+ if (!folder.canRename && !folder.rootFolder) {
    // it's a special folder
    if (!gAllowedSpecialFolders.test(folder.abbreviatedName))
      return;
@@ -102,7 +103,8 @@ function addSearchFolders(folder, searchFolders, postOrderTraversal)
     var subFoldersIterator = folder.GetSubFolders();
     do {
       addSearchFolders(
-        subFoldersIterator.currentItem().QueryInterface(Components.interfaces.nsIMsgFolder),
+        subFoldersIterator.currentItem().QueryInterface(
+          Components.interfaces.nsIMsgFolder),
         searchFolders,
         postOrderTraversal);
       try {
@@ -187,13 +189,13 @@ function collectMessages(topFolders,dupeSetsHashMap,subfoldersFirst)
       if (sillyHash in messageUriHashmap) {
         if (sillyHash in dupeSetsHashMap) {
 #ifdef DEBUG_collectMessages
-      jsConsoleService.logStringMessage('sillyHash \n' + sillyHash + '\nis a third-or-later dupe');
+      jsConsoleService.logStringMessage('sillyHash\n' + sillyHash + '\nis a third-or-later dupe');
 #endif
           // just add the current message's URI, no need to copy anything
           dupeSetsHashMap[sillyHash].push(uri);
         } else {
 #ifdef DEBUG_collectMessages
-      jsConsoleService.logStringMessage('sillyHash \n' + sillyHash + '\nis a second dupe');
+      jsConsoleService.logStringMessage('sillyHash\n' + sillyHash + '\nis a second dupe');
 #endif
           // the URI in messageUriHashmap[sillyMap] has not been copied to
           // the dupes hash since until now we did not know it was a dupe;
@@ -202,7 +204,7 @@ function collectMessages(topFolders,dupeSetsHashMap,subfoldersFirst)
         }
       } else {
 #ifdef DEBUG_collectMessages
-      jsConsoleService.logStringMessage('sillyHash \n' + sillyHash + '\nis not a dupe (or a first dupe)');
+      jsConsoleService.logStringMessage('sillyHash\n' + sillyHash + '\nis not a dupe (or a first dupe)');
 #endif
         messageUriHashmap[sillyHash] = uri;
       }
@@ -278,8 +280,8 @@ function hashTest2(messageRecords)
   gStartTime = (new Date()).getTime();
   var messageUriHashmap = new Object;
   var dupeUriHashmap = new Object;
-  //var hasher = Cc["@mozilla.org/security/hash;1"].createInstance(Ci.nsICryptoHash);
-  //var algorithm = Ci.nsICryptoHash.MD5;
+  //var hasher = Components.classes["@mozilla.org/security/hash;1"].createInstance(Components.interfaces.nsICryptoHash);
+  //var algorithm = Components.interfaces.nsICryptoHash.MD5;
   for (var i = 0; i < messageRecords.length; i++) {
     //hasher.init(algorithm);
     
