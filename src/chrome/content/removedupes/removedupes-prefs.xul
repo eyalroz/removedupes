@@ -21,8 +21,14 @@
             helpURI="&guide-url;"
             onpaneload="gRemoveDupesPrefPane.init();">
     <preferences id="removedupesPrefs">
-      <preference id="removedupes.mail.comparison_criteria.from"
-                  name="removedupes.mail.comparison_criteria.from"
+      <preference id="removedupes.mail.comparison_criteria.author"
+                  name="removedupes.mail.comparison_criteria.author"
+                  type="bool"/>
+      <preference id="removedupes.mail.comparison_criteria.recipients"
+                  name="removedupes.mail.comparison_criteria.recipients"
+                  type="bool"/>
+      <preference id="removedupes.mail.comparison_criteria.cc_list"
+                  name="removedupes.mail.comparison_criteria.cc_list"
                   type="bool"/>
       <preference id="removedupes.mail.comparison_criteria.message_id"
                   name="removedupes.mail.comparison_criteria.message_id"
@@ -66,7 +72,9 @@
       var _elementIDs = ["removedupes.mail.search_subfolders_first",
                          "removedupes.mail.confirm_search_and_deletion",
                          "removedupes.mail.default_action",
-                         "removedupes.mail.comparison_criteria.from",
+                         "removedupes.mail.comparison_criteria.author",
+                         "removedupes.mail.comparison_criteria.recipients",
+                         "removedupes.mail.comparison_criteria.cc_list",
                          "removedupes.mail.comparison_criteria.message_id",
                          "removedupes.mail.comparison_criteria.num_lines",
                          "removedupes.mail.comparison_criteria.send_time",
@@ -115,11 +123,23 @@
         <tabpanel id="changelog">
           <vbox flex="1">
             <description>&message_comparison.tab_description;</description>
-            <checkbox preference="removedupes.mail.comparison_criteria.from"
-              prefstring="removedupes.mail.comparison_criteria.from"
-              id="removedupes.mail.comparison_criteria.from"
-              label="&message_comparison.from.label;"
-              accesskey="&message_comparison.from.access_key;"
+            <checkbox preference="removedupes.mail.comparison_criteria.author"
+              prefstring="removedupes.mail.comparison_criteria.author"
+              id="removedupes.mail.comparison_criteria.author"
+              label="&message_comparison.author.label;"
+              accesskey="&message_comparison.author.access_key;"
+              autostretch="never"/>
+            <checkbox preference="removedupes.mail.comparison_criteria.recipients"
+              prefstring="removedupes.mail.comparison_criteria.recipients"
+              id="removedupes.mail.comparison_criteria.recipients"
+              label="&message_comparison.recipients.label;"
+              accesskey="&message_comparison.recipients.access_key;"
+              autostretch="never"/>
+            <checkbox preference="removedupes.mail.comparison_criteria.cc_list"
+              prefstring="removedupes.mail.comparison_criteria.cc_list"
+              id="removedupes.mail.comparison_criteria.cc_list"
+              label="&message_comparison.cc_list.label;"
+              accesskey="&message_comparison.cc_list.access_key;"
               autostretch="never"/>
             <checkbox preference="removedupes.mail.comparison_criteria.message_id"
               prefstring="removedupes.mail.comparison_criteria.message_id"

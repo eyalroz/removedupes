@@ -3,13 +3,17 @@
 
 <!ENTITY message_comparison.tab_title                                   "Message Comparison">
 <!ENTITY message_comparison.tab_description                             "Message elements used as comparison criteria:">
-<!ENTITY message_comparison.from.label                                  "Author ('From' address)">
+<!ENTITY message_comparison.author.label                                "Author ('From' address)">
+<!ENTITY message_comparison.recipients.label                            "Recipients">
+<!ENTITY message_comparison.cc_list.label                               "CC List">
 <!ENTITY message_comparison.message_id.label                            "Message ID">
 <!ENTITY message_comparison.num_lines.label                             "Number of lines in message">
 <!ENTITY message_comparison.send_time.label                             "Send time">
 <!ENTITY message_comparison.subject.label                               "Subject">
 <!ENTITY message_comparison.folder.label                                "Folder">
-<!ENTITY message_comparison.from.access_key                             "F">
+<!ENTITY message_comparison.author.access_key                           "F">
+<!ENTITY message_comparison.recipients.access_key                       "R">
+<!ENTITY message_comparison.cc_list.access_key                          "C">
 <!ENTITY message_comparison.message_id.access_key                       "I">
 <!ENTITY message_comparison.num_lines.access_key                        "l">
 <!ENTITY message_comparison.send_time.access_key                        "t">
@@ -19,6 +23,7 @@
 <!ENTITY general_settings.tab_title                                     "General Settings">
 <!ENTITY general_settings.search_subfolders_first.label                 "Search subfolders first (postorder)">
 <!ENTITY general_settings.confirm_search_and_deletion.label             "Review search results before deletion">
+
 <!ENTITY general_settings.default_action.description                    "Default action for duplicate messages:">
 <!ENTITY general_settings.default_action.delete_permanently.label       "Delete permanently">
 <!ENTITY general_settings.default_action.move.label                     "Move to Trash">

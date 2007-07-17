@@ -1,4 +1,4 @@
-﻿<!ENTITY removedupes.title                              "Entfernung doppelter Nachrichten (Alternative)">
+<!ENTITY removedupes.title                              "Entfernung doppelter Nachrichten (Alternative)">
 <!ENTITY removedupes.remove_duplicates_menuitem.label   "Duplikate entfernen...">
 
 <!ENTITY removedupes_dialog.dialog_title                "Entfernung von Duplikaten">
@@ -6,6 +6,9 @@
 <!ENTITY removedupes_dialog.keep_label                  "In jeder Gruppe von Duplikaten behalte:">
 <!ENTITY removedupes_dialog.subject                     "Betreff">
 <!ENTITY removedupes_dialog.sender                      "Absender">
+<!ENTITY removedupes_dialog.author                      "Author">
+<!ENTITY removedupes_dialog.recipients                  "Recipients">
+<!ENTITY removedupes_dialog.cc_list                     "CC List">
 <!ENTITY removedupes_dialog.folder                      "Ordner">
 <!ENTITY removedupes_dialog.line_count                  "# Zeilen">
 <!ENTITY removedupes_dialog.date                        "Datum">

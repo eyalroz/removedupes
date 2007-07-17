@@ -3,13 +3,17 @@
 
 <!ENTITY message_comparison.tab_title                                   "Vergleich der Nachrichten">
 <!ENTITY message_comparison.tab_description                             "Nachrichtenelemente, die als Vergleichskriterium benutzt werden:">
-<!ENTITY message_comparison.from.label                                  "Author ('Absender' Adresse)">
+<!ENTITY message_comparison.author.label                                "Author ('Absender' Adresse)">
+<!ENTITY message_comparison.recipients.label                            "Recipients">
+<!ENTITY message_comparison.cc_list.label                               "CC List">
 <!ENTITY message_comparison.message_id.label                            "Nachrichten ID">
 <!ENTITY message_comparison.num_lines.label                             "Anzahl der Zeilen in der Nachricht">
 <!ENTITY message_comparison.send_time.label                             "Versandzeit">
 <!ENTITY message_comparison.subject.label                               "Betreff">
 <!ENTITY message_comparison.folder.label                                "Ordner">
-<!ENTITY message_comparison.from.access_key                             "A">
+<!ENTITY message_comparison.author.access_key                           "A">
+<!ENTITY message_comparison.recipients.access_key                       "R">
+<!ENTITY message_comparison.cc_list.access_key                          "C">
 <!ENTITY message_comparison.message_id.access_key                       "N">
 <!ENTITY message_comparison.num_lines.access_key                        "Z">
 <!ENTITY message_comparison.send_time.access_key                        "V">
