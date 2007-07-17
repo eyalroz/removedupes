@@ -88,6 +88,11 @@ function addSearchFolders(folder, searchFolders, postOrderTraversal)
   jsConsoleService.logStringMessage('addSearchFolders for folder ' + folder.abbreviatedName);
 #endif
 
+ if (!folder.canFileMessages && !folder.rootFolder) {
+   // it's a news folder or some such thing which we shouldn't mess with
+   return;
+ }
+   
  if (!folder.canRename && !folder.rootFolder) {
    // it's a special folder
    if (!gAllowedSpecialFolders.test(folder.abbreviatedName))
