@@ -420,7 +420,7 @@ function onCancel()
 
 function onAccept()
 {
-  var uri = document.getElementById('msgTrashFolderPicker').getAttribute('uri');
+  var uri = document.getElementById('actionTargetFolder').getAttribute('uri');
   var deletePermanently =
     (document.getElementById('action').getAttribute('value') == 'delete_permanently');
   removeDuplicates(
@@ -429,8 +429,8 @@ function onAccept()
     uri,
     true // the uri's have been replaced with messageRecords
     );
-  //if (!deletePermanently) 
-  //  gRemoveDupesPrefs.setCharPref('default_target_folder', uri);
+  if (!deletePermanently) 
+    gRemoveDupesPrefs.setCharPref('default_target_folder', uri);
   delete dupeSetsHashMap;
 }
 
@@ -477,11 +477,11 @@ function initializeFolderPicker()
 #endif
     
   // TODO: perhaps we don't need this when also calling SetFolderPicker ?
-  MsgFolderPickerOnLoad('msgTrashFolderPicker');
+  MsgFolderPickerOnLoad('actionTargetFolder');
 
   if ( (uri == null) || (uri == "") )
     return;
 
   //var msgFolder = GetMsgFolderFromUri(uri, false);
-  SetFolderPicker(uri, 'msgTrashFolderPicker');
+  SetFolderPicker(uri, 'actionTargetFolder');
 }

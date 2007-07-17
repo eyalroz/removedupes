@@ -83,7 +83,7 @@
                    value="move"
                    label="&action.move.label;"
                    accesskey="&action.move.accesskey;"/>
-            <menulist id="msgTrashFolderPicker" flex="1"/>
+            <menulist id="actionTargetFolder" flex="1"/>
           </hbox>
         </radiogroup>
         </groupbox>
