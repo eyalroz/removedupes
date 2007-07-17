@@ -22,6 +22,8 @@ var useSubject;
 var useAuthor;
 var useLineCount;
 var useFolder;
+var useRecipients;
+var useCCList;
 
 // this is about the function called from outside this file
 
@@ -35,6 +37,8 @@ function searchAndRemoveDuplicateMessages()
   useSubject     = gRemoveDupesPrefs.getBoolPref("comparison_criteria.subject", true);
   useAuthor      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.from", true);
   useLineCount   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.num_lines", false);
+  useRecipients  = gRemoveDupesPrefs.getBoolPref("comparison_criteria.recipients", false);
+  useCCList      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.cc_list", false);
   
   gAllowedSpecialFolders = 
     new RegExp(gRemoveDupesPrefs.getLocalizedStringPref('allowed_special_folders', ''));
@@ -181,8 +185,15 @@ function collectMessages(topFolders,dupeSetsHashMap,subfoldersFirst)
         sillyHash += searchFolders[i].uri + '|';
       if (useSubject)
         sillyHash += messageHdr.subject + '|6xX$\WG-C?|';
+          // the extra 'junk string' is intended to reduce the chance of getting the subject
+          // field being mixed up with other fields in the hash, i.e. in case the subject
+          // ends with something like "|55"
       if (useAuthor)
         sillyHash += messageHdr.author + '|^#=)A?mUi5|';
+      if (useRecipients)
+        sillyHash += messageHdr.recipients + '|Ei4iXn=Iv*|';
+      if (useCCList)
+        sillyHash += messageHdr.ccList + '|w7Exh\' s%k|';
       if (useLineCount)
         sillyHash += messageHdr.lineCount;
       var uri = searchFolders[i].getUriForMsg(messageHdr);

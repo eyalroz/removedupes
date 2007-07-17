@@ -21,10 +21,12 @@ var gNumberToKeep;
 
 const toKeepColumnIndex      = 1;
 const authorColumnIndex      = 2;
-const subjectColumnIndex     = 3;
-const folderNameColumnIndex  = 4;
-const sendTimeColumnIndex    = 5;
-const lineCountColumnIndex   = 6;
+const recipientsColumnIndex  = 3;
+const ccListColumnIndex      = 4;
+const subjectColumnIndex     = 5;
+const folderNameColumnIndex  = 6;
+const sendTimeColumnIndex    = 7;
+const lineCountColumnIndex   = 8;
 
 
 
@@ -44,6 +46,9 @@ function dupeMessageRecord(messageUri)
   this.sendTime    = formatSendTime(messageHdr.dateInSeconds);
   this.subject     = messageHdr.mime2DecodedSubject;
   this.author      = messageHdr.mime2DecodedAuthor;
+  this.recipients  = messageHdr.mime2DecodedRecipients;
+  this.ccList      = messageHdr.ccList;
+    // we don't have mime2DecodedRecipients
   this.lineCount   = messageHdr.lineCount;
   // by default, we're deleting dupes, but see also below
   this.toKeep      = false; 
@@ -133,6 +138,10 @@ function createMessageRowTemplate()
   //keepIndicatorCell.setAttribute("src", "chrome://messenger/skin/icons/notchecked.gif");
   var authorCell        = document.createElement("treecell");
   authorCell.setAttribute("id", "authorCell");
+  var recipientsCell    = document.createElement("treecell");
+  recipientsCell.setAttribute("id", "recipientsCell");
+  var ccListCell    = document.createElement("treecell");
+  ccListCell.setAttribute("id", "ccListCell");
   var subjectCell       = document.createElement("treecell");
   subjectCell.setAttribute("id", "subjectCell");
   var folderCell        = document.createElement("treecell");
@@ -146,6 +155,8 @@ function createMessageRowTemplate()
   gMessageRowTemplate.appendChild(dummyCell);
   gMessageRowTemplate.appendChild(keepIndicatorCell);
   gMessageRowTemplate.appendChild(authorCell);
+  gMessageRowTemplate.appendChild(recipientsCell);
+  gMessageRowTemplate.appendChild(ccListCell);
   gMessageRowTemplate.appendChild(subjectCell);
   gMessageRowTemplate.appendChild(folderCell);
   gMessageRowTemplate.appendChild(sendTimeCell);
@@ -246,6 +257,10 @@ function createMessageTreeRow(messageRecord)
   // proper charset and transfer encoding
   row.childNodes.item(authorColumnIndex)
      .setAttribute("label", messageRecord.author); 
+  row.childNodes.item(recipientsColumnIndex)
+     .setAttribute("label", messageRecord.recipients); 
+  row.childNodes.item(ccListColumnIndex)
+     .setAttribute("label", messageRecord.ccList); 
   row.childNodes.item(subjectColumnIndex)
      .setAttribute("label", messageRecord.subject);
   row.childNodes.item(folderNameColumnIndex)
