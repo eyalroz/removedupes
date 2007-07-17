@@ -41,6 +41,12 @@
           <treecol id="senderColumn"
                    label="&removedupes_dialog.sender;" flex="5"/>
           <splitter class="tree-splitter"/>
+          <treecol id="recipientsColumn"
+                   label="&removedupes_dialog.recipients;" flex="5"/>
+          <splitter class="tree-splitter"/>
+          <treecol id="ccListColumn"
+                   label="&removedupes_dialog.cc_list;" flex="5"/>
+          <splitter class="tree-splitter"/>
           <treecol id="subjectColumn"
                    label="&removedupes_dialog.subject;" flex="5"/>
           <splitter class="tree-splitter"/>
@@ -52,6 +58,7 @@
           <splitter class="tree-splitter"/>
           <treecol id="lineCountColumn"
                    label="&removedupes_dialog.line_count;" flex="2"/>
+          <splitter class="tree-splitter"/>
         </treecols>
         <treechildren id="dupeSetsTreeChildren"/>
       </tree>

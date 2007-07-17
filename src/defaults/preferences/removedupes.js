@@ -1,5 +1,8 @@
 // visible prefs
-pref("removedupes.mail.comparison_criteria.from", true);
+
+pref("removedupes.mail.comparison_criteria.author", true);
+pref("removedupes.mail.comparison_criteria.recipients", false);
+pref("removedupes.mail.comparison_criteria.cc_list", false);
 pref("removedupes.mail.comparison_criteria.folder", false);
 pref("removedupes.mail.comparison_criteria.message_id", true);
 pref("removedupes.mail.comparison_criteria.num_lines", false);

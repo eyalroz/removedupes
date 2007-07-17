@@ -6,6 +6,9 @@
 <!ENTITY removedupes_dialog.keep_label                  "In every set of dupes, keep:">
 <!ENTITY removedupes_dialog.subject                     "Subject">
 <!ENTITY removedupes_dialog.sender                      "Sender">
+<!ENTITY removedupes_dialog.author                      "Author">
+<!ENTITY removedupes_dialog.recipients                  "Recipients">
+<!ENTITY removedupes_dialog.cc_list                     "CC List">
 <!ENTITY removedupes_dialog.folder                      "Folder">
 <!ENTITY removedupes_dialog.line_count                  "# Lines">
 <!ENTITY removedupes_dialog.date                        "Date">
