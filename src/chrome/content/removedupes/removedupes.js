@@ -41,7 +41,7 @@ function searchAndRemoveDuplicateMessages()
   useCCList      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.cc_list", false);
   
   gAllowedSpecialFolders = 
-    new RegExp(gRemoveDupesPrefs.getLocalizedStringPref('allowed_special_folders', ''));
+    new RegExp(gRemoveDupesPrefs.getLocalizedStringPref('allowed_special_folders', ''), 'i');
 #ifdef DEBUG_searchAndRemoveDuplicateMessages
   jsConsoleService.logStringMessage('gAllowedSpecialFolders = ' + gAllowedSpecialFolders);
 #endif
