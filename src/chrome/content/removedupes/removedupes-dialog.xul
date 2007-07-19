@@ -88,15 +88,17 @@
         </radiogroup>
         </groupbox>
     </vbox>
-    <vbox width="60">
-      <description  width="60">
-        &removedupes_dialog.keep_label;
-      </description>
-      <button id="keepFirstButton" label="&removedupes_dialog.keep_first.label;" oncommand="markKeepOneInEveryDupeSet();"/>
-      <button id="keepAllButton" label="&removedupes_dialog.keep_all.label;" oncommand="markNoDupesForDeletion();"/>
-      <button id="keepNoneButton"  label="&removedupes_dialog.keep_none.label;" oncommand="markAllDupesForDeletion();"/>
-      <spacer flex="1"/>
-    </vbox>
+    <hbox width="60" flex="1">
+      <vbox>
+        <description  width="60">
+          &removedupes_dialog.keep_label;
+        </description>
+        <button id="keepFirstButton" label="&removedupes_dialog.keep_first.label;" oncommand="markKeepOneInEveryDupeSet();"/>
+        <button id="keepAllButton" label="&removedupes_dialog.keep_all.label;" oncommand="markNoDupesForDeletion();"/>
+        <button id="keepNoneButton"  label="&removedupes_dialog.keep_none.label;" oncommand="markAllDupesForDeletion();"/>
+        <spacer flex="1"/>
+      </vbox>
+    </hbox>
   </hbox>
 
 <!--  <statusbar id="status-bar">
