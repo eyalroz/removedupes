@@ -22,16 +22,15 @@
 
 
   <hbox flex="1">
-    <vbox flex="1">
+    <vbox flex="2">
       <description>&removedupes_dialog.tree_label;</description>
       <spacer />
       <tree id="dupeSetsTree"
             enableColumnDrag="true"
             height="250"
             width="700"
-            flex="1"
-            onclick="onClick();"
-            ondblclick="onDoubleClick();">
+            flex="2"
+            onclick="onClick(event);">
 
         <treecols>
           <treecol width="40" id="dummyCell" primary="true"/>
