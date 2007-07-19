@@ -88,8 +88,8 @@
         </radiogroup>
         </groupbox>
     </vbox>
-    <vbox width="40">
-      <description  width="40">
+    <vbox width="60">
+      <description  width="60">
         &removedupes_dialog.keep_label;
       </description>
       <button id="keepFirstButton" label="&removedupes_dialog.keep_first.label;" oncommand="markKeepOneInEveryDupeSet();"/>

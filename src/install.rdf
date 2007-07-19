@@ -53,14 +53,5 @@
     <em:optionsURL>chrome://removedupes/content/removedupes-prefs.xul</em:optionsURL>
 #endif
 
-    <!-- Packages, Skins and Locales that this extension registers -->
-    <em:file>
-      <Description about="urn:mozilla:extension:file:removedupes.jar">
-        <em:package>content/removedupes/</em:package>
-        <em:locale>locale/en-US/removedupes/</em:locale>
-        <em:locale>locale/ja/removedupes/</em:locale>
-        <em:locale>locale/de-DE/removedupes/</em:locale>
-      </Description>
-    </em:file>
   </Description>      
 </RDF>

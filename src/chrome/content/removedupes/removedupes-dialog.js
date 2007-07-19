@@ -177,7 +177,8 @@ function rebuildDuplicateSetsTree()
   document.getElementById("total-status-panel").setAttribute("label", "");
   document.getElementById("sets-status-panel").setAttribute("label", "");
   document.getElementById("keeping-status-panel").setAttribute("label", "");
-  document.getElementById("main-status-panel").setAttribute("label", "Populating list...");
+  document.getElementById("main-status-panel").setAttribute("label",
+    gRemoveDupesStrings.GetStringFromName("removedupes.status_panel.populating_list"));
 
   gNumberToKeep = 0;
 
@@ -230,9 +231,12 @@ function rebuildDuplicateSetsTree()
 
 function updateStatusBar()
 {
-  document.getElementById("sets-status-panel").setAttribute("label", "Sets: " + gNumberOfDupeSets);
-  document.getElementById("total-status-panel").setAttribute("label", "Total: " + gTotalNumberOfDupes);
-  document.getElementById("keeping-status-panel").setAttribute("label", "Keeping: " + gNumberToKeep);
+  document.getElementById("sets-status-panel").setAttribute("label",
+    gRemoveDupesStrings.GetStringFromName("removedupes.status_panel.number_of_sets") + " " + gNumberOfDupeSets);
+  document.getElementById("total-status-panel").setAttribute("label", 
+    gRemoveDupesStrings.GetStringFromName("removedupes.status_panel.total_number_of_dupes") + " " + gTotalNumberOfDupes);
+  document.getElementById("keeping-status-panel").setAttribute("label", 
+    gRemoveDupesStrings.GetStringFromName("removedupes.status_panel.number_of_kept_dupes") + " " + gNumberToKeep);
   document.getElementById("main-status-panel").setAttribute("label", "");
 
 }
