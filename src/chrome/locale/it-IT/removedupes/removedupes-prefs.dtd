@@ -1,0 +1,32 @@
+<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - Opzioni">
+<!ENTITY guide-url "http://">
+<!ENTITY message_comparison.tab_title "Confronto dei messaggi">
+<!ENTITY message_comparison.tab_description "Elementi del messaggio utilizzati come termine di paragone:">
+<!ENTITY message_comparison.author.label "Autore (indirizzo &apos;Da&apos;)">
+<!ENTITY message_comparison.recipients.label "Destinatari">
+<!ENTITY message_comparison.cc_list.label "Lista destinatari in Cc">
+<!ENTITY message_comparison.message_id.label "ID del messaggio">
+<!ENTITY message_comparison.num_lines.label "Numero di righe nel messaggio">
+<!ENTITY message_comparison.send_time.label "Ora di invio">
+<!ENTITY message_comparison.subject.label "Oggetto">
+<!ENTITY message_comparison.folder.label "Cartella">
+<!ENTITY message_comparison.author.access_key "C">
+<!ENTITY message_comparison.recipients.access_key "D">
+<!ENTITY message_comparison.cc_list.access_key "C">
+<!ENTITY message_comparison.message_id.access_key "I">
+<!ENTITY message_comparison.num_lines.access_key "R">
+<!ENTITY message_comparison.send_time.access_key "O">
+<!ENTITY message_comparison.subject.access_key "G">
+<!ENTITY message_comparison.folder.access_key "T">
+<!ENTITY general_settings.tab_title "Opzioni generali">
+<!ENTITY general_settings.search_subfolders_first.label "Ricerca prima nelle sottocartelle (postorder)">
+<!ENTITY general_settings.confirm_search_and_deletion.label "Mostra riepilogo della ricerca prima della cancellazione">
+<!ENTITY general_settings.default_action.description "Azione predefinita per i messaggi duplicati:">
+<!ENTITY general_settings.default_action.delete_permanently.label "Cancella permanentemente">
+<!ENTITY general_settings.default_action.move.label "Sposta nel cestino">
+<!ENTITY general_settings.default_action.delete_permanently.accesskey "P">
+<!ENTITY general_settings.default_action.move.accesskey "S">
+<!ENTITY general_settings.search_subfolders_first.access_key "O">
+<!ENTITY general_settings.confirm_search_and_deletion.access_key "R">
+<!ENTITY removedupes-preftree-label "Rimuovi duplicati">
+<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
