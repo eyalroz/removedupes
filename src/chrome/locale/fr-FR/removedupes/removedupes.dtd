@@ -18,6 +18,6 @@
 <!ENTITY removedupes_dialog.keep_flag "Conserver ?">
 <!ENTITY removedupes_dialog.action_label "Action :">
 <!ENTITY action.delete_permanently.label "Supprimer définitivement">
-<!ENTITY action.delete_permanently.accesskey "S">
+<!ENTITY action.delete_permanently.accesskey "d">
 <!ENTITY action.move.label "Déplacer vers :">
 <!ENTITY action.move.accesskey "D">
