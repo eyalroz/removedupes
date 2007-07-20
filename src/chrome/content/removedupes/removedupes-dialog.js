@@ -308,24 +308,39 @@ function formatSendTime(sendTimeInSeconds)
     sendTimeInSeconds_in_seconds.getSeconds() );
 }
 
-function onClick()
+function onClick(ev)
 {
 #ifdef DEBUG_onClick
-  jsConsoleService.logStringMessage('in onClick()');
+  jsConsoleService.logStringMessage('in onClick()\nclick point = ' + ev.clientX + ':' + ev.clientY);
 #endif
 
+  var treeBoxOject = gTree.treeBoxObject;
+  var row = {}, col = {}, obj = {};
+  treeBoxOject.getCellAt(ev.clientX, ev.clientY, row, col, obj);
+
+//  var x = {}, y = {}, w = {}, h = {};
+//  treeBoxOject.getCoordsForCellItem(row.value, col.value, "treecell", x, y, w, h);
+
+  if (col.value.index == toKeepColumnIndex) {
+    toggleDeletionForCurrentRow();
+    return;
+  }
+  else loadCurrentRowMessage();
+
+  // ... otherwise, we need to load the relevant dupe message in the 3-pane window
+
+#ifdef DEBUG_onClick
+  jsConsoleService.logStringMessage('done with onClick()');
+#endif
+}
+
+function loadCurrentRowMessage()
+{
   // when we click somewhere in the tree, the focused element should be an inner 'treeitem'
   var focusedTreeItem = gTree.contentView.getItemAtIndex(gTree.currentIndex);
-#ifdef DEBUG_onClick
   var node = focusedTreeItem;
-  jsConsoleService.logStringMessage('focusedTreeItem: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
   var node = focusedTreeItem.parentNode;
-  jsConsoleService.logStringMessage('focusedTreeItem.parentNode: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
-#endif
   var messageIndexInDupeSet = focusedTreeItem.getAttribute('indexInDupeSet');
-#ifdef DEBUG_onClick
-  jsConsoleService.logStringMessage('messageIndexInDupeSet = ' + messageIndexInDupeSet );
-#endif
   var dupeSetTreeItem = focusedTreeItem.parentNode.parentNode;
 #ifdef DEBUG_onClick
   var node = dupeSetTreeItem ;
@@ -336,18 +351,8 @@ function onClick()
   jsConsoleService.logStringMessage('dupeSetTreeItem.parentNode.parentNode: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
 #endif
   var dupeSetHashValue = dupeSetTreeItem.getAttribute('commonHashValue');
-#ifdef DEBUG_onClick
-  jsConsoleService.logStringMessage('dupeSetHashValue = ' + dupeSetHashValue );
-#endif
   var dupeSetItem = dupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
-#ifdef DEBUG_onClick
-  jsConsoleService.logStringMessage('dupeSetItem  = ' + dupeSetItem );
-#endif
   var messageUri = dupeSetItem.uri;
-#ifdef DEBUG_onClick
-  jsConsoleService.logStringMessage('messageUri is ' + messageUri);
-  jsConsoleService.logStringMessage('msgWindow is ' + msgWindow);
-#endif
   var folder = messenger.msgHdrFromURI(messageUri).folder;
   //msgFolder = folder.QueryInterface(Components.interfaces.nsIMsgFolder);
   //msgWindow.RerootFolderForStandAlone(folder.uri);
@@ -359,7 +364,7 @@ function onClick()
     msgWindow.SelectFolder(folder.URI);
   } catch(ex) {
 #ifdef DEBUG_onClick
-  jsConsoleService.logStringMessage('Exception: ' + ex);
+    jsConsoleService.logStringMessage('Exception: ' + ex);
 #endif
     dump(ex); 
   }
@@ -367,40 +372,22 @@ function onClick()
     msgWindow.SelectMessage(messageUri);
   } catch(ex) {
 #ifdef DEBUG_onClick
-  jsConsoleService.logStringMessage('Exception: ' + ex);
+    jsConsoleService.logStringMessage('Exception: ' + ex);
 #endif
     dump(ex); 
   }
-#ifdef DEBUG_onClick
-  jsConsoleService.logStringMessage('done with onClick()');
-#endif
 }
 
-function onDoubleClick()
+function toggleDeletionForCurrentRow()
 {
   // If the user has double-clicked a message row, change it status
   // from 'Keep' to 'Delete' or vice-versa; otherwise do nothing
   
   var focusedTreeItem = gTree.contentView.getItemAtIndex(gTree.currentIndex);
-#ifdef DEBUG_onDoubleClick
-  jsConsoleService.logStringMessage('focusedTreeItem = ' + focusedTreeItem);
-#endif
   var messageIndexInDupeSet = focusedTreeItem.getAttribute('indexInDupeSet');
-#ifdef DEBUG_onDoubleClick
-  jsConsoleService.logStringMessage('messageIndexInDupeSet = ' + messageIndexInDupeSet );
-#endif
   var dupeSetTreeItem = focusedTreeItem.parentNode.parentNode;
-#ifdef DEBUG_onDoubleClick
-  jsConsoleService.logStringMessage('dupeSetTreeItem = ' + dupeSetTreeItem );
-#endif
   var dupeSetHashValue = dupeSetTreeItem.getAttribute('commonHashValue');
-#ifdef DEBUG_onDoubleClick
-  jsConsoleService.logStringMessage('dupeSetHashValue = ' + dupeSetHashValue );
-#endif
   var dupeSetItem = dupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
-#ifdef DEBUG_onDoubleClick
-  jsConsoleService.logStringMessage('dupeSetItem  = ' + dupeSetItem );
-#endif
   
   if (dupeSetItem.toKeep) {
     dupeSetItem.toKeep = false;
