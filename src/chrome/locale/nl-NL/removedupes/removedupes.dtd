@@ -1,23 +1,23 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
-<!ENTITY removedupes.remove_duplicates_menuitem.label "Remove Duplicates...">
-<!ENTITY removedupes_dialog.dialog_title "Duplicate Messages Deletion">
-<!ENTITY removedupes_dialog.id "Message ID">
-<!ENTITY removedupes_dialog.keep_label "In every set of dupes, keep:">
-<!ENTITY removedupes_dialog.subject "Subject">
-<!ENTITY removedupes_dialog.sender "Sender">
-<!ENTITY removedupes_dialog.author "Author">
-<!ENTITY removedupes_dialog.recipients "Recipients">
-<!ENTITY removedupes_dialog.cc_list "CC List">
-<!ENTITY removedupes_dialog.folder "Folder">
-<!ENTITY removedupes_dialog.line_count "# Lines">
-<!ENTITY removedupes_dialog.date "Date">
-<!ENTITY removedupes_dialog.keep_first.label "First copy">
-<!ENTITY removedupes_dialog.keep_none.label "No copies">
-<!ENTITY removedupes_dialog.keep_all.label "All copies">
-<!ENTITY removedupes_dialog.tree_label "Duplicate message sets:">
-<!ENTITY removedupes_dialog.keep_flag "Keep?">
-<!ENTITY removedupes_dialog.action_label "Action:">
-<!ENTITY action.delete_permanently.label "Delete permanently">
-<!ENTITY action.delete_permanently.accesskey "p">
-<!ENTITY action.move.label "Move to:">
-<!ENTITY action.move.accesskey "m">
+<!ENTITY removedupes.remove_duplicates_menuitem.label "Duplicaten verwijderen...">
+<!ENTITY removedupes_dialog.dialog_title "Duplicaatberichten verwijderen">
+<!ENTITY removedupes_dialog.id "Bericht-ID">
+<!ENTITY removedupes_dialog.keep_label "In elke set duplicaten het volgende bewaren:">
+<!ENTITY removedupes_dialog.subject "Onderwerp">
+<!ENTITY removedupes_dialog.sender "Afzender">
+<!ENTITY removedupes_dialog.author "Schrijver">
+<!ENTITY removedupes_dialog.recipients "Ontvangers">
+<!ENTITY removedupes_dialog.cc_list "CC-lijst">
+<!ENTITY removedupes_dialog.folder "Map">
+<!ENTITY removedupes_dialog.line_count "Aantal regels">
+<!ENTITY removedupes_dialog.date "Datum">
+<!ENTITY removedupes_dialog.keep_first.label "Eerste exemplaar">
+<!ENTITY removedupes_dialog.keep_none.label "Geen exemplaren">
+<!ENTITY removedupes_dialog.keep_all.label "Alle exemplaren">
+<!ENTITY removedupes_dialog.tree_label "Dubbele berichten:">
+<!ENTITY removedupes_dialog.keep_flag "Behouden?">
+<!ENTITY removedupes_dialog.action_label "Actie:">
+<!ENTITY action.delete_permanently.label "Permanent verwijderen">
+<!ENTITY action.delete_permanently.accesskey "P">
+<!ENTITY action.move.label "Verplaatsen naar:">
+<!ENTITY action.move.accesskey "V">

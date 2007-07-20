@@ -1,23 +1,23 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
-<!ENTITY removedupes.remove_duplicates_menuitem.label "Remove Duplicates...">
-<!ENTITY removedupes_dialog.dialog_title "Duplicate Messages Deletion">
-<!ENTITY removedupes_dialog.id "Message ID">
-<!ENTITY removedupes_dialog.keep_label "In every set of dupes, keep:">
-<!ENTITY removedupes_dialog.subject "Subject">
-<!ENTITY removedupes_dialog.sender "Sender">
-<!ENTITY removedupes_dialog.author "Author">
-<!ENTITY removedupes_dialog.recipients "Recipients">
-<!ENTITY removedupes_dialog.cc_list "CC List">
-<!ENTITY removedupes_dialog.folder "Folder">
-<!ENTITY removedupes_dialog.line_count "# Lines">
-<!ENTITY removedupes_dialog.date "Date">
-<!ENTITY removedupes_dialog.keep_first.label "First copy">
-<!ENTITY removedupes_dialog.keep_none.label "No copies">
-<!ENTITY removedupes_dialog.keep_all.label "All copies">
-<!ENTITY removedupes_dialog.tree_label "Duplicate message sets:">
-<!ENTITY removedupes_dialog.keep_flag "Keep?">
-<!ENTITY removedupes_dialog.action_label "Action:">
-<!ENTITY action.delete_permanently.label "Delete permanently">
-<!ENTITY action.delete_permanently.accesskey "p">
-<!ENTITY action.move.label "Move to:">
-<!ENTITY action.move.accesskey "m">
+<!ENTITY removedupes.remove_duplicates_menuitem.label "Odstrániť duplicity...">
+<!ENTITY removedupes_dialog.dialog_title "Odstránenie duplicitných správ">
+<!ENTITY removedupes_dialog.id "ID správy">
+<!ENTITY removedupes_dialog.keep_label "Ponechať v každej skupine duplikátu:">
+<!ENTITY removedupes_dialog.subject "Predmet">
+<!ENTITY removedupes_dialog.sender "Odosielateľ">
+<!ENTITY removedupes_dialog.author "Od">
+<!ENTITY removedupes_dialog.recipients "Komu">
+<!ENTITY removedupes_dialog.cc_list "Kópia">
+<!ENTITY removedupes_dialog.folder "Priečinok">
+<!ENTITY removedupes_dialog.line_count "Riadky">
+<!ENTITY removedupes_dialog.date "Dátum">
+<!ENTITY removedupes_dialog.keep_first.label "Prvú kópiu">
+<!ENTITY removedupes_dialog.keep_none.label "Nič">
+<!ENTITY removedupes_dialog.keep_all.label "Všetko">
+<!ENTITY removedupes_dialog.tree_label "Nastavenie pre duplicitnú správu:">
+<!ENTITY removedupes_dialog.keep_flag "Zachovať?">
+<!ENTITY removedupes_dialog.action_label "Postup">
+<!ENTITY action.delete_permanently.label "Natrvalo odstrániť">
+<!ENTITY action.delete_permanently.accesskey "N">
+<!ENTITY action.move.label "Presunúť do:">
+<!ENTITY action.move.accesskey "P">
