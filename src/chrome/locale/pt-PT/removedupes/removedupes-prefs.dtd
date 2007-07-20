@@ -2,22 +2,22 @@
 <!ENTITY guide-url "http://not.yet.written/">
 <!ENTITY message_comparison.tab_title "Comparação de Mensagens">
 <!ENTITY message_comparison.tab_description "Elementos da mensagem utilizados como critério de comparação:">
-<!ENTITY message_comparison.author.label "Autor (Campo &apos;De&apos;)">
+<!ENTITY message_comparison.author.label "Autor (endereço &apos;De&apos;)">
 <!ENTITY message_comparison.recipients.label "Destinatários">
 <!ENTITY message_comparison.cc_list.label "Lista CC">
 <!ENTITY message_comparison.message_id.label "ID da Mensagem">
-<!ENTITY message_comparison.num_lines.label "Número de linhas na mensagem">
+<!ENTITY message_comparison.num_lines.label "Número de linhas da mensagem">
 <!ENTITY message_comparison.send_time.label "Data de envio">
 <!ENTITY message_comparison.subject.label "Assunto">
 <!ENTITY message_comparison.folder.label "Pasta">
-<!ENTITY message_comparison.author.access_key "A">
+<!ENTITY message_comparison.author.access_key "u">
 <!ENTITY message_comparison.recipients.access_key "D">
-<!ENTITY message_comparison.cc_list.access_key "s">
+<!ENTITY message_comparison.cc_list.access_key "C">
 <!ENTITY message_comparison.message_id.access_key "I">
 <!ENTITY message_comparison.num_lines.access_key "l">
 <!ENTITY message_comparison.send_time.access_key "t">
-<!ENTITY message_comparison.subject.access_key "A">
-<!ENTITY message_comparison.folder.access_key "p">
+<!ENTITY message_comparison.subject.access_key "s">
+<!ENTITY message_comparison.folder.access_key "a">
 <!ENTITY general_settings.tab_title "Definições Gerais">
 <!ENTITY general_settings.search_subfolders_first.label "Procurar primeiro em Sub-pastas">
 <!ENTITY general_settings.confirm_search_and_deletion.label "Rever os resultados de procura antes de eliminar">
@@ -26,7 +26,7 @@
 <!ENTITY general_settings.default_action.move.label "Mover para o Lixo">
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "p">
 <!ENTITY general_settings.default_action.move.accesskey "M">
-<!ENTITY general_settings.search_subfolders_first.access_key "v">
-<!ENTITY general_settings.confirm_search_and_deletion.access_key "c">
+<!ENTITY general_settings.search_subfolders_first.access_key "b">
+<!ENTITY general_settings.confirm_search_and_deletion.access_key "v">
 <!ENTITY removedupes-preftree-label "Remover duplicados">
 <!ENTITY removedupes-preftree-page-title "Remover mensagens Duplicadas (Alternativo)">

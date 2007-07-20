@@ -1,5 +1,5 @@
 <!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternatif) - Paramètres">
-<!ENTITY guide-url "http://pas.encore.fait/">
+<!ENTITY guide-url "http://site.pas.encore.fait/">
 <!ENTITY message_comparison.tab_title "Comparaison de messages">
 <!ENTITY message_comparison.tab_description "Éléments de message servant de critères de comparaison :">
 <!ENTITY message_comparison.author.label "Expéditeur (adresse &quot;De :&quot;)">

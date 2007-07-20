@@ -1,32 +1,32 @@
-<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) – Nastavenie">
+<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - Settings">
 <!ENTITY guide-url "http://not.yet.written/">
-<!ENTITY message_comparison.tab_title "Porovnávanie správ">
-<!ENTITY message_comparison.tab_description "Časti správy použité ako kritérium porovnávania:">
-<!ENTITY message_comparison.author.label "Odosielateľ (adresa &apos;Od&apos; )">
-<!ENTITY message_comparison.recipients.label "Komu">
-<!ENTITY message_comparison.cc_list.label "Kópia">
-<!ENTITY message_comparison.message_id.label "ID správy">
-<!ENTITY message_comparison.num_lines.label "Počet riadkov v správe">
-<!ENTITY message_comparison.send_time.label "Čas odoslania">
-<!ENTITY message_comparison.subject.label "Predmet">
-<!ENTITY message_comparison.folder.label "Priečinok">
-<!ENTITY message_comparison.author.access_key "O">
-<!ENTITY message_comparison.recipients.access_key "K">
-<!ENTITY message_comparison.cc_list.access_key "S">
+<!ENTITY message_comparison.tab_title "Message Comparison">
+<!ENTITY message_comparison.tab_description "Message elements used as comparison criteria:">
+<!ENTITY message_comparison.author.label "Author (&apos;From&apos; address)">
+<!ENTITY message_comparison.recipients.label "Recipients">
+<!ENTITY message_comparison.cc_list.label "CC List">
+<!ENTITY message_comparison.message_id.label "Message ID">
+<!ENTITY message_comparison.num_lines.label "Number of lines in message">
+<!ENTITY message_comparison.send_time.label "Send time">
+<!ENTITY message_comparison.subject.label "Subject">
+<!ENTITY message_comparison.folder.label "Folder">
+<!ENTITY message_comparison.author.access_key "F">
+<!ENTITY message_comparison.recipients.access_key "R">
+<!ENTITY message_comparison.cc_list.access_key "C">
 <!ENTITY message_comparison.message_id.access_key "I">
-<!ENTITY message_comparison.num_lines.access_key "P">
-<!ENTITY message_comparison.send_time.access_key "a">
-<!ENTITY message_comparison.subject.access_key "r">
-<!ENTITY message_comparison.folder.access_key "e">
-<!ENTITY general_settings.tab_title "Všeobecné nastavenia">
-<!ENTITY general_settings.search_subfolders_first.label "Najskôr prehľadať podpriečinky">
-<!ENTITY general_settings.confirm_search_and_deletion.label "Prezrieť výsledky vyhľadávania pred odstránením">
-<!ENTITY general_settings.default_action.description "Predvolené rozhodnutie pre duplicitné správy:">
-<!ENTITY general_settings.default_action.delete_permanently.label "Natrvalo odstrániť">
-<!ENTITY general_settings.default_action.move.label "Presunúť do Odpadkového koša">
-<!ENTITY general_settings.default_action.delete_permanently.accesskey "N">
-<!ENTITY general_settings.default_action.move.accesskey "u">
-<!ENTITY general_settings.search_subfolders_first.access_key "j">
-<!ENTITY general_settings.confirm_search_and_deletion.access_key "z">
-<!ENTITY removedupes-preftree-label "Odstrániť duplicity">
+<!ENTITY message_comparison.num_lines.access_key "l">
+<!ENTITY message_comparison.send_time.access_key "t">
+<!ENTITY message_comparison.subject.access_key "S">
+<!ENTITY message_comparison.folder.access_key "o">
+<!ENTITY general_settings.tab_title "General Settings">
+<!ENTITY general_settings.search_subfolders_first.label "Search subfolders first (postorder)">
+<!ENTITY general_settings.confirm_search_and_deletion.label "Review search results before deletion">
+<!ENTITY general_settings.default_action.description "Default action for duplicate messages:">
+<!ENTITY general_settings.default_action.delete_permanently.label "Delete permanently">
+<!ENTITY general_settings.default_action.move.label "Move to Trash">
+<!ENTITY general_settings.default_action.delete_permanently.accesskey "P">
+<!ENTITY general_settings.default_action.move.accesskey "M">
+<!ENTITY general_settings.search_subfolders_first.access_key "s">
+<!ENTITY general_settings.confirm_search_and_deletion.access_key "c">
+<!ENTITY removedupes-preftree-label "Remove Duplicates">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">

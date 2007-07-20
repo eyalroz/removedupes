@@ -1,5 +1,5 @@
 <!ENTITY removedupes.title "Remover Mensagens Duplicadas (Alternativo)">
-<!ENTITY removedupes.remove_duplicates_menuitem.label "Remover Duplicados..">
+<!ENTITY removedupes.remove_duplicates_menuitem.label "Remover Duplicados...">
 <!ENTITY removedupes_dialog.dialog_title "Eliminação de mensagens Duplicadas">
 <!ENTITY removedupes_dialog.id "ID da Mensagem">
 <!ENTITY removedupes_dialog.keep_label "Em cada conjunto de duplicados, manter:">
@@ -8,16 +8,16 @@
 <!ENTITY removedupes_dialog.author "Autor">
 <!ENTITY removedupes_dialog.recipients "Destinatários">
 <!ENTITY removedupes_dialog.cc_list "Lista CC">
-<!ENTITY removedupes_dialog.folder "Psta">
+<!ENTITY removedupes_dialog.folder "Pasta">
 <!ENTITY removedupes_dialog.line_count "# Linhas">
 <!ENTITY removedupes_dialog.date "Data">
 <!ENTITY removedupes_dialog.keep_first.label "Primeira cópia">
-<!ENTITY removedupes_dialog.keep_none.label "Sem cópia">
+<!ENTITY removedupes_dialog.keep_none.label "nenhuma cópia">
 <!ENTITY removedupes_dialog.keep_all.label "Todas as cópias">
 <!ENTITY removedupes_dialog.tree_label "Conjuntos de mensagens duplicadas:">
 <!ENTITY removedupes_dialog.keep_flag "Manter?">
 <!ENTITY removedupes_dialog.action_label "Acção:">
 <!ENTITY action.delete_permanently.label "Apagar permanentemente">
 <!ENTITY action.delete_permanently.accesskey "p">
-<!ENTITY action.move.label "Mover para:">
-<!ENTITY action.move.accesskey "m">
+<!ENTITY action.move.label "Mover para">
+<!ENTITY action.move.accesskey "M">

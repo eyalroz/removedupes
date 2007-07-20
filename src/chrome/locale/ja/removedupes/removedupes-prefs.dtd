@@ -1,12 +1,12 @@
-﻿<!ENTITY prefs_dialog_title "Remove Duplicate Messages 設定">
+<!ENTITY prefs_dialog_title "Remove Duplicate Messages 設定">
 <!ENTITY guide-url "http://not.yet.written/"> 
 
 <!ENTITY message_comparison.tab_title "メッセージ比較設定">
 <!ENTITY message_comparison.tab_description "比較条件の項目：">
 <!ENTITY message_comparison.author.label "送信者 ('From' アドレス) ">
-<!ENTITY message_comparison.recipients.label "Recipients">
-<!ENTITY message_comparison.cc_list.label "CC List">
-<!ENTITY message_comparison.message_id.label "Message ID">
+<!ENTITY message_comparison.recipients.label "受取人 ">
+<!ENTITY message_comparison.cc_list.label "同報人 ">
+<!ENTITY message_comparison.message_id.label "Message ID ">
 <!ENTITY message_comparison.num_lines.label "本文行数 ">
 <!ENTITY message_comparison.send_time.label "送信日時 ">
 <!ENTITY message_comparison.subject.label "件名 ">
