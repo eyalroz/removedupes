@@ -29,14 +29,19 @@
 # **** END LICENSE BLOCK ****
 
 content removedupes jar:chrome/removedupes.jar!/content/removedupes/
-locale removedupes en-US jar:chrome/removedupes.jar!/locale/en-US/removedupes/
-locale removedupes de-DE jar:chrome/removedupes.jar!/locale/de-DE/removedupes/
-locale removedupes it-IT jar:chrome/removedupes.jar!/locale/it-IT/removedupes/
-locale removedupes ja jar:chrome/removedupes.jar!/locale/ja/removedupes/
-locale removedupes ja-JP-mac jar:chrome/removedupes.jar!/locale/ja/removedupes/
-skin removedupes classic/1.0 jar:chrome/removedupes.jar!/skin/classic/removedupes/
 overlay chrome://messenger/content/mailWindowOverlay.xul chrome://removedupes/content/removedupes-mailWindowOverlay.xul
 style chrome://removedupes/content/removedupes-dialog.xul chrome://removedupes/skin/style.css
 #ifdef MOZ_TOOLKIT_SEAMONKEY
 overlay chrome://communicator/content/pref/preftree.xul chrome://removedupes/content/removedupes-preftree.xul
 #endif
+skin removedupes classic/1.0 jar:chrome/removedupes.jar!/skin/classic/removedupes/
+locale removedupes en-US jar:chrome/removedupes.jar!/locale/en-US/removedupes/
+locale removedupes de-DE jar:chrome/removedupes.jar!/locale/de-DE/removedupes/
+locale removedupes it-IT jar:chrome/removedupes.jar!/locale/it-IT/removedupes/
+locale removedupes ja jar:chrome/removedupes.jar!/locale/ja/removedupes/
+locale removedupes ja-JP-mac jar:chrome/removedupes.jar!/locale/ja/removedupes/
+locale removedupes zh-TW jar:chrome/removedupes.jar!/locale/zh-TW/removedupes/
+locale removedupes sk-SK jar:chrome/removedupes.jar!/locale/sk-SK/removedupes/
+locale removedupes pt-PT jar:chrome/removedupes.jar!/locale/pt-PT/removedupes/
+locale removedupes nl-NL jar:chrome/removedupes.jar!/locale/nl-NL/removedupes/
+locale removedupes fr-FR jar:chrome/removedupes.jar!/locale/fr-FR/removedupes/
