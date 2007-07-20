@@ -360,21 +360,15 @@ function loadCurrentRowMessage()
 
 //nsIMsgWindow
   msgWindow = msgWindow.QueryInterface(Components.interfaces.nsIMsgWindow);
-  try {
+  if (msgWindow.SelectFolder) {
+    // it's an old-skool msgWindow, i.e. before the 2007-05-21 check-in
+    // which changed the API
     msgWindow.SelectFolder(folder.URI);
-  } catch(ex) {
-#ifdef DEBUG_onClick
-    jsConsoleService.logStringMessage('Exception: ' + ex);
-#endif
-    dump(ex); 
-  }
-  try {
     msgWindow.SelectMessage(messageUri);
-  } catch(ex) {
-#ifdef DEBUG_onClick
-    jsConsoleService.logStringMessage('Exception: ' + ex);
-#endif
-    dump(ex); 
+  }
+  else {
+    msgWindow.windowCommands.selectFolder(folder.URI);
+    msgWindow.windowCommands.selectMessage(messageUri);
   }
 }
 
