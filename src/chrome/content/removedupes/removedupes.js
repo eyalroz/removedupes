@@ -29,6 +29,10 @@ var useCCList;
 
 function searchAndRemoveDuplicateMessages()
 {
+  //document.getElementById('progress-panel').removeAttribute('collapsed'); 
+  var statusTextField = document.getElementById('statusText');
+  statusTextField.label = gRemoveDupesStrings.GetStringFromName('removedupes.searching_for_dupes');
+
   dfBundle = document.getElementById("removedupesStrings");
 
   useMessageId   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.message_id", true);
@@ -79,6 +83,8 @@ function searchAndRemoveDuplicateMessages()
     alert(gRemoveDupesStrings.GetStringFromName("removedupes.no_duplicates_found"));
   }
   else reviewAndRemove(dupeSetsHashMap);
+  //document.getElementById('progress-panel').setAttribute('collapsed', true); 
+  statusTextField.label = '';
 }
 
 
@@ -162,7 +168,7 @@ function collectMessages(topFolders,dupeSetsHashMap,subfoldersFirst)
 #ifdef DEBUG
       jsConsoleService.logStringMessage('getMessages() failed for folder ' + searchFolders[i].abbreviatedName + ':' + ex);
 #else
-      alert('failed to get messages from folder' + searchFolders[i].abbreviatedName);
+      alert(gRemoveDupesStrings.formatStringFromName('removedupes.failed_getting_messages', [searchFolders[i].abbreviatedName], 1));
 #endif
     }
 
