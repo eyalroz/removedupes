@@ -4,13 +4,13 @@
          xmlns:chrome="http://www.mozilla.org/rdf/chrome#">
 
 	<RDF:Seq about="urn:mozilla:locale:root">
-		<RDF:li resource="urn:mozilla:locale:de-DE"/>
+		<RDF:li resource="urn:mozilla:locale:nl-NL"/>
 	</RDF:Seq>
 
-  <RDF:Description about="urn:mozilla:locale:de-DE">
+  <RDF:Description about="urn:mozilla:locale:nl-NL">
     <chrome:packages>
-      <RDF:Seq about="urn:mozilla:locale:de-DE:packages">
-        <RDF:li resource="urn:mozilla:locale:de-DE:removedupes"/>
+      <RDF:Seq about="urn:mozilla:locale:nl-NL:packages">
+        <RDF:li resource="urn:mozilla:locale:nl-NL:removedupes"/>
       </RDF:Seq>
     </chrome:packages>
   </RDF:Description>
