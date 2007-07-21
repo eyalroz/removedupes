@@ -1,5 +1,5 @@
 #ifdef DEBUG
-// The following 2 lines enable logging messages to the javascript console:
+// the following 2 lines enable logging messages to the javascript console:
 var jsConsoleService = 
   Components.classes['@mozilla.org/consoleservice;1'].getService()
 jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
@@ -9,21 +9,19 @@ var gStartTime;
 var gEndTime;
 #endif
 
+// which of the special folders (inbox, sent, etc.) will we be willing
+// to search in for duplicates?
 var gAllowedSpecialFolders;
 
-// can't we use
-// mail/locales/en-US/chrome/messenger/messenger.properties ... isn't that some
-// isn't it a string bundle somewhere?
-
 // which information will we use for comparing messages?
-var useMessageId;
-var useSendTime;
-var useSubject;
-var useAuthor;
-var useLineCount;
-var useFolder;
-var useRecipients;
-var useCCList;
+var gUseMessageId;
+var gUseSendTime;
+var gUseSubject;
+var gUseAuthor;
+var gUseLineCount;
+var gUseFolder;
+var gUseRecipients;
+var gUseCCList;
 
 // this is about the function called from outside this file
 
@@ -33,16 +31,14 @@ function searchAndRemoveDuplicateMessages()
   var statusTextField = document.getElementById('statusText');
   statusTextField.label = gRemoveDupesStrings.GetStringFromName('removedupes.searching_for_dupes');
 
-  dfBundle = document.getElementById("removedupesStrings");
-
-  useMessageId   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.message_id", true);
-  useSendTime    = gRemoveDupesPrefs.getBoolPref("comparison_criteria.send_time", true);
-  useFolder      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.folder", true);
-  useSubject     = gRemoveDupesPrefs.getBoolPref("comparison_criteria.subject", true);
-  useAuthor      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.from", true);
-  useLineCount   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.num_lines", false);
-  useRecipients  = gRemoveDupesPrefs.getBoolPref("comparison_criteria.recipients", false);
-  useCCList      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.cc_list", false);
+  gUseMessageId   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.message_id", true);
+  gUseSendTime    = gRemoveDupesPrefs.getBoolPref("comparison_criteria.send_time", true);
+  gUseFolder      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.folder", true);
+  gUseSubject     = gRemoveDupesPrefs.getBoolPref("comparison_criteria.subject", true);
+  gUseAuthor      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.from", true);
+  gUseLineCount   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.num_lines", false);
+  gUseRecipients  = gRemoveDupesPrefs.getBoolPref("comparison_criteria.recipients", false);
+  gUseCCList      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.cc_list", false);
   
   gAllowedSpecialFolders = 
     new RegExp(gRemoveDupesPrefs.getLocalizedStringPref('allowed_special_folders', ''), 'i');
@@ -64,7 +60,7 @@ function searchAndRemoveDuplicateMessages()
     gRemoveDupesPrefs.getBoolPref("search_subfolders_first", false));
 #ifdef DEBUG_profile
   gEndTime = (new Date()).getTime();
-  jsConsoleService.logStringMessage('collectMessages time = ' + (gEndTime-gStartTime));
+  jsConsoleService.logStringMessage('collectMessages time = ' + (gEndTime-gStartTime) + ' ms');
   gStartTime = (new Date()).getTime();
 #endif
   // not sure if we need this or not
@@ -188,24 +184,24 @@ function collectMessages(topFolders,dupeSetsHashMap,subfoldersFirst)
 #endif
       
       var sillyHash = '';
-      if (useMessageId)
+      if (gUseMessageId)
         sillyHash += messageHdr.messageId + '|';
-      if (useSendTime)
+      if (gUseSendTime)
         sillyHash += messageHdr.dateInSeconds + '|';
-      if (useFolder)
+      if (gUseFolder)
         sillyHash += searchFolders[i].uri + '|';
-      if (useSubject)
+      if (gUseSubject)
         sillyHash += messageHdr.subject + '|6xX$\WG-C?|';
           // the extra 'junk string' is intended to reduce the chance of getting the subject
           // field being mixed up with other fields in the hash, i.e. in case the subject
           // ends with something like "|55"
-      if (useAuthor)
+      if (gUseAuthor)
         sillyHash += messageHdr.author + '|^#=)A?mUi5|';
-      if (useRecipients)
+      if (gUseRecipients)
         sillyHash += messageHdr.recipients + '|Ei4iXn=Iv*|';
-      if (useCCList)
+      if (gUseCCList)
         sillyHash += messageHdr.ccList + '|w7Exh\' s%k|';
-      if (useLineCount)
+      if (gUseLineCount)
         sillyHash += messageHdr.lineCount;
       var uri = searchFolders[i].getUriForMsg(messageHdr);
       if (sillyHash in messageUriHashmap) {
@@ -328,7 +324,7 @@ function hashTest2(messageRecords)
     }
   }
   gEndTime = (new Date()).getTime();
-  jsConsoleService.logStringMessage('time to populate dupe lists for ' + messageRecords.length + ' messages = ' + (gEndTime-gStartTime));
+  jsConsoleService.logStringMessage('time to populate dupe lists for ' + messageRecords.length + ' messages = ' + (gEndTime-gStartTime) + ' ms');
   gStartTime = (new Date()).getTime();
 }
 
