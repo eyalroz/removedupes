@@ -96,7 +96,7 @@ function initDupeReviewDialog()
   }
 #ifdef DEBUG_profile
   gEndTime = (new Date()).getTime();
-  jsConsoleService.logStringMessage('dupe sets hash decoration time = ' + (gEndTime-gStartTime));
+  jsConsoleService.logStringMessage('dupe sets hash decoration time = ' + (gEndTime-gStartTime) + ' ms');
   gStartTime = (new Date()).getTime();
 #endif
   
@@ -118,7 +118,7 @@ function initDupeReviewDialog()
   rebuildDuplicateSetsTree();
 #ifdef DEBUG_profile
   gEndTime = (new Date()).getTime();
-  jsConsoleService.logStringMessage('rebuildDuplicateSetsTree time = ' + (gEndTime-gStartTime));
+  jsConsoleService.logStringMessage('rebuildDuplicateSetsTree time = ' + (gEndTime-gStartTime) + ' ms');
   gStartTime = (new Date()).getTime();
 #endif
 }
