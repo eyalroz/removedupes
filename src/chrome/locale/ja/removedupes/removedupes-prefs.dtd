@@ -1,9 +1,8 @@
 <!ENTITY prefs_dialog_title "Remove Duplicate Messages 設定">
-<!ENTITY guide-url "http://not.yet.written/"> 
-
+<!ENTITY guide-url "http://not.yet.written/">
 <!ENTITY message_comparison.tab_title "メッセージ比較設定">
 <!ENTITY message_comparison.tab_description "比較条件の項目：">
-<!ENTITY message_comparison.author.label "送信者 ('From' アドレス) ">
+<!ENTITY message_comparison.author.label "送信者 (&apos;From&apos; アドレス) ">
 <!ENTITY message_comparison.recipients.label "受取人 ">
 <!ENTITY message_comparison.cc_list.label "同報人 ">
 <!ENTITY message_comparison.message_id.label "Message ID ">
@@ -17,9 +16,8 @@
 <!ENTITY message_comparison.message_id.access_key "I">
 <!ENTITY message_comparison.num_lines.access_key "l">
 <!ENTITY message_comparison.send_time.access_key "t">
-<!ENTITY message_comparison.subject.access_key "S"> 
-<!ENTITY message_comparison.folder.access_key "o"> 
-
+<!ENTITY message_comparison.subject.access_key "S">
+<!ENTITY message_comparison.folder.access_key "o">
 <!ENTITY general_settings.tab_title "全般設定">
 <!ENTITY general_settings.search_subfolders_first.label "サブフォルダの検索を優先する (postorder) ">
 <!ENTITY general_settings.confirm_search_and_deletion.label "削除前に検索結果を表示する ">
@@ -28,9 +26,7 @@
 <!ENTITY general_settings.default_action.move.label "ごみ箱へ移動 ">
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "P">
 <!ENTITY general_settings.default_action.move.accesskey "M">
-
 <!ENTITY general_settings.search_subfolders_first.access_key "s">
 <!ENTITY general_settings.confirm_search_and_deletion.access_key "c">
-
 <!ENTITY removedupes-preftree-label "重複の削除">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">

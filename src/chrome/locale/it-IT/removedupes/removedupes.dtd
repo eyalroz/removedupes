@@ -1,6 +1,6 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
-<!ENTITY removedupes.remove_duplicates_menuitem.label "Rimuovi duplicati">
-<!ENTITY removedupes_dialog.dialog_title "Cancellazione di messaggi duplicati">
+<!ENTITY removedupes.remove_duplicates_menuitem.label "Rimuovi duplicati...">
+<!ENTITY removedupes_dialog.dialog_title "Cancellazione dei messaggi duplicati">
 <!ENTITY removedupes_dialog.id "ID del messaggio">
 <!ENTITY removedupes_dialog.keep_label "In ciascun gruppo di duplicati, conserva:">
 <!ENTITY removedupes_dialog.subject "Oggetto">
@@ -9,9 +9,9 @@
 <!ENTITY removedupes_dialog.recipients "Destinatario">
 <!ENTITY removedupes_dialog.cc_list "Lista destinatari in Cc">
 <!ENTITY removedupes_dialog.folder "Cartella">
-<!ENTITY removedupes_dialog.line_count "# Righe">
+<!ENTITY removedupes_dialog.line_count "N° righe">
 <!ENTITY removedupes_dialog.date "Data">
-<!ENTITY removedupes_dialog.keep_first.label "Prima copia">
+<!ENTITY removedupes_dialog.keep_first.label "La prima copia">
 <!ENTITY removedupes_dialog.keep_none.label "Nessuna copia">
 <!ENTITY removedupes_dialog.keep_all.label "Tutte le copie">
 <!ENTITY removedupes_dialog.tree_label "Gruppi di messaggi duplicati:">
