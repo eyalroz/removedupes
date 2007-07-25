@@ -2,6 +2,8 @@
 #
 # run this from the src/ directory!
 
+SRCDIR=`pwd`
+# the following are paths relative to the source dir ${SRCDIR}
 DOWNLOADS="../downloads"
 BUILDTOOLS="buildtools"
 
@@ -24,8 +26,8 @@ fi
 #or quit...
 
 for target in tbird suite suiterunner; do
-	cp build/tbird/${SHORTNAME}_${target}.xpi ${DOWNLOADS}/${VERSION}/${SHORTNAME}_${VERSION}_${target}.xpi 
-	cp build/tbird/${SHORTNAME}_${target}.xpi ${DOWNLOADS}/latest/
+	cp build/${target}/${SHORTNAME}_${target}.xpi ${DOWNLOADS}/${VERSION}/${SHORTNAME}_${VERSION}_${target}.xpi 
+	cp build/${target}/${SHORTNAME}_${target}.xpi ${DOWNLOADS}/latest/
 done
 	
 #cp build/tbird/${SHORTNAME}_tbird.xpi build/suite/${SHORTNAME}_suite.xpi build/suiterunner/${SHORTNAME}_suiterunner.xpi ${DOWNLOADS}/${VERSION}/ 
@@ -33,12 +35,13 @@ done
 
 cvs -d :pserver:eyalroz@mozdev.org/cvs tag  ${RELEASE_TAG}
 
-cd ${BUILDTOOLS}
+cd ${SRCDIR}/${BUILDTOOLS}
 
 cvs -d :pserver:eyalroz@mozdev.org/cvs tag  ${RELEASE_TAG}
 
-cd ${DOWNLOADS}
+cd ${SRCDIR}/${DOWNLOADS}
+
 cvs -d :pserver:eyalroz@mozdev.org/cvs add ${VERSION}/ 
 cvs -d :pserver:eyalroz@mozdev.org/cvs add ${VERSION}/${SHORTNAME}_tbird.xpi ${VERSION}/${SHORTNAME}_suite.xpi ${VERSION}/${SHORTNAME}_suiterunner.xpi
-cvs -d :pserver:eyalroz@mozdev.org/cvs ci
+cvs -d :pserver:eyalroz@mozdev.org/cvs ci ${VERSION}/ latest/
 

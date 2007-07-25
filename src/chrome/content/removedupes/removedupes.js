@@ -1,7 +1,7 @@
 #ifdef DEBUG
 // the following 2 lines enable logging messages to the javascript console:
 var jsConsoleService = 
-  Components.classes['@mozilla.org/consoleservice;1'].getService()
+  Components.classes['@mozilla.org/consoleservice;1'].getService();
 jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
 
 // used for rough profiling
