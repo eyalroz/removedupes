@@ -19,7 +19,7 @@
 <!ENTITY message_comparison.subject.access_key "G">
 <!ENTITY message_comparison.folder.access_key "T">
 <!ENTITY general_settings.tab_title "Opzioni generali">
-<!ENTITY general_settings.search_subfolders_first.label "Ricerca prima nelle sottocartelle (postorder)">
+<!ENTITY general_settings.search_subfolders_first.label "Ricerca prima nelle sottocartelle (struttura ad albero)">
 <!ENTITY general_settings.confirm_search_and_deletion.label "Mostra riepilogo della ricerca prima della cancellazione">
 <!ENTITY general_settings.default_action.description "Azione predefinita per i messaggi duplicati:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Cancella permanentemente">

@@ -1,4 +1,4 @@
-<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - 設定">
+<!ENTITY prefs_dialog_title "Remove Duplicate Messages - 設定">
 <!ENTITY guide-url "http://not.yet.written/">
 <!ENTITY message_comparison.tab_title "郵件比較">
 <!ENTITY message_comparison.tab_description "做為比較標準的郵件元素:">
@@ -19,7 +19,7 @@
 <!ENTITY message_comparison.subject.access_key "S">
 <!ENTITY message_comparison.folder.access_key "o">
 <!ENTITY general_settings.tab_title "一般設定">
-<!ENTITY general_settings.search_subfolders_first.label "先搜尋子資料夾 (依時間排序)">
+<!ENTITY general_settings.search_subfolders_first.label "先搜尋子資料夾 (postorder)">
 <!ENTITY general_settings.confirm_search_and_deletion.label "刪除前先檢閱搜尋結果">
 <!ENTITY general_settings.default_action.description "發現重複郵件時的預設動作:">
 <!ENTITY general_settings.default_action.delete_permanently.label "永久刪除">
