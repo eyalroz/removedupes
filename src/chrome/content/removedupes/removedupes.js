@@ -23,14 +23,120 @@ var gUseFolder;
 var gUseRecipients;
 var gUseCCList;
 
-// this is about the function called from outside this file
+// a class definition of the runnable which will do
+// our duplicate search, on a different thread
+//---------------------------------------------------
+
+function SearchForDupesRunnable() {
+  this.dupeSetsHashMap = new Object;
+  this.done = false;
+}
+
+SearchForDupesRunnable.prototype.QueryInterface =
+  function(iid) {
+    if (iid.equals(Components.interfaces.nsIRunnable) ||
+        iid.equals(Components.interfaces.nsISupports))
+      return this;
+    throw Components.results.NS_ERROR_NO_INTERFACE;
+  },
+SearchForDupesRunnable.prototype.run = 
+  function() {
+    searchForDuplicateMessages(this.dupeSetsHashMap);
+    this.done = true;
+  }
+//---------------------------------------------------
 
 function searchAndRemoveDuplicateMessages()
 {
   //document.getElementById('progress-panel').removeAttribute('collapsed'); 
   var statusTextField = document.getElementById('statusText');
   statusTextField.label = gRemoveDupesStrings.GetStringFromName('removedupes.searching_for_dupes');
+  var searchForDupesRunnable = new SearchForDupesRunnable();
+  var searchThread;
+  var needJoining = false;
+  
+  try {
+    searchThread =
+      Components.classes["@mozilla.org/thread-manager;1"]
+                .getService().newThread(0);
+    searchThread.dispatch(searchForDupesRunnable, searchThread.DISPATCH_NORMAL);
+  }
+  catch(ex) {
+    // we've probably gotten here because we're in an older build,
+    // with the old-skool threading API; let's try it as well
+    var Thread = new Components.Constructor("@mozilla.org/thread;1", "nsIThread", "init");
+    searchThread = new Thread(
+      searchForDupesRunnable,
+      0,
+      Components.interfaces.nsIThread.PRIORITY_NORMAL,
+      Components.interfaces.nsIThread.SCOPE_GLOBAL,
+      Components.interfaces.nsIThread.STATE_JOINABLE);
+    needJoining = false;
+  }
+  setTimeout(searchAndRemoveDuplicatesJoiner, 200, searchForDupesRunnable, searchThread, needJoining);
+}
 
+function searchAndRemoveDuplicatesJoiner(searchForDupesRunnable, searchThread, needJoining)
+{
+#ifdef DEBUG_searchAndRemoveDuplicateMessages
+  jsConsoleService.logStringMessage('searchAndRemoveDuplicatesJoiner\ndone = ' + searchForDupesRunnable.done); // + '\nthread = ' + thread);
+#endif
+  if (searchForDupesRunnable.done) {
+    var statusTextField = document.getElementById('statusText');
+  
+    // TODO: isn't there a more decent way to check for emptyness of an Object?
+    var noDupeSets = true;
+    for (var hashValue in searchForDupesRunnable.dupeSetsHashMap) {
+      noDupeSets = false;
+      break;
+    }
+  
+    if (noDupeSets) {
+      // maybe this would be better as a message in the bottom status bar
+      alert(gRemoveDupesStrings.GetStringFromName("removedupes.no_duplicates_found"));
+    }
+    else reviewAndRemove(searchForDupesRunnable.dupeSetsHashMap);
+    //document.getElementById('progress-panel').setAttribute('collapsed', true); 
+    statusTextField.label = '';
+
+    if (needJoining) {
+      searchThread.join();
+    }
+  }
+  else {
+    setTimeout(searchAndRemoveDuplicatesJoiner, 200, searchForDupesRunnable, searchThread, needJoining);
+  }
+}
+
+
+// This next function is the non-threaded version of the previous one
+function searchAndRemoveDuplicateMessagesUnthreaded()
+{
+  //document.getElementById('progress-panel').removeAttribute('collapsed'); 
+  var statusTextField = document.getElementById('statusText');
+  statusTextField.label = gRemoveDupesStrings.GetStringFromName('removedupes.searching_for_dupes');
+  var dupeSetsHashMap = new Object;
+  searchForDuplicateMessages(dupeSetsHashMap);
+  
+  // TODO: isn't there a more decent way to check for emptyness of an Object?
+  var noDupeSets = true;
+  for (var hashValue in dupeSetsHashMap) {
+    noDupeSets = false;
+    break;
+  }
+  
+  if (noDupeSets) {
+    // maybe this would be better as a message in the bottom status bar
+    alert(gRemoveDupesStrings.GetStringFromName("removedupes.no_duplicates_found"));
+  }
+  else reviewAndRemove(dupeSetsHashMap);
+  //document.getElementById('progress-panel').setAttribute('collapsed', true); 
+  statusTextField.label = '';
+}
+
+
+function searchForDuplicateMessages(dupeSetsHashMap)
+{
   gUseMessageId   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.message_id", true);
   gUseSendTime    = gRemoveDupesPrefs.getBoolPref("comparison_criteria.send_time", true);
   gUseFolder      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.folder", true);
@@ -47,7 +153,6 @@ function searchAndRemoveDuplicateMessages()
 #endif
 
   var selectedFolders = GetSelectedMsgFolders();
-  var dupeSetsHashMap = new Object;
 #ifdef DEBUG_searchAndRemoveDuplicateMessages
   jsConsoleService.logStringMessage('calling collectMessages for selectedFolders = ' + selectedFolders);
 #endif
@@ -66,21 +171,6 @@ function searchAndRemoveDuplicateMessages()
   // not sure if we need this or not
   //SelectFolder(selectedFolders[0].URI);
   delete selectedFolders;
-  
-  // TODO: isn't there a more decent way to check for emptyness of an Object?
-  var noDupeSets = true;
-  for (var hashValue in dupeSetsHashMap) {
-    noDupeSets = false;
-    break;
-  }
-  
-  if (noDupeSets) {
-    // maybe this would be better as a message in the bottom status bar
-    alert(gRemoveDupesStrings.GetStringFromName("removedupes.no_duplicates_found"));
-  }
-  else reviewAndRemove(dupeSetsHashMap);
-  //document.getElementById('progress-panel').setAttribute('collapsed', true); 
-  statusTextField.label = '';
 }
 
 
@@ -164,7 +254,7 @@ function collectMessages(topFolders,dupeSetsHashMap,subfoldersFirst)
 #ifdef DEBUG
       jsConsoleService.logStringMessage('getMessages() failed for folder ' + searchFolders[i].abbreviatedName + ':' + ex);
 #else
-      alert(gRemoveDupesStrings.formatStringFromName('removedupes.failed_getting_messages', [searchFolders[i].abbreviatedName], 1));
+      dump(gRemoveDupesStrings.formatStringFromName('removedupes.failed_getting_messages', [searchFolders[i].abbreviatedName], 1));
 #endif
     }
 
