@@ -254,7 +254,7 @@ function collectMessages(topFolders,dupeSetsHashMap,subfoldersFirst)
 #ifdef DEBUG
       jsConsoleService.logStringMessage('getMessages() failed for folder ' + searchFolders[i].abbreviatedName + ':' + ex);
 #else
-      dump(gRemoveDupesStrings.formatStringFromName('removedupes.failed_getting_messages', [searchFolders[i].abbreviatedName], 1));
+      dump(gRemoveDupesStrings.formatStringFromName('removedupes.failed_getting_messages', [searchFolders[i].abbreviatedName], 1) + '\n');
 #endif
     }
 
