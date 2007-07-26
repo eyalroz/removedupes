@@ -30,33 +30,48 @@
             height="250"
             width="700"
             flex="2"
-            onclick="onClick(event);">
-
+            onclick="onClickTree(event);">
         <treecols>
           <treecol width="40" id="dummyCell" primary="true"/>
           <splitter class="tree-splitter"/>
-          <treecol id="keepColumn" width="60" label="&removedupes_dialog.keep_flag;"/>
+          <treecol id="keepColumn"
+                   width="60"
+                   label="&removedupes_dialog.keep_flag;" />
           <splitter class="tree-splitter"/>
           <treecol id="senderColumn"
-                   label="&removedupes_dialog.sender;" flex="5"/>
+                   label="&removedupes_dialog.sender;"
+                   flex="5"
+                   onclick="onClickColumn(event,'author');" />
           <splitter class="tree-splitter"/>
           <treecol id="recipientsColumn"
-                   label="&removedupes_dialog.recipients;" flex="5"/>
+                   label="&removedupes_dialog.recipients;"
+                   flex="5"
+                   onclick="onClickColumn(event,'recipients');" />
           <splitter class="tree-splitter"/>
           <treecol id="ccListColumn"
-                   label="&removedupes_dialog.cc_list;" flex="5"/>
+                   label="&removedupes_dialog.cc_list;" 
+                   flex="5"
+                   onclick="onClickColumn(event,'ccList');" />
           <splitter class="tree-splitter"/>
           <treecol id="subjectColumn"
-                   label="&removedupes_dialog.subject;" flex="5"/>
+                   label="&removedupes_dialog.subject;" 
+                   flex="5"
+                   onclick="onClickColumn(event,'subject');" />
           <splitter class="tree-splitter"/>
           <treecol id="folderColumn"
-                   label="&removedupes_dialog.folder;" flex="2"/>
+                   label="&removedupes_dialog.folder;" 
+                   flex="2"
+                   onclick="onClickColumn(event,'folderUri');" />
           <splitter class="tree-splitter"/>
-          <treecol id="dateColumn"  width="150"
-                   label="&removedupes_dialog.date;" flex="3"/>
+          <treecol id="sendTimeColumn"  width="150"
+                   label="&removedupes_dialog.date;"
+                   flex="3"
+                   onclick="onClickColumn(event,'sendTime');" />
           <splitter class="tree-splitter"/>
           <treecol id="lineCountColumn"
-                   label="&removedupes_dialog.line_count;" flex="2"/>
+                   label="&removedupes_dialog.line_count;" 
+                   flex="2"
+                   onclick="onClickColumn(event,'lineCount');" />
           <splitter class="tree-splitter"/>
         </treecols>
         <treechildren id="dupeSetsTreeChildren"/>
@@ -87,7 +102,7 @@
         </radiogroup>
         </groupbox>
     </vbox>
-    <hbox width="60" flex="1">
+    <hbox width="60">
       <vbox>
         <description  width="60">
           &removedupes_dialog.keep_label;
