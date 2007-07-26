@@ -28,7 +28,10 @@ const folderNameColumnIndex  = 6;
 const sendTimeColumnIndex    = 7;
 const lineCountColumnIndex   = 8;
 
+// state variables for dupe set sorting (see onClickColumn() )
 
+var gCurrentSortCriterion;
+var gSortingBackwards = false;
 
 const gDateService = 
   Components.classes["@mozilla.org/intl/scriptabledateformat;1"]
@@ -308,9 +311,9 @@ function formatSendTime(sendTimeInSeconds)
     sendTimeInSeconds_in_seconds.getSeconds() );
 }
 
-function onClick(ev)
+function onClickTree(ev)
 {
-#ifdef DEBUG_onClick
+#ifdef DEBUG_onClickTree
   jsConsoleService.logStringMessage('in onClick()\nclick point = ' + ev.clientX + ':' + ev.clientY);
 #endif
 
@@ -329,7 +332,7 @@ function onClick(ev)
 
   // ... otherwise, we need to load the relevant dupe message in the 3-pane window
 
-#ifdef DEBUG_onClick
+#ifdef DEBUG_onClickTree
   jsConsoleService.logStringMessage('done with onClick()');
 #endif
 }
@@ -469,4 +472,36 @@ function initializeFolderPicker()
 
   //var msgFolder = GetMsgFolderFromUri(uri, false);
   SetFolderPicker(uri, 'actionTargetFolder');
+}
+
+function onClickColumn(ev,field)
+{
+  ev.stopPropagation();
+  
+  if (gCurrentSortCriterion == field) {
+    gSortingBackwards = !gSortingBackwards;
+  }
+  else {
+    gCurrentSortCriterion = field;
+    gSortingBackwards = false;
+  }
+
+  // we will now re-sort every dupe set using the field whose
+  // column the user has clicked
+  
+  var compareFunction = function(lhs, rhs) {
+    if (lhs[field] == rhs[field])
+      return 0;
+    if (gSortingBackwards)
+      return ( (lhs[field] > rhs[field]) ? -1 : 1);
+    else
+      return ( (lhs[field] > rhs[field]) ? 1 : -1);
+  };
+
+  for (hashValue in dupeSetsHashMap) {
+    var dupeSet = dupeSetsHashMap[hashValue];
+    dupeSet.sort(compareFunction);
+  }
+
+  rebuildDuplicateSetsTree();
 }
