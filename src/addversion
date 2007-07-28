@@ -30,9 +30,6 @@ for target in tbird suite suiterunner; do
 	cp build/${target}/${SHORTNAME}_${target}.xpi ${DOWNLOADS}/latest/
 done
 	
-#cp build/tbird/${SHORTNAME}_tbird.xpi build/suite/${SHORTNAME}_suite.xpi build/suiterunner/${SHORTNAME}_suiterunner.xpi ${DOWNLOADS}/${VERSION}/ 
-#cp -f build/tbird/${SHORTNAME}_tbird.xpi build/suite/${SHORTNAME}_suite.xpi build/suiterunner/${SHORTNAME}_suiterunner.xpi ${DOWNLOADS}/latest/
-
 cvs -d :pserver:eyalroz@mozdev.org/cvs tag  ${RELEASE_TAG}
 
 cd ${SRCDIR}/${BUILDTOOLS}
