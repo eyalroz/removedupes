@@ -9,6 +9,7 @@
 <!DOCTYPE dialog SYSTEM "chrome://removedupes/locale/removedupes.dtd">
 
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        persist="width height screenX screenY sizemode"
         onload="initDupeReviewDialog();"
         buttons="accept,cancel"
         ondialogaccept="onAccept();"
