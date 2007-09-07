@@ -324,6 +324,14 @@ function onClickTree(ev)
 //  var x = {}, y = {}, w = {}, h = {};
 //  treeBoxOject.getCoordsForCellItem(row.value, col.value, "treecell", x, y, w, h);
 
+  if (!col.value || !row.value || !col.value.index) {
+    // this isn't a valid cell we can use
+#ifdef DEBUG_onClickTree
+    jsConsoleService.logStringMessage('not a valid cell, doing nothing');
+#endif
+    return;
+  }
+
   if (col.value.index == toKeepColumnIndex) {
     toggleDeletionForCurrentRow();
     return;
@@ -341,12 +349,16 @@ function loadCurrentRowMessage()
 {
   // when we click somewhere in the tree, the focused element should be an inner 'treeitem'
   var focusedTreeItem = gTree.contentView.getItemAtIndex(gTree.currentIndex);
-  var node = focusedTreeItem;
-  var node = focusedTreeItem.parentNode;
+  if (!focusedTreeItem.hasAttribute('indexInDupeSet')) {
+#ifdef DEBUG_loadCurrentRowMessage
+  jsConsoleService.logStringMessage('no messageIndexInDupeSet; this is an invalid node, aborting');
+#endif
+    return;
+  }
   var messageIndexInDupeSet = focusedTreeItem.getAttribute('indexInDupeSet');
   var dupeSetTreeItem = focusedTreeItem.parentNode.parentNode;
-#ifdef DEBUG_onClick
-  var node = dupeSetTreeItem ;
+#ifdef DEBUG_loadCurrentRowMessage
+  var node = dupeSetTreeItem;
   jsConsoleService.logStringMessage('dupeSetTreeItem: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
   var node = dupeSetTreeItem.parentNode;
   jsConsoleService.logStringMessage('dupeSetTreeItem.parentNode: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
@@ -354,6 +366,9 @@ function loadCurrentRowMessage()
   jsConsoleService.logStringMessage('dupeSetTreeItem.parentNode.parentNode: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
 #endif
   var dupeSetHashValue = dupeSetTreeItem.getAttribute('commonHashValue');
+#ifdef DEBUG_loadCurrentRowMessage
+  jsConsoleService.logStringMessage('dupeSetHashValue = ' + dupeSetHashValue);
+#endif
   var dupeSetItem = dupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
   var messageUri = dupeSetItem.uri;
   var folder = messenger.msgHdrFromURI(messageUri).folder;
