@@ -30,7 +30,7 @@ const lineCountColumnIndex   = 8;
 
 // state variables for dupe set sorting (see onClickColumn() )
 
-var gCurrentSortCriterion;
+var gCurrentSortIndicator;
 var gSortingBackwards = false;
 
 const gDateService = 
@@ -489,15 +489,32 @@ function initializeFolderPicker()
   SetFolderPicker(uri, 'actionTargetFolder');
 }
 
-function onClickColumn(ev,field)
+function onClickColumn(ev)
 {
+#ifdef DEBUG_onClickColumn
+  jsConsoleService.logStringMessage('in onClickColumn()');
+#endif
   ev.stopPropagation();
   
-  if (gCurrentSortCriterion == field) {
+  var field = ev.target.getAttribute('fieldName');
+
+#ifdef DEBUG_onClickColumn
+  jsConsoleService.logStringMessage('field = ' + field);
+#endif
+  
+  if (!field)
+    return;
+
+  if (gCurrentSortIndicator == ev.target) {
+    // re-clicking the current sort indicator means flipping the sort order
     gSortingBackwards = !gSortingBackwards;
   }
   else {
-    gCurrentSortCriterion = field;
+    if (gCurrentSortIndicator) {
+      gCurrentSortIndicator.removeAttribute('class');
+      gCurrentSortIndicator.removeAttribute('sortDirection');
+    }
+    gCurrentSortIndicator = ev.target;
     gSortingBackwards = false;
   }
 
@@ -513,10 +530,17 @@ function onClickColumn(ev,field)
       return ( (lhs[field] > rhs[field]) ? 1 : -1);
   };
 
+  // TODO: see if you can't use the XUL tree's internal sorting mechanism; if we do that, we'll be able to
+  // spare lots of tree-rebuilding
+
   for (hashValue in dupeSetsHashMap) {
     var dupeSet = dupeSetsHashMap[hashValue];
     dupeSet.sort(compareFunction);
   }
 
+  ev.target.setAttribute('class','sortDirectionIndicator');
+  ev.target.setAttribute('sortDirection',gSortingBackwards ? "descending" : "ascending");
   rebuildDuplicateSetsTree();
+
+    // TODO: set tree column attribute class="sortDirectionIndicator" for the new column
 }
