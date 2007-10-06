@@ -30,15 +30,15 @@ for target in tbird suite suiterunner; do
 	cp build/${target}/${SHORTNAME}_${target}.xpi ${DOWNLOADS}/latest/
 done
 	
-cvs -d :pserver:eyalroz@mozdev.org/cvs tag  ${RELEASE_TAG}
+cvs -d :pserver:eyalroz@mozdev.org:/cvs tag  ${RELEASE_TAG}
 
 cd ${SRCDIR}/${BUILDTOOLS}
 
-cvs -d :pserver:eyalroz@mozdev.org/cvs tag  ${RELEASE_TAG}
+cvs -d :pserver:eyalroz@mozdev.org:/cvs tag  ${RELEASE_TAG}
 
 cd ${SRCDIR}/${DOWNLOADS}
 
-cvs -d :pserver:eyalroz@mozdev.org/cvs add ${VERSION}/ 
-cvs -d :pserver:eyalroz@mozdev.org/cvs add ${VERSION}/${SHORTNAME}_tbird.xpi ${VERSION}/${SHORTNAME}_suite.xpi ${VERSION}/${SHORTNAME}_suiterunner.xpi
-cvs -d :pserver:eyalroz@mozdev.org/cvs ci ${VERSION}/ latest/
+cvs -d :pserver:eyalroz@mozdev.org:/cvs add ${VERSION}/ 
+cvs -d :pserver:eyalroz@mozdev.org:/cvs add ${VERSION}/${SHORTNAME}_tbird.xpi ${VERSION}/${SHORTNAME}_suite.xpi ${VERSION}/${SHORTNAME}_suiterunner.xpi
+cvs -d :pserver:eyalroz@mozdev.org:/cvs ci ${VERSION}/ latest/
 
