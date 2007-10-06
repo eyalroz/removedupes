@@ -1,3 +1,18 @@
+// A way to tell if an object is empty or not
+
+function isEmpty(obj)
+{
+  var i;
+  if (typeof obj === 'object' || typeof obj === 'function') {
+    for (i in obj) {
+      if (obj.hasOwnProperty(i)) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 var gCopyService =
   Components.classes["@mozilla.org/messenger/messagecopyservice;1"]
             .getService(Components.interfaces.nsIMsgCopyService);
