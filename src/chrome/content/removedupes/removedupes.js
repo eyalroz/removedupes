@@ -84,14 +84,7 @@ function searchAndRemoveDuplicatesJoiner(searchForDupesRunnable, searchThread, n
   if (searchForDupesRunnable.done) {
     var statusTextField = document.getElementById('statusText');
   
-    // TODO: isn't there a more decent way to check for emptyness of an Object?
-    var noDupeSets = true;
-    for (var hashValue in searchForDupesRunnable.dupeSetsHashMap) {
-      noDupeSets = false;
-      break;
-    }
-  
-    if (noDupeSets) {
+    if (isEmpty(searchForDupesRunnable.dupeSetsHashMap)) {
       // maybe this would be better as a message in the bottom status bar
       alert(gRemoveDupesStrings.GetStringFromName("removedupes.no_duplicates_found"));
     }
@@ -118,14 +111,7 @@ function searchAndRemoveDuplicateMessagesUnthreaded()
   var dupeSetsHashMap = new Object;
   searchForDuplicateMessages(dupeSetsHashMap);
   
-  // TODO: isn't there a more decent way to check for emptyness of an Object?
-  var noDupeSets = true;
-  for (var hashValue in dupeSetsHashMap) {
-    noDupeSets = false;
-    break;
-  }
-  
-  if (noDupeSets) {
+  if (isEmpty(dupeSetsHashMap)) {
     // maybe this would be better as a message in the bottom status bar
     alert(gRemoveDupesStrings.GetStringFromName("removedupes.no_duplicates_found"));
   }
