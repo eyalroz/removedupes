@@ -71,7 +71,7 @@ function searchAndRemoveDuplicateMessages()
       Components.interfaces.nsIThread.PRIORITY_NORMAL,
       Components.interfaces.nsIThread.SCOPE_GLOBAL,
       Components.interfaces.nsIThread.STATE_JOINABLE);
-    needJoining = false;
+    needJoining = true;
   }
   setTimeout(searchAndRemoveDuplicatesJoiner, 200, searchForDupesRunnable, searchThread, needJoining);
 }
