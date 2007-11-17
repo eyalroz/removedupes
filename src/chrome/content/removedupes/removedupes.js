@@ -62,6 +62,9 @@ function searchAndRemoveDuplicateMessages()
     searchThread.dispatch(searchForDupesRunnable, searchThread.DISPATCH_NORMAL);
   }
   catch(ex) {
+#ifdef DEBUG_searchAndRemoveDuplicateMessages
+    jsConsoleService.logStringMessage('can\'t use the new thread manager, doing it the older way');
+#endif
     // we've probably gotten here because we're in an older build,
     // with the old-skool threading API; let's try it as well
     var Thread = new Components.Constructor("@mozilla.org/thread;1", "nsIThread", "init");
@@ -71,9 +74,15 @@ function searchAndRemoveDuplicateMessages()
       Components.interfaces.nsIThread.PRIORITY_NORMAL,
       Components.interfaces.nsIThread.SCOPE_GLOBAL,
       Components.interfaces.nsIThread.STATE_JOINABLE);
+#ifdef DEBUG_searchAndRemoveDuplicateMessages
+    jsConsoleService.logStringMessage('thread created');
+#endif
     needJoining = true;
   }
   setTimeout(searchAndRemoveDuplicatesJoiner, 200, searchForDupesRunnable, searchThread, needJoining);
+#ifdef DEBUG_searchAndRemoveDuplicateMessages
+    jsConsoleService.logStringMessage('timeout set');
+#endif
 }
 
 function searchAndRemoveDuplicatesJoiner(searchForDupesRunnable, searchThread, needJoining)
@@ -105,6 +114,9 @@ function searchAndRemoveDuplicatesJoiner(searchForDupesRunnable, searchThread, n
 // This next function is the non-threaded version of the previous one
 function searchAndRemoveDuplicateMessagesUnthreaded()
 {
+#ifdef DEBUG_searchAndRemoveDuplicateMessages
+  jsConsoleService.logStringMessage('searchAndRemoveDuplicateMessagesUnthreaded()');
+#endif
   //document.getElementById('progress-panel').removeAttribute('collapsed'); 
   var statusTextField = document.getElementById('statusText');
   statusTextField.label = gRemoveDupesStrings.GetStringFromName('removedupes.searching_for_dupes');
@@ -141,12 +153,12 @@ function searchForDuplicateMessages(dupeSetsHashMap)
   
   gAllowedSpecialFolders = 
     new RegExp(gRemoveDupesPrefs.getLocalizedStringPref('allowed_special_folders', ''), 'i');
-#ifdef DEBUG_searchAndRemoveDuplicateMessages
+#ifdef DEBUG_searchForDuplicateMessages
   jsConsoleService.logStringMessage('gAllowedSpecialFolders = ' + gAllowedSpecialFolders);
 #endif
 
   var selectedFolders = GetSelectedMsgFolders();
-#ifdef DEBUG_searchAndRemoveDuplicateMessages
+#ifdef DEBUG_searchForDuplicateMessages
   jsConsoleService.logStringMessage('calling collectMessages for selectedFolders = ' + selectedFolders);
 #endif
 #ifdef DEBUG_profile
