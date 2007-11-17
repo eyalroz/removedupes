@@ -83,6 +83,10 @@ function initDupeReviewDialog()
   initializeFolderPicker();
   document.getElementById('action').value  = gRemoveDupesPrefs.getCharPref('default_action', 'move');
   
+  // we re-form the dupe sets - instead of arrays of message URIs we
+  // will now have arrays of dupeMessageRecord's, which contain much more
+  // information (rather than having to repeatedly retrieve it)
+  
   for (hashValue in dupeSetsHashMap) {
     gNumberOfDupeSets++;
     var dupeSet = dupeSetsHashMap[hashValue];
