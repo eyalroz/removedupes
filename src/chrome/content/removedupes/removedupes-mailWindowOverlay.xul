@@ -14,7 +14,7 @@
      <menuitem id="removeDuplicatesMenuItem" 
                label="&removedupes.remove_duplicates_menuitem.label;"
                insertafter="folderPaneContext-copy-location"
-#ifdef DEBUG_NO_THREADS
+#ifndef USE_THREADS
                oncommand="searchAndRemoveDuplicateMessagesUnthreaded();"/> 
 #else
                oncommand="searchAndRemoveDuplicateMessages();"/> 
@@ -32,8 +32,7 @@
     <menuseparator id="sep-removedupes"/>
     <menuitem id="removedupes-menuitem"
               label="&removedupes.remove_duplicates_menuitem.label;"
-              insertafter="removeDuplicatesMenuItem"
-#ifdef DEBUG_NO_THREADS
+#ifndef USE_THREADS
               oncommand="searchAndRemoveDuplicateMessagesUnthreaded();"/> 
 #else
               oncommand="searchAndRemoveDuplicateMessages();"/> 
