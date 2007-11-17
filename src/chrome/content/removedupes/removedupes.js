@@ -131,6 +131,13 @@ function searchForDuplicateMessages(dupeSetsHashMap)
   gUseLineCount   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.num_lines", false);
   gUseRecipients  = gRemoveDupesPrefs.getBoolPref("comparison_criteria.recipients", false);
   gUseCCList      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.cc_list", false);
+  gUseBody        = gRemoveDupesPrefs.getBoolPref("comparison_criteria.body", false);
+  
+  // some criteria are not used when messages are first collected, so the
+  // hash map of dupe sets might be a 'rough' partition into dupe sets, which
+  // still needs to be refined by additional comparison criteria
+  
+  var additionalRefinementOfDupeSets = gUseBody;
   
   gAllowedSpecialFolders = 
     new RegExp(gRemoveDupesPrefs.getLocalizedStringPref('allowed_special_folders', ''), 'i');
@@ -154,6 +161,9 @@ function searchForDuplicateMessages(dupeSetsHashMap)
   jsConsoleService.logStringMessage('collectMessages time = ' + (gEndTime-gStartTime) + ' ms');
   gStartTime = (new Date()).getTime();
 #endif
+  if (additionalRefinementOfDupeSets) {
+    refineDupeSets(dupeSetsHashMap);
+  }
   // not sure if we need this or not
   //SelectFolder(selectedFolders[0].URI);
   delete selectedFolders;
@@ -248,13 +258,19 @@ function collectMessages(topFolders,dupeSetsHashMap,subfoldersFirst)
       var messageHdr = 
         folderMessageHdrsIterator.getNext()
                                  .QueryInterface(Components.interfaces.nsIMsgDBHdr);
-      // note that there could theoretically be two messages which should not
-      // have the same hash, but do have it, if the subject includes the string
-      // |6xX$\WG-C?| or the author includes the string '|^#=)A?mUi5|' ; this
-      // is however highly unlikely... about as unlikely as collisions of
-      // a hash function, except that we haven't randomized; still,
-      // if a malicious user sent you e-mail with these strings in the author
-      // or subject fields, you probably don't care about deleting them anyways
+      // Notes:
+      // 1. There could theoretically be two messages which should not
+      //    have the same hash, but do have it, if the subject includes the
+      //    string |6xX$\WG-C?| or the author includes the string 
+      //    '|^#=)A?mUi5|' ; this is however highly unlikely... about as 
+      //    unlikely as collisions of a hash function, except that we haven't
+      //    randomized; still, if a malicious user sent you e-mail with these
+      //    strings in the author or subject fields, you probably don't care
+      //    about deleting them anyways
+      // 2. We're not making full body comparisons/hashing here - only after
+      //    creating dupe sets based on the 'cheap' criteria will we look at
+      //    the message body
+      
 #ifdef DEBUG_profile
       numMessages++;
 #endif
@@ -311,9 +327,103 @@ function collectMessages(topFolders,dupeSetsHashMap,subfoldersFirst)
   delete searchFolders;
 }
 
+function messageBodyFromURI(msgURI)
+{
+  var msgContent = "";
+#ifdef DEBUG_messageBodyFromURI
+   jsConsoleService.logStringMessage('in messageBodyFromURI(' + msgURI + ')');
+#endif
+  var MsgService = messenger.messageServiceFromURI(msgURI);
+  var MsgStream =  Components.classes["@mozilla.org/network/sync-stream-listener;1"].createInstance();
+  var consumer = MsgStream.QueryInterface(Components.interfaces.nsIInputStream);
+  var ScriptInput = Components.classes["@mozilla.org/scriptableinputstream;1"].createInstance();
+  var ScriptInputStream = ScriptInput.QueryInterface(Components.interfaces.nsIScriptableInputStream);
+  ScriptInputStream.init(consumer);
+  try {
+    MsgService .streamMessage(msgURI, MsgStream, msgWindow, null, false, null);
+  } catch (ex) {
+    alert("error: " + ex)
+  }
+  ScriptInputStream.available();
+  while (ScriptInputStream.available()) {
+    msgContent = msgContent + ScriptInputStream.read(512);
+  }
+  // the message headers end on the first empty line, and lines are delimited
+  // by \r\n's ; of course, this is a very lame hack, since if the message has
+  // multiple MIME parts we're still getting the headers of all the sub-parts,
+  // and not taking into any account the multipart delimiters
+  return msgContent.split('\r\n\r\n')[1];
+}
+
+function refineDupeSets(dupeSetsHashMap)
+{
+  // we'll split every dupe set into separate sets based on additional
+  // comparison criteria (the more 'expensive' ones); size-1 dupe sets
+  // are removed from the hash map entirely.
+  
+  // TODO: for now, our only 'expensive' criterion is the message body,
+  // so I'm leaving the actualy comparison code in this function and
+  // not even checking for gUseBody; if and when we get additional
+  // criteria this should be rewritten so that dupeSet[i] gets
+  // a comparison record created for it, then for every j we call
+  // ourcomparefunc(comparisonrecord, dupeSet[j])
+  
+  // Note: I don't bother with an actual sort as I expect dupe sets
+  // to be small, or at least to have very few sub-dupe-sets
+ 
+  //var MessageURI = GetFirstSelectedMessage();
+
+ 
+  for (hashValue in dupeSetsHashMap) {
+#ifdef DEBUG_refineDupeSets
+    jsConsoleService.logStringMessage('refining for dupeSetsHashMap value ' + hashValue);
+#endif
+    var dupeSet = dupeSetsHashMap[hashValue];
+    for (var i=0; i < dupeSet.length; i++) {
+      // if dupeSet[i] is null, we've already placed it in a new refined dupeset
+      if (dupeSet[i] == null) continue;
+      // creatingSubDupeSet becomes true only when we find there's
+      // at least one additional message which is really the same as
+      // dupeSet[i]
+      var creatingSubDupeSet = false;
+      var messageBody = messageBodyFromURI(dupeSet[i]);
+#ifdef DEBUG_refineDupeSets
+      jsConsoleService.logStringMessage('i = ' + i + '  body = \n' + messageBody);
+#endif
+      var subsetHashValue;
+      for (var j=i+1; j < dupeSet.length; j++) {
+        // skip dupes in the set which were already
+        // found to be equal to previous ones
+        if (dupeSet[i] == null) continue;
+#ifdef DEBUG_refineDupeSets
+        jsConsoleService.logStringMessage('j = ' + j + '  body = \n' + messageBodyFromURI(dupeSet[j]));
+#endif
+        if (messageBody == messageBodyFromURI(dupeSet[j])) {
+          if (!creatingSubDupeSet) {
+            subsetHashValue = hashValue + '|' + i;
+            dupeSetsHashMap[subsetHashValue] = new Array(dupeSet[i], dupeSet[j]);
+            creatingSubDupeSet = true;
+#ifdef DEBUG_refineDupeSets
+            jsConsoleService.logStringMessage('created new set with i = ' + i + ' j = ' + j + ' ; value = ' + subsetHashValue);
+#endif
+          }
+          else {
+            dupeSetsHashMap[subsetHashValue].push(dupeSet[j]);
+#ifdef DEBUG_refineDupeSets
+            jsConsoleService.logStringMessage('added j = ' + j + ' to set with value ' + subsetHashValue);
+#endif
+          }
+          dupeSet[j] = null;
+        }
+      }
+    }
+    delete dupeSetsHashMap[hashValue];
+  }
+}
+
+
 function reviewAndRemove(dupeSetsHashMap)
 {
-  // this function is only called if there do exist some dupes
 #ifdef DEBUG_reviewAndRemove
   jsConsoleService.logStringMessage('in reviewAndRemove');
 #endif
@@ -350,12 +460,59 @@ function reviewAndRemove(dupeSetsHashMap)
 
 
 #ifdef DEBUG_secondMenuItem
+
+var hD="0123456789ABCDEF";
+// decimal to hexadecimal representation
+function d2h(d) {
+  var h = hD.substr(d&15,1);
+  while(d>15) {d>>=4;h=hD.substr(d&15,1)+h;}
+  return h;
+}
+
+function string2hex(str) {
+  var res = "";
+  for(i = 0; i < str.length-1; i++) {
+    res += d2h(str.charCodeAt(i)) + " ";  
+  }
+  if (str.length > 0)
+    res += d2h(str.charCodeAt(str.length-1));  
+  return res;
+}
+
 function secondMenuItem()
 {
-  stime = (new Date()).getTime();
+/*  stime = (new Date()).getTime();
   alert("hello, world!");
   etime = (new Date()).getTime();
-  alert("it was " + (etime - stime) + " miliseconds");
+  alert("it was " + (etime - stime) + " miliseconds");*/
+
+ // example taken from http://forums.mozillazine.org/viewtopic.php?t=214824
+  var content = "";
+  var MessageURI = GetFirstSelectedMessage();
+  var MsgService = messenger.messageServiceFromURI(MessageURI);
+  var MsgStream =  Components.classes["@mozilla.org/network/sync-stream-listener;1"].createInstance();
+  var consumer = MsgStream.QueryInterface(Components.interfaces.nsIInputStream);
+  var ScriptInput = Components.classes["@mozilla.org/scriptableinputstream;1"].createInstance();
+  var ScriptInputStream = ScriptInput.QueryInterface(Components.interfaces.nsIScriptableInputStream);
+  ScriptInputStream.init(consumer);
+  try {
+    MsgService.streamMessage(MessageURI, MsgStream, msgWindow, null, false, null);
+  } catch (ex) {
+    alert("error: "+ex)
+  }
+  ScriptInputStream .available();
+  while (ScriptInputStream .available()) {
+    content = content + ScriptInputStream .read(512);
+  }
+  //alert(content);
+  //jsConsoleService.logStringMessage('content of current selected message:\n\n' + content);
+/*  var lines = content.split('\n');
+  var i = 1;
+  for (i = 0; i < lines.length; i++) {
+    jsConsoleService.logStringMessage('line ' + i + ' | length ' + lines[i].length + ' | ' + string2hex(lines[i]));
+  } */
+  jsConsoleService.logStringMessage('content of current selected message after headers:\n\n' + content.split('\r\n\r\n')[1]);
+
 }
 #endif
 

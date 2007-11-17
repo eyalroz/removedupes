@@ -45,6 +45,9 @@
       <preference id="removedupes.mail.comparison_criteria.folder"
                   name="removedupes.mail.comparison_criteria.folder"
                   type="bool"/>
+      <preference id="removedupes.mail.comparison_criteria.body"
+                  name="removedupes.mail.comparison_criteria.body"
+                  type="bool"/>
       <preference id="removedupes.mail.confirm_search_and_deletion"
                   name="removedupes.mail.confirm_search_and_deletion"
                   type="bool"/>
@@ -79,7 +82,8 @@
                          "removedupes.mail.comparison_criteria.num_lines",
                          "removedupes.mail.comparison_criteria.send_time",
                          "removedupes.mail.comparison_criteria.subject",
-                         "removedupes.mail.comparison_criteria.folder"];
+                         "removedupes.mail.comparison_criteria.folder",
+                         "removedupes.mail.comparison_criteria.body"];
     </script>
 #endif
 
@@ -112,9 +116,13 @@
               <radiogroup preference="removedupes.mail.default_action"
                 prefstring="removedupes.mail.default_action"
                 id="removedupes.mail.default_action">
-                <radio value="move" label="&general_settings.default_action.move.label;" accesskey="&general_settings.default_action.move.accesskey;"/>
+                <radio value="move" 
+                  label="&general_settings.default_action.move.label;" 
+                  accesskey="&general_settings.default_action.move.accesskey;"/>
                 <!-- add here: folder picker! -->
-                <radio value="delete_permanently" label="&general_settings.default_action.delete_permanently.label;" accesskey="&general_settings.default_action.delete_permanently.accesskey;"/>
+                <radio value="delete_permanently"
+                  label="&general_settings.default_action.delete_permanently.label;"
+                  accesskey="&general_settings.default_action.delete_permanently.accesskey;"/>
               </radiogroup>
             </hbox>
           </vbox>
@@ -170,6 +178,12 @@
               id="removedupes.mail.comparison_criteria.folder"
               label="&message_comparison.folder.label;"
               accesskey="&message_comparison.folder.access_key;"
+              autostretch="never"/>
+            <checkbox preference="removedupes.mail.comparison_criteria.body"
+              prefstring="removedupes.mail.comparison_criteria.body"
+              id="removedupes.mail.comparison_criteria.body"
+              label="&message_comparison.body.label;"
+              accesskey="&message_comparison.body.access_key;"
               autostretch="never"/>
           </vbox>
         </tabpanel>
