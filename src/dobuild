@@ -7,14 +7,17 @@ TARGET="$1"
 case "$TARGET" in
     sm2 | sr | suiterunner)
         TARGET=suiterunner
+#        DEFS="-DMOZ_TOOLKIT_SEAMONKEY -DUSE_THREADS"
         DEFS="-DMOZ_TOOLKIT_SEAMONKEY"
         ;;
     tbird | tb | thunderbird)
         TARGET=tbird
+#        DEFS="-DMOZ_THUNDERBIRD -DUSE_THREADS"
         DEFS="-DMOZ_THUNDERBIRD"
         ;;
     suite | sm | seamonkey)
         TARGET=suite
+#        DEFS="-DMOZ_PRETOOLKIT_SEAMONKEY -DUSE_THREADS"
         DEFS="-DMOZ_PRETOOLKIT_SEAMONKEY"
         ;;
     *)
