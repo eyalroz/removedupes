@@ -256,6 +256,9 @@ function collectMessages(topFolders,dupeSetsHashMap,subfoldersFirst)
     // add records for the messages in the i'th search folder
     var folderMessageHdrsIterator;
     try {
+#ifdef DEBUG_collectMessages
+      jsConsoleService.logStringMessage('doing getMessages() for folder ' + searchFolders[i].abbreviatedName);
+#endif
       folderMessageHdrsIterator =
         searchFolders[i].getMessages(msgWindow);
     } catch(ex) {
