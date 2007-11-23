@@ -1,0 +1,19 @@
+#removedupes-button {
+  list-style-image: url("chrome://removedupes/content/removedupes-button-24x24.png");
+  -moz-image-region: rect( 0px 24px 24px 0px);
+}
+
+[iconsize="small"] #removedupes-button {
+  list-style-image: url("chrome://removedupes/content/removedupes-button-16x16.png");
+  -moz-image-region: rect( 0px 16px 16px 0px);
+}
+
+/* no special image for
+
+#removedupes-button:hover
+
+and
+[iconsize="small"] #removedupes-button:hover
+
+for now
+*/
