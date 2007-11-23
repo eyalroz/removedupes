@@ -27,10 +27,11 @@
                label="&removedupes.remove_duplicates_menuitem.label;"
                insertafter="folderPaneContext-copy-location"
 #ifndef USE_THREADS
-               oncommand="searchAndRemoveDuplicateMessagesUnthreaded();"/> 
+               oncommand="searchAndRemoveDuplicateMessagesUnthreaded();"
 #else
-               oncommand="searchAndRemoveDuplicateMessages();"/> 
+               oncommand="searchAndRemoveDuplicateMessages();"
 #endif
+     /> 
 #ifdef DEBUG_secondMenuItem
      <menuitem id="removeDuplicatesSecondMenuItem" 
                label="removedupes second item..."
@@ -46,10 +47,11 @@
               label="&removedupes.remove_duplicates_menuitem.label;"
               accesskey="&removedupes.remove_duplicates_menuitem.accesskey;" 
 #ifndef USE_THREADS
-              oncommand="searchAndRemoveDuplicateMessagesUnthreaded();"/> 
+              oncommand="searchAndRemoveDuplicateMessagesUnthreaded();"
 #else
-              oncommand="searchAndRemoveDuplicateMessages();"/> 
+              oncommand="searchAndRemoveDuplicateMessages();" 
 #endif
+    />
   </menupopup>
 
 </overlay>
