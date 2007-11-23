@@ -1,3 +1,36 @@
+
+var gCopyService =
+  Components.classes["@mozilla.org/messenger/messagecopyservice;1"]
+            .getService(Components.interfaces.nsIMsgCopyService);
+
+// localized strings
+
+var gRemoveDupesStrings =
+  Components.classes["@mozilla.org/intl/stringbundle;1"]
+            .getService(Components.interfaces.nsIStringBundleService)
+            .createBundle("chrome://removedupes/locale/removedupes.properties");
+
+//---------------------------------------------------------
+
+// General-purpose Javascript stuff
+
+
+function clone(myObject)
+{
+  if(typeof(myObject) != 'object')
+    return myObject;
+  if(myObject == null)
+    return myObject;
+
+  var newObject = new Object();
+
+  for(var i in myObject)
+    newObject[i] = clone(myObject[i]);
+
+  return newObject;
+}
+
+
 // A way to tell if an object is empty or not
 
 function isEmpty(obj)
@@ -13,16 +46,14 @@ function isEmpty(obj)
   return true;
 }
 
-var gCopyService =
-  Components.classes["@mozilla.org/messenger/messagecopyservice;1"]
-            .getService(Components.interfaces.nsIMsgCopyService);
+//---------------------------------------------------------
 
-// localized strings
-
-var gRemoveDupesStrings =
-  Components.classes["@mozilla.org/intl/stringbundle;1"]
-            .getService(Components.interfaces.nsIStringBundleService)
-            .createBundle("chrome://removedupes/locale/removedupes.properties");
+function  getBuildID() {
+  var re = /rv:([0-9.]+).*Gecko\/([0-9]+)/;
+  var arr = re.exec(navigator.userAgent);
+  //var revision = arr[1];
+  return arr[2];
+}
 
 //---------------------------------------------------------
 
@@ -113,21 +144,6 @@ var gRemoveDupesPrefs = {
 }
 
 //---------------------------------------------------------
-
-function clone(myObject)
-{
-  if(typeof(myObject) != 'object')
-    return myObject;
-  if(myObject == null)
-    return myObject;
-
-  var newObject = new Object();
-
-  for(var i in myObject)
-    newObject[i] = clone(myObject[i]);
-
-  return newObject;
-}
 
 // This function is called either after the dupes are collected,
 // without displaying the dialog, in which each element in the hash is
