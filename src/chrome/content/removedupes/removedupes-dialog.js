@@ -452,13 +452,22 @@ function markAllDupesForDeletion()
   rebuildDuplicateSetsTree();
 }
 
-function markKeepOneInEveryDupeSet()
+function markKeepOneInEveryDupeSet(keepFirst)
 {
+  // we'll mark either the first of every dupe set for keeping,
+  // or the last of every set, and mark the rest for deletion
+ 
   for (hashValue in dupeSetsHashMap) {
     var dupeSet = dupeSetsHashMap[hashValue];
-    dupeSet[0].toKeep = true;
-    for (var i=1; i<dupeSet.length; i++ )
+    for (var i=0; i<dupeSet.length; i++ ) {
       dupeSet[i].toKeep = false;
+      if (keepFirst) {
+        dupeSet[0].toKeep = true;
+      }
+      else {
+        dupeSet[dupeSet.length-1].toKeep = true;
+      }
+    }
   }
   
   rebuildDuplicateSetsTree();

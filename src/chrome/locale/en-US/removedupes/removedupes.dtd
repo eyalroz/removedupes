@@ -12,6 +12,7 @@
 <!ENTITY removedupes_dialog.line_count "# Lines">
 <!ENTITY removedupes_dialog.date "Date">
 <!ENTITY removedupes_dialog.keep_first.label "First copy">
+<!ENTITY removedupes_dialog.keep_last.label "Last copy">
 <!ENTITY removedupes_dialog.keep_none.label "No copies">
 <!ENTITY removedupes_dialog.keep_all.label "All copies">
 <!ENTITY removedupes_dialog.tree_label "Duplicate message sets:">
