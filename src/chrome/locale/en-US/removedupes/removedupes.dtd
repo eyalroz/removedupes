@@ -21,3 +21,5 @@
 <!ENTITY action.delete_permanently.accesskey "p">
 <!ENTITY action.move.label "Move to:">
 <!ENTITY action.move.accesskey "m">
+<!ENTITY removeduplicates-button.label "Remove Dupes">
+<!ENTITY removeduplicates-button.tip "Remove Duplicate Messages...">

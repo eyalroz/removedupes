@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE dialog [
+<!ENTITY % removedupesDTD SYSTEM "chrome://removedupes/locale/removedupes.dtd">
+%removedupesDTD;
+]>
+
+<overlay id="removedupesOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+#ifdef MOZ_THUNDERBIRD
+  <toolbarpalette id="MailToolbarPalette">
+    <toolbarbutton id="removedupes-button" />
+  </toolbarpalette>
+#endif
+
+<!-- button details -->
+<toolbarbutton id="removedupes-button"
+#ifdef USE_THREADS
+  oncommand="searchAndRemoveDuplicateMessages();"
+#else
+  oncommand="searchAndRemoveDuplicateMessagesUnthreaded();"
+#endif
+  label="&removeduplicates-button.label;"
+  tooltiptext="&removeduplicates-button.tip;"
+  class="toolbarbutton-1 chromeclass-toolbar-additional custombutton"
+  />
+
+
+
+</overlay>
