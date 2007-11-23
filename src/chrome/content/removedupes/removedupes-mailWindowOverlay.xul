@@ -10,6 +10,18 @@
   <script type="application/x-javascript" src="chrome://removedupes/content/removedupes.js"/>
   <script type="application/x-javascript" src="chrome://removedupes/content/removedupes-common.js"/>
 
+  <keyset id="mailKeys">
+    <key id="key-removedupes"
+         modifiers="&key-removedupes.modifiers;"
+         key="&key-removedupes.keycode;"
+#ifndef USE_THREADS
+         oncommand="searchAndRemoveDuplicateMessagesUnthreaded();"
+#else
+         oncommand="searchAndRemoveDuplicateMessages();"
+#endif
+    /> 
+  </keyset>
+
   <popup id="folderPaneContext">
      <menuitem id="removeDuplicatesMenuItem" 
                label="&removedupes.remove_duplicates_menuitem.label;"
@@ -32,6 +44,7 @@
     <menuseparator id="sep-removedupes"/>
     <menuitem id="removedupes-menuitem"
               label="&removedupes.remove_duplicates_menuitem.label;"
+              accesskey="&removedupes.remove_duplicates_menuitem.accesskey;" 
 #ifndef USE_THREADS
               oncommand="searchAndRemoveDuplicateMessagesUnthreaded();"/> 
 #else

@@ -1,5 +1,8 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
 <!ENTITY removedupes.remove_duplicates_menuitem.label "Remove Duplicates...">
+<!ENTITY removedupes.remove_duplicates_menuitem.accesskey "D">
+<!ENTITY key-removedupes.modifiers "accel,shift">
+<!ENTITY key-removedupes.keycode "D">
 <!ENTITY removedupes_dialog.dialog_title "Duplicate Messages Deletion">
 <!ENTITY removedupes_dialog.id "Message ID">
 <!ENTITY removedupes_dialog.keep_label "In every set of dupes, keep:">
