@@ -1,188 +1,158 @@
 #ifdef DEBUG
 // the following 2 lines enable logging messages to the javascript console:
 var jsConsoleService = 
-  Components.classes['@mozilla.org/consoleservice;1'].getService();
-jsConsoleService.QueryInterface(Components.interfaces.nsIConsoleService);
+  Components.classes['@mozilla.org/consoleservice;1']
+            .getService(Components.interfaces.nsIConsoleService);
 
 // used for rough profiling
 var gStartTime;
 var gEndTime;
 #endif
 
-// which of the special folders (inbox, sent, etc.) will we be willing
-// to search in for duplicates?
-var gAllowedSpecialFolders;
+// see searchAndRemoveDuplicateMessagesUnthreaded()
+var gEventTarget = null;
+var gImapService =
+  Components.classes['@mozilla.org/messenger/imapservice;1']
+            .getService(Components.interfaces.nsIImapService);
 
-// which information will we use for comparing messages?
-var gUseMessageId;
-var gUseSendTime;
-var gUseSubject;
-var gUseAuthor;
-var gUseLineCount;
-var gUseFolder;
-var gUseRecipients;
-var gUseCCList;
+var gStatusTextField;
 
-// a class definition of the runnable which will do
-// our duplicate search, on a different thread
 //---------------------------------------------------
 
-function SearchForDupesRunnable() {
-  this.dupeSetsHashMap = new Object;
-  this.done = false;
+// a class definition of the listener which we'll
+// need for traversing IMAP folders after they've
+// been updated with their on-server contents
+//---------------------------------------------------
+function UpdateFolderDoneListener(folder,searchData) {
+  this.folder = folder;
+  this.searchData = searchData;
 }
 
-SearchForDupesRunnable.prototype.QueryInterface =
+UpdateFolderDoneListener.prototype.QueryInterface =
   function(iid) {
-    if (iid.equals(Components.interfaces.nsIRunnable) ||
+    if (iid.equals(Components.interfaces.nsIUrlListener) ||
         iid.equals(Components.interfaces.nsISupports))
       return this;
     throw Components.results.NS_ERROR_NO_INTERFACE;
-  },
-SearchForDupesRunnable.prototype.run = 
-  function() {
-    searchForDuplicateMessages(this.dupeSetsHashMap);
-    this.done = true;
-  }
+  };
+  
+UpdateFolderDoneListener.prototype.OnStartRunningUrl = 
+  function(url) {
+#ifdef DEBUG_UpdateFolderDoneListener
+   jsConsoleService.logStringMessage('OnStartRunningUrl for folder ' + this.folder.abbreviatedName);
+#endif
+
+  };
+UpdateFolderDoneListener.prototype.OnStopRunningUrl = 
+  function(url, exitCode) {
+#ifdef DEBUG_UpdateFolderDoneListener
+   jsConsoleService.logStringMessage('OnStopRunningUrl for folder ' + this.folder.abbreviatedName);
+#endif
+    // TODO: Perhaps we should actually check the exist code...
+    // for now we'll just assume the folder update wen't ok,
+    // or we'll fail when trying to traverse the children
+    finishAddSearchFolders(this.folder,this.searchData);
+  };
 //---------------------------------------------------
+
+
+// a class for holding the search parameters (instead of
+// using a bunch of globals)
+//---------------------------------------------------
+function DupeSearchData()
+{
+  // which information will we use for comparing messages?
+  this.useMessageId   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.message_id", true);
+  this.useSendTime    = gRemoveDupesPrefs.getBoolPref("comparison_criteria.send_time", true);
+  this.useFolder      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.folder", true);
+  this.useSubject     = gRemoveDupesPrefs.getBoolPref("comparison_criteria.subject", true);
+  this.useAuthor      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.from", true);
+  this.useLineCount   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.num_lines", false);
+  this.useRecipients  = gRemoveDupesPrefs.getBoolPref("comparison_criteria.recipients", false);
+  this.useCCList      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.cc_list", false);
+  this.useBody        = gRemoveDupesPrefs.getBoolPref("comparison_criteria.body", false);
+
+  // which of the special folders (inbox, sent, etc.) will we be willing
+  // to search in for duplicates?
+  
+  this.allowedSpecialFolders = 
+    new RegExp(gRemoveDupesPrefs.getLocalizedStringPref('allowed_special_folders', ''), 'i');
+#ifdef DEBUG_DupeSearchParameters
+  jsConsoleService.logStringMessage('allowedSpecialFolders = ' + gAllowedSpecialFolders);
+#endif
+
+  this.useReviewDialog = 
+    gRemoveDupesPrefs.getBoolPref("confirm_search_and_deletion", true);
+  // we might have to trigger non-blocking IMAP folder updates;
+  // each trigger will increase this, each folder update completing
+  // will decrease this
+  this.remainingFolders = 0;
+
+  this.dupeSetsHashMap = new Object;
+  this.folders = new Array;
+}
+//---------------------------------------------------
+
 
 function searchAndRemoveDuplicateMessages()
 {
-  //document.getElementById('progress-panel').removeAttribute('collapsed'); 
-  var statusTextField = document.getElementById('statusText');
-  statusTextField.label = gRemoveDupesStrings.GetStringFromName('removedupes.searching_for_dupes');
-  var searchForDupesRunnable = new SearchForDupesRunnable();
-  var searchThread;
-  var needJoining = false;
-  
-  try {
-    searchThread =
-      Components.classes["@mozilla.org/thread-manager;1"]
-                .getService().newThread(0);
-    searchThread.dispatch(searchForDupesRunnable, searchThread.DISPATCH_NORMAL);
-  }
-  catch(ex) {
 #ifdef DEBUG_searchAndRemoveDuplicateMessages
-    jsConsoleService.logStringMessage('can\'t use the new thread manager, doing it the older way');
-#endif
-    // we've probably gotten here because we're in an older build,
-    // with the old-skool threading API; let's try it as well
-    var Thread = new Components.Constructor("@mozilla.org/thread;1", "nsIThread", "init");
-    searchThread = new Thread(
-      searchForDupesRunnable,
-      0,
-      Components.interfaces.nsIThread.PRIORITY_NORMAL,
-      Components.interfaces.nsIThread.SCOPE_GLOBAL,
-      Components.interfaces.nsIThread.STATE_JOINABLE);
-#ifdef DEBUG_searchAndRemoveDuplicateMessages
-    jsConsoleService.logStringMessage('thread created');
-#endif
-    needJoining = true;
-  }
-  setTimeout(searchAndRemoveDuplicatesJoiner, 200, searchForDupesRunnable, searchThread, needJoining);
-#ifdef DEBUG_searchAndRemoveDuplicateMessages
-    jsConsoleService.logStringMessage('timeout set');
-#endif
-}
-
-function searchAndRemoveDuplicatesJoiner(searchForDupesRunnable, searchThread, needJoining)
-{
-#ifdef DEBUG_searchAndRemoveDuplicateMessages
-  jsConsoleService.logStringMessage('searchAndRemoveDuplicatesJoiner\ndone = ' + searchForDupesRunnable.done); // + '\nthread = ' + thread);
-#endif
-  if (searchForDupesRunnable.done) {
-    var statusTextField = document.getElementById('statusText');
-  
-    if (isEmpty(searchForDupesRunnable.dupeSetsHashMap)) {
-      // maybe this would be better as a message in the bottom status bar
-      alert(gRemoveDupesStrings.GetStringFromName("removedupes.no_duplicates_found"));
-    }
-    else reviewAndRemove(searchForDupesRunnable.dupeSetsHashMap);
-    //document.getElementById('progress-panel').setAttribute('collapsed', true); 
-    statusTextField.label = '';
-
-    if (needJoining) {
-      searchThread.join();
-    }
-  }
-  else {
-    setTimeout(searchAndRemoveDuplicatesJoiner, 200, searchForDupesRunnable, searchThread, needJoining);
-  }
-}
-
-
-// This next function is the non-threaded version of the previous one
-function searchAndRemoveDuplicateMessagesUnthreaded()
-{
-#ifdef DEBUG_searchAndRemoveDuplicateMessages
-  jsConsoleService.logStringMessage('searchAndRemoveDuplicateMessagesUnthreaded()');
+  jsConsoleService.logStringMessage('searchAndRemoveDuplicateMessages()');
 #endif
   //document.getElementById('progress-panel').removeAttribute('collapsed'); 
-  var statusTextField = document.getElementById('statusText');
-  statusTextField.label = gRemoveDupesStrings.GetStringFromName('removedupes.searching_for_dupes');
-  var dupeSetsHashMap = new Object;
-  searchForDuplicateMessages(dupeSetsHashMap);
+  gStatusTextField = document.getElementById('statusText');
+  gStatusTextField.label = gRemoveDupesStrings.GetStringFromName('removedupes.searching_for_dupes');
+
+  // we'll need this for some calls involving UrlListeners
   
-  if (isEmpty(dupeSetsHashMap)) {
-    // maybe this would be better as a message in the bottom status bar
-    alert(gRemoveDupesStrings.GetStringFromName("removedupes.no_duplicates_found"));
+  if (gEventTarget == null) {
+    if ("nsIThreadManager" in Components.interfaces) {
+       gEventTarget = 
+         Components.classes['@mozilla.org/thread-manager;1']
+                   .getService().currentThread;
+    } else {
+       var eventQueueService =
+         Components.classes['@mozilla.org/event-queue-service;1']
+                   .getService(Components.interfaces.nsIEventQueueService);
+       gEventTarget = 
+         eventQueueService.getSpecialEventQueue(
+           eventQueueService.CURRENT_THREAD_EVENT_QUEUE);
+    }
   }
-  else reviewAndRemove(dupeSetsHashMap);
-  //document.getElementById('progress-panel').setAttribute('collapsed', true); 
-  statusTextField.label = '';
+  
+  var searchData = new DupeSearchData();
+  beginSearchForDuplicateMessages(searchData);
 }
 
-
-function searchForDuplicateMessages(dupeSetsHashMap)
+function beginSearchForDuplicateMessages(searchData)
 {
-  gUseMessageId   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.message_id", true);
-  gUseSendTime    = gRemoveDupesPrefs.getBoolPref("comparison_criteria.send_time", true);
-  gUseFolder      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.folder", true);
-  gUseSubject     = gRemoveDupesPrefs.getBoolPref("comparison_criteria.subject", true);
-  gUseAuthor      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.from", true);
-  gUseLineCount   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.num_lines", false);
-  gUseRecipients  = gRemoveDupesPrefs.getBoolPref("comparison_criteria.recipients", false);
-  gUseCCList      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.cc_list", false);
-  gUseBody        = gRemoveDupesPrefs.getBoolPref("comparison_criteria.body", false);
+  searchData.topFolders = GetSelectedMsgFolders();
+#ifdef DEBUG_beginSearchForDuplicateMessages
+  jsConsoleService.logStringMessage('calling collectMessages for selectedFolders = ' + searchData.topFolders);
+#endif
+ 
+  // TODO: check we haven't selected some folders along with
+  // their subfolders - this would mean false dupes!
   
-  // some criteria are not used when messages are first collected, so the
-  // hash map of dupe sets might be a 'rough' partition into dupe sets, which
-  // still needs to be refined by additional comparison criteria
-  
-  var additionalRefinementOfDupeSets = gUseBody;
-  
-  gAllowedSpecialFolders = 
-    new RegExp(gRemoveDupesPrefs.getLocalizedStringPref('allowed_special_folders', ''), 'i');
-#ifdef DEBUG_searchForDuplicateMessages
-  jsConsoleService.logStringMessage('gAllowedSpecialFolders = ' + gAllowedSpecialFolders);
-#endif
-
-  var selectedFolders = GetSelectedMsgFolders();
-#ifdef DEBUG_searchForDuplicateMessages
-  jsConsoleService.logStringMessage('calling collectMessages for selectedFolders = ' + selectedFolders);
-#endif
-#ifdef DEBUG_profile
-  gStartTime = (new Date()).getTime();
-#endif
-  collectMessages(
-    selectedFolders,
-    dupeSetsHashMap,
-    gRemoveDupesPrefs.getBoolPref("search_subfolders_first", false));
-#ifdef DEBUG_profile
-  gEndTime = (new Date()).getTime();
-  jsConsoleService.logStringMessage('collectMessages time = ' + (gEndTime-gStartTime) + ' ms');
-  gStartTime = (new Date()).getTime();
-#endif
-  if (additionalRefinementOfDupeSets) {
-    refineDupeSets(dupeSetsHashMap);
+  for(var i = 0; i < searchData.topFolders.length; i++) {
+    addSearchFolders(searchData.topFolders[i],searchData);
   }
-  // not sure if we need this or not
-  //SelectFolder(selectedFolders[0].URI);
-  delete selectedFolders;
+
+  // At this point, one would expected searchData.folders to contain
+  // all of the folders and subfolders we're collecting messages from -
+  // but, alas this cannot be! We have to wait for all the UrlListeners
+  // to finish their work, and for their subfolders to be processed,
+  // etc. etc. etc.
+
+  delete searchData.topFolders;
+#ifdef DEBUG_collectMessages
+   jsConsoleService.logStringMessage('done with addSearchFolders() calls\nsearchData.remainingFolders = ' + searchData.remainingFolders);
+#endif
+  
+  waitForFolderCollection(searchData);
 }
 
-
-function addSearchFolders(folder, searchFolders, postOrderTraversal)
+function addSearchFolders(folder, searchData)
 {
 #ifdef DEBUG_addSearchFolders
   jsConsoleService.logStringMessage('addSearchFolders for folder ' + folder.abbreviatedName);
@@ -199,13 +169,48 @@ function addSearchFolders(folder, searchFolders, postOrderTraversal)
      return;
  }
 
-  if (!postOrderTraversal) {
+ searchData.remainingFolders++;
+
 #ifdef DEBUG_addSearchFolders
-    jsConsoleService.logStringMessage('not postorder; pushing folder ' + folder.abbreviatedName);
+  jsConsoleService.logStringMessage('pushing folder ' + folder.abbreviatedName);
 #endif
-    searchFolders.push(folder);
-  }
+  searchData.folders.push(folder);
+  
+  // is this an IMAP folder?
+  
+  var imapFolder = null;
+  try {
+    imapFolder = folder.QueryInterface(Components.interfaces.nsIMsgImapMailFolder);
+
+    var listener = new UpdateFolderDoneListener(folder,searchData);
+
+    var dummyUrl = new Object;
+    gImapService.selectFolder(gEventTarget, folder, listener, msgWindow, dummyUrl);
     
+    // no traversal of children - the listener will take care of that in due time
+    return;
+
+  } catch (ex) {}
+  
+ 
+  // If we've gotten here then the folder is locally-stored rather than
+  // an IMAP folder so we don't have to 'update' it before continuing the traversal
+  
+  finishAddSearchFolders(folder,searchData);
+  
+#ifdef DEBUG_addSearchFolders
+  jsConsoleService.logStringMessage('returning from addSearchFolders for folder ' + folder.abbreviatedName);
+#endif
+}
+
+function finishAddSearchFolders(folder,searchData)
+{
+#ifdef DEBUG_finishAddSearchFolders
+  jsConsoleService.logStringMessage('in finishAddSearchFolders for folder ' + folder.abbreviatedName);
+#endif
+
+  gStatusTextField.label = gRemoveDupesStrings.GetStringFromName('removedupes.searching_for_dupes');
+
   // traverse the children
 
   if (folder.hasSubFolders) {
@@ -214,8 +219,7 @@ function addSearchFolders(folder, searchFolders, postOrderTraversal)
       addSearchFolders(
         subFoldersIterator.currentItem().QueryInterface(
           Components.interfaces.nsIMsgFolder),
-        searchFolders,
-        postOrderTraversal);
+        searchData);
       try {
         subFoldersIterator.next();
       } catch (ex) {
@@ -223,49 +227,97 @@ function addSearchFolders(folder, searchFolders, postOrderTraversal)
       }
     } while(true);
   }
-  
-  if (postOrderTraversal) {
-#ifdef DEBUG_addSearchFolders
-    jsConsoleService.logStringMessage('postorder; pushing folder ' + folder.abbreviatedName);
-#endif
-    searchFolders.push(folder);
-  }
-#ifdef DEBUG_addSearchFolders
-  jsConsoleService.logStringMessage('returning from addSearchFolders for folder ' + folder.abbreviatedName);
+
+  searchData.remainingFolders--;
+
+#ifdef DEBUG_finishAddSearchFolders
+  jsConsoleService.logStringMessage('returning from finishAddSearchFolders for folder ' + folder.abbreviatedName);
 #endif
 }
 
-function collectMessages(topFolders,dupeSetsHashMap,subfoldersFirst)
+function waitForFolderCollection(searchData)
 {
-  // TODO: check we haven't selected some folders along with
-  // their subfolders - this would mean false dupes!
-  var searchFolders = new Array;
+#ifdef DEBUG_waitForFolderCollection
+   jsConsoleService.logStringMessage('in waitForFolderCollection\nsearchData.remainingFolders = ' + searchData.remainingFolders);
+#endif
+
+  gStatusTextField.label = gRemoveDupesStrings.GetStringFromName('removedupes.searching_for_dupes');
+
+  // ... but it might still be the case that we haven't finished 
+  // traversingfolders and collecting their subfolders for the dupe
+  // search, so we may have to wait some more
+
+  if (searchData.remainingFolders > 0) {
+    setTimeout(waitForFolderCollection,100,searchData);
+    return;
+  }
+  continueSearchForDuplicateMessages(searchData);
+}
   
-  for(var i = 0; i < topFolders.length; i++) {
-    addSearchFolders(topFolders[i],searchFolders,subfoldersFirst);
+function continueSearchForDuplicateMessages(searchData)
+{
+  // At this point all UrlListeners have finished their work, and all
+  // relevant folders have been added to the searchData.folders array
+
+#ifdef DEBUG_collectMessages
+   jsConsoleService.logStringMessage('in continueSearchForDuplicateMessages');
+#endif
+  
+  populateDupeSetsHash(searchData);
+  delete searchData.folders;
+  
+  // some criteria are not used when messages are first collected, so the
+  // hash map of dupe sets might be a 'rough' partition into dupe sets, which
+  // still needs to be refined by additional comparison criteria
+  
+  if (searchData.additionalRefinementOfDupeSets) {
+    refineDupeSets(searchData);
   }
 
+  if (isEmpty(searchData.dupeSetsHashMap)) {
+    // maybe this would be better as a message in the bottom status bar
+    alert(gRemoveDupesStrings.GetStringFromName("removedupes.no_duplicates_found"));
+  }
+  else reviewAndRemoveDupes(searchData);
+  //document.getElementById('progress-panel').setAttribute('collapsed', true); 
+  gStatusTextField.label = '';
+
+}
+
+function populateDupeSetsHash(searchData)
+{
+  // messageUriHashmap  will be filled with URIs for _all_ messages;
+  // the dupe set hashmap will only have entries for dupes, and these
+  // entries will be sets of dupes (technically, arrays of dupes)
+  // rather than URIs
   var messageUriHashmap = new Object;
+  var dupeSetsHashMap = searchData.dupeSetsHashMap;
 
 #ifdef DEBUG_profile
+  gStartTime = (new Date()).getTime();
   var numMessages = 0;
 #endif
 
-  for(var i = 0; i < searchFolders.length; i++) {
-   if (searchFolders[i].isServer == true) continue;
+#ifdef DEBUG_collectMessages
+   jsConsoleService.logStringMessage('number of search folders: ' + searchData.folders.length);
+#endif
+
+  for(var i = 0; i < searchData.folders.length; i++) {
+    var folder = searchData.folders[i];
+    if (folder.isServer == true) continue;
     // add records for the messages in the i'th search folder
     var folderMessageHdrsIterator;
     try {
 #ifdef DEBUG_collectMessages
-      jsConsoleService.logStringMessage('doing getMessages() for folder ' + searchFolders[i].abbreviatedName);
+      jsConsoleService.logStringMessage('doing getMessages() for folder ' + folder.abbreviatedName);
 #endif
       folderMessageHdrsIterator =
-        searchFolders[i].getMessages(msgWindow);
+        folder.getMessages(msgWindow);
     } catch(ex) {
 #ifdef DEBUG
-      jsConsoleService.logStringMessage('getMessages() failed for folder ' + searchFolders[i].abbreviatedName + ':' + ex);
+      jsConsoleService.logStringMessage('getMessages() failed for folder ' + folder.abbreviatedName + ':' + ex);
 #else
-      dump(gRemoveDupesStrings.formatStringFromName('removedupes.failed_getting_messages', [searchFolders[i].abbreviatedName], 1) + '\n');
+      dump(gRemoveDupesStrings.formatStringFromName('removedupes.failed_getting_messages', [folder.abbreviatedName], 1) + '\n');
 #endif
     }
 
@@ -291,26 +343,26 @@ function collectMessages(topFolders,dupeSetsHashMap,subfoldersFirst)
 #endif
       
       var sillyHash = '';
-      if (gUseMessageId)
+      if (searchData.useMessageId)
         sillyHash += messageHdr.messageId + '|';
-      if (gUseSendTime)
+      if (searchData.useSendTime)
         sillyHash += messageHdr.dateInSeconds + '|';
-      if (gUseFolder)
-        sillyHash += searchFolders[i].uri + '|';
-      if (gUseSubject)
+      if (searchData.useFolder)
+        sillyHash += folder.uri + '|';
+      if (searchData.useSubject)
         sillyHash += messageHdr.subject + '|6xX$\WG-C?|';
           // the extra 'junk string' is intended to reduce the chance of getting the subject
           // field being mixed up with other fields in the hash, i.e. in case the subject
           // ends with something like "|55"
-      if (gUseAuthor)
+      if (searchData.useAuthor)
         sillyHash += messageHdr.author + '|^#=)A?mUi5|';
-      if (gUseRecipients)
+      if (searchData.useRecipients)
         sillyHash += messageHdr.recipients + '|Ei4iXn=Iv*|';
-      if (gUseCCList)
+      if (searchData.useCCList)
         sillyHash += messageHdr.ccList + '|w7Exh\' s%k|';
-      if (gUseLineCount)
+      if (searchData.useLineCount)
         sillyHash += messageHdr.lineCount;
-      var uri = searchFolders[i].getUriForMsg(messageHdr);
+      var uri = folder.getUriForMsg(messageHdr);
       if (sillyHash in messageUriHashmap) {
         if (sillyHash in dupeSetsHashMap) {
 #ifdef DEBUG_collectMessages
@@ -325,6 +377,7 @@ function collectMessages(topFolders,dupeSetsHashMap,subfoldersFirst)
           // the URI in messageUriHashmap[sillyMap] has not been copied to
           // the dupes hash since until now we did not know it was a dupe;
           // copy it together with our current message's URI
+          // TODO: use [blah, blah] as the array constructor
           dupeSetsHashMap[sillyHash] = new Array(messageUriHashmap[sillyHash], uri);
         }
       } else {
@@ -337,9 +390,11 @@ function collectMessages(topFolders,dupeSetsHashMap,subfoldersFirst)
   }
 
 #ifdef DEBUG_profile
-    jsConsoleService.logStringMessage('processed ' + numMessages + ' messages in ' + searchFolders.length + ' folders');
+  gEndTime = (new Date()).getTime();
+  jsConsoleService.logStringMessage('hashed ' + numMessages + ' messages in ' + searchData.folders.length + ' folders');
+  jsConsoleService.logStringMessage('hashing time = ' + (gEndTime-gStartTime) + ' ms');
+  gStartTime = (new Date()).getTime();
 #endif
-  delete searchFolders;
 }
 
 function messageBodyFromURI(msgURI)
@@ -370,15 +425,16 @@ function messageBodyFromURI(msgURI)
   return msgContent.split('\r\n\r\n')[1];
 }
 
-function refineDupeSets(dupeSetsHashMap)
+function refineDupeSets(searchData)
 {
+  dupeSetsHashMap = searchData.dupeSetsHashMap;
   // we'll split every dupe set into separate sets based on additional
   // comparison criteria (the more 'expensive' ones); size-1 dupe sets
   // are removed from the hash map entirely.
   
   // TODO: for now, our only 'expensive' criterion is the message body,
   // so I'm leaving the actualy comparison code in this function and
-  // not even checking for gUseBody; if and when we get additional
+  // not even checking for searchData.useBody; if and when we get additional
   // criteria this should be rewritten so that dupeSet[i] gets
   // a comparison record created for it, then for every j we call
   // ourcomparefunc(comparisonrecord, dupeSet[j])
@@ -436,20 +492,19 @@ function refineDupeSets(dupeSetsHashMap)
   }
 }
 
-
-function reviewAndRemove(dupeSetsHashMap)
+function reviewAndRemoveDupes(searchData)
 {
 #ifdef DEBUG_reviewAndRemove
-  jsConsoleService.logStringMessage('in reviewAndRemove');
+  jsConsoleService.logStringMessage('in reviewAndRemoveDupes');
 #endif
 
-  if (!gRemoveDupesPrefs.getBoolPref("confirm_search_and_deletion", true))
+  if (!searchData.useReviewDialog)
   {
     // remove (move to trash or erase completely)
     // without user confirmation or review; we're keeping the first dupe
     // in every sequence of dupes and deleting the rest
     removeDuplicates(
-      dupeSetsHashMap,
+      searchData.dupeSetsHashMap,
       (gRemoveDupesPrefs.getCharPref('default_action', 'move') == 'delete_permanently'),
       gRemoveDupesPrefs.getCharPref('default_target_folder', null),
       false // the uri's have not been replaced with messageRecords
@@ -469,8 +524,9 @@ function reviewAndRemove(dupeSetsHashMap)
       msgWindow,
       gMessengerBundle,
       gDBView,
-      dupeSetsHashMap);
+      searchData.dupeSetsHashMap);
   }
+  delete searchData;
 }
 
 
@@ -529,51 +585,4 @@ function secondMenuItem()
   jsConsoleService.logStringMessage('content of current selected message after headers:\n\n' + content.split('\r\n\r\n')[1]);
 
 }
-#endif
-
-#ifdef DEBUG_profile
-
-function str2arr(str)
-{
-  var bin = Array(str.length);
-  for(var i = 0; i < str.length; i++)
-    bin[i] = str.charCodeAt(i);
-  return bin;
-}
-
-function hashTest2(messageRecords)
-{
-  gStartTime = (new Date()).getTime();
-  var messageUriHashmap = new Object;
-  var dupeUriHashmap = new Object;
-  //var hasher = Components.classes["@mozilla.org/security/hash;1"].createInstance(Components.interfaces.nsICryptoHash);
-  //var algorithm = Components.interfaces.nsICryptoHash.MD5;
-  for (var i = 0; i < messageRecords.length; i++) {
-    //hasher.init(algorithm);
-    
-    //hashes[i] = hasher.finish(false /* not b64 encoded */);
-    var sillyHash = messageRecords[i].messageId 
-      + messageRecords[i].sendTime 
-      + messageRecords[i].author 
-      + messageRecords[i].subject 
-      + messageRecords[i].lineCount;
-    if (sillyHash in messageUriHashmap) {
-      if (sillyHash in dupeUriHashmap) {
-        // just add the current message's URI, no need to copy anything
-        dupeUriHashmap[sillyHash].push(messageRecords[i].uri);
-      } else {
-        // the URI in messageUriHashmap[sillyMap] has not been copied to
-        // the dupes hash since until now we did not know it was a dupe;
-        // copy it together with our current message's URI
-        sillyHashMessages = new Array(messageUriHashmap[sillyHash], messageRecords[i].uri);
-      }
-    } else {
-      messageUriHashmap[sillyHash] = messageRecords[i].uri;
-    }
-  }
-  gEndTime = (new Date()).getTime();
-  jsConsoleService.logStringMessage('time to populate dupe lists for ' + messageRecords.length + ' messages = ' + (gEndTime-gStartTime) + ' ms');
-  gStartTime = (new Date()).getTime();
-}
-
 #endif

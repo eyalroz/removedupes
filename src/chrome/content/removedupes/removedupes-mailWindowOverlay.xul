@@ -14,11 +14,7 @@
     <key id="key-removedupes"
          modifiers="&key-removedupes.modifiers;"
          key="&key-removedupes.keycode;"
-#ifndef USE_THREADS
-         oncommand="searchAndRemoveDuplicateMessagesUnthreaded();"
-#else
          oncommand="searchAndRemoveDuplicateMessages();"
-#endif
     /> 
   </keyset>
 
@@ -26,11 +22,7 @@
      <menuitem id="removeDuplicatesMenuItem" 
                label="&removedupes.remove_duplicates_menuitem.label;"
                insertafter="folderPaneContext-copy-location"
-#ifndef USE_THREADS
-               oncommand="searchAndRemoveDuplicateMessagesUnthreaded();"
-#else
                oncommand="searchAndRemoveDuplicateMessages();"
-#endif
      /> 
 #ifdef DEBUG_secondMenuItem
      <menuitem id="removeDuplicatesSecondMenuItem" 
@@ -38,7 +30,8 @@
                insertafter="removeDuplicatesMenuItem"
                oncommand="secondMenuItem();"/> 
 #endif
-     <menuseparator id="folderPaneContext-removedupes-separator" insertafter="folderPaneContext-copy-location"/>  
+     <menuseparator id="folderPaneContext-removedupes-separator" 
+                    insertafter="folderPaneContext-copy-location"/>  
   </popup> 
   
   <menupopup id="taskPopup">
@@ -46,11 +39,7 @@
     <menuitem id="removedupes-menuitem"
               label="&removedupes.remove_duplicates_menuitem.label;"
               accesskey="&removedupes.remove_duplicates_menuitem.accesskey;" 
-#ifndef USE_THREADS
-              oncommand="searchAndRemoveDuplicateMessagesUnthreaded();"
-#else
               oncommand="searchAndRemoveDuplicateMessages();" 
-#endif
     />
   </menupopup>
 
