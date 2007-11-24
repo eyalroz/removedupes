@@ -1,0 +1,29 @@
+<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.remove_duplicates_menuitem.label "Usuń duplikaty...">
+<!ENTITY removedupes.remove_duplicates_menuitem.accesskey "d">
+<!ENTITY key-removedupes.modifiers "accel,shift">
+<!ENTITY key-removedupes.keycode "D">
+<!ENTITY removedupes_dialog.dialog_title "Usuwanie duplikatów wiadomości">
+<!ENTITY removedupes_dialog.id "ID wiadomości">
+<!ENTITY removedupes_dialog.keep_label "Z każdego zestawu duplikatów pozostaw:">
+<!ENTITY removedupes_dialog.subject "Temat">
+<!ENTITY removedupes_dialog.sender "Nadawcę">
+<!ENTITY removedupes_dialog.author "Autora">
+<!ENTITY removedupes_dialog.recipients "Adresatów">
+<!ENTITY removedupes_dialog.cc_list "Listę CC">
+<!ENTITY removedupes_dialog.folder "Folder">
+<!ENTITY removedupes_dialog.line_count "Liczbę linii">
+<!ENTITY removedupes_dialog.date "Datę">
+<!ENTITY removedupes_dialog.keep_first.label "Pierwszą kopię">
+<!ENTITY removedupes_dialog.keep_last.label "Ostatnią kopię">
+<!ENTITY removedupes_dialog.keep_none.label "Brak kopii">
+<!ENTITY removedupes_dialog.keep_all.label "Wszystkie kopie">
+<!ENTITY removedupes_dialog.tree_label "Zestawy duplikatów:">
+<!ENTITY removedupes_dialog.keep_flag "Zachować?">
+<!ENTITY removedupes_dialog.action_label "Operacja:">
+<!ENTITY action.delete_permanently.label "Usuń permanentnie">
+<!ENTITY action.delete_permanently.accesskey "p">
+<!ENTITY action.move.label "Przenieś do:">
+<!ENTITY action.move.accesskey "P">
+<!ENTITY removeduplicates-button.label "Usuń duplikaty">
+<!ENTITY removeduplicates-button.tip "Usuń duplikaty wiadomości...">
