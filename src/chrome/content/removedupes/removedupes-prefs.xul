@@ -51,9 +51,6 @@
       <preference id="removedupes.mail.confirm_search_and_deletion"
                   name="removedupes.mail.confirm_search_and_deletion"
                   type="bool"/>
-      <preference id="removedupes.mail.search_subfolders_first"
-                  name="removedupes.mail.search_subfolders_first"
-                  type="bool"/>
       <preference id="removedupes.mail.default_action"
                   name="removedupes.mail.default_action"
                   type="string"/>
@@ -72,8 +69,7 @@
 #ifndef MOZ_THUNDERBIRD
     <script type="application/x-javascript">
       var panel = "chrome://removedupes/content/removedupes-prefs.xul";
-      var _elementIDs = ["removedupes.mail.search_subfolders_first",
-                         "removedupes.mail.confirm_search_and_deletion",
+      var _elementIDs = ["removedupes.mail.confirm_search_and_deletion",
                          "removedupes.mail.default_action",
                          "removedupes.mail.comparison_criteria.author",
                          "removedupes.mail.comparison_criteria.recipients",
@@ -98,12 +94,6 @@
       <tabpanels flex="1">
         <tabpanel id="general_settings_panel">
           <vbox flex="1">
-            <checkbox preference="removedupes.mail.search_subfolders_first"
-              prefstring="removedupes.mail.search_subfolders_first"
-              id="removedupes.mail.search_subfolders_first"
-              label="&general_settings.search_subfolders_first.label;"
-              accesskey="&general_settings.search_subfolders_first.access_key;"
-              autostretch="never"/>
             <checkbox preference="removedupes.mail.confirm_search_and_deletion"
               prefstring="removedupes.mail.confirm_search_and_deletion"
               id="removedupes.mail.confirm_search_and_deletion"
