@@ -15,11 +15,7 @@
 
 <!-- button details -->
 <toolbarbutton id="removedupes-button"
-#ifdef USE_THREADS
-  oncommand="searchAndRemoveDuplicateMessages();"
-#else
   oncommand="searchAndRemoveDuplicateMessagesUnthreaded();"
-#endif
   label="&removeduplicates-button.label;"
   tooltiptext="&removeduplicates-button.tip;"
   class="toolbarbutton-1 chromeclass-toolbar-additional custombutton"

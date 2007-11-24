@@ -48,7 +48,7 @@ function isEmpty(obj)
 
 //---------------------------------------------------------
 
-function  getBuildID() {
+function getBuildID() {
   var re = /rv:([0-9.]+).*Gecko\/([0-9]+)/;
   var arr = re.exec(navigator.userAgent);
   //var revision = arr[1];
