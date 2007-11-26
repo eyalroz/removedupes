@@ -1,5 +1,8 @@
 <!ENTITY removedupes.title "Entfernung doppelter Nachrichten (Alternative)">
 <!ENTITY removedupes.remove_duplicates_menuitem.label "Duplikate entfernen...">
+<!ENTITY removedupes.remove_duplicates_menuitem.accesskey "D">
+<!ENTITY key-removedupes.modifiers "accel,shift">
+<!ENTITY key-removedupes.keycode "D">
 <!ENTITY removedupes_dialog.dialog_title "Entfernung von Duplikaten">
 <!ENTITY removedupes_dialog.id "Nachrichten ID">
 <!ENTITY removedupes_dialog.keep_label "In jeder Gruppe von Duplikaten behalte:">
@@ -12,6 +15,7 @@
 <!ENTITY removedupes_dialog.line_count "# Zeilen">
 <!ENTITY removedupes_dialog.date "Datum">
 <!ENTITY removedupes_dialog.keep_first.label "Erstes Exemplar">
+<!ENTITY removedupes_dialog.keep_last.label "Letztes Exemplar">
 <!ENTITY removedupes_dialog.keep_none.label "Kein Exemplar">
 <!ENTITY removedupes_dialog.keep_all.label "Alle Exemplare">
 <!ENTITY removedupes_dialog.tree_label "Gruppen von Duplikaten:">
@@ -21,3 +25,5 @@
 <!ENTITY action.delete_permanently.accesskey "d">
 <!ENTITY action.move.label "Verschieben nach:">
 <!ENTITY action.move.accesskey "V">
+<!ENTITY removeduplicates-button.label "Duplikate entfernen">
+<!ENTITY removeduplicates-button.tip "Doppelte Nachrichten entfernen...">

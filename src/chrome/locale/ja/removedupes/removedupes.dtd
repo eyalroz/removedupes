@@ -1,5 +1,8 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
 <!ENTITY removedupes.remove_duplicates_menuitem.label "重複メッセージの検索と削除">
+<!ENTITY removedupes.remove_duplicates_menuitem.accesskey "D">
+<!ENTITY key-removedupes.modifiers "accel,shift">
+<!ENTITY key-removedupes.keycode "D">
 <!ENTITY removedupes_dialog.dialog_title "重複メッセージの削除">
 <!ENTITY removedupes_dialog.id "Message ID">
 <!ENTITY removedupes_dialog.keep_label "重複ツリー内の保持選択：">
@@ -12,6 +15,7 @@
 <!ENTITY removedupes_dialog.line_count "本文行数">
 <!ENTITY removedupes_dialog.date "日時">
 <!ENTITY removedupes_dialog.keep_first.label "上段のメッセージのみ保持">
+<!ENTITY removedupes_dialog.keep_last.label "下段のメッセージのみ保持">
 <!ENTITY removedupes_dialog.keep_none.label "すべて保持しない（削除）">
 <!ENTITY removedupes_dialog.keep_all.label "すべて保持">
 <!ENTITY removedupes_dialog.tree_label "重複メッセージの処理：">
@@ -21,3 +25,5 @@
 <!ENTITY action.delete_permanently.accesskey "p">
 <!ENTITY action.move.label "移動先：">
 <!ENTITY action.move.accesskey "m">
+<!ENTITY removeduplicates-button.label "重複削除">
+<!ENTITY removeduplicates-button.tip "重複メッセージを削除します">

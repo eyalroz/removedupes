@@ -10,6 +10,7 @@
 <!ENTITY message_comparison.send_time.label "送信日時 ">
 <!ENTITY message_comparison.subject.label "件名 ">
 <!ENTITY message_comparison.folder.label "フォルダ ">
+<!ENTITY message_comparison.body.label "本体">
 <!ENTITY message_comparison.author.access_key "F">
 <!ENTITY message_comparison.recipients.access_key "R">
 <!ENTITY message_comparison.cc_list.access_key "C">
@@ -18,6 +19,7 @@
 <!ENTITY message_comparison.send_time.access_key "t">
 <!ENTITY message_comparison.subject.access_key "S">
 <!ENTITY message_comparison.folder.access_key "o">
+<!ENTITY message_comparison.body.access_key "B">
 <!ENTITY general_settings.tab_title "全般設定">
 <!ENTITY general_settings.search_subfolders_first.label "サブフォルダの検索を優先する (postorder) ">
 <!ENTITY general_settings.confirm_search_and_deletion.label "削除前に検索結果を表示する ">

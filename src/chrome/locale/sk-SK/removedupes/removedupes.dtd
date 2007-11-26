@@ -1,5 +1,8 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
 <!ENTITY removedupes.remove_duplicates_menuitem.label "Odstrániť duplicity...">
+<!ENTITY removedupes.remove_duplicates_menuitem.accesskey "d">
+<!ENTITY key-removedupes.modifiers "accel,shift">
+<!ENTITY key-removedupes.keycode "f">
 <!ENTITY removedupes_dialog.dialog_title "Odstránenie duplicitných správ">
 <!ENTITY removedupes_dialog.id "ID správy">
 <!ENTITY removedupes_dialog.keep_label "Ponechať v každej skupine duplikátu:">
@@ -12,6 +15,7 @@
 <!ENTITY removedupes_dialog.line_count "Riadky">
 <!ENTITY removedupes_dialog.date "Dátum">
 <!ENTITY removedupes_dialog.keep_first.label "Prvú kópiu">
+<!ENTITY removedupes_dialog.keep_last.label "Poslednú kópiu">
 <!ENTITY removedupes_dialog.keep_none.label "Nič">
 <!ENTITY removedupes_dialog.keep_all.label "Všetko">
 <!ENTITY removedupes_dialog.tree_label "Nastavenie pre duplicitnú správu:">
@@ -21,3 +25,5 @@
 <!ENTITY action.delete_permanently.accesskey "N">
 <!ENTITY action.move.label "Presunúť do:">
 <!ENTITY action.move.accesskey "P">
+<!ENTITY removeduplicates-button.label "Odstrániť duplicity">
+<!ENTITY removeduplicates-button.tip "Odstráni duplicitné správy...">

@@ -10,6 +10,7 @@
 <!ENTITY message_comparison.send_time.label "Data de envio">
 <!ENTITY message_comparison.subject.label "Assunto">
 <!ENTITY message_comparison.folder.label "Pasta">
+<!ENTITY message_comparison.body.label "Corpo">
 <!ENTITY message_comparison.author.access_key "A">
 <!ENTITY message_comparison.recipients.access_key "D">
 <!ENTITY message_comparison.cc_list.access_key "s">
@@ -18,6 +19,7 @@
 <!ENTITY message_comparison.send_time.access_key "t">
 <!ENTITY message_comparison.subject.access_key "A">
 <!ENTITY message_comparison.folder.access_key "p">
+<!ENTITY message_comparison.body.access_key "C">
 <!ENTITY general_settings.tab_title "Definições Gerais">
 <!ENTITY general_settings.search_subfolders_first.label "Procurar primeiro em Sub-pastas">
 <!ENTITY general_settings.confirm_search_and_deletion.label "Rever os resultados de procura antes de eliminar">
@@ -28,5 +30,5 @@
 <!ENTITY general_settings.default_action.move.accesskey "M">
 <!ENTITY general_settings.search_subfolders_first.access_key "v">
 <!ENTITY general_settings.confirm_search_and_deletion.access_key "c">
-<!ENTITY removedupes-preftree-label "Remover duplicados">
-<!ENTITY removedupes-preftree-page-title "Remover mensagens Duplicadas (Alternativo)">
+<!ENTITY removedupes-preftree-label "Remover Duplicados">
+<!ENTITY removedupes-preftree-page-title "Remover Mensagens Duplicadas (Alternativo)">
