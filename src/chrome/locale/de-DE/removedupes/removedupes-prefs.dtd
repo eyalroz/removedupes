@@ -10,14 +10,16 @@
 <!ENTITY message_comparison.send_time.label "Versandzeit">
 <!ENTITY message_comparison.subject.label "Betreff">
 <!ENTITY message_comparison.folder.label "Ordner">
+<!ENTITY message_comparison.body.label "Nachrichtentext">
 <!ENTITY message_comparison.author.access_key "A">
 <!ENTITY message_comparison.recipients.access_key "R">
 <!ENTITY message_comparison.cc_list.access_key "C">
-<!ENTITY message_comparison.message_id.access_key "N">
+<!ENTITY message_comparison.message_id.access_key "I">
 <!ENTITY message_comparison.num_lines.access_key "Z">
 <!ENTITY message_comparison.send_time.access_key "V">
 <!ENTITY message_comparison.subject.access_key "B">
 <!ENTITY message_comparison.folder.access_key "O">
+<!ENTITY message_comparison.body.access_key "N">
 <!ENTITY general_settings.tab_title "Allgemeine Einstellungen">
 <!ENTITY general_settings.search_subfolders_first.label "Durchsuche Unterordner zuerst (nachgestelle Ordnung)">
 <!ENTITY general_settings.confirm_search_and_deletion.label "Betrachte Suchergebnis vor der Entfernung">

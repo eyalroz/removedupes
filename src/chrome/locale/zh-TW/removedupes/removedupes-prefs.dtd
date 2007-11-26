@@ -1,15 +1,16 @@
 <!ENTITY prefs_dialog_title "Remove Duplicate Messages - 設定">
 <!ENTITY guide-url "http://not.yet.written/">
-<!ENTITY message_comparison.tab_title "郵件比較">
-<!ENTITY message_comparison.tab_description "做為比較標準的郵件元素:">
+<!ENTITY message_comparison.tab_title "郵件比對">
+<!ENTITY message_comparison.tab_description "用來做為比對標準的郵件元素:">
 <!ENTITY message_comparison.author.label "寄件者 (&apos;From&apos; 地址)">
 <!ENTITY message_comparison.recipients.label "收件者">
-<!ENTITY message_comparison.cc_list.label "副本">
+<!ENTITY message_comparison.cc_list.label "副本清單">
 <!ENTITY message_comparison.message_id.label "郵件 ID">
 <!ENTITY message_comparison.num_lines.label "郵件行數">
 <!ENTITY message_comparison.send_time.label "傳送時間">
 <!ENTITY message_comparison.subject.label "主旨">
 <!ENTITY message_comparison.folder.label "資料夾">
+<!ENTITY message_comparison.body.label "內文">
 <!ENTITY message_comparison.author.access_key "F">
 <!ENTITY message_comparison.recipients.access_key "R">
 <!ENTITY message_comparison.cc_list.access_key "C">
@@ -18,9 +19,10 @@
 <!ENTITY message_comparison.send_time.access_key "t">
 <!ENTITY message_comparison.subject.access_key "S">
 <!ENTITY message_comparison.folder.access_key "o">
+<!ENTITY message_comparison.body.access_key "B">
 <!ENTITY general_settings.tab_title "一般設定">
 <!ENTITY general_settings.search_subfolders_first.label "先搜尋子資料夾 (postorder)">
-<!ENTITY general_settings.confirm_search_and_deletion.label "刪除前先檢閱搜尋結果">
+<!ENTITY general_settings.confirm_search_and_deletion.label "刪除前先檢視搜尋結果">
 <!ENTITY general_settings.default_action.description "發現重複郵件時的預設動作:">
 <!ENTITY general_settings.default_action.delete_permanently.label "永久刪除">
 <!ENTITY general_settings.default_action.move.label "移至垃圾桶">

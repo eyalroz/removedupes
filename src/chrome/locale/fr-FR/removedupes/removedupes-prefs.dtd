@@ -10,6 +10,7 @@
 <!ENTITY message_comparison.send_time.label "Date d&apos;envoi">
 <!ENTITY message_comparison.subject.label "Sujet">
 <!ENTITY message_comparison.folder.label "Dossier">
+<!ENTITY message_comparison.body.label "Contenu">
 <!ENTITY message_comparison.author.access_key "D">
 <!ENTITY message_comparison.recipients.access_key "r">
 <!ENTITY message_comparison.cc_list.access_key "C">
@@ -18,6 +19,7 @@
 <!ENTITY message_comparison.send_time.access_key "t">
 <!ENTITY message_comparison.subject.access_key "S">
 <!ENTITY message_comparison.folder.access_key "o">
+<!ENTITY message_comparison.body.access_key "C">
 <!ENTITY general_settings.tab_title "Paramètres principaux">
 <!ENTITY general_settings.search_subfolders_first.label "Rechercher d&apos;abord dans les sous-dossiers">
 <!ENTITY general_settings.confirm_search_and_deletion.label "Avant la suppression, apercevoir les résultats de la recherche">

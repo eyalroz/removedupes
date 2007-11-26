@@ -1,5 +1,8 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
 <!ENTITY removedupes.remove_duplicates_menuitem.label "移除重複的郵件...">
+<!ENTITY removedupes.remove_duplicates_menuitem.accesskey "D">
+<!ENTITY key-removedupes.modifiers "accel,shift">
+<!ENTITY key-removedupes.keycode "D">
 <!ENTITY removedupes_dialog.dialog_title "刪除重複的郵件">
 <!ENTITY removedupes_dialog.id "郵件 ID">
 <!ENTITY removedupes_dialog.keep_label "在每個重複郵件群組中，保留:">
@@ -7,11 +10,12 @@
 <!ENTITY removedupes_dialog.sender "寄件者">
 <!ENTITY removedupes_dialog.author "作者">
 <!ENTITY removedupes_dialog.recipients "收件者">
-<!ENTITY removedupes_dialog.cc_list "副本">
+<!ENTITY removedupes_dialog.cc_list "副本清單">
 <!ENTITY removedupes_dialog.folder "資料夾">
 <!ENTITY removedupes_dialog.line_count "行數">
 <!ENTITY removedupes_dialog.date "日期">
 <!ENTITY removedupes_dialog.keep_first.label "第一個副本">
+<!ENTITY removedupes_dialog.keep_last.label "最後一個副本">
 <!ENTITY removedupes_dialog.keep_none.label "無副本">
 <!ENTITY removedupes_dialog.keep_all.label "所有副本">
 <!ENTITY removedupes_dialog.tree_label "重複郵件群組:">
@@ -21,3 +25,5 @@
 <!ENTITY action.delete_permanently.accesskey "p">
 <!ENTITY action.move.label "移至:">
 <!ENTITY action.move.accesskey "m">
+<!ENTITY removeduplicates-button.label "移除重複">
+<!ENTITY removeduplicates-button.tip "移除重複的郵件...">
