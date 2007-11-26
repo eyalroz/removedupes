@@ -1,5 +1,8 @@
 <!ENTITY removedupes.title "Remover Mensagens Duplicadas (Alternativo)">
 <!ENTITY removedupes.remove_duplicates_menuitem.label "Remover Duplicados..">
+<!ENTITY removedupes.remove_duplicates_menuitem.accesskey "D">
+<!ENTITY key-removedupes.modifiers "accel,shift">
+<!ENTITY key-removedupes.keycode "D">
 <!ENTITY removedupes_dialog.dialog_title "Eliminação de mensagens Duplicadas">
 <!ENTITY removedupes_dialog.id "ID da Mensagem">
 <!ENTITY removedupes_dialog.keep_label "Em cada conjunto de duplicados, manter:">
@@ -12,6 +15,7 @@
 <!ENTITY removedupes_dialog.line_count "# Linhas">
 <!ENTITY removedupes_dialog.date "Data">
 <!ENTITY removedupes_dialog.keep_first.label "Primeira cópia">
+<!ENTITY removedupes_dialog.keep_last.label "Última cópia">
 <!ENTITY removedupes_dialog.keep_none.label "Sem cópia">
 <!ENTITY removedupes_dialog.keep_all.label "Todas as cópias">
 <!ENTITY removedupes_dialog.tree_label "Conjuntos de mensagens duplicadas:">
@@ -21,3 +25,5 @@
 <!ENTITY action.delete_permanently.accesskey "p">
 <!ENTITY action.move.label "Mover para:">
 <!ENTITY action.move.accesskey "m">
+<!ENTITY removeduplicates-button.label "Remover Duplicados">
+<!ENTITY removeduplicates-button.tip "Remover Mensagens Duplicadas...">

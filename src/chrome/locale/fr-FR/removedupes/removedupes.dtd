@@ -1,5 +1,8 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternatif)">
 <!ENTITY removedupes.remove_duplicates_menuitem.label "Supprimer les doublons…">
+<!ENTITY removedupes.remove_duplicates_menuitem.accesskey "d">
+<!ENTITY key-removedupes.modifiers "accel,maj">
+<!ENTITY key-removedupes.keycode "d">
 <!ENTITY removedupes_dialog.dialog_title "Suppression des messages en double…">
 <!ENTITY removedupes_dialog.id "Identifiant du message">
 <!ENTITY removedupes_dialog.keep_label "Dans chaque lot de copies, conserver :">
@@ -12,6 +15,7 @@
 <!ENTITY removedupes_dialog.line_count "Nombre de lignes">
 <!ENTITY removedupes_dialog.date "Date">
 <!ENTITY removedupes_dialog.keep_first.label "La première">
+<!ENTITY removedupes_dialog.keep_last.label "La dernière">
 <!ENTITY removedupes_dialog.keep_none.label "Aucune">
 <!ENTITY removedupes_dialog.keep_all.label "Toutes">
 <!ENTITY removedupes_dialog.tree_label "Ensemble des doublons de messages :">
@@ -21,3 +25,5 @@
 <!ENTITY action.delete_permanently.accesskey "d">
 <!ENTITY action.move.label "Déplacer vers :">
 <!ENTITY action.move.accesskey "D">
+<!ENTITY removeduplicates-button.label "Enlever les doublons">
+<!ENTITY removeduplicates-button.tip "Enlever des messages en double…">
