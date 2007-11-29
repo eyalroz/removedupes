@@ -295,7 +295,7 @@ function continueSearchForDuplicateMessages(searchData)
   // hash map of dupe sets might be a 'rough' partition into dupe sets, which
   // still needs to be refined by additional comparison criteria
   
-  if (searchData.additionalRefinementOfDupeSets) {
+  if (searchData.useBody) {
     refineDupeSets(searchData);
   }
 
