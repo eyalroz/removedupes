@@ -66,11 +66,36 @@ function DupeSearchData()
   this.useSendTime    = gRemoveDupesPrefs.getBoolPref("comparison_criteria.send_time", true);
   this.useFolder      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.folder", true);
   this.useSubject     = gRemoveDupesPrefs.getBoolPref("comparison_criteria.subject", true);
-  this.useAuthor      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.from", true);
+  this.useAuthor      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.author", true);
   this.useLineCount   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.num_lines", false);
   this.useRecipients  = gRemoveDupesPrefs.getBoolPref("comparison_criteria.recipients", false);
   this.useCCList      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.cc_list", false);
   this.useBody        = gRemoveDupesPrefs.getBoolPref("comparison_criteria.body", false);
+
+#ifdef DEBUG_DupeSearchParameters
+  jsConsoleService.logStringMessage('USE criteria: '
+    + (this.useMessageId ? 'message ID ' : '') 
+    + (this.useSendTime ? 'send time ' : '') 
+    + (this.useFolder ? 'folder ' : '') 
+    + (this.useSubject ? 'subject ' : '') 
+    + (this.useAuthor ? 'author ' : '') 
+    + (this.useLineCount ? 'line count ' : '') 
+    + (this.useRecipients ? 'recipients ' : '') 
+    + (this.useCCList ? 'CC list ' : '') 
+    + (this.useBody? 'body ' : '') 
+    );
+  jsConsoleService.logStringMessage('DON\'T USE criteria: '
+    + (!this.useMessageId ? 'message ID ' : '') 
+    + (!this.useSendTime ? 'send time ' : '') 
+    + (!this.useFolder ? 'folder ' : '') 
+    + (!this.useSubject ? 'subject ' : '') 
+    + (!this.useAuthor ? 'author ' : '') 
+    + (!this.useLineCount ? 'line count ' : '') 
+    + (!this.useRecipients ? 'recipients ' : '') 
+    + (!this.useCCList ? 'CC list ' : '') 
+    + (!this.useBody? 'body ' : '') 
+    );
+#endif
 
   // which of the special folders (inbox, sent, etc.) will we be willing
   // to search in for duplicates?
@@ -78,7 +103,7 @@ function DupeSearchData()
   this.allowedSpecialFolders = 
     new RegExp(gRemoveDupesPrefs.getLocalizedStringPref('allowed_special_folders', ''), 'i');
 #ifdef DEBUG_DupeSearchParameters
-  jsConsoleService.logStringMessage('allowedSpecialFolders = ' + gAllowedSpecialFolders);
+  jsConsoleService.logStringMessage('allowedSpecialFolders = ' + this.allowedSpecialFolders);
 #endif
 
   this.useReviewDialog = 
