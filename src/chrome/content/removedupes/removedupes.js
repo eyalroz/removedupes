@@ -300,12 +300,24 @@ function continueSearchForDuplicateMessages(searchData)
   }
 
   if (isEmpty(searchData.dupeSetsHashMap)) {
-    // maybe this would be better as a message in the bottom status bar
-    alert(gRemoveDupesStrings.GetStringFromName("removedupes.no_duplicates_found"));
+    if (searchData.useReviewDialog) {
+      // if the user wants a dialog to pop up for the dupes, we can bother him/her
+      // with a message box for 'no dupes'
+      gStatusTextField.label = '';
+      alert(gRemoveDupesStrings.GetStringFromName("removedupes.no_duplicates_found"));
+    }
+    else {
+      // if the user wanted silent removal, we'll be more quiet about telling
+      // him/her there are no dupes
+      gStatusTextField.label = 
+        gRemoveDupesStrings.GetStringFromName("removedupes.no_duplicates_found");
+    }
   }
-  else reviewAndRemoveDupes(searchData);
-  //document.getElementById('progress-panel').setAttribute('collapsed', true); 
-  gStatusTextField.label = '';
+  else {
+    reviewAndRemoveDupes(searchData);
+    //document.getElementById('progress-panel').setAttribute('collapsed', true); 
+    gStatusTextField.label = '';
+  }
 
 }
 
