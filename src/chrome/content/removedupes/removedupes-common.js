@@ -46,6 +46,39 @@ function isEmpty(obj)
   return true;
 }
 
+#ifdef DEBUG
+var hD="0123456789ABCDEF";
+// decimal to hexadecimal representation
+function d2h(d) {
+  var h = hD.substr(d&15,1);
+  while(d>15) {d>>=4;h=hD.substr(d&15,1)+h;}
+  return h;
+}
+
+function string2hex(str) {
+  var res = "";
+  for(i = 0; i < str.length-1; i++) {
+    res += d2h(str.charCodeAt(i)) + " ";  
+  }
+  if (str.length > 0)
+    res += d2h(str.charCodeAt(str.length-1));  
+  return res;
+}
+
+function string2hexWithNewLines(str) {
+  var res = "";
+  for(i = 0; i < str.length-1; i++) {
+    res += d2h(str.charCodeAt(i)) + " ";  
+    if (str.charCodeAt(i) == 10)
+      res += '\n';
+  }
+  if (str.length > 0)
+    res += d2h(str.charCodeAt(str.length-1));  
+  return res;
+}
+#endif
+
+
 //---------------------------------------------------------
 
 function getBuildID() {
