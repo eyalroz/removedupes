@@ -440,7 +440,13 @@ function messageBodyFromURI(msgURI)
 #ifdef DEBUG_messageBodyFromURI
    jsConsoleService.logStringMessage('in messageBodyFromURI(' + msgURI + ')');
 #endif
-  var MsgService = messenger.messageServiceFromURI(msgURI);
+  var MsgService;
+  try {
+    MsgService = messenger.messageServiceFromURI(msgURI);
+  } catch (ex) {
+    alert('Error getting message service for message ' + msgURI + '\n: ' + ex);
+    return null;
+  }
   var MsgStream =  Components.classes["@mozilla.org/network/sync-stream-listener;1"].createInstance();
   var consumer = MsgStream.QueryInterface(Components.interfaces.nsIInputStream);
   var ScriptInput = Components.classes["@mozilla.org/scriptableinputstream;1"].createInstance();
@@ -449,17 +455,32 @@ function messageBodyFromURI(msgURI)
   try {
     MsgService .streamMessage(msgURI, MsgStream, msgWindow, null, false, null);
   } catch (ex) {
-    alert("error: " + ex)
+    alert('Error getting message content:\n' + ex)
+    return null;
   }
   ScriptInputStream.available();
   while (ScriptInputStream.available()) {
     msgContent = msgContent + ScriptInputStream.read(512);
   }
+  
   // the message headers end on the first empty line, and lines are delimited
-  // by \r\n's ; of course, this is a very lame hack, since if the message has
-  // multiple MIME parts we're still getting the headers of all the sub-parts,
-  // and not taking into any account the multipart delimiters
-  return msgContent.split('\r\n\r\n')[1];
+  // by \n's or \r\n's ; of course, this is a very lame hack, since if the 
+  // message has multiple MIME parts we're still getting the headers of all 
+  // the sub-parts, and not taking into any account the multipart delimiters
+  var endOfHeaders = /\r?\n\r?\n/;
+  if (endOfHeaders.test(msgContent)) {
+#ifdef DEBUG_messageBodyFromURI
+  //jsConsoleService.logStringMessage('msgContent =\n\n' + msgContent);
+  //jsConsoleService.logStringMessage('msgContent =\n\n' + string2hexWithNewLines(msgContent));
+  jsConsoleService.logStringMessage('RegExp.rightContext =\n\n' + RegExp.rightContext);
+#endif
+    // return everything after the end-of-headers
+    return RegExp.rightContext;
+  }
+#ifdef DEBUG_messageBodyFromURI
+  jsConsoleService.logStringMessage('Can\'t match /\\r?\\n\\r?\\n/');
+#endif
+  return null;
 }
 
 function refineDupeSets(searchData)
@@ -488,21 +509,32 @@ function refineDupeSets(searchData)
 #endif
     var dupeSet = dupeSetsHashMap[hashValue];
     for (var i=0; i < dupeSet.length; i++) {
+
       // if dupeSet[i] is null, we've already placed it in a new refined dupeset
-      if (dupeSet[i] == null) continue;
+      if (dupeSet[i] == null)
+        continue;
+
       // creatingSubDupeSet becomes true only when we find there's
       // at least one additional message which is really the same as
       // dupeSet[i]
       var creatingSubDupeSet = false;
+
       var messageBody = messageBodyFromURI(dupeSet[i]);
 #ifdef DEBUG_refineDupeSets
       jsConsoleService.logStringMessage('i = ' + i + '  body = \n' + messageBody);
 #endif
+      // if we couldn't retrieve the message body, we'll err on the side of caution and
+      // assume the message is not a dupe of anything
+      if (messageBody == null)
+        continue;
+        
+      // now find the messages in the set after i which are
+      // its dupes with respect to the body as well
       var subsetHashValue;
       for (var j=i+1; j < dupeSet.length; j++) {
         // skip dupes in the set which were already
         // found to be equal to previous ones
-        if (dupeSet[i] == null) continue;
+        if (dupeSet[j] == null) continue;
 #ifdef DEBUG_refineDupeSets
         jsConsoleService.logStringMessage('j = ' + j + '  body = \n' + messageBodyFromURI(dupeSet[j]));
 #endif
@@ -568,24 +600,6 @@ function reviewAndRemoveDupes(searchData)
 
 
 #ifdef DEBUG_secondMenuItem
-
-var hD="0123456789ABCDEF";
-// decimal to hexadecimal representation
-function d2h(d) {
-  var h = hD.substr(d&15,1);
-  while(d>15) {d>>=4;h=hD.substr(d&15,1)+h;}
-  return h;
-}
-
-function string2hex(str) {
-  var res = "";
-  for(i = 0; i < str.length-1; i++) {
-    res += d2h(str.charCodeAt(i)) + " ";  
-  }
-  if (str.length > 0)
-    res += d2h(str.charCodeAt(str.length-1));  
-  return res;
-}
 
 function secondMenuItem()
 {
