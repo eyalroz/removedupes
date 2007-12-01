@@ -396,10 +396,16 @@ function loadCurrentRowMessage()
 
 function toggleDeletionForCurrentRow()
 {
-  // If the user has double-clicked a message row, change it status
-  // from 'Keep' to 'Delete' or vice-versa; otherwise do nothing
-  
   var focusedTreeItem = gTree.contentView.getItemAtIndex(gTree.currentIndex);
+
+  // Maybe this isn't actually a message row? The first row in every branch
+  // of the tree is a dummy row with the [+]/[ ] indicator
+  if (focusedTreeItem.parentNode.parentNode.firstChild == focusedTreeItem.parentNode)
+    return;
+
+  // The user has clicked a message row, so change it status
+  // from 'Keep' to 'Delete' or vice-versa
+  
   var messageIndexInDupeSet = focusedTreeItem.getAttribute('indexInDupeSet');
   var dupeSetTreeItem = focusedTreeItem.parentNode.parentNode;
   var dupeSetHashValue = dupeSetTreeItem.getAttribute('commonHashValue');
