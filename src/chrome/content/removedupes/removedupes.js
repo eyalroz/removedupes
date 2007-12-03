@@ -71,6 +71,11 @@ function DupeSearchData()
   this.useRecipients  = gRemoveDupesPrefs.getBoolPref("comparison_criteria.recipients", false);
   this.useCCList      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.cc_list", false);
   this.useBody        = gRemoveDupesPrefs.getBoolPref("comparison_criteria.body", false);
+  
+  // an optimization: if we're comparing bodies, there shouldn't be any harm
+  // in comparing by number of lines first
+  
+  this.useLineCount = this.useLineCount || this.useBody;
 
 #ifdef DEBUG_DupeSearchParameters
   jsConsoleService.logStringMessage('USE criteria: '
