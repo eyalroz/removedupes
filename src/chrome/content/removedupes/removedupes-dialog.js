@@ -318,7 +318,7 @@ function formatSendTime(sendTimeInSeconds)
 function onClickTree(ev)
 {
 #ifdef DEBUG_onClickTree
-  jsConsoleService.logStringMessage('in onClick()\nclick point = ' + ev.clientX + ':' + ev.clientY);
+  jsConsoleService.logStringMessage('in onClickTree()\nclick point = ' + ev.clientX + ':' + ev.clientY);
 #endif
 
   var treeBoxOject = gTree.treeBoxObject;
@@ -328,8 +328,11 @@ function onClickTree(ev)
 //  var x = {}, y = {}, w = {}, h = {};
 //  treeBoxOject.getCoordsForCellItem(row.value, col.value, "treecell", x, y, w, h);
 
-  if (!col.value || !row.value || !col.value.index) {
-    // this isn't a valid cell we can use
+  if (   !col.value
+      || !row.value 
+      || !col.value.index 
+      || !gTree.contentView.getItemAtIndex(gTree.currentIndex).hasAttribute('indexInDupeSet') ) {
+    // this isn't a valid cell we can use, or it's in one of the [+]/[-] rows
 #ifdef DEBUG_onClickTree
     jsConsoleService.logStringMessage('not a valid cell, doing nothing');
 #endif
@@ -340,25 +343,17 @@ function onClickTree(ev)
     toggleDeletionForCurrentRow();
     return;
   }
-  else loadCurrentRowMessage();
 
-  // ... otherwise, we need to load the relevant dupe message in the 3-pane window
-
-#ifdef DEBUG_onClickTree
-  jsConsoleService.logStringMessage('done with onClick()');
-#endif
+  loadCurrentRowMessage();
 }
 
 function loadCurrentRowMessage()
 {
+#ifdef DEBUG_loadCurrentRowMessage
+  jsConsoleService.logStringMessage('in loadCurrentRowMessage()\ngTree.currentIndex = ' + gTree.currentIndex);
+#endif
   // when we click somewhere in the tree, the focused element should be an inner 'treeitem'
   var focusedTreeItem = gTree.contentView.getItemAtIndex(gTree.currentIndex);
-  if (!focusedTreeItem.hasAttribute('indexInDupeSet')) {
-#ifdef DEBUG_loadCurrentRowMessage
-  jsConsoleService.logStringMessage('no messageIndexInDupeSet; this is an invalid node, aborting');
-#endif
-    return;
-  }
   var messageIndexInDupeSet = focusedTreeItem.getAttribute('indexInDupeSet');
   var dupeSetTreeItem = focusedTreeItem.parentNode.parentNode;
 #ifdef DEBUG_loadCurrentRowMessage
@@ -396,12 +391,10 @@ function loadCurrentRowMessage()
 
 function toggleDeletionForCurrentRow()
 {
+#ifdef DEBUG_toggleDeletionForCurrentRow
+  jsConsoleService.logStringMessage('in toggleDeletionForCurrentRow()\ngTree.currentIndex = ' + gTree.currentIndex);
+#endif
   var focusedTreeItem = gTree.contentView.getItemAtIndex(gTree.currentIndex);
-
-  // Maybe this isn't actually a message row? The first row in every branch
-  // of the tree is a dummy row with the [+]/[ ] indicator
-  if (focusedTreeItem.parentNode.parentNode.firstChild == focusedTreeItem.parentNode)
-    return;
 
   // The user has clicked a message row, so change it status
   // from 'Keep' to 'Delete' or vice-versa
