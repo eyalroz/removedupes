@@ -1,4 +1,4 @@
-<!ENTITY removedupes.title "Remove Duplicate Messages (Alternatif)">
+﻿<!ENTITY removedupes.title "Supprimer les Messages en Double (Alternatif)">
 <!ENTITY removedupes.remove_duplicates_menuitem.label "Supprimer les doublons…">
 <!ENTITY removedupes.remove_duplicates_menuitem.accesskey "d">
 <!ENTITY key-removedupes.modifiers "accel,maj">
