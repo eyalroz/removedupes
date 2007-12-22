@@ -171,6 +171,15 @@ function createMessageRowTemplate()
   gMessageRowTemplate.setAttribute('indexInDupeSet', 0);
 }
 
+function clearStatusBar()
+{
+  document.getElementById("total-status-panel").setAttribute("label", "");
+  document.getElementById("sets-status-panel").setAttribute("label", "");
+  document.getElementById("keeping-status-panel").setAttribute("label", "");
+  document.getElementById("main-status-panel").setAttribute("label","");
+}
+
+
 
 function rebuildDuplicateSetsTree()
 {
@@ -178,12 +187,11 @@ function rebuildDuplicateSetsTree()
       jsConsoleService.logStringMessage('in rebuildDuplicateSetsTree');
 #endif
 
+  clearStatusBar();
+
   while (gTreeChildren.firstChild)
    gTreeChildren.removeChild(gTreeChildren.firstChild);
 
-  document.getElementById("total-status-panel").setAttribute("label", "");
-  document.getElementById("sets-status-panel").setAttribute("label", "");
-  document.getElementById("keeping-status-panel").setAttribute("label", "");
   document.getElementById("main-status-panel").setAttribute("label",
     gRemoveDupesStrings.GetStringFromName("removedupes.status_panel.populating_list"));
 
@@ -216,7 +224,7 @@ function rebuildDuplicateSetsTree()
     
     for (var i=0; i < dupeSet.length; i++) {
       if (dupeSet[i].toKeep) gNumberToKeep++;
-      var dupeInSetRow = createMessageTreeRow(dupeSet[i], i);
+      var dupeInSetRow = createMessageTreeRow(dupeSet[i]);
       var dupeInSetTreeItem = document.createElement("treeitem");
       dupeInSetTreeItem.setAttribute('indexInDupeSet', i);
         // TODO: does anyone know a simple way of getting the index of a treeitem within
@@ -235,6 +243,42 @@ function rebuildDuplicateSetsTree()
   }
   updateStatusBar();
 }
+
+function resetCheckboxValues()
+{
+#ifdef DEBUG_resetCheckboxValues
+      jsConsoleService.logStringMessage('in resetCheckboxValues');
+#endif
+
+  clearStatusBar();
+
+  document.getElementById("main-status-panel").setAttribute("label",
+    gRemoveDupesStrings.GetStringFromName("removedupes.status_panel.updating_list"));
+
+  gNumberToKeep = 0;
+
+  // to understand how this code works, see the comment regarding the tree
+  // structure in the code of rebuildDuplicateSetsTree()
+
+  var dupeSetTreeItem  =  gTreeChildren.firstChild;
+  while (dupeSetTreeItem) {
+    var hashValue = dupeSetTreeItem.getAttribute('commonHashValue');
+    var dupeSet = dupeSetsHashMap[hashValue];
+    var dupeInSetTreeItem = dupeSetTreeItem.firstChild.firstChild;
+    while (dupeInSetTreeItem) {
+      var indexInDupeSet = parseInt(dupeInSetTreeItem.getAttribute('indexInDupeSet'));
+      
+      dupeInSetTreeItem.firstChild.childNodes.item(toKeepColumnIndex).setAttribute(
+        "properties", (dupeSet[indexInDupeSet].toKeep ? "keep" : "delete"));
+
+      if (dupeSet[indexInDupeSet].toKeep) gNumberToKeep++;
+      dupeInSetTreeItem = dupeInSetTreeItem.nextSibling;
+    }
+    dupeSetTreeItem = dupeSetTreeItem.nextSibling;
+  }
+  updateStatusBar();
+}
+
 
 function updateStatusBar()
 {
@@ -448,7 +492,7 @@ function markAllDupesForDeletion()
     for (var i=0; i<dupeSet.length; i++ )
       dupeSet[i].toKeep = false;
   }
-  rebuildDuplicateSetsTree();
+  resetCheckboxValues();
 }
 
 function markKeepOneInEveryDupeSet(keepFirst)
@@ -469,7 +513,7 @@ function markKeepOneInEveryDupeSet(keepFirst)
     }
   }
   
-  rebuildDuplicateSetsTree();
+  resetCheckboxValues();
 }
 
 function markNoDupesForDeletion()
@@ -480,7 +524,7 @@ function markNoDupesForDeletion()
       dupeSet[i].toKeep = true;
   }
 
-  rebuildDuplicateSetsTree();
+  resetCheckboxValues();
 }
 
 function initializeFolderPicker()
@@ -553,6 +597,4 @@ function onClickColumn(ev)
   ev.target.setAttribute('class','sortDirectionIndicator');
   ev.target.setAttribute('sortDirection',gSortingBackwards ? "descending" : "ascending");
   rebuildDuplicateSetsTree();
-
-    // TODO: set tree column attribute class="sortDirectionIndicator" for the new column
 }
