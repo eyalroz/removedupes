@@ -27,3 +27,4 @@
 <!ENTITY action.move.accesskey "m">
 <!ENTITY removeduplicates-button.label "Remove Dupes">
 <!ENTITY removeduplicates-button.tip "Remove Duplicate Messages...">
+<!ENTITY removedupes.criteria_menu.label "Comparison Criteria:">

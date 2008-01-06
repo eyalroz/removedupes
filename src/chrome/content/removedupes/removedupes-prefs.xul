@@ -5,9 +5,9 @@
 
 #ifdef MOZ_THUNDERBIRD
 <!DOCTYPE prefwindow [
-  <!ENTITY % removedupesDTD SYSTEM
+  <!ENTITY % removedupesprefDTD SYSTEM
              "chrome://removedupes/locale/removedupes-prefs.dtd">
-  %removedupesDTD;
+  %removedupesprefDTD;
 ]>
 #else
 <!DOCTYPE page SYSTEM "chrome://removedupes/locale/removedupes-prefs.dtd">
