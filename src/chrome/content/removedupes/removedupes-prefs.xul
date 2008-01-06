@@ -84,11 +84,13 @@
 #endif
 
 
-    <tabbox flex="1">
+    <tabbox id="prefsTabBox" flex="1" persist="selectedIndex">
 
-      <tabs id="prefTabBox">
-        <tab id="general_settings_tab"  label="&general_settings.tab_title;"/>
-        <tab id="message_comparison_tab" label="&message_comparison.tab_title;"/>
+      <tabs id="prefsTabs">
+        <tab id="general_settings_tab" 
+             label="&general_settings.tab_title;" />
+        <tab id="message_comparison_tab" 
+             label="&message_comparison.tab_title;" />
       </tabs>
 
       <tabpanels flex="1">
@@ -118,7 +120,7 @@
           </vbox>
         </tabpanel>
 
-        <tabpanel id="changelog">
+        <tabpanel id="comparison_criteria_panel">
           <vbox flex="1">
             <description>&message_comparison.tab_description;</description>
             <checkbox preference="removedupes.mail.comparison_criteria.author"
