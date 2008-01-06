@@ -17,6 +17,19 @@ var gImapService =
 
 var gStatusTextField;
 
+var gSearchCriterionUsageDefaults = {
+  message_id: true,
+  send_time: true,
+  folder: true,
+  subject: true,
+  author: true,
+  num_lines: false,
+  recipients: false,
+  cc_list: false,
+  body: false
+}
+
+
 //---------------------------------------------------
 
 // a class definition of the listener which we'll
@@ -61,44 +74,41 @@ UpdateFolderDoneListener.prototype.OnStopRunningUrl =
 //---------------------------------------------------
 function DupeSearchData()
 {
+  this.useCriteria = new Object;
   // which information will we use for comparing messages?
-  this.useMessageId   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.message_id", true);
-  this.useSendTime    = gRemoveDupesPrefs.getBoolPref("comparison_criteria.send_time", true);
-  this.useFolder      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.folder", true);
-  this.useSubject     = gRemoveDupesPrefs.getBoolPref("comparison_criteria.subject", true);
-  this.useAuthor      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.author", true);
-  this.useLineCount   = gRemoveDupesPrefs.getBoolPref("comparison_criteria.num_lines", false);
-  this.useRecipients  = gRemoveDupesPrefs.getBoolPref("comparison_criteria.recipients", false);
-  this.useCCList      = gRemoveDupesPrefs.getBoolPref("comparison_criteria.cc_list", false);
-  this.useBody        = gRemoveDupesPrefs.getBoolPref("comparison_criteria.body", false);
-  
+  for(criterion in gSearchCriterionUsageDefaults) {
+    this.useCriteria[criterion] = 
+     gRemoveDupesPrefs.getBoolPref("comparison_criteria." + criterion, 
+                gSearchCriterionUsageDefaults[criterion]);
+  }
+
   // an optimization: if we're comparing bodies, there shouldn't be any harm
   // in comparing by number of lines first
   
-  this.useLineCount = this.useLineCount || this.useBody;
+  this.useCriteria['num_lines'] = this.useCriteria['num_lines'] || this.useCriteria['body'];
 
 #ifdef DEBUG_DupeSearchParameters
   jsConsoleService.logStringMessage('USE criteria: '
-    + (this.useMessageId ? 'message ID ' : '') 
-    + (this.useSendTime ? 'send time ' : '') 
-    + (this.useFolder ? 'folder ' : '') 
-    + (this.useSubject ? 'subject ' : '') 
-    + (this.useAuthor ? 'author ' : '') 
-    + (this.useLineCount ? 'line count ' : '') 
-    + (this.useRecipients ? 'recipients ' : '') 
-    + (this.useCCList ? 'CC list ' : '') 
-    + (this.useBody? 'body ' : '') 
+    + (this.useCriteria['message_id'] ? 'message-ID ' : '') 
+    + (this.useCriteria['send_time'] ? 'send-time ' : '') 
+    + (this.useCriteria['folder'] ? 'folder ' : '') 
+    + (this.useCriteria['subject'] ? 'subject ' : '') 
+    + (this.useCriteria['author'] ? 'author ' : '') 
+    + (this.useCriteria['num_lines'] ? 'line-count ' : '') 
+    + (this.useCriteria['recipients'] ? 'recipients ' : '') 
+    + (this.useCriteria['cc_list'] ? 'CC-list ' : '') 
+    + (this.useCriteria['body']? 'body ' : '') 
     );
   jsConsoleService.logStringMessage('DON\'T USE criteria: '
-    + (!this.useMessageId ? 'message ID ' : '') 
-    + (!this.useSendTime ? 'send time ' : '') 
-    + (!this.useFolder ? 'folder ' : '') 
-    + (!this.useSubject ? 'subject ' : '') 
-    + (!this.useAuthor ? 'author ' : '') 
-    + (!this.useLineCount ? 'line count ' : '') 
-    + (!this.useRecipients ? 'recipients ' : '') 
-    + (!this.useCCList ? 'CC list ' : '') 
-    + (!this.useBody? 'body ' : '') 
+    + (!this.useCriteria['message_id'] ? 'message-ID ' : '') 
+    + (!this.useCriteria['send_time'] ? 'send-time ' : '') 
+    + (!this.useCriteria['folder'] ? 'folder ' : '') 
+    + (!this.useCriteria['subject'] ? 'subject ' : '') 
+    + (!this.useCriteria['author'] ? 'author ' : '') 
+    + (!this.useCriteria['num_lines'] ? 'line-count ' : '') 
+    + (!this.useCriteria['recipients'] ? 'recipients ' : '') 
+    + (!this.useCriteria['cc_list'] ? 'CC-list ' : '') 
+    + (!this.useCriteria['body']? 'body ' : '') 
     );
 #endif
 
@@ -300,7 +310,7 @@ function continueSearchForDuplicateMessages(searchData)
   // hash map of dupe sets might be a 'rough' partition into dupe sets, which
   // still needs to be refined by additional comparison criteria
   
-  if (searchData.useBody) {
+  if (searchData.useCriteria['body']) {
     refineDupeSets(searchData);
   }
 
@@ -385,24 +395,24 @@ function populateDupeSetsHash(searchData)
 #endif
       
       var sillyHash = '';
-      if (searchData.useMessageId)
+      if (searchData.useCriteria['message_id'])
         sillyHash += messageHdr.messageId + '|';
-      if (searchData.useSendTime)
+      if (searchData.useCriteria['send_time'])
         sillyHash += messageHdr.dateInSeconds + '|';
-      if (searchData.useFolder)
+      if (searchData.useCriteria['folder'])
         sillyHash += folder.uri + '|';
-      if (searchData.useSubject)
+      if (searchData.useCriteria['subject'])
         sillyHash += messageHdr.subject + '|6xX$\WG-C?|';
           // the extra 'junk string' is intended to reduce the chance of getting the subject
           // field being mixed up with other fields in the hash, i.e. in case the subject
           // ends with something like "|55"
-      if (searchData.useAuthor)
+      if (searchData.useCriteria['author'])
         sillyHash += messageHdr.author + '|^#=)A?mUi5|';
-      if (searchData.useRecipients)
+      if (searchData.useCriteria['recipients'])
         sillyHash += messageHdr.recipients + '|Ei4iXn=Iv*|';
-      if (searchData.useCCList)
+      if (searchData.useCriteria['cc_list'])
         sillyHash += messageHdr.ccList + '|w7Exh\' s%k|';
-      if (searchData.useLineCount)
+      if (searchData.useCriteria['line_count'])
         sillyHash += messageHdr.lineCount;
       var uri = folder.getUriForMsg(messageHdr);
       if (sillyHash in messageUriHashmap) {
@@ -603,6 +613,26 @@ function reviewAndRemoveDupes(searchData)
   delete searchData;
 }
 
+
+function toggleDupeSearchCriterion(ev,criterion)
+{
+  var useCriterion = 
+    !gRemoveDupesPrefs.getBoolPref("comparison_criteria." + criterion, 
+      gSearchCriterionUsageDefaults[criterion]);
+  gRemoveDupesPrefs.setBoolPref("comparison_criteria." + criterion, useCriterion);
+  document.getElementById('removedupesCriterionMenuItem_' + criterion).setAttribute("checked", useCriterion ? "true" : "false");
+  ev.stopPropagation();
+}
+
+function removedupesCriteriaPopupMenuInit()
+{
+  for(criterion in gSearchCriterionUsageDefaults) {
+    document.getElementById('removedupesCriterionMenuItem_' + criterion)
+            .setAttribute("checked",
+              (gRemoveDupesPrefs.getBoolPref("comparison_criteria." + criterion, 
+                gSearchCriterionUsageDefaults[criterion]) ? "true" : "false"));
+  }
+}
 
 #ifdef DEBUG_secondMenuItem
 
