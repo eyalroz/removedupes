@@ -30,9 +30,6 @@ const lineCountColumnIndex   = 8;
 
 // state variables for dupe set sorting (see onClickColumn() )
 
-var gCurrentSortIndicator;
-var gSortingBackwards = false;
-
 const gDateService = 
   Components.classes["@mozilla.org/intl/scriptabledateformat;1"]
             .getService(Components.interfaces.nsIScriptableDateFormat);
@@ -82,6 +79,8 @@ function initDupeReviewDialog()
   
   initializeFolderPicker();
   document.getElementById('action').value  = gRemoveDupesPrefs.getCharPref('default_action', 'move');
+  gTree = document.getElementById("dupeSetsTree");
+  
   
   // we re-form the dupe sets - instead of arrays of message URIs we
   // will now have arrays of dupeMessageRecord's, which contain much more
@@ -98,8 +97,6 @@ function initDupeReviewDialog()
 #endif
       
     }
-    // first dupe in a dupe set is kept by default
-    dupeSet[0].toKeep = true;
   }
 #ifdef DEBUG_profile
   gEndTime = (new Date()).getTime();
@@ -111,7 +108,6 @@ function initDupeReviewDialog()
   // now let's show the information about the dupes to the user,
   // and let her/him decide what to do with them
 
-  gTree = document.getElementById("dupeSetsTree");
 #ifdef DEBUG_initDupeReviewDialog
   jsConsoleService.logStringMessage('gTree = ' + gTree);
 #endif
@@ -122,6 +118,15 @@ function initDupeReviewDialog()
 #endif
 
   createMessageRowTemplate();
+  var sortColumnId = gTree.getAttribute('sortColumn');
+  if (sortColumnId)
+    sortDupeSetsByField(document.getElementById(sortColumnId).getAttribute('fieldName'));
+
+  for (hashValue in dupeSetsHashMap) {
+    // first dupe in a dupe set is kept by default
+    dupeSetsHashMap[hashValue][0].toKeep = true;
+  }
+
   rebuildDuplicateSetsTree();
 #ifdef DEBUG_profile
   gEndTime = (new Date()).getTime();
@@ -555,32 +560,54 @@ function onClickColumn(ev)
   var field = ev.target.getAttribute('fieldName');
 
 #ifdef DEBUG_onClickColumn
-  jsConsoleService.logStringMessage('field = ' + field);
+  jsConsoleService.logStringMessage('field = ' + field + '\ngTree.getAttribute(\'sortColumn\') = ' + gTree.getAttribute('sortColumn') );
 #endif
   
   if (!field)
     return;
 
-  if (gCurrentSortIndicator == ev.target) {
+  if (gTree.getAttribute('sortColumn') == ev.target.id) {
+#ifdef DEBUG_onClickColumn
+    jsConsoleService.logStringMessage('reclick ; gTree.getAttribute(\'sortDirection\') = ' + gTree.getAttribute('sortDirection'));
+#endif
     // re-clicking the current sort indicator means flipping the sort order
-    gSortingBackwards = !gSortingBackwards;
+    gTree.setAttribute('sortDirection',
+      (gTree.getAttribute('sortDirection') == 'ascending') ? 'descending' : 'ascending')
   }
   else {
-    if (gCurrentSortIndicator) {
-      gCurrentSortIndicator.removeAttribute('class');
-      gCurrentSortIndicator.removeAttribute('sortDirection');
+    if (gTree.getAttribute('sortColumn')) {
+#ifdef DEBUG_onClickColumn
+      jsConsoleService.logStringMessage('clearing old sort column');
+#endif
+      document.getElementById(gTree.getAttribute('sortColumn')).removeAttribute('class');
+      document.getElementById(gTree.getAttribute('sortColumn')).removeAttribute('sortDirection');
     }
-    gCurrentSortIndicator = ev.target;
-    gSortingBackwards = false;
+    gTree.setAttribute('sortColumn', ev.target.id);
+#ifdef DEBUG_onClickColumn
+    jsConsoleService.logStringMessage('set gTree.getAttribute(\'sortColumn\') to' + gTree.getAttribute('sortColumn'));
+#endif
+    gTree.setAttribute('sortDirection', 'ascending');
   }
+  
+  sortDupeSetsByField(field);
 
+#ifdef DEBUG_onClickColumn
+  jsConsoleService.logStringMessage('setting attrs on new sort column' + ev.target + "\nto class and " + gTree.getAttribute('sortDirection'));
+#endif
+  ev.target.setAttribute('class','sortDirectionIndicator');
+  ev.target.setAttribute('sortDirection',gTree.getAttribute('sortDirection'));
+  rebuildDuplicateSetsTree();
+}
+
+function sortDupeSetsByField(field)
+{
   // we will now re-sort every dupe set using the field whose
   // column the user has clicked
   
   var compareFunction = function(lhs, rhs) {
     if (lhs[field] == rhs[field])
       return 0;
-    if (gSortingBackwards)
+    if (gTree.getAttribute('sortDirection') == 'descending')
       return ( (lhs[field] > rhs[field]) ? -1 : 1);
     else
       return ( (lhs[field] > rhs[field]) ? 1 : -1);
@@ -593,8 +620,4 @@ function onClickColumn(ev)
     var dupeSet = dupeSetsHashMap[hashValue];
     dupeSet.sort(compareFunction);
   }
-
-  ev.target.setAttribute('class','sortDirectionIndicator');
-  ev.target.setAttribute('sortDirection',gSortingBackwards ? "descending" : "ascending");
-  rebuildDuplicateSetsTree();
 }
