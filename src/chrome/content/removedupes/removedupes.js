@@ -608,6 +608,7 @@ function reviewAndRemoveDupes(searchData)
       msgWindow,
       gMessengerBundle,
       gDBView,
+      searchData.useCriteria,
       searchData.dupeSetsHashMap);
   }
   delete searchData;

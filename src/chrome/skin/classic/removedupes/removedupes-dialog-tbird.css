@@ -8,3 +8,6 @@ treechildren::-moz-tree-cell(delete) {
   background-position: center center;
 }
 
+treecol[comparisonCriterion] {
+  font-weight: bold;
+}
