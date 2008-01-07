@@ -14,6 +14,7 @@
 <!ENTITY removedupes_dialog.folder "Folder">
 <!ENTITY removedupes_dialog.line_count "# Lines">
 <!ENTITY removedupes_dialog.date "Date">
+<!ENTITY removedupes_dialog.send_time "Send Time">
 <!ENTITY removedupes_dialog.keep_first.label "First copy">
 <!ENTITY removedupes_dialog.keep_last.label "Last copy">
 <!ENTITY removedupes_dialog.keep_none.label "No copies">

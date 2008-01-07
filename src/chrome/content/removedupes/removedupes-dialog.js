@@ -4,7 +4,7 @@ var messenger;
 var msgWindow;
 var gMessengerBundle;
 var gDBView;
-var dupeSetsHashMap;
+var gDupeSetsHashMap;
 
 var gTree;
 var gTreeChildren;
@@ -39,17 +39,17 @@ function dupeMessageRecord(messageUri)
 {
   var messageHdr  = messenger.msgHdrFromURI(messageUri);
   
-  this.uri         = messageUri;
-  this.folderName  = messageHdr.folder.abbreviatedName;
-  this.folderUri   = messageHdr.folder.URI;
-  this.messageId   = messageHdr.messageId;
-  this.sendTime    = formatSendTime(messageHdr.dateInSeconds);
-  this.subject     = messageHdr.mime2DecodedSubject;
-  this.author      = messageHdr.mime2DecodedAuthor;
-  this.recipients  = messageHdr.mime2DecodedRecipients;
-  this.ccList      = messageHdr.ccList;
+  this.uri          = messageUri;
+  this.folder_name  = messageHdr.folder.abbreviatedName;
+  this.folder       = messageHdr.folder.URI;
+  this.message_id   = messageHdr.messageId;
+  this.send_time    = formatSendTime(messageHdr.dateInSeconds);
+  this.subject      = messageHdr.mime2DecodedSubject;
+  this.author       = messageHdr.mime2DecodedAuthor;
+  this.recipients   = messageHdr.mime2DecodedRecipients;
+  this.cc_list      = messageHdr.ccList;
     // we don't have mime2DecodedRecipients
-  this.lineCount   = messageHdr.lineCount;
+  this.num_lines   = messageHdr.lineCount;
   // by default, we're deleting dupes, but see also below
   this.toKeep      = false; 
 }
@@ -69,7 +69,8 @@ function initDupeReviewDialog()
   msgWindow                 = window.arguments[1];
   gMessengerBundle          = window.arguments[2];
   gDBView                   = window.arguments[3];
-  dupeSetsHashMap           = window.arguments[4];
+  var useCriteria           = window.arguments[4];
+  gDupeSetsHashMap          = window.arguments[5];
   
   // let's replace the URI's with all the necessary information
   // for the display dialog:
@@ -81,14 +82,23 @@ function initDupeReviewDialog()
   document.getElementById('action').value  = gRemoveDupesPrefs.getCharPref('default_action', 'move');
   gTree = document.getElementById("dupeSetsTree");
   
+  // indicate which columns were used in the search
+  
+  for(criterion in useCriteria) {
+#ifdef DEBUG_initDupeReviewDialog
+      jsConsoleService.logStringMessage('criterion = ' + criterion);
+#endif
+    if ((criterion != 'message_id') && useCriteria[criterion])
+      document.getElementById(criterion + 'Column').setAttribute('comparisonCriterion',true);
+  }
   
   // we re-form the dupe sets - instead of arrays of message URIs we
   // will now have arrays of dupeMessageRecord's, which contain much more
   // information (rather than having to repeatedly retrieve it)
   
-  for (hashValue in dupeSetsHashMap) {
+  for (hashValue in gDupeSetsHashMap) {
     gNumberOfDupeSets++;
-    var dupeSet = dupeSetsHashMap[hashValue];
+    var dupeSet = gDupeSetsHashMap[hashValue];
     for (var i=0; i < dupeSet.length; i++) {
       dupeSet[i] = new dupeMessageRecord(dupeSet[i]);
       gTotalNumberOfDupes++;
@@ -122,9 +132,9 @@ function initDupeReviewDialog()
   if (sortColumnId)
     sortDupeSetsByField(document.getElementById(sortColumnId).getAttribute('fieldName'));
 
-  for (hashValue in dupeSetsHashMap) {
+  for (hashValue in gDupeSetsHashMap) {
     // first dupe in a dupe set is kept by default
-    dupeSetsHashMap[hashValue][0].toKeep = true;
+    gDupeSetsHashMap[hashValue][0].toKeep = true;
   }
 
   rebuildDuplicateSetsTree();
@@ -202,9 +212,9 @@ function rebuildDuplicateSetsTree()
 
   gNumberToKeep = 0;
 
-  for (hashValue in dupeSetsHashMap) {
+  for (hashValue in gDupeSetsHashMap) {
 
-    var dupeSet = dupeSetsHashMap[hashValue];
+    var dupeSet = gDupeSetsHashMap[hashValue];
 
     // Every XUL tree has a single treechildren element. The treechildren
     // for the global tree of the 'removedupes' dialog has a treeitem for every
@@ -268,7 +278,7 @@ function resetCheckboxValues()
   var dupeSetTreeItem  =  gTreeChildren.firstChild;
   while (dupeSetTreeItem) {
     var hashValue = dupeSetTreeItem.getAttribute('commonHashValue');
-    var dupeSet = dupeSetsHashMap[hashValue];
+    var dupeSet = gDupeSetsHashMap[hashValue];
     var dupeInSetTreeItem = dupeSetTreeItem.firstChild.firstChild;
     while (dupeInSetTreeItem) {
       var indexInDupeSet = parseInt(dupeInSetTreeItem.getAttribute('indexInDupeSet'));
@@ -320,16 +330,16 @@ function createMessageTreeRow(messageRecord)
   row.childNodes.item(recipientsColumnIndex)
      .setAttribute("label", messageRecord.recipients); 
   row.childNodes.item(ccListColumnIndex)
-     .setAttribute("label", messageRecord.ccList); 
+     .setAttribute("label", messageRecord.cc_list); 
   row.childNodes.item(subjectColumnIndex)
      .setAttribute("label", messageRecord.subject);
   row.childNodes.item(folderNameColumnIndex)
-     .setAttribute("label", messageRecord.folderName);
+     .setAttribute("label", messageRecord.folder_name);
   // the send time is already formatted
   row.childNodes.item(sendTimeColumnIndex)
-     .setAttribute("label", messageRecord.sendTime);
+     .setAttribute("label", messageRecord.send_time);
   row.childNodes.item(lineCountColumnIndex)
-     .setAttribute("label", messageRecord.lineCount);
+     .setAttribute("label", messageRecord.num_lines);
 #ifdef DEBUG_createMessageTreeRow
   jsConsoleService.logStringMessage('messageRecord.lineCount = ' + messageRecord.lineCount);
 #endif
@@ -417,7 +427,7 @@ function loadCurrentRowMessage()
 #ifdef DEBUG_loadCurrentRowMessage
   jsConsoleService.logStringMessage('dupeSetHashValue = ' + dupeSetHashValue);
 #endif
-  var dupeSetItem = dupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
+  var dupeSetItem = gDupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
   var messageUri = dupeSetItem.uri;
   var folder = messenger.msgHdrFromURI(messageUri).folder;
   //msgFolder = folder.QueryInterface(Components.interfaces.nsIMsgFolder);
@@ -451,7 +461,7 @@ function toggleDeletionForCurrentRow()
   var messageIndexInDupeSet = focusedTreeItem.getAttribute('indexInDupeSet');
   var dupeSetTreeItem = focusedTreeItem.parentNode.parentNode;
   var dupeSetHashValue = dupeSetTreeItem.getAttribute('commonHashValue');
-  var dupeSetItem = dupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
+  var dupeSetItem = gDupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
   
   if (dupeSetItem.toKeep) {
     dupeSetItem.toKeep = false;
@@ -470,7 +480,7 @@ function toggleDeletionForCurrentRow()
 
 function onCancel()
 {
-  delete dupeSetsHashMap;
+  delete gDupeSetsHashMap;
 }
 
 function onAccept()
@@ -479,21 +489,21 @@ function onAccept()
   var deletePermanently =
     (document.getElementById('action').getAttribute('value') == 'delete_permanently');
   removeDuplicates(
-    dupeSetsHashMap,
+    gDupeSetsHashMap,
     deletePermanently,
     uri,
     true // the uri's have been replaced with messageRecords
     );
   if (!deletePermanently) 
     gRemoveDupesPrefs.setCharPref('default_target_folder', uri);
-  delete dupeSetsHashMap;
+  delete gDupeSetsHashMap;
 }
 
 
 function markAllDupesForDeletion()
 {
-  for (hashValue in dupeSetsHashMap) {
-    var dupeSet = dupeSetsHashMap[hashValue];
+  for (hashValue in gDupeSetsHashMap) {
+    var dupeSet = gDupeSetsHashMap[hashValue];
     for (var i=0; i<dupeSet.length; i++ )
       dupeSet[i].toKeep = false;
   }
@@ -505,8 +515,8 @@ function markKeepOneInEveryDupeSet(keepFirst)
   // we'll mark either the first of every dupe set for keeping,
   // or the last of every set, and mark the rest for deletion
  
-  for (hashValue in dupeSetsHashMap) {
-    var dupeSet = dupeSetsHashMap[hashValue];
+  for (hashValue in gDupeSetsHashMap) {
+    var dupeSet = gDupeSetsHashMap[hashValue];
     for (var i=0; i<dupeSet.length; i++ ) {
       dupeSet[i].toKeep = false;
       if (keepFirst) {
@@ -523,8 +533,8 @@ function markKeepOneInEveryDupeSet(keepFirst)
 
 function markNoDupesForDeletion()
 {
-  for (hashValue in dupeSetsHashMap) {
-    var dupeSet = dupeSetsHashMap[hashValue];
+  for (hashValue in gDupeSetsHashMap) {
+    var dupeSet = gDupeSetsHashMap[hashValue];
     for (var i=0; i<dupeSet.length; i++ )
       dupeSet[i].toKeep = true;
   }
@@ -616,8 +626,8 @@ function sortDupeSetsByField(field)
   // TODO: see if you can't use the XUL tree's internal sorting mechanism; if we do that, we'll be able to
   // spare lots of tree-rebuilding
 
-  for (hashValue in dupeSetsHashMap) {
-    var dupeSet = dupeSetsHashMap[hashValue];
+  for (hashValue in gDupeSetsHashMap) {
+    var dupeSet = gDupeSetsHashMap[hashValue];
     dupeSet.sort(compareFunction);
   }
 }
