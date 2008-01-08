@@ -88,7 +88,9 @@ function initDupeReviewDialog()
 #ifdef DEBUG_initDupeReviewDialog
       jsConsoleService.logStringMessage('criterion = ' + criterion);
 #endif
-    if ((criterion != 'message_id') && useCriteria[criterion])
+    if (useCriteria[criterion] &&
+        (criterion != 'message_id') &&
+        (criterion != 'body'))
       document.getElementById(criterion + 'Column').setAttribute('comparisonCriterion',true);
   }
   
