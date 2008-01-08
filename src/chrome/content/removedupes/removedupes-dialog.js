@@ -352,28 +352,28 @@ function createMessageTreeRow(messageRecord)
 
 function formatSendTime(sendTimeInSeconds)
 {
-  sendTimeInSeconds_in_seconds = new Date( sendTimeInSeconds*1000 );
+  var date = new Date( sendTimeInSeconds*1000 );
     // the Date() constructor expects miliseconds
     
 #ifdef DEBUG_formatSendTime
   jsConsoleService.logStringMessage('sendTimeInSeconds = ' + sendTimeInSeconds);
-  jsConsoleService.logStringMessage('sendTimeInSeconds_in_seconds = ' + sendTimeInSeconds_in_seconds);
-  jsConsoleService.logStringMessage('sendTimeInSeconds_in_seconds.getFullYear() = ' + sendTimeInSeconds_in_seconds.getFullYear());
-  jsConsoleService.logStringMessage('sendTimeInSeconds_in_seconds.getMonth()+1 = ' + sendTimeInSeconds_in_seconds.getMonth()+1);
-  jsConsoleService.logStringMessage('sendTimeInSeconds_in_seconds.getDate() = ' + sendTimeInSeconds_in_seconds.getDate());
-  jsConsoleService.logStringMessage('sendTimeInSeconds_in_seconds.getHours() = ' + sendTimeInSeconds_in_seconds.getHours());
-  jsConsoleService.logStringMessage('sendTimeInSeconds_in_seconds.getMinutes() = ' + sendTimeInSeconds_in_seconds.getMinutes());
+  jsConsoleService.logStringMessage('date = ' + date);
+  jsConsoleService.logStringMessage('date.getFullYear() = ' + date.getFullYear());
+  jsConsoleService.logStringMessage('date.getMonth()+1 = ' + date.getMonth()+1);
+  jsConsoleService.logStringMessage('date.getDate() = ' + date.getDate());
+  jsConsoleService.logStringMessage('date.getHours() = ' + date.getHours());
+  jsConsoleService.logStringMessage('date.getMinutes() = ' + date.getMinutes());
 #endif
   return gDateService.FormatDateTime(
     "", // use application locale
     gDateService.dateFormatShort,
     gDateService.timeFormatSeconds, 
-    sendTimeInSeconds_in_seconds.getFullYear(),
-    sendTimeInSeconds_in_seconds.getMonth()+1, 
-    sendTimeInSeconds_in_seconds.getDate(),
-    sendTimeInSeconds_in_seconds.getHours(),
-    sendTimeInSeconds_in_seconds.getMinutes(), 
-    sendTimeInSeconds_in_seconds.getSeconds() );
+    date.getFullYear(),
+    date.getMonth()+1, 
+    date.getDate(),
+    date.getHours(),
+    date.getMinutes(), 
+    date.getSeconds() );
 }
 
 function onClickTree(ev)

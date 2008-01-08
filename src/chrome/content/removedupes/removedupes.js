@@ -55,7 +55,7 @@ UpdateFolderDoneListener.prototype.OnStartRunningUrl =
    jsConsoleService.logStringMessage('OnStartRunningUrl for folder ' + this.folder.abbreviatedName);
 #endif
 
-  };
+  }
 UpdateFolderDoneListener.prototype.OnStopRunningUrl = 
   function(url, exitCode) {
 #ifdef DEBUG_UpdateFolderDoneListener
@@ -400,7 +400,7 @@ function populateDupeSetsHash(searchData)
       if (searchData.useCriteria['send_time'])
         sillyHash += messageHdr.dateInSeconds + '|';
       if (searchData.useCriteria['folder'])
-        sillyHash += folder.uri + '|';
+        sillyHash += folder.URI + '|';
       if (searchData.useCriteria['subject'])
         sillyHash += messageHdr.subject + '|6xX$\WG-C?|';
           // the extra 'junk string' is intended to reduce the chance of getting the subject
@@ -500,7 +500,6 @@ function messageBodyFromURI(msgURI)
 
 function refineDupeSets(searchData)
 {
-  dupeSetsHashMap = searchData.dupeSetsHashMap;
   // we'll split every dupe set into separate sets based on additional
   // comparison criteria (the more 'expensive' ones); size-1 dupe sets
   // are removed from the hash map entirely.
@@ -518,11 +517,11 @@ function refineDupeSets(searchData)
   //var MessageURI = GetFirstSelectedMessage();
 
  
-  for (hashValue in dupeSetsHashMap) {
+  for (hashValue in searchData.dupeSetsHashMap) {
 #ifdef DEBUG_refineDupeSets
     jsConsoleService.logStringMessage('refining for dupeSetsHashMap value ' + hashValue);
 #endif
-    var dupeSet = dupeSetsHashMap[hashValue];
+    var dupeSet = searchData.dupeSetsHashMap[hashValue];
     for (var i=0; i < dupeSet.length; i++) {
 
       // if dupeSet[i] is null, we've already placed it in a new refined dupeset
@@ -556,14 +555,14 @@ function refineDupeSets(searchData)
         if (messageBody == messageBodyFromURI(dupeSet[j])) {
           if (!creatingSubDupeSet) {
             subsetHashValue = hashValue + '|' + i;
-            dupeSetsHashMap[subsetHashValue] = new Array(dupeSet[i], dupeSet[j]);
+            searchData.dupeSetsHashMap[subsetHashValue] = new Array(dupeSet[i], dupeSet[j]);
             creatingSubDupeSet = true;
 #ifdef DEBUG_refineDupeSets
             jsConsoleService.logStringMessage('created new set with i = ' + i + ' j = ' + j + ' ; value = ' + subsetHashValue);
 #endif
           }
           else {
-            dupeSetsHashMap[subsetHashValue].push(dupeSet[j]);
+            searchData.dupeSetsHashMap[subsetHashValue].push(dupeSet[j]);
 #ifdef DEBUG_refineDupeSets
             jsConsoleService.logStringMessage('added j = ' + j + ' to set with value ' + subsetHashValue);
 #endif
@@ -572,7 +571,7 @@ function refineDupeSets(searchData)
         }
       }
     }
-    delete dupeSetsHashMap[hashValue];
+    delete searchData.dupeSetsHashMap[hashValue];
   }
 }
 
