@@ -27,6 +27,7 @@ const subjectColumnIndex     = 5;
 const folderNameColumnIndex  = 6;
 const sendTimeColumnIndex    = 7;
 const lineCountColumnIndex   = 8;
+const messageIdColumnIndex   = 9;
 
 // state variables for dupe set sorting (see onClickColumn() )
 
@@ -89,7 +90,6 @@ function initDupeReviewDialog()
       jsConsoleService.logStringMessage('criterion = ' + criterion);
 #endif
     if (useCriteria[criterion] &&
-        (criterion != 'message_id') &&
         (criterion != 'body'))
       document.getElementById(criterion + 'Column').setAttribute('comparisonCriterion',true);
   }
@@ -174,6 +174,8 @@ function createMessageRowTemplate()
   sendTimeCell.setAttribute("id", "sendTimeCell");
   var lineCountCell     = document.createElement("treecell");
   lineCountCell.setAttribute("id", "lineCountCell");
+  var messageIdCell     = document.createElement("treecell");
+  messageIdCell.setAttribute("id", "messageIdCell");
 
   gMessageRowTemplate = document.createElement("treerow");
   gMessageRowTemplate.appendChild(dummyCell);
@@ -185,6 +187,7 @@ function createMessageRowTemplate()
   gMessageRowTemplate.appendChild(folderCell);
   gMessageRowTemplate.appendChild(sendTimeCell);
   gMessageRowTemplate.appendChild(lineCountCell);
+  gMessageRowTemplate.appendChild(messageIdCell);
   gMessageRowTemplate.setAttribute('indexInDupeSet', 0);
 }
 
@@ -342,6 +345,8 @@ function createMessageTreeRow(messageRecord)
      .setAttribute("label", messageRecord.send_time);
   row.childNodes.item(lineCountColumnIndex)
      .setAttribute("label", messageRecord.num_lines);
+  row.childNodes.item(messageIdColumnIndex)
+     .setAttribute("label", messageRecord.message_id);
 #ifdef DEBUG_createMessageTreeRow
   jsConsoleService.logStringMessage('messageRecord.lineCount = ' + messageRecord.lineCount);
 #endif

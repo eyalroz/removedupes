@@ -61,6 +61,7 @@
           <treecol id="cc_listColumn"
                    fieldName="cc_list"
                    label="&removedupes_dialog.cc_list;" 
+                   hidden="true"
                    flex="5"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);" />
@@ -89,6 +90,13 @@
           <treecol id="num_linesColumn"
                    fieldName="num_lines"
                    label="&removedupes_dialog.line_count;" 
+                   flex="2"
+                   persist="width hidden class sortDirection"
+                   onclick="onClickColumn(event);" />
+          <treecol id="message_idColumn"
+                   fieldName="message_id"
+                   label="&removedupes_dialog.id;" 
+                   hidden="true"
                    flex="2"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);" />
