@@ -26,6 +26,7 @@ var gSearchCriterionUsageDefaults = {
   num_lines: false,
   recipients: false,
   cc_list: false,
+  flags: false,
   body: false
 }
 
@@ -97,6 +98,7 @@ function DupeSearchData()
     + (this.useCriteria['num_lines'] ? 'line-count ' : '') 
     + (this.useCriteria['recipients'] ? 'recipients ' : '') 
     + (this.useCriteria['cc_list'] ? 'CC-list ' : '') 
+    + (this.useCriteria['flags'] ? 'Flags ' : '') 
     + (this.useCriteria['body']? 'body ' : '') 
     );
   jsConsoleService.logStringMessage('DON\'T USE criteria: '
@@ -108,6 +110,7 @@ function DupeSearchData()
     + (!this.useCriteria['num_lines'] ? 'line-count ' : '') 
     + (!this.useCriteria['recipients'] ? 'recipients ' : '') 
     + (!this.useCriteria['cc_list'] ? 'CC-list ' : '') 
+    + (!this.useCriteria['flags'] ? 'Flags ' : '') 
     + (!this.useCriteria['body']? 'body ' : '') 
     );
 #endif
@@ -413,7 +416,9 @@ function populateDupeSetsHash(searchData)
       if (searchData.useCriteria['cc_list'])
         sillyHash += messageHdr.ccList + '|w7Exh\' s%k|';
       if (searchData.useCriteria['line_count'])
-        sillyHash += messageHdr.lineCount;
+        sillyHash += messageHdr.lineCount + '|';
+      if (searchData.useCriteria['flags'])
+        sillyHash += messageHdr.flags;
       var uri = folder.getUriForMsg(messageHdr);
       if (sillyHash in messageUriHashmap) {
         if (sillyHash in dupeSetsHashMap) {
