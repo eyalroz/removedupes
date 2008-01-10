@@ -14,7 +14,6 @@ var gRemoveDupesStrings =
 
 // General-purpose Javascript stuff
 
-
 function clone(myObject)
 {
   if(typeof(myObject) != 'object')
