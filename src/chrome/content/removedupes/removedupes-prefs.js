@@ -51,11 +51,7 @@ var gRemoveDupesPrefPane = {
     var header = top.document.getElementById("header");
     if (header)
       header.removeAttribute("description");
-  },
+  }
 #endif
-
-//  _getRemoveDupesPrefElement: function(prefName) {
-//    return document.getElementById("removedupes.mail." + prefName);
-//  },
 
 };
