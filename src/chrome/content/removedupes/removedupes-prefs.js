@@ -42,10 +42,8 @@ var gRemoveDupesPrefPane = {
     // Prevent the default help button behavior
     aEvent.preventDefault();
     aEvent.stopPropagation();
-  },
-#endif
-
-#ifndef MOZ_THUNDERBIRD
+  }
+#else
   onunload: function() {
     // clean up the header description
     var header = top.document.getElementById("header");
