@@ -100,6 +100,13 @@
                    flex="2"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);" />
+          <treecol id="flagsColumn"
+                   fieldName="flags"
+                   label="&removedupes_dialog.flags;" 
+                   hidden="true"
+                   flex="2"
+                   persist="width hidden class sortDirection"
+                   onclick="onClickColumn(event);" />
           <splitter class="tree-splitter"/>
         </treecols>
         <treechildren id="dupeSetsTreeChildren"/>

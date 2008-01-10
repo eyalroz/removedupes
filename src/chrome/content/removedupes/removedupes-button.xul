@@ -25,6 +25,7 @@
         <menuitem type="checkbox" id="removedupesCriterionMenuItem_author" label="&message_comparison.author.label;" oncommand="toggleDupeSearchCriterion(event,'author')"/>
         <menuitem type="checkbox" id="removedupesCriterionMenuItem_recipients" label="&message_comparison.recipients.label;" oncommand="toggleDupeSearchCriterion(event,'recipients')"/>
         <menuitem type="checkbox" id="removedupesCriterionMenuItem_cc_list" label="&message_comparison.cc_list.label;" oncommand="toggleDupeSearchCriterion(event,'cc_list')"/>
+        <menuitem type="checkbox" id="removedupesCriterionMenuItem_flags" label="&message_comparison.flags.label;" oncommand="toggleDupeSearchCriterion(event,'flags')"/>
         <menuitem type="checkbox" id="removedupesCriterionMenuItem_message_id" label="&message_comparison.message_id.label;" oncommand="toggleDupeSearchCriterion(event,'message_id')"/>
         <menuitem type="checkbox" id="removedupesCriterionMenuItem_num_lines" label="&message_comparison.num_lines.label;" oncommand="toggleDupeSearchCriterion(event,'num_lines')"/>
         <menuitem type="checkbox" id="removedupesCriterionMenuItem_send_time" label="&message_comparison.send_time.label;" oncommand="toggleDupeSearchCriterion(event,'send_time')"/>

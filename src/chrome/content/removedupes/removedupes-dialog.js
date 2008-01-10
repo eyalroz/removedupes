@@ -28,6 +28,7 @@ const folderNameColumnIndex  = 6;
 const sendTimeColumnIndex    = 7;
 const lineCountColumnIndex   = 8;
 const messageIdColumnIndex   = 9;
+const flagsColumnIndex       = 10;
 
 // state variables for dupe set sorting (see onClickColumn() )
 
@@ -35,6 +36,31 @@ const gDateService =
   Components.classes["@mozilla.org/intl/scriptabledateformat;1"]
             .getService(Components.interfaces.nsIScriptableDateFormat);
 
+const gMessageStatusFlagValues = {
+  READ:           0x0001,
+  REPLIED:        0x0002,
+  MARKED:         0x0004,
+  EXPUNGED:       0x0008,
+  HAS_RE:         0x0010,
+  ELIDED:         0x0020,
+  OFFLINE:        0x0080,
+  WATCHED:        0x0100,
+  SENDER_AUTHED:  0x0200,
+  PARTIAL:        0x0400,
+  QUEUED:         0x0800,
+  FORWARDED:      0x1000,
+  PRIORITIES:     0xE000
+}
+
+function flagsToString(flags)
+{
+  var str = '';
+  for(flagName in gMessageStatusFlagValues) {
+    if (flags & gMessageStatusFlagValues[flagName])
+      str += ' | ' + flagName;
+  }
+  return str.replace(' | ','');
+}
 
 function dupeMessageRecord(messageUri)
 {
@@ -49,7 +75,8 @@ function dupeMessageRecord(messageUri)
   this.author       = messageHdr.mime2DecodedAuthor;
   this.recipients   = messageHdr.mime2DecodedRecipients;
   this.cc_list      = messageHdr.ccList;
-    // we don't have mime2DecodedRecipients
+  //this.flags      = "0x" + num2hex(messageHdr.flags);
+  this.flags        = flagsToString(messageHdr.flags);
   this.num_lines   = messageHdr.lineCount;
   // by default, we're deleting dupes, but see also below
   this.toKeep      = false; 
@@ -176,6 +203,8 @@ function createMessageRowTemplate()
   lineCountCell.setAttribute("id", "lineCountCell");
   var messageIdCell     = document.createElement("treecell");
   messageIdCell.setAttribute("id", "messageIdCell");
+  var flagsCell         = document.createElement("treecell");
+  flagsCell.setAttribute("id", "messageIdCell");
 
   gMessageRowTemplate = document.createElement("treerow");
   gMessageRowTemplate.appendChild(dummyCell);
@@ -188,6 +217,7 @@ function createMessageRowTemplate()
   gMessageRowTemplate.appendChild(sendTimeCell);
   gMessageRowTemplate.appendChild(lineCountCell);
   gMessageRowTemplate.appendChild(messageIdCell);
+  gMessageRowTemplate.appendChild(flagsCell);
   gMessageRowTemplate.setAttribute('indexInDupeSet', 0);
 }
 
@@ -347,6 +377,8 @@ function createMessageTreeRow(messageRecord)
      .setAttribute("label", messageRecord.num_lines);
   row.childNodes.item(messageIdColumnIndex)
      .setAttribute("label", messageRecord.message_id);
+  row.childNodes.item(flagsColumnIndex)
+     .setAttribute("label", messageRecord.flags);
 #ifdef DEBUG_createMessageTreeRow
   jsConsoleService.logStringMessage('messageRecord.lineCount = ' + messageRecord.lineCount);
 #endif
