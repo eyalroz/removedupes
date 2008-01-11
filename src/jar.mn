@@ -26,6 +26,9 @@ removedupes.jar:
     locale/pt-PT/removedupes/removedupes.dtd                      (chrome/locale/pt-PT/removedupes/removedupes.dtd)
     locale/pt-PT/removedupes/removedupes-prefs.dtd                (chrome/locale/pt-PT/removedupes/removedupes-prefs.dtd)
     locale/pt-PT/removedupes/removedupes.properties               (chrome/locale/pt-PT/removedupes/removedupes.properties)
+    locale/pt-BR/removedupes/removedupes.dtd                      (chrome/locale/pt-BR/removedupes/removedupes.dtd)
+    locale/pt-BR/removedupes/removedupes-prefs.dtd                (chrome/locale/pt-BR/removedupes/removedupes-prefs.dtd)
+    locale/pt-BR/removedupes/removedupes.properties               (chrome/locale/pt-BR/removedupes/removedupes.properties)
     locale/fr-FR/removedupes/removedupes.dtd                      (chrome/locale/fr-FR/removedupes/removedupes.dtd)
     locale/fr-FR/removedupes/removedupes-prefs.dtd                (chrome/locale/fr-FR/removedupes/removedupes-prefs.dtd)
     locale/fr-FR/removedupes/removedupes.properties               (chrome/locale/fr-FR/removedupes/removedupes.properties)
@@ -64,4 +67,5 @@ removedupes.jar:
     locale/nl-NL/removedupes/contents.rdf                         (chrome/locale/nl-NL/removedupes/contents.rdf)
     locale/sk-SK/removedupes/contents.rdf                         (chrome/locale/sk-SK/removedupes/contents.rdf)
     locale/pt-PT/removedupes/contents.rdf                         (chrome/locale/pt-PT/removedupes/contents.rdf)
+    locale/pt-BR/removedupes/contents.rdf                         (chrome/locale/pt-BR/removedupes/contents.rdf)
 #endif
