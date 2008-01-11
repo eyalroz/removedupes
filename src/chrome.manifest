@@ -43,6 +43,8 @@ locale removedupes ja-JP-mac jar:chrome/removedupes.jar!/locale/ja/removedupes/
 locale removedupes zh-TW jar:chrome/removedupes.jar!/locale/zh-TW/removedupes/
 locale removedupes sk-SK jar:chrome/removedupes.jar!/locale/sk-SK/removedupes/
 locale removedupes pt-PT jar:chrome/removedupes.jar!/locale/pt-PT/removedupes/
+locale removedupes pt-BR jar:chrome/removedupes.jar!/locale/pt-BR/removedupes/
+locale removedupes pt-PT jar:chrome/removedupes.jar!/locale/pt-PT/removedupes/
 locale removedupes nl-NL jar:chrome/removedupes.jar!/locale/nl-NL/removedupes/
 locale removedupes fr-FR jar:chrome/removedupes.jar!/locale/fr-FR/removedupes/
 locale removedupes pl-PL jar:chrome/removedupes.jar!/locale/pl-PL/removedupes/
