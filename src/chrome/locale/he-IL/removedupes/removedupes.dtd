@@ -1,32 +1,32 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
-<!ENTITY removedupes.remove_duplicates_menuitem.label "äñø ëôåìéí...">
-<!ENTITY removedupes.remove_duplicates_menuitem.accesskey "ë">
+<!ENTITY removedupes.remove_duplicates_menuitem.label "×”×¡×¨ ×›×¤×•×œ×™×...">
+<!ENTITY removedupes.remove_duplicates_menuitem.accesskey "×›">
 <!ENTITY key-removedupes.modifiers "accel,shift">
-<!ENTITY key-removedupes.keycode "ë">
-<!ENTITY removedupes_dialog.dialog_title "îçé÷ú äåãòåú ëôåìåú">
-<!ENTITY removedupes_dialog.id "îæää äåãòä">
-<!ENTITY removedupes_dialog.keep_label "áëì ÷áåöú ëôåìéí, ùîåø àú:">
-<!ENTITY removedupes_dialog.subject "ðåùà">
-<!ENTITY removedupes_dialog.sender "ùåìç">
-<!ENTITY removedupes_dialog.author "îçáø">
-<!ENTITY removedupes_dialog.recipients "ðîòðéí">
-<!ENTITY removedupes_dialog.cc_list "î÷áìé òåú÷">
-<!ENTITY removedupes_dialog.flags "ãâìéí">
-<!ENTITY removedupes_dialog.folder "úé÷éä">
-<!ENTITY removedupes_dialog.line_count "îñ' ùåøåú">
-<!ENTITY removedupes_dialog.date "úàøéê">
-<!ENTITY removedupes_dialog.send_time "æîï îùìåç">
-<!ENTITY removedupes_dialog.keep_first.label "ääåãòä äøàùåðä">
-<!ENTITY removedupes_dialog.keep_last.label "ääåãòä äàçøåðä">
-<!ENTITY removedupes_dialog.keep_none.label "àó äåãòä">
-<!ENTITY removedupes_dialog.keep_all.label "ëì ääåãòåú">
-<!ENTITY removedupes_dialog.tree_label "÷áåöåú äåãòåú ëôåìåú:">
-<!ENTITY removedupes_dialog.keep_flag "ùîåø?">
-<!ENTITY removedupes_dialog.action_label "ôòåìä:">
-<!ENTITY action.delete_permanently.label "îç÷ ìöîéúåú">
-<!ENTITY action.delete_permanently.accesskey "ö">
-<!ENTITY action.move.label "äòáø ì:">
-<!ENTITY action.move.accesskey "ò">
-<!ENTITY removeduplicates-button.label "äñø ëôåìéí">
-<!ENTITY removeduplicates-button.tip "äñø äåãòåú ëôåìåú...">
-<!ENTITY removedupes.criteria_menu.label "÷øéèøéåðéí ìäùååàä:">
+<!ENTITY key-removedupes.keycode "×›">
+<!ENTITY removedupes_dialog.dialog_title "×ž×—×™×§×ª ×”×•×“×¢×•×ª ×›×¤×•×œ×•×ª">
+<!ENTITY removedupes_dialog.id "×ž×–×”×” ×”×•×“×¢×”">
+<!ENTITY removedupes_dialog.keep_label "×‘×›×œ ×§×‘×•×¦×ª ×›×¤×•×œ×™×, ×©×ž×•×¨ ××ª:">
+<!ENTITY removedupes_dialog.subject "× ×•×©×">
+<!ENTITY removedupes_dialog.sender "×©×•×œ×—">
+<!ENTITY removedupes_dialog.author "×ž×—×‘×¨">
+<!ENTITY removedupes_dialog.recipients "× ×ž×¢× ×™×">
+<!ENTITY removedupes_dialog.cc_list "×ž×§×‘×œ×™ ×¢×•×ª×§">
+<!ENTITY removedupes_dialog.flags "×“×’×œ×™×">
+<!ENTITY removedupes_dialog.folder "×ª×™×§×™×”">
+<!ENTITY removedupes_dialog.line_count "×ž×¡' ×©×•×¨×•×ª">
+<!ENTITY removedupes_dialog.date "×ª××¨×™×š">
+<!ENTITY removedupes_dialog.send_time "×–×ž×Ÿ ×ž×©×œ×•×—">
+<!ENTITY removedupes_dialog.keep_first.label "×”×”×•×“×¢×” ×”×¨××©×•× ×”">
+<!ENTITY removedupes_dialog.keep_last.label "×”×”×•×“×¢×” ×”××—×¨×•× ×”">
+<!ENTITY removedupes_dialog.keep_none.label "××£ ×”×•×“×¢×”">
+<!ENTITY removedupes_dialog.keep_all.label "×›×œ ×”×”×•×“×¢×•×ª">
+<!ENTITY removedupes_dialog.tree_label "×§×‘×•×¦×•×ª ×”×•×“×¢×•×ª ×›×¤×•×œ×•×ª:">
+<!ENTITY removedupes_dialog.keep_flag "×©×ž×•×¨?">
+<!ENTITY removedupes_dialog.action_label "×¤×¢×•×œ×”:">
+<!ENTITY action.delete_permanently.label "×ž×—×§ ×œ×¦×ž×™×ª×•×ª">
+<!ENTITY action.delete_permanently.accesskey "×¦">
+<!ENTITY action.move.label "×”×¢×‘×¨ ×œ:">
+<!ENTITY action.move.accesskey "×¢">
+<!ENTITY removeduplicates-button.label "×”×¡×¨ ×›×¤×•×œ×™×">
+<!ENTITY removeduplicates-button.tip "×”×¡×¨ ×”×•×“×¢×•×ª ×›×¤×•×œ×•×ª...">
+<!ENTITY removedupes.criteria_menu.label "×§×¨×™×˜×¨×™×•× ×™× ×œ×”×©×•×•××”:">

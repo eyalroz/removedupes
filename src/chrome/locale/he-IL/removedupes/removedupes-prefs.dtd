@@ -1,36 +1,36 @@
-<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - àôùøåéåú">
+<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - ××¤×©×¨×•×™×•×ª">
 <!ENTITY guide-url "http://not.yet.written/">
-<!ENTITY message_comparison.tab_title "äùååàú äåãòåú">
-<!ENTITY message_comparison.tab_description "øëéáéí áäåãòä äîùîùéí ë÷øéèøéåðéí ìäùååàä:">
-<!ENTITY message_comparison.author.label "îçáø (&apos;îàú&apos;)">
-<!ENTITY message_comparison.recipients.label "ðîðòðéí (&apos;àì&apos;)">
-<!ENTITY message_comparison.cc_list.label "î÷áìé òåú÷">
-<!ENTITY message_comparison.flags.label "ãâìé îöá">
-<!ENTITY message_comparison.message_id.label "îæää äåãòä">
-<!ENTITY message_comparison.num_lines.label "îñôø ùåøåú áäåãòä">
-<!ENTITY message_comparison.send_time.label "æîï îùìåç">
-<!ENTITY message_comparison.subject.label "ðåùà">
-<!ENTITY message_comparison.folder.label "úé÷éä">
-<!ENTITY message_comparison.body.label "âåó ääåãòä">
-<!ENTITY message_comparison.author.access_key "î">
-<!ENTITY message_comparison.flags.access_key "ã">
-<!ENTITY message_comparison.recipients.access_key "ò">
-<!ENTITY message_comparison.cc_list.access_key "ò">
-<!ENTITY message_comparison.message_id.access_key "æ">
-<!ENTITY message_comparison.num_lines.access_key "ù">
-<!ENTITY message_comparison.send_time.access_key "æ">
-<!ENTITY message_comparison.subject.access_key "ð">
-<!ENTITY message_comparison.folder.access_key "ú">
-<!ENTITY message_comparison.body.access_key "â">
-<!ENTITY general_settings.tab_title "àôùøåéåú ëììéåú">
-<!ENTITY general_settings.search_subfolders_first.label "çôù áúú-úé÷éåú ÷åãí (postorder)">
-<!ENTITY general_settings.confirm_search_and_deletion.label "òáåø òì úåöàåú äçéôåù ìôðé äîçé÷ä">
-<!ENTITY general_settings.default_action.description "äôòåìä ìáéöåò ëáøéøú-äîçãì òì äåãòåú ëôåìåú:">
-<!ENTITY general_settings.default_action.delete_permanently.label "îç÷ ìöîéúåú">
-<!ENTITY general_settings.default_action.move.label "äòáø ìàùôä">
-<!ENTITY general_settings.default_action.delete_permanently.accesskey "ö">
-<!ENTITY general_settings.default_action.move.accesskey "ò">
-<!ENTITY general_settings.search_subfolders_first.access_key "ú">
-<!ENTITY general_settings.confirm_search_and_deletion.access_key "á">
-<!ENTITY removedupes-preftree-label "äñø ëôåìéí">
+<!ENTITY message_comparison.tab_title "×”×©×•×•××ª ×”×•×“×¢×•×ª">
+<!ENTITY message_comparison.tab_description "×¨×›×™×‘×™× ×‘×”×•×“×¢×” ×”×ž×©×ž×©×™× ×›×§×¨×™×˜×¨×™×•× ×™× ×œ×”×©×•×•××”:">
+<!ENTITY message_comparison.author.label "×ž×—×‘×¨ (&apos;×ž××ª&apos;)">
+<!ENTITY message_comparison.recipients.label "× ×ž× ×¢× ×™× (&apos;××œ&apos;)">
+<!ENTITY message_comparison.cc_list.label "×ž×§×‘×œ×™ ×¢×•×ª×§">
+<!ENTITY message_comparison.flags.label "×“×’×œ×™ ×ž×¦×‘">
+<!ENTITY message_comparison.message_id.label "×ž×–×”×” ×”×•×“×¢×”">
+<!ENTITY message_comparison.num_lines.label "×ž×¡×¤×¨ ×©×•×¨×•×ª ×‘×”×•×“×¢×”">
+<!ENTITY message_comparison.send_time.label "×–×ž×Ÿ ×ž×©×œ×•×—">
+<!ENTITY message_comparison.subject.label "× ×•×©×">
+<!ENTITY message_comparison.folder.label "×ª×™×§×™×”">
+<!ENTITY message_comparison.body.label "×’×•×£ ×”×”×•×“×¢×”">
+<!ENTITY message_comparison.author.access_key "×ž">
+<!ENTITY message_comparison.flags.access_key "×“">
+<!ENTITY message_comparison.recipients.access_key "×¢">
+<!ENTITY message_comparison.cc_list.access_key "×¢">
+<!ENTITY message_comparison.message_id.access_key "×–">
+<!ENTITY message_comparison.num_lines.access_key "×©">
+<!ENTITY message_comparison.send_time.access_key "×–">
+<!ENTITY message_comparison.subject.access_key "× ">
+<!ENTITY message_comparison.folder.access_key "×ª">
+<!ENTITY message_comparison.body.access_key "×’">
+<!ENTITY general_settings.tab_title "××¤×©×¨×•×™×•×ª ×›×œ×œ×™×•×ª">
+<!ENTITY general_settings.search_subfolders_first.label "×—×¤×© ×‘×ª×ª-×ª×™×§×™×•×ª ×§×•×“× (postorder)">
+<!ENTITY general_settings.confirm_search_and_deletion.label "×¢×‘×•×¨ ×¢×œ ×ª×•×¦××•×ª ×”×—×™×¤×•×© ×œ×¤× ×™ ×”×ž×—×™×§×”">
+<!ENTITY general_settings.default_action.description "×”×¤×¢×•×œ×” ×œ×‘×™×¦×•×¢ ×›×‘×¨×™×¨×ª-×”×ž×—×“×œ ×¢×œ ×”×•×“×¢×•×ª ×›×¤×•×œ×•×ª:">
+<!ENTITY general_settings.default_action.delete_permanently.label "×ž×—×§ ×œ×¦×ž×™×ª×•×ª">
+<!ENTITY general_settings.default_action.move.label "×”×¢×‘×¨ ×œ××©×¤×”">
+<!ENTITY general_settings.default_action.delete_permanently.accesskey "×¦">
+<!ENTITY general_settings.default_action.move.accesskey "×¢">
+<!ENTITY general_settings.search_subfolders_first.access_key "×ª">
+<!ENTITY general_settings.confirm_search_and_deletion.access_key "×‘">
+<!ENTITY removedupes-preftree-label "×”×¡×¨ ×›×¤×•×œ×™×">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
