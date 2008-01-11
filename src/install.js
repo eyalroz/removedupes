@@ -39,9 +39,20 @@ if(retval == SUCCESS)
     folder = getFolder(folder, jarName);
 
     registerChrome(contentFlag, folder, "content/" + name + "/");
+
     registerChrome(localeFlag, folder, "locale/en-US/" + name + "/");
     registerChrome(localeFlag, folder, "locale/de-DE/" + name + "/");
+    registerChrome(localeFlag, folder, "locale/it-IT/" + name + "/");
     registerChrome(localeFlag, folder, "locale/ja/" + name + "/");
+    //registerChrome(localeFlag, folder, "locale/ja-JP-mac/" + name + "/");
+    registerChrome(localeFlag, folder, "locale/zh-TW/" + name + "/");
+    registerChrome(localeFlag, folder, "locale/sk-SK/" + name + "/");
+    registerChrome(localeFlag, folder, "locale/pt-PT/" + name + "/");
+    registerChrome(localeFlag, folder, "locale/pt-BR/" + name + "/");
+    registerChrome(localeFlag, folder, "locale/nl-NL/" + name + "/");
+    registerChrome(localeFlag, folder, "locale/fr-FR/" + name + "/");
+    registerChrome(localeFlag, folder, "locale/pl-PL/" + name + "/");
+
     registerChrome(skinFlag, folder, "skin/classic/" + name + "/");
 //    registerChrome(skinFlag, folder, "skin/modern/" + name + "/");
 
