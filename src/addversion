@@ -1,7 +1,9 @@
 #!/bin/sh -x
 #
-# run this from the src/ directory!
+# run this from the source directory!
 
+CVS_USERNAME="eyalroz"
+CVSROOT=":pserver:${CVS_USERNAME}@www.mozdev.org:/cvs"
 SRCDIR=`pwd`
 # the following are paths relative to the source dir ${SRCDIR}
 DOWNLOADS="../downloads"
@@ -12,35 +14,41 @@ VERSION=`grep VERSION=\" dobuild | cut -d\" -f2`
 SHORTNAME=`grep SHORTNAME=\" dobuild | cut -d\" -f2`
 USCORED_VERSION=`echo $VERSION | tr . _`
 CAPS_SHORTNAME=`echo ${SHORTNAME} | tr a-z A-Z`
-RELEASE_TAG="${CAPS_SHORTNAME}_${USCORED_VERSION}"
+RELEASE_TAG="${CAPS_SHORTNAME}_RELEASE_${USCORED_VERSION}"
 
 
 # create new version directory
 
 if [ ! -d ${DOWNLOADS}/${VERSION} ]; then
-	mkdir ${DOWNLOADS}/${VERSION}
+        mkdir ${DOWNLOADS}/${VERSION}
 fi
 
-# dobuild
-./dobuild suite && ./dobuild tbird && ./dobuild suiterunner
-#or quit...
+# build the release versions and place them in the appropriate directories
 
-for target in tbird suite suiterunner; do
-	cp build/${target}/${SHORTNAME}_${target}.xpi ${DOWNLOADS}/${VERSION}/${SHORTNAME}_${VERSION}_${target}.xpi 
-	cp build/${target}/${SHORTNAME}_${target}.xpi ${DOWNLOADS}/latest/
+(./dobuild suite && ./dobuild tbird ) || exit
+
+for target in tbird suite; do
+        cp build/${target}/${SHORTNAME}_${target}.xpi ${DOWNLOADS}/${VERSION}/${SHORTNAME}_${VERSION}_${target}.xpi
+        cp build/${target}/${SHORTNAME}_${target}.xpi ${DOWNLOADS}/latest/
 done
-	
-cvs -d :pserver:eyalroz@mozdev.org:/cvs tag -d ${RELEASE_TAG}
-cvs -d :pserver:eyalroz@mozdev.org:/cvs tag ${RELEASE_TAG}
+
+
+# create a CVS tag for the code used to build the release
+
+cvs -d $CVSROOT tag -d ${RELEASE_TAG}
+cvs -d $CVSROOT tag ${RELEASE_TAG}
 
 cd ${SRCDIR}/${BUILDTOOLS}
 
-cvs -d :pserver:eyalroz@mozdev.org:/cvs tag -d ${RELEASE_TAG}
-cvs -d :pserver:eyalroz@mozdev.org:/cvs tag ${RELEASE_TAG}
+cvs -d $CVSROOT tag -d ${RELEASE_TAG}
+cvs -d $CVSROOT tag ${RELEASE_TAG}
+
+
+# add the release to the CVS repository
+# (it gets propagated to the mozdev download mirrors)
 
 cd ${SRCDIR}/${DOWNLOADS}
 
-cvs -d :pserver:eyalroz@mozdev.org:/cvs add ${VERSION}/ 
-cvs -d :pserver:eyalroz@mozdev.org:/cvs add `ls ${VERSION}/*.xpi`
-cvs -d :pserver:eyalroz@mozdev.org:/cvs ci ${VERSION}/ latest/
-
+cvs -d $CVSROOT add ${VERSION}/
+cvs -d $CVSROOT add `ls ${VERSION}/*.xpi`
+cvs -d $CVSROOT ci ${VERSION}/ latest/
