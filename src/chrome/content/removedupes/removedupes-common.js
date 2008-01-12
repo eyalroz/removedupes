@@ -75,6 +75,16 @@ function string2hexWithNewLines(str) {
     res += d2h(str.charCodeAt(str.length-1));  
   return res;
 }
+
+function busySleep(milliseconds)
+{
+  var date = new Date();
+  var curDate = null;
+
+  do {
+    curDate = new Date();
+  } while (curDate-date < milliseconds);
+} 
 #endif
 
 

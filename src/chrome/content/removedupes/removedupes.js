@@ -415,7 +415,7 @@ function populateDupeSetsHash(searchData)
         sillyHash += messageHdr.recipients + '|Ei4iXn=Iv*|';
       if (searchData.useCriteria['cc_list'])
         sillyHash += messageHdr.ccList + '|w7Exh\' s%k|';
-      if (searchData.useCriteria['line_count'])
+      if (searchData.useCriteria['num_lines'])
         sillyHash += messageHdr.lineCount + '|';
       if (searchData.useCriteria['flags'])
         sillyHash += messageHdr.flags;
