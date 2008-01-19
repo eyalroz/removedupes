@@ -11,9 +11,11 @@
 <!ENTITY removedupes_dialog.author "作者">
 <!ENTITY removedupes_dialog.recipients "收件者">
 <!ENTITY removedupes_dialog.cc_list "副本清單">
+<!ENTITY removedupes_dialog.flags "標記">
 <!ENTITY removedupes_dialog.folder "資料夾">
 <!ENTITY removedupes_dialog.line_count "行數">
 <!ENTITY removedupes_dialog.date "日期">
+<!ENTITY removedupes_dialog.send_time "傳送時間">
 <!ENTITY removedupes_dialog.keep_first.label "第一個副本">
 <!ENTITY removedupes_dialog.keep_last.label "最後一個副本">
 <!ENTITY removedupes_dialog.keep_none.label "無副本">
@@ -27,3 +29,4 @@
 <!ENTITY action.move.accesskey "m">
 <!ENTITY removeduplicates-button.label "移除重複">
 <!ENTITY removeduplicates-button.tip "移除重複的郵件...">
+<!ENTITY removedupes.criteria_menu.label "比對標準:">

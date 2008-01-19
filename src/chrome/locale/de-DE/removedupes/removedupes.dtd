@@ -1,29 +1,32 @@
-<!ENTITY removedupes.title "Entfernung doppelter Nachrichten (Alternative)">
+<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate) [de]">
 <!ENTITY removedupes.remove_duplicates_menuitem.label "Duplikate entfernen...">
 <!ENTITY removedupes.remove_duplicates_menuitem.accesskey "D">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "D">
-<!ENTITY removedupes_dialog.dialog_title "Entfernung von Duplikaten">
+<!ENTITY removedupes_dialog.dialog_title "Entfernen von Duplikaten">
 <!ENTITY removedupes_dialog.id "Nachrichten ID">
-<!ENTITY removedupes_dialog.keep_label "In jeder Gruppe von Duplikaten behalte:">
+<!ENTITY removedupes_dialog.keep_label "In jeder Gruppe von Duplikaten behalten:">
 <!ENTITY removedupes_dialog.subject "Betreff">
 <!ENTITY removedupes_dialog.sender "Absender">
-<!ENTITY removedupes_dialog.author "Author">
-<!ENTITY removedupes_dialog.recipients "Recipients">
-<!ENTITY removedupes_dialog.cc_list "CC List">
+<!ENTITY removedupes_dialog.author "Absender">
+<!ENTITY removedupes_dialog.recipients "Empfänger">
+<!ENTITY removedupes_dialog.cc_list "CC-Empfänger">
+<!ENTITY removedupes_dialog.flags "Status (z.B. Junk, ungelesen, usw.)">
 <!ENTITY removedupes_dialog.folder "Ordner">
 <!ENTITY removedupes_dialog.line_count "# Zeilen">
 <!ENTITY removedupes_dialog.date "Datum">
+<!ENTITY removedupes_dialog.send_time "Absendezeit">
 <!ENTITY removedupes_dialog.keep_first.label "Erstes Exemplar">
 <!ENTITY removedupes_dialog.keep_last.label "Letztes Exemplar">
 <!ENTITY removedupes_dialog.keep_none.label "Kein Exemplar">
 <!ENTITY removedupes_dialog.keep_all.label "Alle Exemplare">
-<!ENTITY removedupes_dialog.tree_label "Gruppen von Duplikaten:">
+<!ENTITY removedupes_dialog.tree_label "Doppelte Einträge:">
 <!ENTITY removedupes_dialog.keep_flag "Behalten?">
-<!ENTITY removedupes_dialog.action_label "Action:">
-<!ENTITY action.delete_permanently.label "Entferne dauerhaft (verschiebe nicht in den Papierkorb)">
-<!ENTITY action.delete_permanently.accesskey "d">
+<!ENTITY removedupes_dialog.action_label "Aktion:">
+<!ENTITY action.delete_permanently.label "Vollständiges löschen (nicht in den Papierkorb verschieben)">
+<!ENTITY action.delete_permanently.accesskey "v">
 <!ENTITY action.move.label "Verschieben nach:">
 <!ENTITY action.move.accesskey "V">
-<!ENTITY removeduplicates-button.label "Duplikate entfernen">
+<!ENTITY removeduplicates-button.label "Duplikate löschen">
 <!ENTITY removeduplicates-button.tip "Doppelte Nachrichten entfernen...">
+<!ENTITY removedupes.criteria_menu.label "Vergleichskriterium:">

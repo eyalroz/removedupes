@@ -11,9 +11,11 @@
 <!ENTITY removedupes_dialog.author "Od">
 <!ENTITY removedupes_dialog.recipients "Komu">
 <!ENTITY removedupes_dialog.cc_list "Kópia">
+<!ENTITY removedupes_dialog.flags "Atribúty">
 <!ENTITY removedupes_dialog.folder "Priečinok">
 <!ENTITY removedupes_dialog.line_count "Riadky">
 <!ENTITY removedupes_dialog.date "Dátum">
+<!ENTITY removedupes_dialog.send_time "Čas odoslania">
 <!ENTITY removedupes_dialog.keep_first.label "Prvú kópiu">
 <!ENTITY removedupes_dialog.keep_last.label "Poslednú kópiu">
 <!ENTITY removedupes_dialog.keep_none.label "Nič">
@@ -27,3 +29,4 @@
 <!ENTITY action.move.accesskey "P">
 <!ENTITY removeduplicates-button.label "Odstrániť duplicity">
 <!ENTITY removeduplicates-button.tip "Odstráni duplicitné správy...">
+<!ENTITY removedupes.criteria_menu.label "Kritérium porovnávania">
