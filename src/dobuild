@@ -43,6 +43,7 @@ XPINAME="${SHORTNAME}_${TARGET}.xpi"
 BUILDTOOLSDIR="buildtools"
 export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
 
+# TODO: split builddir by /'s and try to create everything along the path
 if [ ! -d build ] ; then mkdir build; fi
 if [ ! -d $BUILDDIR ] ; then mkdir $BUILDDIR; else rm -rf $BUILDDIR/*; fi
 

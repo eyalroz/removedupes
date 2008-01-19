@@ -5,6 +5,7 @@
 <!ENTITY message_comparison.author.label "Autore (indirizzo &apos;Da&apos;)">
 <!ENTITY message_comparison.recipients.label "Destinatari">
 <!ENTITY message_comparison.cc_list.label "Lista destinatari in Cc">
+<!ENTITY message_comparison.flags.label "Indicatore di stato">
 <!ENTITY message_comparison.message_id.label "ID del messaggio">
 <!ENTITY message_comparison.num_lines.label "Numero di righe nel messaggio">
 <!ENTITY message_comparison.send_time.label "Ora di invio">
@@ -12,6 +13,7 @@
 <!ENTITY message_comparison.folder.label "Cartella">
 <!ENTITY message_comparison.body.label "Corpo">
 <!ENTITY message_comparison.author.access_key "C">
+<!ENTITY message_comparison.flags.access_key "A">
 <!ENTITY message_comparison.recipients.access_key "D">
 <!ENTITY message_comparison.cc_list.access_key "C">
 <!ENTITY message_comparison.message_id.access_key "I">
@@ -24,9 +26,9 @@
 <!ENTITY general_settings.search_subfolders_first.label "Ricerca prima nelle sottocartelle (struttura ad albero)">
 <!ENTITY general_settings.confirm_search_and_deletion.label "Mostra riepilogo della ricerca prima della cancellazione">
 <!ENTITY general_settings.default_action.description "Azione predefinita per i messaggi duplicati:">
-<!ENTITY general_settings.default_action.delete_permanently.label "Cancella permanentemente">
+<!ENTITY general_settings.default_action.delete_permanently.label "Cancella definitivamente">
 <!ENTITY general_settings.default_action.move.label "Sposta nel cestino">
-<!ENTITY general_settings.default_action.delete_permanently.accesskey "P">
+<!ENTITY general_settings.default_action.delete_permanently.accesskey "D">
 <!ENTITY general_settings.default_action.move.accesskey "S">
 <!ENTITY general_settings.search_subfolders_first.access_key "O">
 <!ENTITY general_settings.confirm_search_and_deletion.access_key "R">
