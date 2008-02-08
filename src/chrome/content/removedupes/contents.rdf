@@ -19,19 +19,26 @@
 
   <!-- overlay info -->
   
-  <!-- (note this file is only used with seamonkey; for tbird we have the chrome.manifest -->
+  <!-- (note this file is only used with pre-toolkitization Seamonkey;
+       for Thuderbird and toolkitized Seamonkey we have chrome.manifest -->
   
   <RDF:Seq about="urn:mozilla:overlays">
     <RDF:li resource="chrome://messenger/content/mailWindowOverlay.xul"/>
     <RDF:li resource="chrome://communicator/content/pref/preftree.xul"/>
+    <RDF:li resource="chrome://messenger/content/messenger.xul"/>
   </RDF:Seq>
 
   <RDF:Seq about="chrome://messenger/content/mailWindowOverlay.xul">
     <RDF:li>chrome://removedupes/content/removedupes-mailWindowOverlay.xul</RDF:li>
+    <RDF:li>chrome://removedupes/content/removedupes-button.xul</RDF:li>
   </RDF:Seq>
 
   <RDF:Seq about="chrome://communicator/content/pref/preftree.xul">
      <RDF:li>chrome://removedupes/content/removedupes-preftree.xul</RDF:li>
+  </RDF:Seq>
+
+  <RDF:Seq about="chrome://messenger/content/messenger.xul">
+    <RDF:li>chrome://removedupes/content/removedupes-button.xul</RDF:li>
   </RDF:Seq>
 
 </RDF:RDF>

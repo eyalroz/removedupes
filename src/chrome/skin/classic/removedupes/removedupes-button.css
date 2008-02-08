@@ -1,6 +1,11 @@
 #removedupes-button {
+%ifdef MOZ_THUNDERBIRD
   list-style-image: url("chrome://removedupes/content/removedupes-button-24x24.png");
   -moz-image-region: rect( 0px 24px 24px 0px);
+%else
+  list-style-image: url("chrome://removedupes/content/removedupes-button-29x30.png");
+  -moz-image-region: rect( 0px 30px 29px 0px);
+%endif
 }
 
 [iconsize="small"] #removedupes-button {
