@@ -45,13 +45,15 @@ removedupes.jar:
     locale/ru-RU/removedupes/removedupes-prefs.dtd                (chrome/locale/ru-RU/removedupes/removedupes-prefs.dtd)
     locale/ru-RU/removedupes/removedupes.properties               (chrome/locale/ru-RU/removedupes/removedupes.properties)
 *   content/removedupes/removedupes-prefs.xul                     (chrome/content/removedupes/removedupes-prefs.xul)
+*   content/removedupes/removedupes-button.xul                    (chrome/content/removedupes/removedupes-button.xul)
+*   skin/classic/removedupes/removedupes-button.css               (chrome/skin/classic/removedupes/removedupes-button.css)
 #ifdef MOZ_THUNDERBIRD
     skin/classic/removedupes/removedupes-dialog.css               (chrome/skin/classic/removedupes/removedupes-dialog-tbird.css)
-    content/removedupes/removedupes.png                           (chrome/content/removedupes/removedupes.png)
-*   content/removedupes/removedupes-button.xul                    (chrome/content/removedupes/removedupes-button.xul)
-    skin/classic/removedupes/removedupes-button.css               (chrome/skin/classic/removedupes/removedupes-button.css)
     content/removedupes/removedupes-button-16x16.png              (chrome/content/removedupes/removedupes-button-16x16.png)
     content/removedupes/removedupes-button-24x24.png              (chrome/content/removedupes/removedupes-button-24x24.png)
+    content/removedupes/removedupes.png                           (chrome/content/removedupes/removedupes.png)
+#else
+    content/removedupes/removedupes-button-29x30.png              (chrome/content/removedupes/removedupes-button-29x30.png)
 #endif
 #ifdef MOZ_TOOLKIT_SEAMONKEY
     skin/classic/removedupes/removedupes-dialog.css               (chrome/skin/classic/removedupes/removedupes-dialog-suite.css)

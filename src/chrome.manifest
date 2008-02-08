@@ -51,8 +51,8 @@ locale removedupes pl-PL jar:chrome/removedupes.jar!/locale/pl-PL/removedupes/
 locale removedupes he-IL jar:chrome/removedupes.jar!/locale/he-IL/removedupes/
 locale removedupes ru-RU jar:chrome/removedupes.jar!/locale/ru-RU/removedupes/
 #ifdef MOZ_THUNDERBIRD
-overlay	chrome://messenger/content/messenger.xul chrome://removedupes/content/removedupes-button.xul
 style chrome://global/content/customizeToolbar.xul chrome://removedupes/skin/removedupes-button.css
-style chrome://messenger/content/messenger.xul chrome://removedupes/skin/removedupes-button.css
 #endif
+overlay	chrome://messenger/content/messenger.xul chrome://removedupes/content/removedupes-button.xul
+style chrome://messenger/content/messenger.xul chrome://removedupes/skin/removedupes-button.css
 

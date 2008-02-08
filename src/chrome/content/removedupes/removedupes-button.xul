@@ -13,11 +13,22 @@
 
 #ifdef MOZ_THUNDERBIRD
   <toolbarpalette id="MailToolbarPalette">
+#endif
+#ifdef MOZ_TOOLKIT_SEAMONKEY
+  <toolbar id="msgToolbar">
+#endif
+#ifdef PRETOOLKIT_SEAMONKEY
+  <hbox id="toolbar_button_box">
+#endif
+
     <toolbarbutton id="removedupes-button"
                    oncommand="searchAndRemoveDuplicateMessages();"
                    label="&removeduplicates-button.label;"
                    tooltiptext="&removeduplicates-button.tip;"
                    type="menu-button"
+#ifndef MOZ_THUNDERBIRD
+                   insertafter="button-stop"
+#endif
                    class="toolbarbutton-1 chromeclass-toolbar-additional custombutton">
       <menupopup onpopupshowing="removedupesCriteriaPopupMenuInit()">
         <label value="&removedupes.criteria_menu.label;" style="font-weight: bold"/>
@@ -34,7 +45,14 @@
         <menuitem type="checkbox" id="removedupesCriterionMenuItem_body" label="&message_comparison.body.label;" oncommand="toggleDupeSearchCriterion(event,'body')"/>
       </menupopup>
     </toolbarbutton>
+#ifdef MOZ_THUNDERBIRD
   </toolbarpalette>
+#endif
+#ifdef MOZ_TOOLKIT_SEAMONKEY
+  </toolbar>
+#endif
+#ifdef PRETOOLKIT_SEAMONKEY
+   </hbox>
 #endif
 
 </overlay>
