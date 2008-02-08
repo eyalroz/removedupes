@@ -239,8 +239,9 @@ function rebuildDuplicateSetsTree()
 
   clearStatusBar();
 
-  while (gTreeChildren.firstChild)
-   gTreeChildren.removeChild(gTreeChildren.firstChild);
+  gTree.removeChild(gTreeChildren);
+
+  gTreeChildren = document.createElement("treechildren");
 
   document.getElementById("main-status-panel").setAttribute("label",
     gRemoveDupesStrings.GetStringFromName("removedupes.status_panel.populating_list"));
@@ -291,6 +292,7 @@ function rebuildDuplicateSetsTree()
    
     gTreeChildren.appendChild(dupeSetTreeItem);
   }
+  gTree.appendChild(gTreeChildren);
   updateStatusBar();
 }
 
