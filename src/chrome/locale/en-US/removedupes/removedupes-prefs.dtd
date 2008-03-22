@@ -23,6 +23,7 @@
 <!ENTITY message_comparison.folder.access_key "o">
 <!ENTITY message_comparison.body.access_key "B">
 <!ENTITY general_settings.tab_title "General Settings">
+<!ENTITY general_settings.search_subfolders.label "Search subfolders of selected top folder(s)">
 <!ENTITY general_settings.search_subfolders_first.label "Search subfolders first (postorder)">
 <!ENTITY general_settings.confirm_search_and_deletion.label "Review search results before deletion">
 <!ENTITY general_settings.default_action.description "Default action for duplicate messages:">
@@ -31,6 +32,7 @@
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "P">
 <!ENTITY general_settings.default_action.move.accesskey "M">
 <!ENTITY general_settings.search_subfolders_first.access_key "s">
+<!ENTITY general_settings.search_subfolders.access_key "s">
 <!ENTITY general_settings.confirm_search_and_deletion.access_key "c">
 <!ENTITY removedupes-preftree-label "Remove Duplicates">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
