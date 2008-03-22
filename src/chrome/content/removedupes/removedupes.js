@@ -17,7 +17,7 @@ var gImapService =
 
 var gStatusTextField;
 
-var gSearchCriterionUsageDefaults = {
+const SearchCriterionUsageDefaults = {
   message_id: true,
   send_time: true,
   folder: true,
@@ -75,12 +75,15 @@ UpdateFolderDoneListener.prototype.OnStopRunningUrl =
 //---------------------------------------------------
 function DupeSearchData()
 {
+  this.searchSubfolders = 
+    gRemoveDupesPrefs.getBoolPref("search_subfolders"); 
+
   this.useCriteria = new Object;
   // which information will we use for comparing messages?
-  for(criterion in gSearchCriterionUsageDefaults) {
+  for(criterion in SearchCriterionUsageDefaults) {
     this.useCriteria[criterion] = 
-     gRemoveDupesPrefs.getBoolPref("comparison_criteria." + criterion, 
-                gSearchCriterionUsageDefaults[criterion]);
+      gRemoveDupesPrefs.getBoolPref("comparison_criteria." + criterion, 
+        SearchCriterionUsageDefaults[criterion]);
   }
 
   // an optimization: if we're comparing bodies, there shouldn't be any harm
@@ -256,7 +259,7 @@ function finishAddSearchFolders(folder,searchData)
 
   // traverse the children
 
-  if (folder.hasSubFolders) {
+  if (searchData.searchSubfolders && folder.hasSubFolders) {
     var subFoldersIterator = folder.GetSubFolders();
     do {
       addSearchFolders(
@@ -623,7 +626,7 @@ function toggleDupeSearchCriterion(ev,criterion)
 {
   var useCriterion = 
     !gRemoveDupesPrefs.getBoolPref("comparison_criteria." + criterion, 
-      gSearchCriterionUsageDefaults[criterion]);
+      SearchCriterionUsageDefaults[criterion]);
   gRemoveDupesPrefs.setBoolPref("comparison_criteria." + criterion, useCriterion);
   document.getElementById('removedupesCriterionMenuItem_' + criterion).setAttribute("checked", useCriterion ? "true" : "false");
   ev.stopPropagation();
@@ -631,11 +634,11 @@ function toggleDupeSearchCriterion(ev,criterion)
 
 function removedupesCriteriaPopupMenuInit()
 {
-  for(criterion in gSearchCriterionUsageDefaults) {
+  for(criterion in SearchCriterionUsageDefaults) {
     document.getElementById('removedupesCriterionMenuItem_' + criterion)
             .setAttribute("checked",
               (gRemoveDupesPrefs.getBoolPref("comparison_criteria." + criterion, 
-                gSearchCriterionUsageDefaults[criterion]) ? "true" : "false"));
+                SearchCriterionUsageDefaults[criterion]) ? "true" : "false"));
   }
 }
 
