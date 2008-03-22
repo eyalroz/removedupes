@@ -101,7 +101,7 @@ function getBuildID() {
 
 // Helper object for preferences
 
-const preferencePrefix = "removedupes.mail.";
+const preferencePrefix = "removedupes.";
 
 var gRemoveDupesPrefs = {
   _prefService: null,
