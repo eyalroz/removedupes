@@ -48,6 +48,9 @@
       <preference id="removedupes.comparison_criteria.body"
                   name="removedupes.comparison_criteria.body"
                   type="bool"/>
+      <preference id="removedupes.search_subfolders"
+                  name="removedupes.search_subfolders"
+                  type="bool"/>
       <preference id="removedupes.confirm_search_and_deletion"
                   name="removedupes.confirm_search_and_deletion"
                   type="bool"/>
@@ -69,7 +72,8 @@
 #ifndef MOZ_THUNDERBIRD
     <script type="application/x-javascript">
       var panel = "chrome://removedupes/content/removedupes-prefs.xul";
-      var _elementIDs = ["removedupes.confirm_search_and_deletion",
+      var _elementIDs = ["removedupes.search_subfolders",
+                         "removedupes.confirm_search_and_deletion",
                          "removedupes.default_action",
                          "removedupes.comparison_criteria.author",
                          "removedupes.comparison_criteria.recipients",
@@ -96,6 +100,12 @@
       <tabpanels flex="1">
         <tabpanel id="general_settings_panel">
           <vbox flex="1">
+            <checkbox preference="removedupes.search_subfolders"
+              prefstring="removedupes.search_subfolders"
+              id="removedupes.search_subfolders"
+              label="&general_settings.search_subfolders.label;"
+              accesskey="&general_settings.search_subfolders.access_key;"
+              autostretch="never"/>
             <checkbox preference="removedupes.confirm_search_and_deletion"
               prefstring="removedupes.confirm_search_and_deletion"
               id="removedupes.confirm_search_and_deletion"
