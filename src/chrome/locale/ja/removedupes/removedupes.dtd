@@ -9,8 +9,8 @@
 <!ENTITY removedupes_dialog.subject "件名">
 <!ENTITY removedupes_dialog.sender "送信者">
 <!ENTITY removedupes_dialog.author "送信者">
-<!ENTITY removedupes_dialog.recipients "受取人">
-<!ENTITY removedupes_dialog.cc_list "同報人">
+<!ENTITY removedupes_dialog.recipients "受信者">
+<!ENTITY removedupes_dialog.cc_list "同報者">
 <!ENTITY removedupes_dialog.flags "フラグ">
 <!ENTITY removedupes_dialog.folder "フォルダ">
 <!ENTITY removedupes_dialog.line_count "本文行数">
@@ -29,4 +29,4 @@
 <!ENTITY action.move.accesskey "m">
 <!ENTITY removeduplicates-button.label "重複削除">
 <!ENTITY removeduplicates-button.tip "重複メッセージを削除します">
-<!ENTITY removedupes.criteria_menu.label "Comparison Criteria:">
+<!ENTITY removedupes.criteria_menu.label "比較基準：">
