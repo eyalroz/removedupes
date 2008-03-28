@@ -142,6 +142,7 @@
         <description  width="60">
           &removedupes_dialog.keep_label;
         </description>
+        <button id="keepPresetOriginalButton"  label="&removedupes_dialog.keep_preset_originals.label;" oncommand="markKeepPresetOriginals();"/>
         <button id="keepFirstButton" label="&removedupes_dialog.keep_first.label;" oncommand="markKeepOneInEveryDupeSet(true);"/>
         <button id="keepLastButton" label="&removedupes_dialog.keep_last.label;" oncommand="markKeepOneInEveryDupeSet(false);"/>
         <button id="keepAllButton" label="&removedupes_dialog.keep_all.label;" oncommand="markNoDupesForDeletion();"/>
