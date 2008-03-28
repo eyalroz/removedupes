@@ -9,7 +9,7 @@
     <em:id>{a300a000-5e21-4ee0-a115-9ec8f4eaa92b}</em:id>
 #expand    <em:version>__VERSION__</em:version>
     <em:name>Remove Duplicate Messages (Alternate)</em:name>
-    <em:description>Finds duplicate messages in mail folders and removes them.</em:description>
+    <em:description>Locates duplicate messages in mail folders and removes them.</em:description>
     <em:creator>Eyal Rozenberg</em:creator>
     <em:homepageURL>https://removedupes.mozdev.org/</em:homepageURL>
 
@@ -22,7 +22,7 @@
      <Description>
        <em:id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</em:id>
        <em:minVersion>1.5</em:minVersion>
-       <em:maxVersion>2.0.0.*</em:maxVersion>
+       <em:maxVersion>3.0a1</em:maxVersion>
      </Description>
     </em:targetApplication>
 #endif
