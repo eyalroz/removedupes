@@ -99,13 +99,18 @@ function initDupeReviewDialog()
   gDBView                   = window.arguments[3];
   var useCriteria           = window.arguments[4];
   gDupeSetsHashMap          = window.arguments[5];
+  gOriginalsFolderUris     = window.arguments[6];
   
   // let's replace the URI's with all the necessary information
   // for the display dialog:
 
   gNumberOfDupeSets = 0;
   gTotalNumberOfDupes = 0;
-  
+
+  // if no folders were pre-set as the 'originals', let's not
+  // have the button mentioning them
+  document.getElementById('keepPresetOriginalButton')
+          .setAttribute('hidden',(!gOriginalsFolderUris));
   initializeFolderPicker();
   document.getElementById('action').value  = gRemoveDupesPrefs.getCharPref('default_action', 'move');
   gTree = document.getElementById("dupeSetsTree");
@@ -130,11 +135,21 @@ function initDupeReviewDialog()
     var dupeSet = gDupeSetsHashMap[hashValue];
     for (var i=0; i < dupeSet.length; i++) {
       dupeSet[i] = new dupeMessageRecord(dupeSet[i]);
+      if (gOriginalsFolderUris) {
+        // if we have pre-set originals folders, the default is to 
+        // keep all of messages in them and remove their dupes elsewhere
+        dupeSet[i].toKeep = (gOriginalsFolderUris[dupeSet[i].folder] ? true : false);
+      }
       gTotalNumberOfDupes++;
 #ifdef DEBUG_initDupeReviewDialog
       jsConsoleService.logStringMessage('dupe ' + i + ' for hash value ' + hashValue + ':\n' + dupeSet[i].uri);
 #endif
       
+    }
+    if (!gOriginalsFolderUris) {
+      // if we don't have pre-set originals,
+      // the default is to keep the first dupe in each set
+      dupeSet[0].toKeep = true;
     }
   }
 #ifdef DEBUG_profile
@@ -162,8 +177,12 @@ function initDupeReviewDialog()
     sortDupeSetsByField(document.getElementById(sortColumnId).getAttribute('fieldName'));
 
   for (hashValue in gDupeSetsHashMap) {
-    // first dupe in a dupe set is kept by default
-    gDupeSetsHashMap[hashValue][0].toKeep = true;
+    if (gOriginalsFolderUris) {
+      // by default, dupes in the pre-set originals folders are kept
+      gDupeSetsHashMap[hashValue][0].toKeep = true;
+    }
+    else {
+   }
   }
 
   rebuildDuplicateSetsTree();
@@ -571,6 +590,19 @@ function markKeepOneInEveryDupeSet(keepFirst)
   
   resetCheckboxValues();
 }
+
+function markKeepPresetOriginals()
+{
+  for (hashValue in gDupeSetsHashMap) {
+    var dupeSet = gDupeSetsHashMap[hashValue];
+    for (var i=0; i < dupeSet.length; i++ ) {
+      dupeSet[i].toKeep =
+        (gOriginalsFolderUris[dupeSet[i].folder] ? true : false);
+    }
+  }
+  resetCheckboxValues();
+}
+
 
 function markNoDupesForDeletion()
 {
