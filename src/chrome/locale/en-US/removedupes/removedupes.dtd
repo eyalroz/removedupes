@@ -1,8 +1,8 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Remove Duplicates...">
-<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Set Originals for Dupe Search">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Set original message folder(s) for next duplicate search">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">
-<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "O">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "o">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "D">
 <!ENTITY removedupes_dialog.dialog_title "Duplicate Messages Deletion">
