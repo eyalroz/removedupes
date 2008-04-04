@@ -250,31 +250,51 @@ function beginSearchForDuplicateMessages(searchData)
 function addSearchFolders(folder, searchData)
 {
 #ifdef DEBUG_addSearchFolders
-  jsConsoleService.logStringMessage('addSearchFolders for folder ' + folder.abbreviatedName);
+  jsConsoleService.logStringMessage('addSearchFolders for folder ' + folder.abbreviatedName +
+   '\nrootFolder = ' + folder.rootFolder + ((folder.rootFolder == folder) ? ' - self!' : ' - not self!') +
+   '\ncanFileMessages = ' + folder.canFileMessages +
+   '\nfolder.canRename = ' + folder.canRename
+  );
 #endif
 
- if (!folder.canFileMessages && !folder.rootFolder) {
-   // it's a news folder or some such thing which we shouldn't mess with
-   return;
- }
-   
- if (!folder.canRename && !folder.rootFolder) {
-   // it's a special folder
-   if (!gAllowedSpecialFolders.test(folder.abbreviatedName))
-     return;
- }
-
- searchData.remainingFolders++;
-
-  if (!searchData.originalsFolderUris || !searchData.originalsFolderUris[folder.URI]) {
+  if (!folder.canRename && (folder.rootFolder != folder) ) {
+    // it's a special folder
+    if (!searchData.allowedSpecialFolders.test(folder.abbreviatedName)) {
 #ifdef DEBUG_addSearchFolders
-  jsConsoleService.logStringMessage('not pushing folder ' + folder.abbreviatedName);
+      jsConsoleService.logStringMessage('skipping special folder ' + folder.abbreviatedName + '\n(matched by ' + searchData.allowedSpecialFolders + ')');
 #endif
-    searchData.folders.push(folder);
+      return;
+    }
+#ifdef DEBUG_addSearchFolders
+    jsConsoleService.logStringMessage('special folder ' + folder.abbreviatedName + ' is allowed');
+#endif
+  }
+
+  searchData.remainingFolders++;
+
+  if (folder.canFileMessages) {
+    if (searchData.originalsFolderUris) {
+      if (!searchData.originalsFolderUris[folder.URI]) {
+#ifdef DEBUG_addSearchFolders
+        jsConsoleService.logStringMessage('pushing non-originals folder ' + folder.abbreviatedName);
+#endif
+        searchData.folders.push(folder);
+      }
+#ifdef DEBUG_addSearchFolders
+      else jsConsoleService.logStringMessage('not pushing folder ' + folder.abbreviatedName + ' - it\'s an originals folder');
+#endif
+    }
+    else {
+#ifdef DEBUG_addSearchFolders
+      jsConsoleService.logStringMessage('pushing folder ' + folder.abbreviatedName);
+#endif
+      searchData.folders.push(folder);
+    }
   }
 #ifdef DEBUG_addSearchFolders
-  else jsConsoleService.logStringMessage('not pushing folder ' + folder.abbreviatedName + ' - it\'s an originals folder');
+  else jsConsoleService.logStringMessage('not pushing folder ' + folder.abbreviatedName + ' - since it has no root folder or can\'t file messages');
 #endif
+
   
   // is this an IMAP folder?
   
@@ -525,7 +545,11 @@ function populateDupeSetsHash(searchData)
         'updateDupeSetsHashMapWithFolderMessages for folder ' + folder.abbreviatedName + '\n' +
         (allowNewUris ? '' : 'not') + 'allowing new URIs');
 #endif
-    if (folder.isServer == true) return;
+    if (folder.isServer == true) {
+      // shouldn't get here
+      i++;
+      continue;
+    }
 
     var folderMessageHdrsIterator;
     try {
@@ -829,9 +853,20 @@ function removedupesCriteriaPopupMenuInit()
 
 function setOriginalsFolders()
 {
-  gOriginalsFolders  = GetSelectedMsgFolders();
+  gOriginalsFolders = GetSelectedMsgFolders();
   if (gOriginalsFolders.length == 0) {
     gOriginalsFolders = null;
+  }
+  var allowedSpecialFolders = 
+    new RegExp(gRemoveDupesPrefs.getLocalizedStringPref('allowed_special_folders', ''), 'i');
+  for (var i = 0; i < gOriginalsFolders.length; i++) {
+    if (!gOriginalsFolders[i].canFileMessages ||
+        (gOriginalsFolders[i].rootFolder == gOriginalsFolders[i]) ||
+        (!gOriginalsFolders[i].canRename && 
+         (!allowedSpecialFolders.test(gOriginalsFolders[i].abbreviatedName)))) {
+      alert(gRemoveDupesStrings.GetStringFromName("removedupes.invalid_originals_folders"));
+      gOriginalsFolders = null;
+    }
   }
 }
 
