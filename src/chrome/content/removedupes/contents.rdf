@@ -24,7 +24,9 @@
   
   <RDF:Seq about="urn:mozilla:overlays">
     <RDF:li resource="chrome://messenger/content/mailWindowOverlay.xul"/>
+#ifdef MOZ_PRETOOLKIT_SEAMONKEY
     <RDF:li resource="chrome://communicator/content/pref/preftree.xul"/>
+#endif
     <RDF:li resource="chrome://messenger/content/messenger.xul"/>
   </RDF:Seq>
 
@@ -33,9 +35,11 @@
     <RDF:li>chrome://removedupes/content/removedupes-button.xul</RDF:li>
   </RDF:Seq>
 
+#ifdef MOZ_PRETOOLKIT_SEAMONKEY
   <RDF:Seq about="chrome://communicator/content/pref/preftree.xul">
      <RDF:li>chrome://removedupes/content/removedupes-preftree.xul</RDF:li>
   </RDF:Seq>
+#endif
 
   <RDF:Seq about="chrome://messenger/content/messenger.xul">
     <RDF:li>chrome://removedupes/content/removedupes-button.xul</RDF:li>
