@@ -3,7 +3,7 @@
 <?xml-stylesheet href="chrome://global/skin/"?>
 <?xml-stylesheet href="chrome://messenger/skin/preferences/preferences.css"?>
 
-#ifdef MOZ_THUNDERBIRD
+#ifdef MOZ_PRETOOLKIT_SEAMONKEY
 <!DOCTYPE prefwindow [
   <!ENTITY % removedupesprefDTD SYSTEM
              "chrome://removedupes/locale/removedupes-prefs.dtd">
@@ -13,7 +13,7 @@
 <!DOCTYPE page SYSTEM "chrome://removedupes/locale/removedupes-prefs.dtd">
 #endif
 
-#ifdef MOZ_THUNDERBIRD
+#ifndef MOZ_PRETOOLKIT_SEAMONKEY
 <prefwindow xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
             title="&prefs_dialog_title;"
             dlgbuttons="accept,cancel">
@@ -69,7 +69,7 @@
 
     <script type="application/x-javascript"
       src="chrome://removedupes/content/removedupes-prefs.js"/>
-#ifndef MOZ_THUNDERBIRD
+#ifdef MOZ_PRETOOLKIT_SEAMONKEY
     <script type="application/x-javascript">
       var panel = "chrome://removedupes/content/removedupes-prefs.xul";
       var _elementIDs = ["removedupes.search_subfolders",
@@ -191,7 +191,7 @@
         </tabpanel>
       </tabpanels>
     </tabbox>
-#ifdef MOZ_THUNDERBIRD
+#ifndef MOZ_PRETOOLKIT_SEAMONKEY
   </prefpane>
 </prefwindow>
 #else

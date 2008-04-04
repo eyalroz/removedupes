@@ -49,7 +49,7 @@
 
     <em:iconURL>chrome://removedupes/content/removedupes.png</em:iconURL>
 
-#ifdef MOZ_THUNDERBIRD
+#ifndef MOZ_PRETOOLKIT_SEAMONKEY
     <em:optionsURL>chrome://removedupes/content/removedupes-prefs.xul</em:optionsURL>
 #endif
 

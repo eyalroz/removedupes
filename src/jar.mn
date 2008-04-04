@@ -57,7 +57,6 @@ removedupes.jar:
 #endif
 #ifdef MOZ_TOOLKIT_SEAMONKEY
     skin/classic/removedupes/removedupes-dialog.css               (chrome/skin/classic/removedupes/removedupes-dialog-suite.css)
-*   content/removedupes/removedupes-preftree.xul                  (chrome/content/removedupes/removedupes-preftree.xul)
     content/removedupes/removedupes.png                           (chrome/content/removedupes/removedupes.png)
 #endif
 #ifdef MOZ_PRETOOLKIT_SEAMONKEY
