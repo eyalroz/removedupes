@@ -5,14 +5,24 @@
 
 <ul id="version-history">
 
-<!--<li><a name="0.2.3">version 0.2.3</a>
+<!--<li><a name="0.3.1">version 0.3.1</a>
   <ul>
-    <li>
     <li>
     <li>
     <li>
   </ul>
 </li>-->
+
+<li><a name="0.3">version 0.3</a>
+  <ul>
+    <li>Can now abort search by pressing the Escape key (although key responsiveness during message body comparisons is poor in Thunderbird 2.x and good with Thunderbird 3.x and Seamonkey 2.x).
+    <li>Can now choose to search a folder for dupes without including its subfolders in the search.
+    <li>Can now mark a set of folders as containing the originals, so that only dupes of these messages are found, and the review dialog marks the 'non-original' copies for deletion.
+    <li>Search progress now reported every short while in the status bar.
+    <li>Search time-memory balance changed for search including body comparison - now using more memory and significantly less time when comparing many bodies (quicksort instead of Theta(n^2) algorithm).
+    <li>Review Dialog: Improved responsiveness when toggling 'keep' status.
+  </ul>
+</li>
 <li><a name="0.2.2">version 0.2.2</a>
   <ul>
     <li>Toolbar button: Added a side-menu for quick-selecting comparison criteria.
