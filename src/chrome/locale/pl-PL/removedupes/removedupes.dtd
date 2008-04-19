@@ -1,6 +1,8 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
-<!ENTITY removedupes.remove_duplicates_menuitem.label "Usuń duplikaty...">
-<!ENTITY removedupes.remove_duplicates_menuitem.accesskey "d">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Usuń duplikaty...">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Oznacz wiadomości jako oryginalne dla późniejszego wyszukiwania duplikatów">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "O">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "D">
 <!ENTITY removedupes_dialog.dialog_title "Usuwanie duplikatów wiadomości">
@@ -16,6 +18,7 @@
 <!ENTITY removedupes_dialog.line_count "Liczbę linii">
 <!ENTITY removedupes_dialog.date "Datę">
 <!ENTITY removedupes_dialog.send_time "Czas wysłania">
+<!ENTITY removedupes_dialog.keep_preset_originals.label "Oznacz oryginały">
 <!ENTITY removedupes_dialog.keep_first.label "Pierwszą kopię">
 <!ENTITY removedupes_dialog.keep_last.label "Ostatnią kopię">
 <!ENTITY removedupes_dialog.keep_none.label "Brak kopii">
