@@ -23,6 +23,7 @@
 <!ENTITY message_comparison.folder.access_key "e">
 <!ENTITY message_comparison.body.access_key "T">
 <!ENTITY general_settings.tab_title "Všeobecné nastavenia">
+<!ENTITY general_settings.search_subfolders.label "Prehľadávať podpriečinky vybraného priečinka (priečinkov)">
 <!ENTITY general_settings.search_subfolders_first.label "Najskôr prehľadať podpriečinky">
 <!ENTITY general_settings.confirm_search_and_deletion.label "Prezrieť výsledky vyhľadávania pred odstránením">
 <!ENTITY general_settings.default_action.description "Predvolené rozhodnutie pre duplicitné správy:">
@@ -31,6 +32,7 @@
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "N">
 <!ENTITY general_settings.default_action.move.accesskey "u">
 <!ENTITY general_settings.search_subfolders_first.access_key "j">
+<!ENTITY general_settings.search_subfolders.access_key "h">
 <!ENTITY general_settings.confirm_search_and_deletion.access_key "z">
 <!ENTITY removedupes-preftree-label "Odstrániť duplicity">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">

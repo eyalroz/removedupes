@@ -17,12 +17,13 @@
 <!ENTITY message_comparison.recipients.access_key "R">
 <!ENTITY message_comparison.cc_list.access_key "C">
 <!ENTITY message_comparison.message_id.access_key "I">
-<!ENTITY message_comparison.num_lines.access_key "I">
+<!ENTITY message_comparison.num_lines.access_key "l">
 <!ENTITY message_comparison.send_time.access_key "t">
 <!ENTITY message_comparison.subject.access_key "S">
 <!ENTITY message_comparison.folder.access_key "o">
 <!ENTITY message_comparison.body.access_key "B">
 <!ENTITY general_settings.tab_title "一般設定">
+<!ENTITY general_settings.search_subfolders.label "搜尋所選上層資料夾的子資料夾">
 <!ENTITY general_settings.search_subfolders_first.label "先搜尋子資料夾 (postorder)">
 <!ENTITY general_settings.confirm_search_and_deletion.label "刪除前先檢視搜尋結果">
 <!ENTITY general_settings.default_action.description "發現重複郵件時的預設動作:">
@@ -31,6 +32,7 @@
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "P">
 <!ENTITY general_settings.default_action.move.accesskey "M">
 <!ENTITY general_settings.search_subfolders_first.access_key "s">
+<!ENTITY general_settings.search_subfolders.access_key "s">
 <!ENTITY general_settings.confirm_search_and_deletion.access_key "c">
 <!ENTITY removedupes-preftree-label "移除重複的郵件">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
