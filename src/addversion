@@ -25,9 +25,9 @@ fi
 
 # build the release versions and place them in the appropriate directories
 
-(./dobuild suite && ./dobuild tbird ) || exit
+(./dobuild suite && ./dobuild tbird && ./dobuild suiterunner ) || exit
 
-for target in tbird suite; do
+for target in tbird suite suiterunner; do
         cp build/${target}/${SHORTNAME}_${target}.xpi ${DOWNLOADS}/${VERSION}/${SHORTNAME}_${VERSION}_${target}.xpi
         cp build/${target}/${SHORTNAME}_${target}.xpi ${DOWNLOADS}/latest/
 done
