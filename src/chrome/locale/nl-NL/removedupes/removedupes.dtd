@@ -1,6 +1,8 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
-<!ENTITY removedupes.remove_duplicates_menuitem.label "Duplicaten verwijderen...">
-<!ENTITY removedupes.remove_duplicates_menuitem.accesskey "D">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Duplicaten verwijderen...">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Originelen instellen voor zoeken naar duplicaten">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "O">
 <!ENTITY key-removedupes.modifiers "accel, shift">
 <!ENTITY key-removedupes.keycode "D">
 <!ENTITY removedupes_dialog.dialog_title "Duplicaatberichten verwijderen">
@@ -16,6 +18,7 @@
 <!ENTITY removedupes_dialog.line_count "Aantal regels">
 <!ENTITY removedupes_dialog.date "Datum">
 <!ENTITY removedupes_dialog.send_time "Verzendtijd">
+<!ENTITY removedupes_dialog.keep_preset_originals.label "Ingestelde originelen">
 <!ENTITY removedupes_dialog.keep_first.label "Eerste exemplaar">
 <!ENTITY removedupes_dialog.keep_last.label "Laatste exemplaar">
 <!ENTITY removedupes_dialog.keep_none.label "Geen exemplaren">

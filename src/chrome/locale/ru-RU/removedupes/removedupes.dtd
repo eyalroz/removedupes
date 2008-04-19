@@ -1,6 +1,8 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
-<!ENTITY removedupes.remove_duplicates_menuitem.label "Удалить одинаковые сообщения...">
-<!ENTITY removedupes.remove_duplicates_menuitem.accesskey "У">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "У">
 <!ENTITY removedupes_dialog.dialog_title "Удаление одинаковых сообщений">
@@ -16,6 +18,7 @@
 <!ENTITY removedupes_dialog.line_count "Кол-во строк">
 <!ENTITY removedupes_dialog.date "Дата">
 <!ENTITY removedupes_dialog.send_time "Время отправки">
+<!ENTITY removedupes_dialog.keep_preset_originals.label "">
 <!ENTITY removedupes_dialog.keep_first.label "Первая копия">
 <!ENTITY removedupes_dialog.keep_last.label "Последняя копия">
 <!ENTITY removedupes_dialog.keep_none.label "Ни одна">

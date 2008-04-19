@@ -1,6 +1,8 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
-<!ENTITY removedupes.remove_duplicates_menuitem.label "Odstrániť duplicity...">
-<!ENTITY removedupes.remove_duplicates_menuitem.accesskey "d">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Odstrániť duplicity">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Nastaviť predvolené hodnoty pre vyhľadávanie duplicít">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "O">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "f">
 <!ENTITY removedupes_dialog.dialog_title "Odstránenie duplicitných správ">
@@ -16,6 +18,7 @@
 <!ENTITY removedupes_dialog.line_count "Riadky">
 <!ENTITY removedupes_dialog.date "Dátum">
 <!ENTITY removedupes_dialog.send_time "Čas odoslania">
+<!ENTITY removedupes_dialog.keep_preset_originals.label "Stanoviť originály">
 <!ENTITY removedupes_dialog.keep_first.label "Prvú kópiu">
 <!ENTITY removedupes_dialog.keep_last.label "Poslednú kópiu">
 <!ENTITY removedupes_dialog.keep_none.label "Nič">
