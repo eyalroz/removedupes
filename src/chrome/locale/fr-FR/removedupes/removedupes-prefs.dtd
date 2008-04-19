@@ -2,7 +2,7 @@
 <!ENTITY guide-url "http://site.pas.encore.fait/">
 <!ENTITY message_comparison.tab_title "Comparaison de messages">
 <!ENTITY message_comparison.tab_description "Éléments de message servant de critères de comparaison :">
-<!ENTITY message_comparison.author.label "Expéditeur (adresse &quot;De :&quot;)">
+<!ENTITY message_comparison.author.label "Expéditeur (adresse « De : »)">
 <!ENTITY message_comparison.recipients.label "Destinataires">
 <!ENTITY message_comparison.cc_list.label "Liste des Cc">
 <!ENTITY message_comparison.flags.label "Drapeaux concernant l&apos;état">
@@ -23,6 +23,7 @@
 <!ENTITY message_comparison.folder.access_key "o">
 <!ENTITY message_comparison.body.access_key "C">
 <!ENTITY general_settings.tab_title "Paramètres principaux">
+<!ENTITY general_settings.search_subfolders.label "Recherche les sous-dossiers du ou des dossiers sélectionnés">
 <!ENTITY general_settings.search_subfolders_first.label "Rechercher d&apos;abord dans les sous-dossiers">
 <!ENTITY general_settings.confirm_search_and_deletion.label "Avant la suppression, apercevoir les résultats de la recherche">
 <!ENTITY general_settings.default_action.description "Action par défaut pour les doublons :">
@@ -31,6 +32,7 @@
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "d">
 <!ENTITY general_settings.default_action.move.accesskey "M">
 <!ENTITY general_settings.search_subfolders_first.access_key "s">
+<!ENTITY general_settings.search_subfolders.access_key "s">
 <!ENTITY general_settings.confirm_search_and_deletion.access_key "v">
 <!ENTITY removedupes-preftree-label "Supprimer les doublons">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternatif)">

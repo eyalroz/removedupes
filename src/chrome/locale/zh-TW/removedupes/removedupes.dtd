@@ -1,6 +1,8 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
-<!ENTITY removedupes.remove_duplicates_menuitem.label "移除重複的郵件...">
-<!ENTITY removedupes.remove_duplicates_menuitem.accesskey "D">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "移除重複的郵件...">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "設定下次重複搜尋的原始資料夾">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "O">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "D">
 <!ENTITY removedupes_dialog.dialog_title "刪除重複的郵件">
@@ -16,6 +18,7 @@
 <!ENTITY removedupes_dialog.line_count "行數">
 <!ENTITY removedupes_dialog.date "日期">
 <!ENTITY removedupes_dialog.send_time "傳送時間">
+<!ENTITY removedupes_dialog.keep_preset_originals.label "預設原始資料夾">
 <!ENTITY removedupes_dialog.keep_first.label "第一個副本">
 <!ENTITY removedupes_dialog.keep_last.label "最後一個副本">
 <!ENTITY removedupes_dialog.keep_none.label "無副本">

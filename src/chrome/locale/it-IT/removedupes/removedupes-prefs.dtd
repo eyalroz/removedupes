@@ -23,6 +23,7 @@
 <!ENTITY message_comparison.folder.access_key "T">
 <!ENTITY message_comparison.body.access_key "P">
 <!ENTITY general_settings.tab_title "Opzioni generali">
+<!ENTITY general_settings.search_subfolders.label "Cerca nelle sottocartelle delle cartelle selezionate">
 <!ENTITY general_settings.search_subfolders_first.label "Ricerca prima nelle sottocartelle (struttura ad albero)">
 <!ENTITY general_settings.confirm_search_and_deletion.label "Mostra riepilogo della ricerca prima della cancellazione">
 <!ENTITY general_settings.default_action.description "Azione predefinita per i messaggi duplicati:">
@@ -31,6 +32,7 @@
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "D">
 <!ENTITY general_settings.default_action.move.accesskey "S">
 <!ENTITY general_settings.search_subfolders_first.access_key "O">
+<!ENTITY general_settings.search_subfolders.access_key "C">
 <!ENTITY general_settings.confirm_search_and_deletion.access_key "R">
 <!ENTITY removedupes-preftree-label "Rimuovi duplicati">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
