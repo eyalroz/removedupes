@@ -334,7 +334,16 @@ function finishAddSearchFolders(folder,searchData)
   // traverse the children
 
   if (searchData.searchSubfolders && folder.hasSubFolders) {
-    var subFoldersIterator = folder.GetSubFolders();
+    // the GetSubFolders() function was removed in bugzilla.mozilla.org bug 420614;
+    // so we have here both its use for older builds and the workaround created
+    // by the patch for that bug
+    var subFoldersIterator;
+    try {
+      subFoldersIterator = folder.GetSubFolders();
+    }
+    catch(ex) {
+      subFoldersIterator = folder.subFoldersObsolete;
+    }
     do {
       addSearchFolders(
         subFoldersIterator.currentItem().QueryInterface(
