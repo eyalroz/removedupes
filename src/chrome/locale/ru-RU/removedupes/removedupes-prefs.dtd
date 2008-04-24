@@ -23,7 +23,7 @@
 <!ENTITY message_comparison.folder.access_key "П">
 <!ENTITY message_comparison.body.access_key "С">
 <!ENTITY general_settings.tab_title "Основные настройки">
-<!ENTITY general_settings.search_subfolders.label "">
+<!ENTITY general_settings.search_subfolders.label "Search subfolders of selected top folder(s)">
 <!ENTITY general_settings.search_subfolders_first.label "Сначала искать в подпапках (обратный порядок)">
 <!ENTITY general_settings.confirm_search_and_deletion.label "Пересмотреть результаты поиска перед удалением">
 <!ENTITY general_settings.default_action.description "Действия по умолчанию для удаляемых сообщений:">
@@ -32,7 +32,7 @@
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "У">
 <!ENTITY general_settings.default_action.move.accesskey "П">
 <!ENTITY general_settings.search_subfolders_first.access_key "и">
-<!ENTITY general_settings.search_subfolders.access_key "">
+<!ENTITY general_settings.search_subfolders.access_key "s">
 <!ENTITY general_settings.confirm_search_and_deletion.access_key "с">
 <!ENTITY removedupes-preftree-label "Удалить дубликаты">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">

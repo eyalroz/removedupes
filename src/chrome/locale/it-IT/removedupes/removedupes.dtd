@@ -18,7 +18,7 @@
 <!ENTITY removedupes_dialog.line_count "N° righe">
 <!ENTITY removedupes_dialog.date "Data">
 <!ENTITY removedupes_dialog.send_time "Ora di invio">
-<!ENTITY removedupes_dialog.keep_preset_originals.label "">
+<!ENTITY removedupes_dialog.keep_preset_originals.label "Preset Originals">
 <!ENTITY removedupes_dialog.keep_first.label "La prima copia">
 <!ENTITY removedupes_dialog.keep_last.label "L&apos;ultima copia">
 <!ENTITY removedupes_dialog.keep_none.label "Nessuna copia">
