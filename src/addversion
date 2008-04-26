@@ -55,7 +55,7 @@ mkdir ${SRCDIR}/${TMPDIR}
 cd ${SRCDIR}/${TMPDIR}
 cvs -d $CVSROOT export -r ${RELEASE_TAG} -d ${SHORTNAME} ${SHORTNAME}/src
 cd ${SRCDIR}
-rm -rf ${SRCDIR}/${TMPDIR}
+#rm -r ${SRCDIR}/${TMPDIR}
 
 # add the release to the CVS repository
 # (it gets propagated to the mozdev download mirrors)
