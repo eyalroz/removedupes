@@ -1,0 +1,35 @@
+<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Fjerner dubletter...">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Vælg mapper for næste søgning efter dubletter">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "F">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "V">
+<!ENTITY key-removedupes.modifiers "accel,shift">
+<!ENTITY key-removedupes.keycode "D">
+<!ENTITY removedupes_dialog.dialog_title "Sletning af Dubletter">
+<!ENTITY removedupes_dialog.id "Meddelelses-ID">
+<!ENTITY removedupes_dialog.keep_label "I hvert sæt dubletter, behold:">
+<!ENTITY removedupes_dialog.subject "Emne">
+<!ENTITY removedupes_dialog.sender "Afsender">
+<!ENTITY removedupes_dialog.author "Afsender">
+<!ENTITY removedupes_dialog.recipients "Modtager">
+<!ENTITY removedupes_dialog.cc_list "CC liste">
+<!ENTITY removedupes_dialog.flags "Status">
+<!ENTITY removedupes_dialog.folder "Mappe">
+<!ENTITY removedupes_dialog.line_count "# Linjer">
+<!ENTITY removedupes_dialog.date "Dato">
+<!ENTITY removedupes_dialog.send_time "Tidspunkt">
+<!ENTITY removedupes_dialog.keep_preset_originals.label "Forvælg oprindelige">
+<!ENTITY removedupes_dialog.keep_first.label "Første kopi">
+<!ENTITY removedupes_dialog.keep_last.label "Sidste kopi">
+<!ENTITY removedupes_dialog.keep_none.label "Ingen kopier">
+<!ENTITY removedupes_dialog.keep_all.label "Alle kopier">
+<!ENTITY removedupes_dialog.tree_label "Dublet-meddelelsessæt:">
+<!ENTITY removedupes_dialog.keep_flag "Behold?">
+<!ENTITY removedupes_dialog.action_label "Handling:">
+<!ENTITY action.delete_permanently.label "Slet permanent">
+<!ENTITY action.delete_permanently.accesskey "p">
+<!ENTITY action.move.label "Flyt til:">
+<!ENTITY action.move.accesskey "F">
+<!ENTITY removeduplicates-button.label "Fjern dubletter">
+<!ENTITY removeduplicates-button.tip "Fjern dubletter...">
+<!ENTITY removedupes.criteria_menu.label "Kriterier for sammenligning:">
