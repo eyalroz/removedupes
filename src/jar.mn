@@ -44,6 +44,9 @@ removedupes.jar:
     locale/ru-RU/removedupes/removedupes.dtd                      (chrome/locale/ru-RU/removedupes/removedupes.dtd)
     locale/ru-RU/removedupes/removedupes-prefs.dtd                (chrome/locale/ru-RU/removedupes/removedupes-prefs.dtd)
     locale/ru-RU/removedupes/removedupes.properties               (chrome/locale/ru-RU/removedupes/removedupes.properties)
+    locale/da-DK/removedupes/removedupes.dtd                      (chrome/locale/da-DK/removedupes/removedupes.dtd)
+    locale/da-DK/removedupes/removedupes-prefs.dtd                (chrome/locale/da-DK/removedupes/removedupes-prefs.dtd)
+    locale/da-DK/removedupes/removedupes.properties               (chrome/locale/da-DK/removedupes/removedupes.properties)
 *   content/removedupes/removedupes-prefs.xul                     (chrome/content/removedupes/removedupes-prefs.xul)
 *   content/removedupes/removedupes-button.xul                    (chrome/content/removedupes/removedupes-button.xul)
 *   skin/classic/removedupes/removedupes-button.css               (chrome/skin/classic/removedupes/removedupes-button.css)
@@ -77,4 +80,5 @@ removedupes.jar:
     locale/pt-BR/removedupes/contents.rdf                         (chrome/locale/pt-BR/removedupes/contents.rdf)
     locale/he-IL/removedupes/contents.rdf                         (chrome/locale/he-IL/removedupes/contents.rdf)
     locale/ru-RU/removedupes/contents.rdf                         (chrome/locale/ru-RU/removedupes/contents.rdf)
+    locale/da-DK/removedupes/contents.rdf                         (chrome/locale/da-DK/removedupes/contents.rdf)
 #endif
