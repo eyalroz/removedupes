@@ -337,24 +337,35 @@ function finishAddSearchFolders(folder,searchData)
     // the GetSubFolders() function was removed in bugzilla.mozilla.org bug 420614;
     // so we have here both its use for older builds and the workaround created
     // by the patch for that bug
-    var subFoldersIterator;
+    var subFoldersIterator = null;
     try {
       subFoldersIterator = folder.GetSubFolders();
     }
     catch(ex) {
       subFoldersIterator = folder.subFoldersObsolete;
     }
-    do {
-      addSearchFolders(
-        subFoldersIterator.currentItem().QueryInterface(
-          Components.interfaces.nsIMsgFolder),
-        searchData);
-      try {
-        subFoldersIterator.next();
-      } catch (ex) {
-        break;
+    if (subFoldersIterator) {
+      do {
+        addSearchFolders(
+          subFoldersIterator.currentItem().QueryInterface(
+            Components.interfaces.nsIMsgFolder),
+          searchData);
+        try {
+         subFoldersIterator.next();
+        } catch (ex) {
+          break;
+        }
+      } while(true);
+    }
+    else {
+      var subFoldersEnumerator = folder.subFolders;
+      while (subFoldersEnumerator.hasMoreElements()) {
+        addSearchFolders(
+          subFoldersEnumerator.getNext().QueryInterface(
+            Components.interfaces.nsIMsgFolder),
+          searchData);
       }
-    } while(true);
+    }
   }
 
   searchData.remainingFolders--;
