@@ -373,6 +373,7 @@ function waitForFolderCollection(searchData)
   gStatusTextField.label = gRemoveDupesStrings.GetStringFromName('removedupes.searching_for_dupes');
 
   if (searchData.userAborted) {
+    window.removeEventListener("keypress", searchData.keyPressEventListener, true);
     delete searchData;
     gStatusTextField.label =
       gRemoveDupesStrings.GetStringFromName('removedupes.search_aborted');
@@ -396,6 +397,7 @@ function processMessagesInCollectedFoldersPhase1(searchData)
   // relevant folders have been added to the searchData.folders array
 
   if (searchData.userAborted) {
+    window.removeEventListener("keypress", searchData.keyPressEventListener, true);
     delete searchData;
     gStatusTextField.label =
       gRemoveDupesStrings.GetStringFromName('removedupes.search_aborted');
@@ -412,6 +414,7 @@ function processMessagesInCollectedFoldersPhase1(searchData)
 function processMessagesInCollectedFoldersPhase2(searchData)
 {
   if (searchData.userAborted) {
+    window.removeEventListener("keypress", searchData.keyPressEventListener, true);
     delete searchData;
     gStatusTextField.label =
       gRemoveDupesStrings.GetStringFromName('removedupes.search_aborted');
@@ -442,6 +445,7 @@ function processMessagesInCollectedFoldersPhase2(searchData)
   refineDupeSets(searchData);
 
   if (searchData.userAborted) {
+    window.removeEventListener("keypress", searchData.keyPressEventListener, true);
     delete searchData;
     gStatusTextField.label =
       gRemoveDupesStrings.GetStringFromName('removedupes.search_aborted');
