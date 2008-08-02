@@ -230,7 +230,28 @@ function beginSearchForDuplicateMessages(searchData)
   // their subfolders - this would mean false dupes!
   
   for(var i = 0; i < searchData.topFolders.length; i++) {
-    addSearchFolders(searchData.topFolders[i],searchData);
+    var folder = searchData.topFolders[i];
+    if (!folder.canRename && (folder.rootFolder != folder) ) {
+      // one of the top folders is a special folders; if the folder
+      // addition would skip it, let's skip it here already, and inform
+      // the user we're doing that
+      if (!searchData.allowedSpecialFolders.test(folder.abbreviatedName)) {
+        alert(gRemoveDupesStrings.formatStringFromName(
+          'removedupes.skipping_special_folder', [folder.abbreviatedName], 1));
+        continue;
+      }
+    }
+    addSearchFolders(folder,searchData);
+  }
+
+  if (searchData.folders.length == 0) {
+    // all the possible folders were skipped for some reason or
+    // another; abort the search
+    window.removeEventListener("keypress", searchData.keyPressEventListener, true);
+    delete searchData;
+    gStatusTextField.label =
+      gRemoveDupesStrings.GetStringFromName('removedupes.search_aborted');
+    return;
   }
 
   // At this point, one would expected searchData.folders to contain
