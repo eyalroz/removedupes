@@ -26,9 +26,10 @@ const ccListColumnIndex      = 4;
 const subjectColumnIndex     = 5;
 const folderNameColumnIndex  = 6;
 const sendTimeColumnIndex    = 7;
-const lineCountColumnIndex   = 8;
-const messageIdColumnIndex   = 9;
-const flagsColumnIndex       = 10;
+const sizeColumnIndex        = 8;
+const lineCountColumnIndex   = 9;
+const messageIdColumnIndex   = 10;
+const flagsColumnIndex       = 11;
 
 // state variables for dupe set sorting (see onClickColumn() )
 
@@ -71,15 +72,16 @@ function dupeMessageRecord(messageUri)
   this.folder       = messageHdr.folder.URI;
   this.message_id   = messageHdr.messageId;
   this.send_time    = formatSendTime(messageHdr.dateInSeconds);
+  this.size         = messageHdr.messageSize;
   this.subject      = messageHdr.mime2DecodedSubject;
   this.author       = messageHdr.mime2DecodedAuthor;
   this.recipients   = messageHdr.mime2DecodedRecipients;
   this.cc_list      = messageHdr.ccList;
   //this.flags      = "0x" + num2hex(messageHdr.flags);
   this.flags        = flagsToString(messageHdr.flags);
-  this.num_lines   = messageHdr.lineCount;
+  this.num_lines    = messageHdr.lineCount;
   // by default, we're deleting dupes, but see also below
-  this.toKeep      = false; 
+  this.toKeep       = false; 
 }
 
 function initDupeReviewDialog()
@@ -218,6 +220,8 @@ function createMessageRowTemplate()
   folderCell.setAttribute("id", "folderCell");
   var sendTimeCell      = document.createElement("treecell");
   sendTimeCell.setAttribute("id", "sendTimeCell");
+  var sizeCell      = document.createElement("treecell");
+  sizeCell.setAttribute("id", "sizeCell");
   var lineCountCell     = document.createElement("treecell");
   lineCountCell.setAttribute("id", "lineCountCell");
   var messageIdCell     = document.createElement("treecell");
@@ -234,6 +238,7 @@ function createMessageRowTemplate()
   gMessageRowTemplate.appendChild(subjectCell);
   gMessageRowTemplate.appendChild(folderCell);
   gMessageRowTemplate.appendChild(sendTimeCell);
+  gMessageRowTemplate.appendChild(sizeCell);
   gMessageRowTemplate.appendChild(lineCountCell);
   gMessageRowTemplate.appendChild(messageIdCell);
   gMessageRowTemplate.appendChild(flagsCell);
@@ -394,6 +399,8 @@ function createMessageTreeRow(messageRecord)
   // the send time is already formatted
   row.childNodes.item(sendTimeColumnIndex)
      .setAttribute("label", messageRecord.send_time);
+  row.childNodes.item(sizeColumnIndex)
+     .setAttribute("label", messageRecord.size);
   row.childNodes.item(lineCountColumnIndex)
      .setAttribute("label", messageRecord.num_lines);
   row.childNodes.item(messageIdColumnIndex)
