@@ -40,6 +40,7 @@
         <menuitem type="checkbox" id="removedupesCriterionMenuItem_message_id" label="&message_comparison.message_id.label;" oncommand="toggleDupeSearchCriterion(event,'message_id')"/>
         <menuitem type="checkbox" id="removedupesCriterionMenuItem_num_lines" label="&message_comparison.num_lines.label;" oncommand="toggleDupeSearchCriterion(event,'num_lines')"/>
         <menuitem type="checkbox" id="removedupesCriterionMenuItem_send_time" label="&message_comparison.send_time.label;" oncommand="toggleDupeSearchCriterion(event,'send_time')"/>
+        <menuitem type="checkbox" id="removedupesCriterionMenuItem_size" label="&message_comparison.size.label;" oncommand="toggleDupeSearchCriterion(event,'size')"/>
         <menuitem type="checkbox" id="removedupesCriterionMenuItem_subject" label="&message_comparison.subject.label;" oncommand="toggleDupeSearchCriterion(event,'subject')"/>
         <menuitem type="checkbox" id="removedupesCriterionMenuItem_folder" label="&message_comparison.folder.label;" oncommand="toggleDupeSearchCriterion(event,'folder')"/>
         <menuitem type="checkbox" id="removedupesCriterionMenuItem_body" label="&message_comparison.body.label;" oncommand="toggleDupeSearchCriterion(event,'body')"/>

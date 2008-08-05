@@ -39,6 +39,9 @@
       <preference id="removedupes.comparison_criteria.send_time"
                   name="removedupes.comparison_criteria.send_time"
                   type="bool"/>
+      <preference id="removedupes.comparison_criteria.size"
+                  name="removedupes.comparison_criteria.size"
+                  type="bool"/>
       <preference id="removedupes.comparison_criteria.subject"
                   name="removedupes.comparison_criteria.subject"
                   type="bool"/>
@@ -81,6 +84,7 @@
                          "removedupes.comparison_criteria.message_id",
                          "removedupes.comparison_criteria.num_lines",
                          "removedupes.comparison_criteria.send_time",
+                         "removedupes.comparison_criteria.size",
                          "removedupes.comparison_criteria.subject",
                          "removedupes.comparison_criteria.folder",
                          "removedupes.comparison_criteria.body"];
@@ -168,6 +172,12 @@
               id="removedupes.comparison_criteria.send_time"
               label="&message_comparison.send_time.label;"
               accesskey="&message_comparison.send_time.access_key;"
+              autostretch="never"/>
+            <checkbox preference="removedupes.comparison_criteria.size"
+              prefstring="removedupes.comparison_criteria.size"
+              id="removedupes.comparison_criteria.size"
+              label="&message_comparison.size.label;"
+              accesskey="&message_comparison.size.access_key;"
               autostretch="never"/>
             <checkbox preference="removedupes.comparison_criteria.subject"
               prefstring="removedupes.comparison_criteria.subject"

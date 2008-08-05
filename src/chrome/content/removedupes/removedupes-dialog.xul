@@ -87,6 +87,13 @@
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);" />
           <splitter class="tree-splitter"/>
+          <treecol id="sizeColumn"  width="150"
+                   fieldName="size"
+                   label="&removedupes_dialog.size;"
+                   flex="3"
+                   persist="width hidden class sortDirection"
+                   onclick="onClickColumn(event);" />
+          <splitter class="tree-splitter"/>
           <treecol id="num_linesColumn"
                    fieldName="num_lines"
                    label="&removedupes_dialog.line_count;" 

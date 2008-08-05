@@ -22,6 +22,7 @@ var gOriginalsFolders;
 const SearchCriterionUsageDefaults = {
   message_id: true,
   send_time: true,
+  size: true,
   folder: true,
   subject: true,
   author: true,
@@ -98,6 +99,7 @@ function DupeSearchData()
   jsConsoleService.logStringMessage('USE criteria: '
     + (this.useCriteria['message_id'] ? 'message-ID ' : '') 
     + (this.useCriteria['send_time'] ? 'send-time ' : '') 
+    + (this.useCriteria['size'] ? 'size ' : '') 
     + (this.useCriteria['folder'] ? 'folder ' : '') 
     + (this.useCriteria['subject'] ? 'subject ' : '') 
     + (this.useCriteria['author'] ? 'author ' : '') 
@@ -110,6 +112,7 @@ function DupeSearchData()
   jsConsoleService.logStringMessage('DON\'T USE criteria: '
     + (!this.useCriteria['message_id'] ? 'message-ID ' : '') 
     + (!this.useCriteria['send_time'] ? 'send-time ' : '') 
+    + (!this.useCriteria['size'] ? 'size ' : '') 
     + (!this.useCriteria['folder'] ? 'folder ' : '') 
     + (!this.useCriteria['subject'] ? 'subject ' : '') 
     + (!this.useCriteria['author'] ? 'author ' : '') 
@@ -527,6 +530,8 @@ function sillyHash(searchData,messageHdr,folder)
     retVal += messageHdr.messageId + '|';
   if (searchData.useCriteria['send_time'])
     retVal += messageHdr.dateInSeconds + '|';
+  if (searchData.useCriteria['size'])
+    retVal += messageHdr.messageSize + '|';
   if (searchData.useCriteria['folder'])
     retVal += folder.URI + '|';
   if (searchData.useCriteria['subject'])
