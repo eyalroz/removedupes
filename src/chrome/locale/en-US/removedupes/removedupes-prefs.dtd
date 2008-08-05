@@ -9,6 +9,7 @@
 <!ENTITY message_comparison.message_id.label "Message ID">
 <!ENTITY message_comparison.num_lines.label "Number of lines in message">
 <!ENTITY message_comparison.send_time.label "Send time">
+<!ENTITY message_comparison.size.label "Size">
 <!ENTITY message_comparison.subject.label "Subject">
 <!ENTITY message_comparison.folder.label "Folder">
 <!ENTITY message_comparison.body.label "Body">
@@ -19,6 +20,7 @@
 <!ENTITY message_comparison.message_id.access_key "I">
 <!ENTITY message_comparison.num_lines.access_key "l">
 <!ENTITY message_comparison.send_time.access_key "t">
+<!ENTITY message_comparison.size.access_key "s">
 <!ENTITY message_comparison.subject.access_key "S">
 <!ENTITY message_comparison.folder.access_key "o">
 <!ENTITY message_comparison.body.access_key "B">
