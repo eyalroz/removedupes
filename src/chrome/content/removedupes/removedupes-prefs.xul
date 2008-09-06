@@ -54,6 +54,9 @@
       <preference id="removedupes.search_subfolders"
                   name="removedupes.search_subfolders"
                   type="bool"/>
+      <preference id="removedupes.skip_special_folders"
+                  name="removedupes.skip_special_folders"
+                  type="bool"/>
       <preference id="removedupes.confirm_search_and_deletion"
                   name="removedupes.confirm_search_and_deletion"
                   type="bool"/>
@@ -76,6 +79,7 @@
     <script type="application/x-javascript">
       var panel = "chrome://removedupes/content/removedupes-prefs.xul";
       var _elementIDs = ["removedupes.search_subfolders",
+                         "removedupes.skip_special_folders",
                          "removedupes.confirm_search_and_deletion",
                          "removedupes.default_action",
                          "removedupes.comparison_criteria.author",
@@ -136,68 +140,77 @@
 
         <tabpanel id="comparison_criteria_panel">
           <vbox flex="1">
-            <description>&message_comparison.tab_description;</description>
-            <checkbox preference="removedupes.comparison_criteria.author"
-              prefstring="removedupes.comparison_criteria.author"
-              id="removedupes.comparison_criteria.author"
-              label="&message_comparison.author.label;"
-              accesskey="&message_comparison.author.access_key;"
+            <checkbox preference="removedupes.skip_special_folders"
+              prefstring="removedupes.skip_special_folders"
+              id="removedupes.skip_special_folders"
+              label="&message_comparison.skip_special_folders.label;"
+              accesskey="&message_comparison.skip_special_folders.access_key;"
               autostretch="never"/>
-            <checkbox preference="removedupes.comparison_criteria.recipients"
-              prefstring="removedupes.comparison_criteria.recipients"
-              id="removedupes.comparison_criteria.recipients"
-              label="&message_comparison.recipients.label;"
-              accesskey="&message_comparison.recipients.access_key;"
-              autostretch="never"/>
-            <checkbox preference="removedupes.comparison_criteria.cc_list"
-              prefstring="removedupes.comparison_criteria.cc_list"
-              id="removedupes.comparison_criteria.cc_list"
-              label="&message_comparison.cc_list.label;"
-              accesskey="&message_comparison.cc_list.access_key;"
-              autostretch="never"/>
-            <checkbox preference="removedupes.comparison_criteria.message_id"
-              prefstring="removedupes.comparison_criteria.message_id"
-              id="removedupes.comparison_criteria.message_id"
-              label="&message_comparison.message_id.label;"
-              accesskey="&message_comparison.message_id.access_key;"
-              autostretch="never"/>
-            <checkbox preference="removedupes.comparison_criteria.num_lines"
-              prefstring="removedupes.comparison_criteria.num_lines"
-              id="removedupes.comparison_criteria.num_lines"
-              label="&message_comparison.num_lines.label;"
-              accesskey="&message_comparison.num_lines.access_key;"
-              autostretch="never"/>
-            <checkbox preference="removedupes.comparison_criteria.send_time"
-              prefstring="removedupes.comparison_criteria.send_time"
-              id="removedupes.comparison_criteria.send_time"
-              label="&message_comparison.send_time.label;"
-              accesskey="&message_comparison.send_time.access_key;"
-              autostretch="never"/>
-            <checkbox preference="removedupes.comparison_criteria.size"
-              prefstring="removedupes.comparison_criteria.size"
-              id="removedupes.comparison_criteria.size"
-              label="&message_comparison.size.label;"
-              accesskey="&message_comparison.size.access_key;"
-              autostretch="never"/>
-            <checkbox preference="removedupes.comparison_criteria.subject"
-              prefstring="removedupes.comparison_criteria.subject"
-              id="removedupes.comparison_criteria.subject"
-              label="&message_comparison.subject.label;"
-              accesskey="&message_comparison.subject.access_key;"
-              autostretch="never"/>
-            <checkbox preference="removedupes.comparison_criteria.folder"
-              prefstring="removedupes.comparison_criteria.folder"
-              id="removedupes.comparison_criteria.folder"
-              label="&message_comparison.folder.label;"
-              accesskey="&message_comparison.folder.access_key;"
-              autostretch="never"/>
-            <checkbox preference="removedupes.comparison_criteria.body"
-              prefstring="removedupes.comparison_criteria.body"
-              id="removedupes.comparison_criteria.body"
-              label="&message_comparison.body.label;"
-              accesskey="&message_comparison.body.access_key;"
-              autostretch="never"/>
-          </vbox>
+            <groupbox>
+              <vbox flex="1">
+                <checkbox preference="removedupes.comparison_criteria.author"
+                  prefstring="removedupes.comparison_criteria.author"
+                  id="removedupes.comparison_criteria.author"
+                  label="&message_comparison.author.label;"
+                  accesskey="&message_comparison.author.access_key;"
+                  autostretch="never"/>
+                <checkbox preference="removedupes.comparison_criteria.recipients"
+                  prefstring="removedupes.comparison_criteria.recipients"
+                  id="removedupes.comparison_criteria.recipients"
+                  label="&message_comparison.recipients.label;"
+                  accesskey="&message_comparison.recipients.access_key;"
+                  autostretch="never"/>
+                <checkbox preference="removedupes.comparison_criteria.cc_list"
+                  prefstring="removedupes.comparison_criteria.cc_list"
+                  id="removedupes.comparison_criteria.cc_list"
+                  label="&message_comparison.cc_list.label;"
+                  accesskey="&message_comparison.cc_list.access_key;"
+                  autostretch="never"/>
+                <checkbox preference="removedupes.comparison_criteria.message_id"
+                   prefstring="removedupes.comparison_criteria.message_id"
+                  id="removedupes.comparison_criteria.message_id"
+                  label="&message_comparison.message_id.label;"
+                  accesskey="&message_comparison.message_id.access_key;"
+                  autostretch="never"/>
+                <checkbox preference="removedupes.comparison_criteria.num_lines"
+                  prefstring="removedupes.comparison_criteria.num_lines"
+                  id="removedupes.comparison_criteria.num_lines"
+                  label="&message_comparison.num_lines.label;"
+                   accesskey="&message_comparison.num_lines.access_key;"
+                  autostretch="never"/>
+                 <checkbox preference="removedupes.comparison_criteria.send_time"
+                  prefstring="removedupes.comparison_criteria.send_time"
+                  id="removedupes.comparison_criteria.send_time"
+                  label="&message_comparison.send_time.label;"
+                  accesskey="&message_comparison.send_time.access_key;"
+                  autostretch="never"/>
+                <checkbox preference="removedupes.comparison_criteria.size"
+                  prefstring="removedupes.comparison_criteria.size"
+                  id="removedupes.comparison_criteria.size"
+                  label="&message_comparison.size.label;"
+                   accesskey="&message_comparison.size.access_key;"
+                  autostretch="never"/>
+                <checkbox preference="removedupes.comparison_criteria.subject"
+                  prefstring="removedupes.comparison_criteria.subject"
+                   id="removedupes.comparison_criteria.subject"
+                  label="&message_comparison.subject.label;"
+                  accesskey="&message_comparison.subject.access_key;"
+                  autostretch="never"/>
+                <checkbox preference="removedupes.comparison_criteria.folder"
+                   prefstring="removedupes.comparison_criteria.folder"
+                  id="removedupes.comparison_criteria.folder"
+                  label="&message_comparison.folder.label;"
+                  accesskey="&message_comparison.folder.access_key;"
+                  autostretch="never"/>
+                <checkbox preference="removedupes.comparison_criteria.body"
+                  prefstring="removedupes.comparison_criteria.body"
+                  id="removedupes.comparison_criteria.body"
+                  label="&message_comparison.body.label;"
+                  accesskey="&message_comparison.body.access_key;"
+                  autostretch="never"/>
+                </vbox>
+              </groupbox>
+            </vbox>
         </tabpanel>
       </tabpanels>
     </tabbox>

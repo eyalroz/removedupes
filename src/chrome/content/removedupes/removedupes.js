@@ -130,13 +130,18 @@ function DupeSearchData()
 
   // which of the special folders (inbox, sent, etc.) will we be willing
   // to search in for duplicates?
+
+  this.skippingSpecialFolders = 
+    gRemoveDupesPrefs.getBoolPref("skip_special_folders", true);
   
-  this.allowedSpecialFolders = 
-    new RegExp(gRemoveDupesPrefs.getLocalizedStringPref('allowed_special_folders', ''), 'i');
+  if (this.skippingSpecialFolders) {
+    this.allowedSpecialFolders = 
+      new RegExp(gRemoveDupesPrefs.getLocalizedStringPref('allowed_special_folders', ''), 'i');
 #ifdef DEBUG_DupeSearchParameters
-  jsConsoleService.logStringMessage(
-    'allowedSpecialFolders = ' + this.allowedSpecialFolders);
+     jsConsoleService.logStringMessage(
+      'allowedSpecialFolders = ' + this.allowedSpecialFolders);
 #endif
+  }
 
   this.useReviewDialog = 
     gRemoveDupesPrefs.getBoolPref("confirm_search_and_deletion", true);
@@ -241,14 +246,16 @@ function beginSearchForDuplicateMessages(searchData)
   
   for(var i = 0; i < searchData.topFolders.length; i++) {
     var folder = searchData.topFolders[i];
-    if (!folder.canRename && (folder.rootFolder != folder) ) {
-      // one of the top folders is a special folders; if the folder
-      // addition would skip it, let's skip it here already, and inform
-      // the user we're doing that
-      if (!searchData.allowedSpecialFolders.test(folder.abbreviatedName)) {
-        alert(gRemoveDupesStrings.formatStringFromName(
-          'removedupes.skipping_special_folder', [folder.abbreviatedName], 1));
-        continue;
+    if (searchData.skippingSpecialFolders) {
+      if (!folder.canRename && (folder.rootFolder != folder) ) {
+        // one of the top folders is a special folders; if the folder
+        // addition would skip it, let's skip it here already, and inform
+        // the user we're doing that
+        if (!searchData.allowedSpecialFolders.test(folder.abbreviatedName)) {
+          alert(gRemoveDupesStrings.formatStringFromName(
+            'removedupes.skipping_special_folder', [folder.abbreviatedName], 1));
+          continue;
+        }
       }
     }
     addSearchFolders(folder,searchData);
@@ -298,20 +305,28 @@ function addSearchFolders(folder, searchData)
 
   if (!folder.canRename && (folder.rootFolder != folder) ) {
     // it's a special folder
-    if (!searchData.allowedSpecialFolders.test(folder.abbreviatedName)) {
+    if (searchData.skippingSpecialFolders) {
+      if (!searchData.allowedSpecialFolders.test(folder.abbreviatedName)) {
 #ifdef DEBUG_addSearchFolders
-      jsConsoleService.logStringMessage('skipping special folder ' + folder.abbreviatedName + '\n(matched by ' + searchData.allowedSpecialFolders + ')');
+        jsConsoleService.logStringMessage('skipping special folder ' + folder.abbreviatedName + '\n(matched by ' + searchData.allowedSpecialFolders + ')');
 #endif
-      return;
+        return;
+      }
+#ifdef DEBUG_addSearchFolders
+      jsConsoleService.logStringMessage('special folder ' + folder.abbreviatedName + ' is allowed');
+#endif
     }
-#ifdef DEBUG_addSearchFolders
-    jsConsoleService.logStringMessage('special folder ' + folder.abbreviatedName + ' is allowed');
-#endif
   }
 
   searchData.remainingFolders++;
 
-  if (folder.canFileMessages) {
+  // Skipping folders which are not special, but by definition cannot
+  // have duplicates
+
+  // TODO: There may theoretically be other URI prefixes which we need to avoid
+  // in addition to 'news://'
+
+  if (folder.URI.substring(0,7) != 'news://') {
     if (searchData.originalsFolderUris) {
       if (!searchData.originalsFolderUris[folder.URI]) {
 #ifdef DEBUG_addSearchFolders
@@ -967,17 +982,22 @@ function setOriginalsFolders()
   if (gOriginalsFolders.length == 0) {
     gOriginalsFolders = null;
   }
-  var allowedSpecialFolders = 
-    new RegExp(gRemoveDupesPrefs.getLocalizedStringPref('allowed_special_folders', ''), 'i');
-  for (var i = 0; i < gOriginalsFolders.length; i++) {
-    if (!gOriginalsFolders[i].canFileMessages ||
-        (gOriginalsFolders[i].rootFolder == gOriginalsFolders[i]) ||
-        (!gOriginalsFolders[i].canRename && 
-         (!allowedSpecialFolders.test(gOriginalsFolders[i].abbreviatedName)))) {
-      alert(gRemoveDupesStrings.GetStringFromName("removedupes.invalid_originals_folders"));
-      gOriginalsFolders = null;
+  if (gRemoveDupesPrefs.getBoolPref('skip_special_folders','true')) {
+    var allowedSpecialFolders = 
+      new RegExp(gRemoveDupesPrefs.getLocalizedStringPref('allowed_special_folders', ''), 'i');
+    for (var i = 0; i < gOriginalsFolders.length; i++) {
+      if (!gOriginalsFolders[i].canFileMessages ||
+          (gOriginalsFolders[i].rootFolder == gOriginalsFolders[i]) ||
+          (!gOriginalsFolders[i].canRename && 
+          (!allowedSpecialFolders.test(gOriginalsFolders[i].abbreviatedName)))) {
+        alert(gRemoveDupesStrings.GetStringFromName("removedupes.invalid_originals_folders"));
+        gOriginalsFolders = null;
+      }
     }
   }
+  // TODO: Think of what happens if the user first marks the originals folders,
+  // then changes the special folder skipping prefs; if we could clear the originals
+  // in that case somehow...
 }
 
 #ifdef DEBUG_secondMenuItem
