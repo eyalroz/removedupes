@@ -1,6 +1,7 @@
 // visible prefs
 
 pref("removedupes.search_subfolders", true);
+pref("removedupes.skip_special_folders", true);
 
 pref("removedupes.comparison_criteria.message_id", true);
 pref("removedupes.comparison_criteria.send_time", true);
