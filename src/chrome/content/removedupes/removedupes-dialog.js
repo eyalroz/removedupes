@@ -195,6 +195,11 @@ function initDupeReviewDialog()
 #endif
 }
 
+// createMessageRowTemplate -
+// We create a message row for every message in every dupe set; to speed
+// up this process we first create a template, with this function, then
+// duplicate it and update it for each individual dupe set message
+
 function createMessageRowTemplate()
 {
   // TODO: consider whether we want to disply/not display
@@ -252,8 +257,6 @@ function clearStatusBar()
   document.getElementById("keeping-status-panel").setAttribute("label", "");
   document.getElementById("main-status-panel").setAttribute("label","");
 }
-
-
 
 function rebuildDuplicateSetsTree()
 {
@@ -355,7 +358,6 @@ function resetCheckboxValues()
   updateStatusBar();
 }
 
-
 function updateStatusBar()
 {
   document.getElementById("sets-status-panel").setAttribute("label",
@@ -367,6 +369,11 @@ function updateStatusBar()
   document.getElementById("main-status-panel").setAttribute("label", "");
 
 }
+
+// createMessageTreeRow -
+// To create the dupe set tree row for a specific message,
+// we duplicate the row template and modify it with data
+// from the messageRecord
 
 function createMessageTreeRow(messageRecord)
 {
@@ -414,6 +421,8 @@ function createMessageTreeRow(messageRecord)
   return row;
 }
 
+// formatSendTime -
+// Create a user-legible string for our seconds-since-epoch time value
 
 function formatSendTime(sendTimeInSeconds)
 {
@@ -440,6 +449,10 @@ function formatSendTime(sendTimeInSeconds)
     date.getMinutes(), 
     date.getSeconds() );
 }
+
+// onClickTree -
+// Either toggle the deleted status of the message, load it for display,
+// or do nothing
 
 function onClickTree(ev)
 {
@@ -472,6 +485,9 @@ function onClickTree(ev)
 
   loadCurrentRowMessage();
 }
+
+// loadCurrentRowMessage -
+// When the user selects a message row, we load that message in the 3-pane window
 
 function loadCurrentRowMessage()
 {
@@ -640,6 +656,11 @@ function initializeFolderPicker()
   SetFolderPicker(uri, 'actionTargetFolder');
 }
 
+// onClickColumn -
+// Changes the sort order to be based on this column, or if this is already
+// the case - toggles the sort direction - low to high values in this
+// column or vice versa
+
 function onClickColumn(ev)
 {
 #ifdef DEBUG_onClickColumn
@@ -688,6 +709,9 @@ function onClickColumn(ev)
   ev.target.setAttribute('sortDirection',gTree.getAttribute('sortDirection'));
   rebuildDuplicateSetsTree();
 }
+
+// sortDupeSetsByField -
+// re-sorts the messages to respect the order column selection
 
 function sortDupeSetsByField(field)
 {

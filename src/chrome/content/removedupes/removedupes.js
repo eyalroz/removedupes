@@ -19,6 +19,9 @@ var gStatusTextField;
 
 var gOriginalsFolders;
 
+// which criteria will we use in the dupe search if the preferences
+// are not set?
+
 const SearchCriterionUsageDefaults = {
   message_id: true,
   send_time: true,
@@ -37,8 +40,9 @@ const SearchCriterionUsageDefaults = {
 //---------------------------------------------------
 
 // a class definition of the listener which we'll
-// need for traversing IMAP folders after they've
-// been updated with their on-server contents
+// need for recursively traversing IMAP folder hierarchies,
+// in which each folder needs to be asyncrhonously updated
+// with its on-server contents
 //---------------------------------------------------
 function UpdateFolderDoneListener(folder,searchData) {
   this.folder = folder;
@@ -68,7 +72,7 @@ UpdateFolderDoneListener.prototype.OnStopRunningUrl =
     // TODO: Perhaps we should actually check the exist code...
     // for now we'll just assume the folder update wen't ok,
     // or we'll fail when trying to traverse the children
-    finishAddSearchFolders(this.folder,this.searchData);
+    traverseSearchFolderSubfolders(this.folder,this.searchData);
   };
 //---------------------------------------------------
 
@@ -169,6 +173,9 @@ function DupeSearchData()
 //---------------------------------------------------
 
 
+// searchAndRemoveDuplicateMessages - 
+// Called from the UI to trigger a new dupe search
+
 function searchAndRemoveDuplicateMessages()
 {
 #ifdef DEBUG_searchAndRemoveDuplicateMessages
@@ -257,19 +264,27 @@ function beginSearchForDuplicateMessages(searchData)
     return;
   }
 
-  // At this point, one would expected searchData.folders to contain
-  // all of the folders and subfolders we're collecting messages from -
-  // but, alas this cannot be! We have to wait for all the UrlListeners
-  // to finish their work, and for their subfolders to be processed,
-  // etc. etc. etc.
-
   delete searchData.topFolders;
 #ifdef DEBUG_collectMessages
    jsConsoleService.logStringMessage('done with addSearchFolders() calls\nsearchData.remainingFolders = ' + searchData.remainingFolders);
 #endif
+
+  // At this point, one would expected searchData.folders to contain
+  // all of the folders and subfolders we're collecting messages from -
+  // but, alas this cannot be... We have to wait for all the IMAP
+  // folders and subfolders to become ready and then be processed;
+  // so let's call a sleep-poll function
   
   waitForFolderCollection(searchData);
 }
+
+// addSearchFolders - 
+// supposed to recursively traverse the subfolders of a
+// given folder, marking them for inclusion in the dupe search;
+// however, it can't really do this in the straightforward way, as for
+// IMAP folders one needs to make sure they're ready before acting, so
+// instead, it only marks the current folder and has traverseSearchFolderSubfolders
+// called either synchronously or asynchronously to complete its work
 
 function addSearchFolders(folder, searchData)
 {
@@ -319,7 +334,6 @@ function addSearchFolders(folder, searchData)
   else jsConsoleService.logStringMessage('not pushing folder ' + folder.abbreviatedName + ' - since it has no root folder or can\'t file messages');
 #endif
 
-  
   // is this an IMAP folder?
   
   var imapFolder = null;
@@ -340,17 +354,22 @@ function addSearchFolders(folder, searchData)
   // If we've gotten here then the folder is locally-stored rather than
   // an IMAP folder so we don't have to 'update' it before continuing the traversal
   
-  finishAddSearchFolders(folder,searchData);
+  traverseSearchFolderSubfolders(folder,searchData);
   
 #ifdef DEBUG_addSearchFolders
   jsConsoleService.logStringMessage('returning from addSearchFolders for folder ' + folder.abbreviatedName);
 #endif
 }
 
-function finishAddSearchFolders(folder,searchData)
+// traverseSearchFolderSubfolders - 
+// Completes the work of addSearchFolder by traversing a
+// folder's children once it's 'ready'; it is called asynchronously
+// for IMAP folders
+
+function traverseSearchFolderSubfolders(folder,searchData)
 {
-#ifdef DEBUG_finishAddSearchFolders
-  jsConsoleService.logStringMessage('in finishAddSearchFolders for folder ' + folder.abbreviatedName);
+#ifdef DEBUG_traverseSearchFolderSubfolders
+  jsConsoleService.logStringMessage('in traverseSearchFolderSubfolders for folder ' + folder.abbreviatedName);
 #endif
 
   gStatusTextField.label = gRemoveDupesStrings.GetStringFromName('removedupes.searching_for_dupes');
@@ -394,10 +413,15 @@ function finishAddSearchFolders(folder,searchData)
 
   searchData.remainingFolders--;
 
-#ifdef DEBUG_finishAddSearchFolders
-  jsConsoleService.logStringMessage('returning from finishAddSearchFolders for folder ' + folder.abbreviatedName);
+#ifdef DEBUG_traverseSearchFolderSubfolders
+  jsConsoleService.logStringMessage('returning from traverseSearchFolderSubfolders for folder ' + folder.abbreviatedName);
 #endif
 }
+
+// the folder collection for a dupe search happens asynchronously; this function
+// waits for the folder collection to conclude (sleeping and calling itself
+// again if it hasn't), before continuing to the collection of messages
+// from the folders
 
 function waitForFolderCollection(searchData)
 {
@@ -426,6 +450,17 @@ function waitForFolderCollection(searchData)
   processMessagesInCollectedFoldersPhase1(searchData);
 }
 
+// processMessagesInCollectedFoldersPhase1 - 
+// Called after we've collected all of the folders
+// we need to process messages in. The processing of messages has
+// two phases - first, all messages are hashed into a possible-dupe-sets
+// hash, then the sets of messages with the same hash values are
+// refined using more costly comparisons than the hashing itself.
+// The processing can take a long time; to allow the UI to remain 
+// responsive and the user to be able to abort the dupe search, we
+// perform the first phase using a generator and a separate function 
+// which occasionally yields
+
 function processMessagesInCollectedFoldersPhase1(searchData)
 {
   // At this point all UrlListeners have finished their work, and all
@@ -445,6 +480,12 @@ function processMessagesInCollectedFoldersPhase1(searchData)
   searchData.generator = populateDupeSetsHash(searchData);
   setTimeout(processMessagesInCollectedFoldersPhase2, 10, searchData);
 }
+
+// processMessagesInCollectedFoldersPhase2 - 
+// A wrapper for the  'Phase2' function waits for the first phase to complete, 
+// calling itself with a timeout otherwise; after performing the second phase,
+// it calls the post-search reviewAndRemoveDupes function (as we're working
+// asynchronously)
 
 function processMessagesInCollectedFoldersPhase2(searchData)
 {
@@ -510,6 +551,10 @@ function processMessagesInCollectedFoldersPhase2(searchData)
   }
 }
 
+// sillyHash - 
+// Calculates the hash used for the first-phase separation of non-dupe
+// messages; it relies on the non-expensive comparison criteria
+
 function sillyHash(searchData,messageHdr,folder)
 {
   // Notes:
@@ -552,6 +597,8 @@ function sillyHash(searchData,messageHdr,folder)
   return retVal;
 }
 
+// The actual first phase of message processing (see
+// processMessagesInCollectedFoldersPhase1 for more details)
 
 function populateDupeSetsHash(searchData)
 {
@@ -671,6 +718,10 @@ function populateDupeSetsHash(searchData)
   }
 }
 
+// messageBodyFromURI -
+// An 'expensive' function used in the second phase of messgage
+// processing, in which suspected sets of dupes are refined
+
 function messageBodyFromURI(msgURI)
 {
   var msgContent = "";
@@ -720,6 +771,8 @@ function messageBodyFromURI(msgURI)
   return null;
 }
 
+// Write some progress info to the status bar
+
 function reportRefinementProgress(searchData,activity,setSize,curr)
 {
   var currentTime = (new Date()).getTime();
@@ -749,6 +802,9 @@ function reportRefinementProgress(searchData,activity,setSize,curr)
     }
   }
 }
+
+// The actual second phase of message processing (see
+// processMessagesInCollectedFoldersPhase2 for more details)
 
 function refineDupeSets(searchData)
 {
@@ -832,6 +888,10 @@ function refineDupeSets(searchData)
     searchData.setsRefined++;
   }
 }
+
+// reviewAndRemoveDupes - 
+// This function either moves the dupes, erases them completely,
+// or fires the review dialog for the user to decide what to do
 
 function reviewAndRemoveDupes(searchData)
 {
