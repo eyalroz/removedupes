@@ -218,8 +218,6 @@ function removeDuplicates(
     }
   }
   
-  // TODO: re-hash the messages by folder, then delete all messages in a folder at once
-  
   var dupesByFolderHashMap = new Object;
   var messageHeader;
   var previousFolderUri = null;
@@ -237,17 +235,31 @@ function removeDuplicates(
           jsConsoleService.logStringMessage('processing URI ' + messageRecord.uri);
 #endif
           messageHeader = messenger.msgHdrFromURI(messageRecord.uri);
+#ifdef DEBUG_removeDuplicates
+          if (!messageHeader)
+          jsConsoleService.logStringMessage('header is null for ' + messageRecord.uri);
+#endif
           if (!(messageRecord.folderUri in dupesByFolderHashMap)) {
             var folderDupesInfo = new Object; 
             folderDupesInfo.folder = messageHeader.folder;
             folderDupesInfo.previousFolderUri = previousFolderUri;
             previousFolderUri = messageRecord.folderUri;
             folderDupesInfo.removalHeaders =
+            // nsISupportsArray replaced with nsIArray by Mozilla bug 435290
+#ifdef MOZ_TOOLKIT_SEAMONKEY
+              Components.classes["@mozilla.org/array;1"].createInstance(Components.interfaces.nsIMutableArray);
+#else
               Components.classes["@mozilla.org/supports-array;1"].createInstance(Components.interfaces.nsISupportsArray);
+#endif
             dupesByFolderHashMap[messageRecord.folderUri] = folderDupesInfo;
           }
-          dupesByFolderHashMap[messageRecord.folderUri]
-            .removalHeaders.AppendElement(messageHeader);
+          dupesByFolderHashMap[messageRecord.folderUri].removalHeaders.
+#ifdef MOZ_TOOLKIT_SEAMONKEY
+            // TODO: make sure using a weak reference is the right thing here
+            appendElement(messageHeader,false);
+#else
+            AppendElement(messageHeader);
+#endif
         }
       }
     }
@@ -264,11 +276,22 @@ function removeDuplicates(
           folderDupesInfo.previousFolderUri = previousFolderUri;
           previousFolderUri = folderUri;
           folderDupesInfo.removalHeaders =
+          // nsISupportsArray replaced with nsIArray by Mozilla bug 435290
+#ifdef MOZ_TOOLKIT_SEAMONKEY
+            Components.classes["@mozilla.org/array;1"].createInstance(Components.interfaces.nsIMutableArray);
+#else
             Components.classes["@mozilla.org/supports-array;1"].createInstance(Components.interfaces.nsISupportsArray);
+#endif
           dupesByFolderHashMap[folderUri] = folderDupesInfo;
         }
-        dupesByFolderHashMap[folderUri]
-            .removalHeaders.AppendElement(messageHeader);
+        dupesByFolderHashMap[folderUri].removalHeaders.
+          // nsISupportsArray replaced with nsIArray by Mozilla bug 435290
+#ifdef MOZ_TOOLKIT_SEAMONKEY
+          // TODO: make sure using a weak reference is the right thing here
+          appendElement(messageHeader,false);
+#else
+          AppendElement(messageHeader);
+#endif
       }
     }
   }
@@ -315,8 +338,19 @@ function removeDupesFromSingleFolder(
     try {
 #ifdef DEBUG_removeDuplicates
   jsConsoleService.logStringMessage('targetFolder URI = ' + targetFolder.URI + '\nsourceFolder URI = ' + sourceFolder.URI +
-                                    '\nremovalMessageHdrs has ' + removalMessageHdrs.Count() + ' elements, first element is\n' +
+                                    '\nremovalMessageHdrs has ' +
+// nsISupportsArray replaced with nsIArray by Mozilla bug 435290
+#ifdef MOZ_TOOLKIT_SEAMONKEY
+                                    removalMessageHdrs.length +
+#else
+                                    removalMessageHdrs.Count() +
+#endif
+                                    ' elements, first element is\n' +
+#ifdef MOZ_TOOLKIT_SEAMONKEY
+                                    removalMessageHdrs.queryElementAt(0,Components.interfaces.nsISupports));
+#else
                                     removalMessageHdrs.GetElementAt(0));
+#endif
   
 #endif
       gCopyService.CopyMessages(
