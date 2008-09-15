@@ -69,7 +69,7 @@ function dupeMessageRecord(messageUri)
   
   this.uri          = messageUri;
   this.folder_name  = messageHdr.folder.abbreviatedName;
-  this.folder       = messageHdr.folder.URI;
+  this.folderUri    = messageHdr.folder.URI;
   this.message_id   = messageHdr.messageId;
   this.send_time    = formatSendTime(messageHdr.dateInSeconds);
   this.size         = messageHdr.messageSize;
@@ -101,7 +101,7 @@ function initDupeReviewDialog()
   gDBView                   = window.arguments[3];
   var useCriteria           = window.arguments[4];
   gDupeSetsHashMap          = window.arguments[5];
-  gOriginalsFolderUris     = window.arguments[6];
+  gOriginalsFolderUris      = window.arguments[6];
   
   // let's replace the URI's with all the necessary information
   // for the display dialog:
@@ -140,7 +140,7 @@ function initDupeReviewDialog()
       if (gOriginalsFolderUris) {
         // if we have pre-set originals folders, the default is to 
         // keep all of messages in them and remove their dupes elsewhere
-        dupeSet[i].toKeep = (gOriginalsFolderUris[dupeSet[i].folder] ? true : false);
+        dupeSet[i].toKeep = (gOriginalsFolderUris[dupeSet[i].folderUri] ? true : false);
       }
       gTotalNumberOfDupes++;
 #ifdef DEBUG_initDupeReviewDialog
@@ -620,7 +620,7 @@ function markKeepPresetOriginals()
     var dupeSet = gDupeSetsHashMap[hashValue];
     for (var i=0; i < dupeSet.length; i++ ) {
       dupeSet[i].toKeep =
-        (gOriginalsFolderUris[dupeSet[i].folder] ? true : false);
+        (gOriginalsFolderUris[dupeSet[i].folderUri] ? true : false);
     }
   }
   resetCheckboxValues();
