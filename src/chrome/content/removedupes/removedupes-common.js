@@ -325,7 +325,7 @@ function removeDupesFromSingleFolder(
         removalMessageHdrs, 
         msgWindow,
         true, // delete permanently
-        false, // delete storage - what does this mean? 
+        true, // delete storage - what does this mean? 
         null, // no listener
         true // allow undo... will this be possible at all?
         );
