@@ -3,6 +3,8 @@
 pref("removedupes.search_subfolders", true);
 pref("removedupes.skip_special_folders", true);
 
+pref("removedupes.compare_stripped_and_sorted_addresses", false);
+
 pref("removedupes.comparison_criteria.message_id", true);
 pref("removedupes.comparison_criteria.send_time", true);
 pref("removedupes.comparison_criteria.size", true);

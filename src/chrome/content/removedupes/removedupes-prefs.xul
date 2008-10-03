@@ -51,6 +51,9 @@
       <preference id="removedupes.comparison_criteria.body"
                   name="removedupes.comparison_criteria.body"
                   type="bool"/>
+      <preference id="removedupes.compare_stripped_and_sorted_addresses"
+                  name="removedupes.compare_stripped_and_sorted_addresses"
+                  type="bool"/>
       <preference id="removedupes.search_subfolders"
                   name="removedupes.search_subfolders"
                   type="bool"/>
@@ -79,6 +82,7 @@
     <script type="application/x-javascript">
       var panel = "chrome://removedupes/content/removedupes-prefs.xul";
       var _elementIDs = ["removedupes.search_subfolders",
+                         "removedupes.compare_stripped_and_sorted_addresses",
                          "removedupes.skip_special_folders",
                          "removedupes.confirm_search_and_deletion",
                          "removedupes.default_action",
@@ -145,6 +149,12 @@
               id="removedupes.skip_special_folders"
               label="&message_comparison.skip_special_folders.label;"
               accesskey="&message_comparison.skip_special_folders.access_key;"
+              autostretch="never"/>
+            <checkbox preference="removedupes.compare_stripped_and_sorted_addresses"
+              prefstring="removedupes.compare_stripped_and_sorted_addresses"
+              id="removedupes.compare_stripped_and_sorted_addresses"
+              label="&message_comparison.compare_stripped_and_sorted_addresses.label;"
+              accesskey="&message_comparison.compare_stripped_and_sorted_addresses.access_key;"
               autostretch="never"/>
             <groupbox>
               <vbox flex="1">
