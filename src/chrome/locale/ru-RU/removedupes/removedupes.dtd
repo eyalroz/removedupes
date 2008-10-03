@@ -1,4 +1,4 @@
-﻿<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Remove Duplicates...">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Set original message folder(s) for next duplicate search">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">
@@ -19,7 +19,7 @@
 <!ENTITY removedupes_dialog.date "Дата">
 <!ENTITY removedupes_dialog.send_time "Время отправки">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "Preset Originals">
-<!ENTITee removedupes_dialog removedupes_dialog.keep_first.label "Первая копия">
+<!ENTITY removedupes_dialog.keep_first.label "Первая копия">
 <!ENTITY removedupes_dialog.keep_last.label "Последняя копия">
 <!ENTITY removedupes_dialog.keep_none.label "Ни одна">
 <!ENTITY removedupes_dialog.keep_all.label "Все копии">
