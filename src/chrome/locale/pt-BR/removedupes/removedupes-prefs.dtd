@@ -4,7 +4,7 @@
 <!ENTITY message_comparison.tab_description "Elementos de mensagem usados como critério de comparação:">
 <!ENTITY message_comparison.author.label "Autor (&apos;De&apos;)">
 <!ENTITY message_comparison.recipients.label "Destinatários (&apos;Para&apos;)">
-<!ENTITY message_comparison.cc_list.label "Lista CC">
+<!ENTITY message_comparison.cc_list.label "Lista Cc">
 <!ENTITY message_comparison.flags.label "Status dos Flags">
 <!ENTITY message_comparison.message_id.label "ID da mensagem">
 <!ENTITY message_comparison.num_lines.label "Números de linhas na mensagem">
@@ -23,7 +23,7 @@
 <!ENTITY message_comparison.folder.access_key "p">
 <!ENTITY message_comparison.body.access_key "m">
 <!ENTITY general_settings.tab_title "Configurações gerais">
-<!ENTITY general_settings.search_subfolders.label "Search subfolders of selected top folder(s)">
+<!ENTITY general_settings.search_subfolders.label "Procurar nas subpastas das pastas raízes selecionadas">
 <!ENTITY general_settings.search_subfolders_first.label "Procurar em sub-pastas primeiro (ordem da mensagem)">
 <!ENTITY general_settings.confirm_search_and_deletion.label "Rever os resultados antes de excluir">
 <!ENTITY general_settings.default_action.description "Ação padrão para mensagens duplicadas:">
