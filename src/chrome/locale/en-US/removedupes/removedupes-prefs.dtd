@@ -3,6 +3,7 @@
 <!ENTITY message_comparison.tab_title "Message Comparison">
 <!ENTITY message_comparison.criteria_box.label "Message elements used as comparison criteria">
 <!ENTITY message_comparison.skip_special_folders.label "Skip Special Folders (Sent, Drafts etc.)">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Compare addresses stripped and sorted">
 <!ENTITY message_comparison.tab_description "Message elements used as comparison criteria:">
 <!ENTITY message_comparison.author.label "Author (&apos;From&apos;)">
 <!ENTITY message_comparison.recipients.label "Recipients (&apos;To&apos;)">
@@ -16,6 +17,7 @@
 <!ENTITY message_comparison.folder.label "Folder">
 <!ENTITY message_comparison.body.label "Body">
 <!ENTITY message_comparison.skip_special_folders.access_key "k">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.access_key "r">
 <!ENTITY message_comparison.author.access_key "A">
 <!ENTITY message_comparison.flags.access_key "F">
 <!ENTITY message_comparison.recipients.access_key "R">

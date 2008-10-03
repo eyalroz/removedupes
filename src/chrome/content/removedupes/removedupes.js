@@ -128,6 +128,14 @@ function DupeSearchData()
     );
 #endif
 
+  // When comparing fields with address (recipients and CC list), 
+  // do we compare the fields in the way and order they appear in
+  // the field, or do we canonicalize the fields by taking the
+  // addresses only and sorting them?
+
+  this.compareStrippedAndSortedAddresses = 
+    gRemoveDupesPrefs.getBoolPref("compare_stripped_and_sorted_addresses", false);
+
   // which of the special folders (inbox, sent, etc.) will we be willing
   // to search in for duplicates?
 
@@ -566,6 +574,34 @@ function processMessagesInCollectedFoldersPhase2(searchData)
   }
 }
 
+// stripAndSortAddreses - 
+// Takes a MIME header field (hopefully, decoded for appropriate charset
+// and transfer encoding), strips out the email addresses in it, and
+// returns them, sorted, in a string
+
+const gEmailRegExp = RegExp(
+  "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
+  "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?","g");
+const gEcnodedWordRegExp = RegExp("=\?.*\?=","g");
+  
+function stripAndSortAddresses(headerString)
+{
+#ifdef DEBUG_stripAndSortAddresses
+  jsConsoleService.logStringMessage('stripAndSortAddresses(' + headerString +  ')');
+#endif
+  // if we suspect there's undecoded text, let's not do anything and
+  // keep the field the way it is; at worst, we'll have some false-non-dupes
+  if ((headerString == null) || (headerString == ""))
+    return headerString;
+  if (gEcnodedWordRegExp.test(headerString))
+    return headerString;
+  var matches;
+  try {
+    matches = headerString.match(gEmailRegExp).sort();
+  } catch(ex) {}
+  return matches;
+}
+
 // sillyHash - 
 // Calculates the hash used for the first-phase separation of non-dupe
 // messages; it relies on the non-expensive comparison criteria
@@ -600,11 +636,24 @@ function sillyHash(searchData,messageHdr,folder)
       // field being mixed up with other fields in the hash, i.e. in case the subject
       // ends with something like "|55"
   if (searchData.useCriteria['author'])
-    retVal += messageHdr.author + '|^#=)A?mUi5|';
+    retVal += 
+      (searchData.compareStrippedAndSortedAddresses ?
+      stripAndSortAddresses(messageHdr.mime2DecodedAuthor) : messageHdr.author)
+      + '|^#=)A?mUi5|';
   if (searchData.useCriteria['recipients'])
-    retVal += messageHdr.recipients + '|Ei4iXn=Iv*|';
+    retVal += 
+      (searchData.compareStrippedAndSortedAddresses ?
+      stripAndSortAddresses(messageHdr.mime2DecodedRecipients) : messageHdr.recipients)
+      + '|Ei4iXn=Iv*|';
+  // note: 
+  // We're stripping here the non-MIME-transfer-encoding-decoded CC list!
+  // It might not work but we don't have immediate access to the decoded
+  // version...
   if (searchData.useCriteria['cc_list'])
-    retVal += messageHdr.ccList + '|w7Exh\' s%k|';
+    retVal += 
+      (searchData.compareStrippedAndSortedAddresses ?
+      stripAndSortAddresses(messageHdr.ccList) : messageHdr.ccList)
+      + '|w7Exh\' s%k|';
   if (searchData.useCriteria['num_lines'])
     retVal += messageHdr.lineCount + '|';
   if (searchData.useCriteria['flags'])
