@@ -19,7 +19,7 @@
 <!ENTITY removedupes_dialog.line_count "מס' שורות">
 <!ENTITY removedupes_dialog.date "תאריך">
 <!ENTITY removedupes_dialog.send_time "זמן משלוח">
-<!ENTITY removedupes_dialog.send_time "גודל">
+<!ENTITY removedupes_dialog.size "גודל">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "המסומנים כמקורות">
 <!ENTITY removedupes_dialog.keep_first.label "ההודעה הראשונה">
 <!ENTITY removedupes_dialog.keep_last.label "ההודעה האחרונה">
