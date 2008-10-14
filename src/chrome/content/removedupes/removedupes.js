@@ -325,6 +325,14 @@ function addSearchFolders(folder, searchData)
 #endif
     }
   }
+  if (folder.flags & MSG_FOLDER_FLAG_VIRTUAL) {
+    // it's a virtual search folder, skip it
+#ifdef DEBUG_addSearchFolders
+    jsConsoleService.logStringMessage('skipping virtual search folder ' + folder.abbreviatedName);
+#endif
+    return;
+  }
+    
 
   searchData.remainingFolders++;
 
