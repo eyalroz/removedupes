@@ -1,6 +1,6 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "重複メッセージの削除...">
-<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "次の重複メッセージ検索用に設定">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "重複メッセージ検索用の設定">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "O">
 <!ENTITY key-removedupes.modifiers "accel,shift">
@@ -18,6 +18,7 @@
 <!ENTITY removedupes_dialog.line_count "本文行数">
 <!ENTITY removedupes_dialog.date "日時">
 <!ENTITY removedupes_dialog.send_time "送信日時">
+<!ENTITY removedupes_dialog.size "Size">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "オリジナルのセット">
 <!ENTITY removedupes_dialog.keep_first.label "上段のメッセージのみ保持">
 <!ENTITY removedupes_dialog.keep_last.label "下段のメッセージのみ保持">
