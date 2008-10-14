@@ -18,6 +18,7 @@
 <!ENTITY removedupes_dialog.line_count "Aantal regels">
 <!ENTITY removedupes_dialog.date "Datum">
 <!ENTITY removedupes_dialog.send_time "Verzendtijd">
+<!ENTITY removedupes_dialog.size "Grootte">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "Ingestelde originelen">
 <!ENTITY removedupes_dialog.keep_first.label "Eerste exemplaar">
 <!ENTITY removedupes_dialog.keep_last.label "Laatste exemplaar">

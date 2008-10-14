@@ -1,6 +1,9 @@
 <!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) – Nastavenie">
 <!ENTITY guide-url "http://not.yet.written/">
 <!ENTITY message_comparison.tab_title "Porovnávanie správ">
+<!ENTITY message_comparison.criteria_box.label "Časť správy použitá ako kritérium porovnávania">
+<!ENTITY message_comparison.skip_special_folders.label "Preskočiť osobité priečinky (Odoslané, Návrhy a pod.)">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Porovnať zotriedené e-mailové adresy (neobsahuje Prezývky či Zobrazované meno)">
 <!ENTITY message_comparison.tab_description "Časti správy použité ako kritérium porovnávania:">
 <!ENTITY message_comparison.author.label "Odosielateľ (&apos;Od&apos;)">
 <!ENTITY message_comparison.recipients.label "Komu">
@@ -9,9 +12,12 @@
 <!ENTITY message_comparison.message_id.label "ID správy">
 <!ENTITY message_comparison.num_lines.label "Počet riadkov v správe">
 <!ENTITY message_comparison.send_time.label "Čas odoslania">
+<!ENTITY message_comparison.size.label "Veľkosť">
 <!ENTITY message_comparison.subject.label "Predmet">
 <!ENTITY message_comparison.folder.label "Priečinok">
 <!ENTITY message_comparison.body.label "Telo správy">
+<!ENTITY message_comparison.skip_special_folders.access_key "y">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.access_key "v">
 <!ENTITY message_comparison.author.access_key "O">
 <!ENTITY message_comparison.flags.access_key "b">
 <!ENTITY message_comparison.recipients.access_key "K">
@@ -19,6 +25,7 @@
 <!ENTITY message_comparison.message_id.access_key "I">
 <!ENTITY message_comparison.num_lines.access_key "P">
 <!ENTITY message_comparison.send_time.access_key "s">
+<!ENTITY message_comparison.size.access_key "ť">
 <!ENTITY message_comparison.subject.access_key "r">
 <!ENTITY message_comparison.folder.access_key "e">
 <!ENTITY message_comparison.body.access_key "T">
