@@ -1,6 +1,9 @@
 <!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - Opzioni">
 <!ENTITY guide-url "http://">
 <!ENTITY message_comparison.tab_title "Confronto dei messaggi">
+<!ENTITY message_comparison.criteria_box.label "Elementi del messaggio da utilizzare come termine di paragone.">
+<!ENTITY message_comparison.skip_special_folders.label "Ignora le cartelle speciali (Posta inviata, Bozze, ecc. ecc.)">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Ordina e confronta gli indirizzi">
 <!ENTITY message_comparison.tab_description "Elementi del messaggio utilizzati come termine di paragone:">
 <!ENTITY message_comparison.author.label "Autore (indirizzo &apos;Da&apos;)">
 <!ENTITY message_comparison.recipients.label "Destinatari">
@@ -9,9 +12,12 @@
 <!ENTITY message_comparison.message_id.label "ID del messaggio">
 <!ENTITY message_comparison.num_lines.label "Numero di righe nel messaggio">
 <!ENTITY message_comparison.send_time.label "Ora di invio">
+<!ENTITY message_comparison.size.label "Dimensione">
 <!ENTITY message_comparison.subject.label "Oggetto">
 <!ENTITY message_comparison.folder.label "Cartella">
 <!ENTITY message_comparison.body.label "Corpo">
+<!ENTITY message_comparison.skip_special_folders.access_key "I">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.access_key "Z">
 <!ENTITY message_comparison.author.access_key "C">
 <!ENTITY message_comparison.flags.access_key "A">
 <!ENTITY message_comparison.recipients.access_key "D">
@@ -19,6 +25,7 @@
 <!ENTITY message_comparison.message_id.access_key "I">
 <!ENTITY message_comparison.num_lines.access_key "R">
 <!ENTITY message_comparison.send_time.access_key "O">
+<!ENTITY message_comparison.size.access_key "S">
 <!ENTITY message_comparison.subject.access_key "G">
 <!ENTITY message_comparison.folder.access_key "T">
 <!ENTITY message_comparison.body.access_key "P">

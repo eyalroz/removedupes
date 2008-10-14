@@ -1,6 +1,9 @@
 <!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - Настройки">
 <!ENTITY guide-url "http://not.yet.written/">
 <!ENTITY message_comparison.tab_title "Сравнение сообщений">
+<!ENTITY message_comparison.criteria_box.label "Message elements used as comparison criteria">
+<!ENTITY message_comparison.skip_special_folders.label "Skip Special Folders (Sent, Drafts etc.)">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Compare addresses stripped and sorted">
 <!ENTITY message_comparison.tab_description "Параметры сообщения, используемые для сравнения:">
 <!ENTITY message_comparison.author.label "Автор (&apos;От&apos;)">
 <!ENTITY message_comparison.recipients.label "Получатели (&apos;Кому&apos;)">
@@ -9,9 +12,12 @@
 <!ENTITY message_comparison.message_id.label "ID сообщения">
 <!ENTITY message_comparison.num_lines.label "Кол-во строк в сообщении">
 <!ENTITY message_comparison.send_time.label "Время отправки">
+<!ENTITY message_comparison.size.label "Size">
 <!ENTITY message_comparison.subject.label "Тема">
 <!ENTITY message_comparison.folder.label "Папка">
 <!ENTITY message_comparison.body.label "Содержимое">
+<!ENTITY message_comparison.skip_special_folders.access_key "k">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.access_key "r">
 <!ENTITY message_comparison.author.access_key "А">
 <!ENTITY message_comparison.flags.access_key "Ф">
 <!ENTITY message_comparison.recipients.access_key "П">
@@ -19,6 +25,7 @@
 <!ENTITY message_comparison.message_id.access_key "I">
 <!ENTITY message_comparison.num_lines.access_key "К">
 <!ENTITY message_comparison.send_time.access_key "В">
+<!ENTITY message_comparison.size.access_key "s">
 <!ENTITY message_comparison.subject.access_key "Т">
 <!ENTITY message_comparison.folder.access_key "П">
 <!ENTITY message_comparison.body.access_key "С">
