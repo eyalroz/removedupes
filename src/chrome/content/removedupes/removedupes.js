@@ -701,9 +701,9 @@ function populateDupeSetsHash(searchData)
       i = 0;
     }
     var folder = folders[i];
-#ifdef DEBUG_updateDupeSetsHashMapWithFolderMessages
+#ifdef DEBUG_populateDupeSetsHash
     jsConsoleService.logStringMessage(
-        'updateDupeSetsHashMapWithFolderMessages for folder ' + folder.abbreviatedName + '\n' +
+        'populateDupeSetsHash for folder ' + folder.abbreviatedName + '\n' +
         (allowNewUris ? '' : 'not') + 'allowing new URIs');
 #endif
     if (folder.isServer == true) {
@@ -714,7 +714,7 @@ function populateDupeSetsHash(searchData)
 
     var folderMessageHdrsIterator;
     try {
-#ifdef DEBUG_updateDupeSetsHashMapWithFolderMessages
+#ifdef DEBUG_populateDupeSetsHash
       jsConsoleService.logStringMessage('doing getMessages() for folder ' + folder.abbreviatedName);
 #endif
       folderMessageHdrsIterator =
@@ -737,14 +737,14 @@ function populateDupeSetsHash(searchData)
 
       if (messageHash in messageUriHashmap) {
         if (messageHash in searchData.dupeSetsHashMap) {
-#ifdef DEBUG_updateDupeSetsHashMapWithFolderMessages
+#ifdef DEBUG_populateDupeSetsHash
           jsConsoleService.logStringMessage('sillyHash\n' + messageHash + '\nis a third-or-later dupe');
 #endif
           // just add the current message's URI, no need to copy anything
           searchData.dupeSetsHashMap[messageHash].push(uri);
         } 
         else {
-#ifdef DEBUG_updateDupeSetsHashMapWithFolderMessages
+#ifdef DEBUG_populateDupeSetsHash
           jsConsoleService.logStringMessage('sillyHash\n' + messageHash + '\nis a second dupe');
 #endif
           // the URI in messageUriHashmap[messageHash] has not been copied to
@@ -757,7 +757,7 @@ function populateDupeSetsHash(searchData)
         }
       } 
       else {
-#ifdef DEBUG_updateDupeSetsHashMapWithFolderMessages
+#ifdef DEBUG_populateDupeSetsHash
         jsConsoleService.logStringMessage('sillyHash\n' + messageHash + '\nis not a dupe (or a first dupe)');
 #endif
         if (allowNewUris) {
