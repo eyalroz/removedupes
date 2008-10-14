@@ -18,6 +18,7 @@
 <!ENTITY removedupes_dialog.line_count "# Linjer">
 <!ENTITY removedupes_dialog.date "Dato">
 <!ENTITY removedupes_dialog.send_time "Tidspunkt">
+<!ENTITY removedupes_dialog.size "Størrelse">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "Forvælg oprindelige">
 <!ENTITY removedupes_dialog.keep_first.label "Første kopi">
 <!ENTITY removedupes_dialog.keep_last.label "Sidste kopi">
