@@ -1,6 +1,9 @@
 <!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternatif) - Paramètres">
 <!ENTITY guide-url "http://site.pas.encore.fait/">
 <!ENTITY message_comparison.tab_title "Comparaison de messages">
+<!ENTITY message_comparison.criteria_box.label "Éléments du message utilisés comme critère de comparaison">
+<!ENTITY message_comparison.skip_special_folders.label "Ignorer les dossier spéciaux (envois, brouillons, etc.)">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Comparer les adresses simplifiées et triées">
 <!ENTITY message_comparison.tab_description "Éléments de message servant de critères de comparaison :">
 <!ENTITY message_comparison.author.label "Expéditeur (adresse « De : »)">
 <!ENTITY message_comparison.recipients.label "Destinataires">
@@ -9,9 +12,12 @@
 <!ENTITY message_comparison.message_id.label "Identifiant du message">
 <!ENTITY message_comparison.num_lines.label "Nombre de lignes du message">
 <!ENTITY message_comparison.send_time.label "Date d&apos;envoi">
+<!ENTITY message_comparison.size.label "Taille">
 <!ENTITY message_comparison.subject.label "Sujet">
 <!ENTITY message_comparison.folder.label "Dossier">
 <!ENTITY message_comparison.body.label "Contenu">
+<!ENTITY message_comparison.skip_special_folders.access_key "g">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.access_key "t">
 <!ENTITY message_comparison.author.access_key "D">
 <!ENTITY message_comparison.flags.access_key "p">
 <!ENTITY message_comparison.recipients.access_key "r">
@@ -19,6 +25,7 @@
 <!ENTITY message_comparison.message_id.access_key "I">
 <!ENTITY message_comparison.num_lines.access_key "l">
 <!ENTITY message_comparison.send_time.access_key "t">
+<!ENTITY message_comparison.size.access_key "a">
 <!ENTITY message_comparison.subject.access_key "S">
 <!ENTITY message_comparison.folder.access_key "o">
 <!ENTITY message_comparison.body.access_key "C">

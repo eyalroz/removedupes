@@ -1,9 +1,8 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "הסר כפולים...">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "קבע תיקיות הודעות מקור לצורך חיפוש הכפולים הבא">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "כ">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "מ">
-<!ENTITY removedupes.remove_duplicates_menuitems.remove.label  "הסר כפולים...">
-<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "כ">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "כ">
 <!ENTITY removedupes_dialog.dialog_title "מחיקת הודעות כפולות">
@@ -16,7 +15,7 @@
 <!ENTITY removedupes_dialog.cc_list "מקבלי עותק">
 <!ENTITY removedupes_dialog.flags "דגלים">
 <!ENTITY removedupes_dialog.folder "תיקיה">
-<!ENTITY removedupes_dialog.line_count "מס' שורות">
+<!ENTITY removedupes_dialog.line_count "מס&apos; שורות">
 <!ENTITY removedupes_dialog.date "תאריך">
 <!ENTITY removedupes_dialog.send_time "זמן משלוח">
 <!ENTITY removedupes_dialog.size "גודל">
