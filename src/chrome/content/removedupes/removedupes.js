@@ -19,6 +19,8 @@ var gStatusTextField;
 
 var gOriginalsFolders;
 
+var gVirtualFolderFlag;
+  
 // which criteria will we use in the dupe search if the preferences
 // are not set?
 
@@ -194,6 +196,15 @@ function searchAndRemoveDuplicateMessages()
 #ifdef DEBUG_searchAndRemoveDuplicateMessages
   jsConsoleService.logStringMessage('searchAndRemoveDuplicateMessages()');
 #endif
+
+  // for some reason this is no longer defined recent Seamonkey trunk versions
+  try {
+    gVirtualFolderFlag =
+      Components.interfaces.nsMsgFolderFlags.Virtual
+  } catch(ex) {
+    gVirtualFolderFlag = MSG_FOLDER_FLAG_VIRTUAL;
+  }
+    
   //document.getElementById('progress-panel').removeAttribute('collapsed'); 
   gStatusTextField = document.getElementById('statusText');
   gStatusTextField.label =
@@ -325,7 +336,7 @@ function addSearchFolders(folder, searchData)
 #endif
     }
   }
-  if (folder.flags & MSG_FOLDER_FLAG_VIRTUAL) {
+  if (folder.flags & gVirtualFolderFlag) {
     // it's a virtual search folder, skip it
 #ifdef DEBUG_addSearchFolders
     jsConsoleService.logStringMessage('skipping virtual search folder ' + folder.abbreviatedName);
@@ -674,6 +685,10 @@ function sillyHash(searchData,messageHdr,folder)
 
 function populateDupeSetsHash(searchData)
 {
+#ifdef DEBUG_populateDupeSetsHash
+   jsConsoleService.logStringMessage('in populateDupeSetsHash()');
+#endif
+
   // messageUriHashmap  will be filled with URIs for _all_ messages;
   // the dupe set hashmap will only have entries for dupes, and these
   // entries will be sets of dupes (technically, arrays of dupes)
@@ -723,16 +738,23 @@ function populateDupeSetsHash(searchData)
     var folderMessageHdrsIterator;
     try {
 #ifdef DEBUG_populateDupeSetsHash
-      jsConsoleService.logStringMessage('doing getMessages() for folder ' + folder.abbreviatedName);
+      jsConsoleService.logStringMessage('trying getMessages(msgWindows) for folder ' + folder.abbreviatedName);
 #endif
       folderMessageHdrsIterator =
         folder.getMessages(msgWindow);
     } catch(ex) {
-#ifdef DEBUG
-      jsConsoleService.logStringMessage('getMessages() failed for folder ' + folder.abbreviatedName + ':' + ex);
-#else
-      dump(gRemoveDupesStrings.formatStringFromName('removedupes.failed_getting_messages', [folder.abbreviatedName], 1) + '\n');
+      try {
+#ifdef DEBUG_populateDupeSetsHash
+        jsConsoleService.logStringMessage('trying getMessages() for folder ' + folder.abbreviatedName);
 #endif
+        folderMessageHdrsIterator = folder.messages;
+      } catch(ex) {
+#ifdef DEBUG
+        jsConsoleService.logStringMessage('accessing messages failed for folder ' + folder.abbreviatedName + ' :\n' + ex);
+#else
+        dump(gRemoveDupesStrings.formatStringFromName('removedupes.failed_getting_messages', [folder.abbreviatedName], 1) + '\n');
+#endif
+      }
     }
 
     while (folderMessageHdrsIterator.hasMoreElements()) {
