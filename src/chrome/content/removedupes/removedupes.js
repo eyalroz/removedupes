@@ -130,6 +130,14 @@ function DupeSearchData()
     );
 #endif
 
+  // when messages have no Message-ID header, Mozilla uses their MD5
+  // digest value; however, the implementation is somewhat buggy and
+  // two copies of the same message reportedly get different MD5s
+  // sometimes; plus, it's not _really_ the message ID
+
+  this.allowMD5IDSubstitutes = 
+    gRemoveDupesPrefs.getBoolPref("allow_md5_id_substitute",false);
+
   // When comparing fields with address (recipients and CC list), 
   // do we compare the fields in the way and order they appear in
   // the field, or do we canonicalize the fields by taking the
@@ -642,7 +650,9 @@ function sillyHash(searchData,messageHdr,folder)
 
   var retVal = '';
   if (searchData.useCriteria['message_id'])
-    retVal += messageHdr.messageId + '|';
+    retVal += 
+      ((searchData.allowMD5IDSubstitutes || messageHdr.messageId.substr(0,4) != 'md5:') ?
+      messageHdr.messageId : '') + '|';
   if (searchData.useCriteria['send_time'])
     retVal += messageHdr.dateInSeconds + '|';
   if (searchData.useCriteria['size'])
@@ -1029,7 +1039,8 @@ function reviewAndRemoveDupes(searchData)
       gDBView,
       searchData.useCriteria,
       searchData.dupeSetsHashMap,
-      searchData.originalsFolderUris);
+      searchData.originalsFolderUris,
+      searchData.allowMD5IDSubstitutes);
   }
   delete searchData;
 }

@@ -70,7 +70,9 @@ function dupeMessageRecord(messageUri)
   this.uri          = messageUri;
   this.folder_name  = messageHdr.folder.abbreviatedName;
   this.folderUri    = messageHdr.folder.URI;
-  this.message_id   = messageHdr.messageId;
+  this.message_id   = 
+   ((gAllowMD5IDSubstitutes || messageHdr.messageId.substr(0,4) != 'md5:') ?
+    messageHdr.messageId : '');
   this.send_time    = formatSendTime(messageHdr.dateInSeconds);
   this.size         = messageHdr.messageSize;
   this.subject      = messageHdr.mime2DecodedSubject;
@@ -102,6 +104,7 @@ function initDupeReviewDialog()
   var useCriteria           = window.arguments[4];
   gDupeSetsHashMap          = window.arguments[5];
   gOriginalsFolderUris      = window.arguments[6];
+  gAllowMD5IDSubstitutes    = window.arguments[7];
   
   // let's replace the URI's with all the necessary information
   // for the display dialog:
