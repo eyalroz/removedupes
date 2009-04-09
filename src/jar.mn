@@ -84,3 +84,8 @@ removedupes.jar:
     locale/da-DK/removedupes/contents.rdf                         (chrome/locale/da-DK/removedupes/contents.rdf)
     locale/cs-CZ/removedupes/contents.rdf                         (chrome/locale/cs-CZ/removedupes/contents.rdf)
 #endif
+
+#ifdef MOZ_THUNDERBIRD
+removedupes-mac-skin.jar:
+    skin/classic/removedupes/removedupes-dialog.css               (platform/Darwin/chrome/skin/classic/removedupes/removedupes-dialog-tbird.css)
+#endif
