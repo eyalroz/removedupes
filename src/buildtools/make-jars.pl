@@ -1,4 +1,4 @@
-#!/perl
+#!/usr/bin/perl
 
 # make-jars [-f] [-v] [-l] [-x] [-a] [-e] [-d <chromeDir>] [-s <srcdir>] [-t <topsrcdir>] [-c <localedir>] [-j <jarDir>] [-z zipprog] [-o operating-system] < <jar.mn>
 
@@ -49,7 +49,7 @@ foreach my $arg (@ARGV) {
 }
 my $defines = join(' ', @ARGV[ $ddindex .. $#ARGV ]);
 
-getopts("d:s:t:c:j:f:avqlD:o:p:xz:e");
+getopts("d:s:t:c:j:f:avlD:o:p:xz:e");
 
 my $baseFilesDir = ".";
 if (defined($::opt_s)) {
@@ -84,11 +84,6 @@ if (defined($::opt_j)) {
 my $verbose = 0;
 if (defined($::opt_v)) {
     $verbose = 1;
-}
-
-my $quiet = 0;
-if (defined($::opt_q)) {
-    $quiet = 1;
 }
 
 my $fileformat = "jar";
@@ -208,25 +203,6 @@ sub foreignPlatformFile
    return 0;
 }
 
-sub foreignPlatformPath
-{
-   my ($jarpath) = @_;
-   
-   if (!$win32 && index($jarpath, "-platform/win") != -1) {
-     return 1;
-   }
-   
-   if (!$unix && index($jarpath, "-platform/unix") != -1) {
-     return 1; 
-   }
-
-   if (!$macos && index($jarpath, "-platform/mac") != -1) {
-     return 1;
-   }
-
-   return 0;
-}
-
 sub zipErrorCheck($$)
 {
     my ($err,$lockfile) = @_;
@@ -249,8 +225,6 @@ sub JarIt
     }
 
     #print "cd $destPath/$jarfile\n";
-    my $argOpt = "-X";
-    $argOpt = "-uX" if ( -e $jarchive);
 
     my $lockfile = "../$jarfile.lck";
 
@@ -271,20 +245,20 @@ sub JarIt
 
             #print "$zipprog $zipmoveopt -uX $jarchive $subargs\n";
             #print "Length of subargs: " . length($subargs) . "\n";
-            system("$zipprog $zipmoveopt $argOpt $jarchive $subargs") == 0 or
+            system("$zipprog $zipmoveopt -uX $jarchive $subargs") == 0 or
                 $err = $? >> 8;
             zipErrorCheck($err,$lockfile);
         }
         #print "Length of args: " . length($args) . "\n";
         #print "$zipprog $zipmoveopt -uX $jarchive $args\n";
-        system("$zipprog $zipmoveopt $argOpt $jarchive $args") == 0 or
+        system("$zipprog $zipmoveopt -uX $jarchive $args") == 0 or
             $err = $? >> 8;
         zipErrorCheck($err,$lockfile);
     }
 
     if (!($overrides eq "")) {
         my $err = 0; 
-        print "+++ overriding $overrides\n" unless $quiet;
+        print "+++ overriding $overrides\n";
           
         while (length($overrides) > $maxCmdline) {
             #print "Exceeding POSIX cmdline limit: " . length($overrides) . "\n";
@@ -345,7 +319,7 @@ sub UniqIt
     my %lines = map { $_ => 1 } @_;
 
     my $lockfile = "$manifest.lck";
-    print "+++ updating chrome $manifest\n" unless $quiet;
+    print "+++ updating chrome $manifest\n";
 
     my $dir = dirname($manifest);
     mkpath($dir, 0, 0755);
@@ -398,7 +372,7 @@ sub RegIt
 
 sub EnsureFileInDir
 {
-    my ($destPath, $srcPath, $destFile, $srcFile, $override, $preproc) = @_;
+    my ($destPath, $srcPath, $destFile, $srcFile, $override, $preproc, $preproc_flags) = @_;
     my $objPath;
 
     #print "EnsureFileInDir($destPath, $srcPath, $destFile, $srcFile, $override)\n";
@@ -451,7 +425,7 @@ sub EnsureFileInDir
         #print "copying $destPath, from $srcPath\n";
         my $dir = "";
         my $file;
-        if ($destPath =~ /(.+)[\\\/]([\w\d.\-\_]+)/) {
+        if ($destPath =~ /([\w\d.\-\_\\\/\+]+)[\\\/]([\w\d.\-\_]+)/) {
             $dir = $1;
             $file = $2;
         }
@@ -476,9 +450,9 @@ sub EnsureFileInDir
         }
         unlink $destPath;       # in case we had a symlink on unix
         if ($preproc) {
-            my $preproc_flags = '';
-            if ($srcPath =~ /\.css$/o) {
-                $preproc_flags = '--marker=%';
+            # my $preproc_flags = '';
+            if ($srcFile =~ /\.css$/o) {
+                $preproc_flags = $preproc_flags . ' --marker=%';
             }
 
             my $preproc_file = $file;
@@ -492,12 +466,13 @@ sub EnsureFileInDir
                 open(TMP, ">$tmpFile") || die("$tmpFile: $!");
                 print(TMP "$^X $preprocessor $preproc_flags $defines $preproc_file > $destPath");
                 close(TMP);
-                print "+++ preprocessing $preproc_file > $destPath\n" unless $quiet;
+                print "+++ preprocessing $preproc_file > $destPath\n";
                 if (system("bash \"$tmpFile\"") != 0) {
                     die "Preprocessing of $file failed (VMS): ".($? >> 8);
                 }
                 unlink("$tmpFile") || die("$tmpFile: $!");
             } else {
+                printf("doing \"$^X $preprocessor $preproc_flags $defines $preproc_file > $destPath\"\n");
                 if (system("$^X $preprocessor $preproc_flags $defines $preproc_file > $destPath") != 0) {
                     die "Preprocessing of $file failed: ".($? >> 8);
                 }
@@ -534,14 +509,14 @@ start:
         my $cwd = cwd();
         my @manifestLines;
 
-        print "+++ making chrome $cwd  => $jarDir/$jarfile.jar\n" unless $quiet;
+        print "+++ making chrome $cwd  => $jarDir/$jarfile.jar\n";
         while (defined($_ = shift @gLines)) {
             if (/^\s+([\w\d.\-\_\\\/\+]+)\s*(\(\%?[\w\d.\-\_\\\/]+\))?$\s*/) {
                 my $dest = $1;
                 my $srcPath = defined($2) ? substr($2, 1, -1) : $2;
-                EnsureFileInDir("$chromeDir/$jarfile", $baseFilesDir, $dest, $srcPath, 0, 0);
+                EnsureFileInDir("$chromeDir/$jarfile", $baseFilesDir, $dest, $srcPath, 0, 0, '');
                 $args = "$args$dest ";
-                if (!foreignPlatformFile($jarfile) && !foreignPlatformPath($dest) && $autoreg &&
+                if (!foreignPlatformFile($jarfile)  && $autoreg &&
                     $dest =~ /([\w\d.\-\_\+]+)\/([\w\d.\-\_\\\/]+)contents.rdf/)
                 {
                     my $chrome_type = $1;
@@ -551,23 +526,23 @@ start:
             } elsif (/^\+\s+([\w\d.\-\_\\\/\+]+)\s*(\(\%?[\w\d.\-\_\\\/]+\))?$\s*/) {
                 my $dest = $1;
                 my $srcPath = defined($2) ? substr($2, 1, -1) : $2;
-                EnsureFileInDir("$chromeDir/$jarfile", $baseFilesDir, $dest, $srcPath, 1, 0);
+                EnsureFileInDir("$chromeDir/$jarfile", $baseFilesDir, $dest, $srcPath, 1, 0, '');
                 $overrides = "$overrides$dest ";
-                if (!foreignPlatformFile($jarfile) && !foreignPlatformPath($dest) && $autoreg &&
-                    $dest =~ /([\w\d.\-\_\+]+)\/([\w\d.\-\_\\\/]+)contents.rdf/)
+                if (!foreignPlatformFile($jarfile)  && $autoreg && $dest =~ /([\w\d.\-\_\+]+)\/([\w\d.\-\_\\\/]+)contents.rdf/)
                 {
                     my $chrome_type = $1;
                     my $pkg_name = $2;
                     RegIt($chromeDir, $jarfile, $chrome_type, $pkg_name);
                 }
-            } elsif (/^\*\+?\s+([\w\d.\-\_\\\/\+]+)\s*(\(\%?[\w\d.\-\_\\\/]+\))?$\s*/) {
+            } elsif (/^\*\+?\s+([\w\d.\-\_\\\/\+]+)\s*(\(\%?[\w\d.\-\_\\\/]+\))?(\s+([^\s].*))?$\s*/) {
                 # preprocessed (always override)
                 my $dest = $1;
                 my $srcPath = defined($2) ? substr($2, 1, -1) : $2;
-                EnsureFileInDir("$chromeDir/$jarfile", $baseFilesDir, $dest, $srcPath, 1, 1);
+                print("\$3 is: $3\n\$4 is: $4\n");
+                my $preproc_flags = defined($4) ? $4 : '';
+                EnsureFileInDir("$chromeDir/$jarfile", $baseFilesDir, $dest, $srcPath, 1, 1, $preproc_flags);
                 $overrides = "$overrides$dest ";
-                if (!foreignPlatformFile($jarfile) && !foreignPlatformPath($dest) && $autoreg &&
-                    $dest =~ /([\w\d.\-\_\+]+)\/([\w\d.\-\_\\\/]+)contents.rdf/)
+                if (!foreignPlatformFile($jarfile)  && $autoreg && $dest =~ /([\w\d.\-\_\+]+)\/([\w\d.\-\_\\\/]+)contents.rdf/)
                 {
                     my $chrome_type = $1;
                     my $pkg_name = $2;
