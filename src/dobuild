@@ -52,7 +52,7 @@ $BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $DEFS" 
 echo -e "\nJAR files ready\n"
 $BUILDTOOLSDIR/preprocessor.pl $DEFS install.rdf > $BUILDDIR/install.rdf
 rm -rf ${SHORTNAME}
-#rm -rf bidimailpack-mac-skin
+#rm -rf ${SHORTNAME}-mac-skin
 rm -f installed-chrome.txt
 
 mkdir $BUILDDIR/defaults
@@ -64,7 +64,24 @@ mv ${SHORTNAME}.jar $BUILDDIR/chrome/${SHORTNAME}.jar
 cp COPYING $BUILDDIR
 
 case "$TARGET" in
-    suiterunner | tbird)
+    tbird)
+        mkdir $BUILDDIR/platform/
+        mkdir $BUILDDIR/platform/Darwin
+        mkdir $BUILDDIR/platform/Darwin/chrome
+        mv ${SHORTNAME}-mac-skin.jar $BUILDDIR/platform/Darwin/chrome
+        $BUILDTOOLSDIR/preprocessor.pl $DEFS chrome.manifest > $BUILDDIR/chrome.manifest
+        cp platform/Darwin/chrome.manifest $BUILDDIR/platform/Darwin/chrome.manifest
+        cd $BUILDDIR
+	zip -r $XPINAME  \
+	  COPYING \
+	  chrome/${SHORTNAME}.jar \
+	  defaults/ \
+	  platform/Darwin/chrome.manifest \
+	  platform/Darwin/chrome/${SHORTNAME}-mac-skin.jar \
+	  install.rdf \
+	  chrome.manifest || exit
+        ;;
+    suiterunner)
         $BUILDTOOLSDIR/preprocessor.pl $DEFS chrome.manifest > $BUILDDIR/chrome.manifest
         cd $BUILDDIR
 	zip -r $XPINAME  \
