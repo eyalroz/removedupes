@@ -53,5 +53,5 @@
     <em:optionsURL>chrome://removedupes/content/removedupes-prefs.xul</em:optionsURL>
 #endif
 
-  </Description>      
+  </Description>
 </RDF>
