@@ -1026,11 +1026,25 @@ function reviewAndRemoveDupes(searchData)
   else {
     if (!gMessengerBundle)
       gMessengerBundle = document.getElementById("bundle_messenger");
+    var dialogURI = "chrome://removedupes/content/removedupes-dialog.xul";
+#ifdef MOZ_THUNDERBIRD
+    if (getAppVersion() < "3") {
+#ifdef DEBUG_reviewAndRemove
+      jsConsoleService.logStringMessage('getAppVersion  >= 3');
+#endif
+      dialogURI = "chrome://removedupes/content/removedupes-dialog.tb2.xul"
+    }
+#ifdef DEBUG_reviewAndRemove
+    else {
+      jsConsoleService.logStringMessage('getAppVersion  < 3');
+    }    
+#endif
+#endif
 
     // open up a dialog in which the user sees all dupes we've found,
     // and can decide which to delete
     window.openDialog(
-      "chrome://removedupes/content/removedupes-dialog.xul",
+      dialogURI,
       "removedupes",
       "chrome,resizable=yes",
       messenger,
@@ -1044,7 +1058,6 @@ function reviewAndRemoveDupes(searchData)
   }
   delete searchData;
 }
-
 
 function toggleDupeSearchCriterion(ev,criterion)
 {
