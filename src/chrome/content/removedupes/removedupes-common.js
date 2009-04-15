@@ -1,4 +1,7 @@
 
+// nsISupportsArray replaced with nsIArray by Mozilla bug 435290
+var gUseSupportsArray;
+
 var gCopyService =
   Components.classes["@mozilla.org/messenger/messagecopyservice;1"]
             .getService(Components.interfaces.nsIMsgCopyService);
@@ -95,6 +98,12 @@ function getBuildID() {
   var arr = re.exec(navigator.userAgent);
   //var revision = arr[1];
   return arr[2];
+}
+
+function getAppVersion()
+{
+  var re = /Gecko\/[0-9.a-z]+\s+\w+\/([0-9.a-z]+)/;
+  return re.exec(navigator.userAgent)[1];
 }
 
 //---------------------------------------------------------
@@ -207,6 +216,19 @@ function removeDuplicates(
   jsConsoleService.logStringMessage('in removeDuplicates\ntargetFolderUri = ' + targetFolderUri + '\ndeletePermanently = ' + deletePermanently);
 #endif
 
+  // nsIMsgCopyService no longer accepts nsISupportsArray's in recent versions;
+  // I don't know how better to check that other than using the interface's UUID
+  switch (Components.interfaces.nsIMsgCopyService.number) {
+    case "{4010d881-6c83-4f8d-9332-d44564cee14a}":
+    case "{f0ee3821-e382-43de-9b71-bd9a4a594fcb}":
+    case "{c9255b88-5e0f-4614-8fdc-ebb97a0f333e}":
+    case "{bce41600-28df-11d3-abf7-00805f8ac968}":
+      gUseSupportsArray = true;
+      break;
+    default:
+      // should be {f21e428b-73c5-4607-993b-d37325b33722} or later
+      gUseSupportsArray = false;
+  }
   var targetFolder;
   if (!deletePermanently) {
     if ((targetFolderUri == null) || (targetFolderUri == ""))
@@ -245,21 +267,22 @@ function removeDuplicates(
             folderDupesInfo.previousFolderUri = previousFolderUri;
             previousFolderUri = messageRecord.folderUri;
             folderDupesInfo.removalHeaders =
+              (gUseSupportsArray ?
             // nsISupportsArray replaced with nsIArray by Mozilla bug 435290
-#ifdef MOZ_TOOLKIT_SEAMONKEY
-              Components.classes["@mozilla.org/array;1"].createInstance(Components.interfaces.nsIMutableArray);
-#else
-              Components.classes["@mozilla.org/supports-array;1"].createInstance(Components.interfaces.nsISupportsArray);
-#endif
+               Components.classes["@mozilla.org/supports-array;1"]
+                         .createInstance(Components.interfaces.nsISupportsArray) :
+               Components.classes["@mozilla.org/array;1"]
+                         .createInstance(Components.interfaces.nsIMutableArray) );
+
             dupesByFolderHashMap[messageRecord.folderUri] = folderDupesInfo;
           }
-          dupesByFolderHashMap[messageRecord.folderUri].removalHeaders.
-#ifdef MOZ_TOOLKIT_SEAMONKEY
-            // TODO: make sure using a weak reference is the right thing here
-            appendElement(messageHeader,false);
-#else
-            AppendElement(messageHeader);
-#endif
+          // TODO: make sure using a weak reference is the right thing here
+          if (gUseSupportsArray)
+            dupesByFolderHashMap[messageRecord.folderUri].removalHeaders.
+              AppendElement(messageHeader);
+          else 
+            dupesByFolderHashMap[messageRecord.folderUri].removalHeaders.
+              appendElement(messageHeader,false);
         }
       }
     }
@@ -276,22 +299,19 @@ function removeDuplicates(
           folderDupesInfo.previousFolderUri = previousFolderUri;
           previousFolderUri = folderUri;
           folderDupesInfo.removalHeaders =
-          // nsISupportsArray replaced with nsIArray by Mozilla bug 435290
-#ifdef MOZ_TOOLKIT_SEAMONKEY
-            Components.classes["@mozilla.org/array;1"].createInstance(Components.interfaces.nsIMutableArray);
-#else
-            Components.classes["@mozilla.org/supports-array;1"].createInstance(Components.interfaces.nsISupportsArray);
-#endif
+            (gUseSupportsArray ?
+             Components.classes["@mozilla.org/supports-array;1"]
+                       .createInstance(Components.interfaces.nsISupportsArray) :
+             Components.classes["@mozilla.org/array;1"]
+                       .createInstance(Components.interfaces.nsIMutableArray) );
           dupesByFolderHashMap[folderUri] = folderDupesInfo;
         }
-        dupesByFolderHashMap[folderUri].removalHeaders.
-          // nsISupportsArray replaced with nsIArray by Mozilla bug 435290
-#ifdef MOZ_TOOLKIT_SEAMONKEY
-          // TODO: make sure using a weak reference is the right thing here
-          appendElement(messageHeader,false);
-#else
-          AppendElement(messageHeader);
-#endif
+        if (gUseSupportsArray)
+          dupesByFolderHashMap[folderUri].removalHeaders.
+            AppendElement(messageHeader);
+        else 
+          dupesByFolderHashMap[folderUri].removalHeaders.
+            appendElement(messageHeader,false);
       }
     }
   }
@@ -337,21 +357,21 @@ function removeDupesFromSingleFolder(
   else {
     try {
 #ifdef DEBUG_removeDuplicates
-  jsConsoleService.logStringMessage('targetFolder URI = ' + targetFolder.URI + '\nsourceFolder URI = ' + sourceFolder.URI +
-                                    '\nremovalMessageHdrs has ' +
-// nsISupportsArray replaced with nsIArray by Mozilla bug 435290
-#ifdef MOZ_TOOLKIT_SEAMONKEY
-                                    removalMessageHdrs.length +
-#else
-                                    removalMessageHdrs.Count() +
-#endif
-                                    ' elements, first element is\n' +
-#ifdef MOZ_TOOLKIT_SEAMONKEY
-                                    removalMessageHdrs.queryElementAt(0,Components.interfaces.nsISupports));
-#else
-                                    removalMessageHdrs.GetElementAt(0));
-#endif
-  
+  jsConsoleService.logStringMessage(
+    'using supports? ' + (gUseSupportsArray ? 'yes' : 'no') + '\n' +
+    'equals 4010d881-6c83-4f8d-9332-d44564cee14a? ' +
+      (Components.interfaces.nsIMsgCopyService.equals(Components.ID("{4010d881-6c83-4f8d-9332-d44564cee14a}")) ? 'yes' : 'no') + '\n' +
+    'equals f0ee3821-e382-43de-9b71-bd9a4a594fcb? ' +
+      (Components.interfaces.nsIMsgCopyService.equals(Components.ID("{f0ee3821-e382-43de-9b71-bd9a4a594fcb}")) ? 'yes' : 'no') + '\n' +
+    'gCopyService uuid = ' + Components.interfaces.nsIMsgCopyService.number + '\n' +
+    'targetFolder URI = ' + targetFolder.URI + '\n' +
+    'sourceFolder URI = ' + sourceFolder.URI + '\n' +
+    'removalMessageHdrs has ' +
+    (gUseSupportsArray ? removalMessageHdrs.Count() : removalMessageHdrs.length) +
+    ' elements, first element is\n' +
+    (gUseSupportsArray ? 
+     removalMessageHdrs.GetElementAt(0) :
+     removalMessageHdrs.queryElementAt(0,Components.interfaces.nsISupports)));
 #endif
       gCopyService.CopyMessages(
         sourceFolder,
