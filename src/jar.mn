@@ -1,9 +1,18 @@
 removedupes.jar:
-*   content/removedupes/removedupes-dialog.js                     (chrome/content/removedupes/removedupes-dialog.js)
 *   content/removedupes/removedupes.js                            (chrome/content/removedupes/removedupes.js)
 *   content/removedupes/removedupes-common.js                     (chrome/content/removedupes/removedupes-common.js)
 *   content/removedupes/removedupes-prefs.js                      (chrome/content/removedupes/removedupes-prefs.js)
+#ifdef MOZ_PRETOOLKIT_SEAMONKEY
 *   content/removedupes/removedupes-dialog.xul                    (chrome/content/removedupes/removedupes-dialog.xul)
+*   content/removedupes/removedupes-dialog.js                     (chrome/content/removedupes/removedupes-dialog.js)
+#else
+*   content/removedupes/removedupes-dialog.xul                    (chrome/content/removedupes/removedupes-dialog.xul) -DXBL_FOLDER_PICKER
+*   content/removedupes/removedupes-dialog.js                     (chrome/content/removedupes/removedupes-dialog.js) -DXBL_FOLDER_PICKER  
+#endif
+#ifdef MOZ_THUNDERBIRD
+*   content/removedupes/removedupes-dialog.tb2.xul                (chrome/content/removedupes/removedupes-dialog.xul)
+*   content/removedupes/removedupes-dialog.tb2.js                 (chrome/content/removedupes/removedupes-dialog.js)
+#endif
 *   content/removedupes/removedupes-mailWindowOverlay.xul         (chrome/content/removedupes/removedupes-mailWindowOverlay.xul)
     locale/en-US/removedupes/removedupes.dtd                      (chrome/locale/en-US/removedupes/removedupes.dtd)
     locale/en-US/removedupes/removedupes-prefs.dtd                (chrome/locale/en-US/removedupes/removedupes-prefs.dtd)

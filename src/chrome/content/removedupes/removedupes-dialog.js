@@ -11,6 +11,16 @@ var gTreeChildren;
 var gMessageRowTemplate;
 var gtreeLineUriColumn;
 
+#ifdef XBL_FOLDER_PICKER
+// workaround for Mozilla bug 473009 - 
+// the new folder picker DOESN'T EXPOSE ITS F***ING selected folder!
+// ... and thank you very much David Ascher & TB devs for checking ib
+// a folder picker without the most basic folder picker functionality,
+// forcing me to write a workaround
+
+var gDupeMoveTargetFolder = null;
+#endif
+
 // statistical info displayed on the status bar
 
 var gNumberOfDupeSets;
@@ -571,7 +581,17 @@ function onCancel()
 
 function onAccept()
 {
+#ifdef XBL_FOLDER_PICKER
+  var uri = gDupeMoveTargetFolder.URI;
+#else
   var uri = document.getElementById('actionTargetFolder').getAttribute('uri');
+#endif
+
+#ifdef DEBUG_onAccept
+  jsConsoleService.logStringMessage('uri is ' + uri);
+#endif
+
+
   var deletePermanently =
     (document.getElementById('action').getAttribute('value') == 'delete_permanently');
   removeDuplicates(
@@ -584,7 +604,6 @@ function onAccept()
     gRemoveDupesPrefs.setCharPref('default_target_folder', uri);
   delete gDupeSetsHashMap;
 }
-
 
 function markAllDupesForDeletion()
 {
@@ -648,15 +667,26 @@ function initializeFolderPicker()
 #ifdef DEBUG_initializeFolderPicker
   jsConsoleService.logStringMessage('setting folder picker to uri:\n' + uri);
 #endif
-    
+
+#ifndef XBL_FOLDER_PICKER
   // TODO: perhaps we don't need this when also calling SetFolderPicker ?
   MsgFolderPickerOnLoad('actionTargetFolder');
-
+#endif
+  
   if ( (uri == null) || (uri == "") )
     return;
 
-  //var msgFolder = GetMsgFolderFromUri(uri, false);
+  var msgFolder = GetMsgFolderFromUri(uri, false);
+#ifdef XBL_FOLDER_PICKER
+  try {
+    document.getElementById('actionTargetFolderPopup').selectFolder(msgFolder);
+  }
+  catch(ex) {
+  }
+#else
   SetFolderPicker(uri, 'actionTargetFolder');
+#endif
+  gDupeMoveTargetFolder = msgFolder;
 }
 
 // onClickColumn -
@@ -738,3 +768,13 @@ function sortDupeSetsByField(field)
     dupeSet.sort(compareFunction);
   }
 }
+
+#ifdef XBL_FOLDER_PICKER
+function onTargetFolderClick(targetFolder)
+{
+  gDupeMoveTargetFolder = targetFolder;
+#ifdef DEBUG_onTargetFolderClick
+  jsConsoleService.logStringMessage('in onTargetFolderClick()\ntarget = ' + targetFolder.abbreviatedName);
+#endif
+}
+#endif

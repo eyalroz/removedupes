@@ -3,8 +3,11 @@
 <?xml-stylesheet href="chrome://communicator/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://messenger/skin/prefPanels.css" type="text/css"?>
 <?xml-stylesheet href="chrome://removedupes/skin/removedupes-dialog.css" type="text/css"?>
+#ifndef XBL_FOLDER_PICKER
 
 <?xul-overlay href="chrome://messenger/content/msgFolderPickerOverlay.xul"?>
+
+#endif
 
 <!DOCTYPE dialog SYSTEM "chrome://removedupes/locale/removedupes.dtd">
 
@@ -17,10 +20,18 @@
         id="removeDuplicatesReviewDialog"
         title="&removedupes_dialog.dialog_title;">
 
+  <script type="application/x-javascript" src="chrome://messenger/content/widgetglue.js"/>
   <script type="application/x-javascript" src="chrome://removedupes/content/removedupes.js"/>
   <script type="application/x-javascript" src="chrome://removedupes/content/removedupes-common.js"/>
+#ifdef XBL_FOLDER_PICKER
   <script type="application/x-javascript" src="chrome://removedupes/content/removedupes-dialog.js"/>
-
+#else
+#ifdef MOZ_THUNDERBIRD
+  <script type="application/x-javascript" src="chrome://removedupes/content/removedupes-dialog.tb2.js"/>
+#else
+  <script type="application/x-javascript" src="chrome://removedupes/content/removedupes-dialog.js"/>
+#endif
+#endif
 
   <hbox flex="1">
     <vbox flex="2">
@@ -139,7 +150,13 @@
                    value="move"
                    label="&action.move.label;"
                    accesskey="&action.move.accesskey;"/>
-            <menulist id="actionTargetFolder" flex="1"/>
+            <menulist id="actionTargetFolder" flex="1">
+#ifdef XBL_FOLDER_PICKER
+              <menupopup id="actionTargetFolderPopup" type="folder" mode="filing"
+                         style="-moz-binding: url('chrome://messenger/content/folderWidgets.xml#folder-menupopup');"
+                         oncommand="onTargetFolderClick(event.target._folder);"/>
+#endif
+            </menulist>
           </hbox>
         </radiogroup>
         </groupbox>
@@ -166,4 +183,3 @@
   </statusbar>-->
 
 </dialog>
-
