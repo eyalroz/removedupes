@@ -11,14 +11,10 @@
 
 <overlay id="removedupesOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-#ifdef MOZ_THUNDERBIRD
-  <toolbarpalette id="MailToolbarPalette">
-#endif
-#ifdef MOZ_TOOLKIT_SEAMONKEY
-  <toolbar id="msgToolbar">
-#endif
 #ifdef PRETOOLKIT_SEAMONKEY
   <hbox id="toolbar_button_box">
+#else
+  <toolbarpalette id="MailToolbarPalette">
 #endif
 
     <toolbarbutton id="removedupes-button"
@@ -26,7 +22,7 @@
                    label="&removeduplicates-button.label;"
                    tooltiptext="&removeduplicates-button.tip;"
                    type="menu-button"
-#ifndef MOZ_THUNDERBIRD
+#ifdef MOZ_PRETOOLKIT_SEAMONKEY
                    insertafter="button-stop"
 #endif
                    class="toolbarbutton-1 chromeclass-toolbar-additional custombutton">
@@ -46,14 +42,10 @@
         <menuitem type="checkbox" id="removedupesCriterionMenuItem_body" label="&message_comparison.body.label;" oncommand="toggleDupeSearchCriterion(event,'body')"/>
       </menupopup>
     </toolbarbutton>
-#ifdef MOZ_THUNDERBIRD
-  </toolbarpalette>
-#endif
-#ifdef MOZ_TOOLKIT_SEAMONKEY
-  </toolbar>
-#endif
 #ifdef PRETOOLKIT_SEAMONKEY
-   </hbox>
+  </hbox>
+#else
+  </toolbarpalette>
 #endif
 
 </overlay>
