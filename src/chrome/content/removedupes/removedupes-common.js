@@ -102,8 +102,11 @@ function getBuildID() {
 
 function getAppVersion()
 {
-  var re = /Gecko\/[0-9.a-z]+\s+\w+\/([0-9.a-z]+)/;
-  return re.exec(navigator.userAgent)[1];
+  var versionString = 
+    gRemoveDupesPrefs.prefService
+                     .getBranch('extensions.')
+                     .getCharPref('lastAppVersion');
+  return versionString;
 }
 
 //---------------------------------------------------------
