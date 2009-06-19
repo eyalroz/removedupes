@@ -1028,15 +1028,15 @@ function reviewAndRemoveDupes(searchData)
       gMessengerBundle = document.getElementById("bundle_messenger");
     var dialogURI = "chrome://removedupes/content/removedupes-dialog.xul";
 #ifdef MOZ_THUNDERBIRD
-    if (getAppVersion() < "3") {
+    if (rdGetAppVersion() < "3") {
 #ifdef DEBUG_reviewAndRemove
-      jsConsoleService.logStringMessage('getAppVersion  >= 3');
+      jsConsoleService.logStringMessage('App Version >= 3');
 #endif
       dialogURI = "chrome://removedupes/content/removedupes-dialog.tb2.xul"
     }
 #ifdef DEBUG_reviewAndRemove
     else {
-      jsConsoleService.logStringMessage('getAppVersion  < 3');
+      jsConsoleService.logStringMessage('App Version < 3');
     }    
 #endif
 #endif
