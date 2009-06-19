@@ -9,9 +9,13 @@
   %removedupesprefDTD;
 ]>
 
+#ifdef MOZ_PRETOOLKIT_SEAMONKEY
+<?xml-stylesheet href="chrome://removedupes/skin/removedupes-button.css" type="text/css"?>
+#endif
+
 <overlay id="removedupesOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-#ifdef PRETOOLKIT_SEAMONKEY
+#ifdef MOZ_PRETOOLKIT_SEAMONKEY
   <hbox id="toolbar_button_box">
 #else
   <toolbarpalette id="MailToolbarPalette">
@@ -42,7 +46,7 @@
         <menuitem type="checkbox" id="removedupesCriterionMenuItem_body" label="&message_comparison.body.label;" oncommand="toggleDupeSearchCriterion(event,'body')"/>
       </menupopup>
     </toolbarbutton>
-#ifdef PRETOOLKIT_SEAMONKEY
+#ifdef MOZ_PRETOOLKIT_SEAMONKEY
   </hbox>
 #else
   </toolbarpalette>
