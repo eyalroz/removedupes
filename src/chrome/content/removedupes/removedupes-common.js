@@ -100,7 +100,7 @@ function getBuildID() {
   return arr[2];
 }
 
-function getAppVersion()
+function rdGetAppVersion()
 {
   var versionString = 
     gRemoveDupesPrefs.prefService
