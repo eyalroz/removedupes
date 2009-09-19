@@ -83,7 +83,7 @@ function dupeMessageRecord(messageUri)
   this.message_id   = 
    ((gAllowMD5IDSubstitutes || messageHdr.messageId.substr(0,4) != 'md5:') ?
     messageHdr.messageId : '');
-  this.send_time    = formatSendTime(messageHdr.dateInSeconds);
+  this.send_time    = messageHdr.dateInSeconds;
   this.size         = messageHdr.messageSize;
   this.subject      = messageHdr.mime2DecodedSubject;
   this.author       = messageHdr.mime2DecodedAuthor;
@@ -416,9 +416,8 @@ function createMessageTreeRow(messageRecord)
      .setAttribute("label", messageRecord.subject);
   row.childNodes.item(folderNameColumnIndex)
      .setAttribute("label", messageRecord.folder_name);
-  // the send time is already formatted
   row.childNodes.item(sendTimeColumnIndex)
-     .setAttribute("label", messageRecord.send_time);
+     .setAttribute("label", formatSendTime(messageRecord.send_time));
   row.childNodes.item(sizeColumnIndex)
      .setAttribute("label", messageRecord.size);
   row.childNodes.item(lineCountColumnIndex)
