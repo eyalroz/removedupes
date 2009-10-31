@@ -175,6 +175,20 @@ function DupeSearchData()
   this.messagesHashed = 0;
   this.setsRefined = 0;
   this.totalOriginalDupeSets = 0;
+
+  // maximum number of messages to process
+  this.limitNumberOfMessages = 
+    gRemoveDupesPrefs.getBoolPref("limit_number_of_processed_messages", false);
+#ifdef DEBUG_DupeSearchParameters
+     jsConsoleService.logStringMessage(
+      'this.limitNumberOfMessages ' + this.limitNumberOfMessages);
+#endif
+  this.maxMessages = 
+    gRemoveDupesPrefs.getIntPref("processed_messages_limit", 10000);
+#ifdef DEBUG_DupeSearchParameters
+     jsConsoleService.logStringMessage(
+      'this.maxMessages ' + this.maxMessages);
+#endif
   
   // timing is used to decide when to make the next status
   // bar progress report and for yielding for processing UI events
@@ -723,7 +737,9 @@ function populateDupeSetsHash(searchData)
   var allowNewUris = true;
   var doneWithOriginals = false;
   var folders = searchData.originalsFolders;
-  while (i < endI || !doneWithOriginals) {
+  while (   (i < endI || !doneWithOriginals)
+         && (   !searchData.limitNumberOfMessages 
+             || (searchData.messagesHashed < searchData.maxMessages))  ) {
     if (i == endI) {
       doneWithOriginals = true;
       folders = searchData.folders;
@@ -767,7 +783,9 @@ function populateDupeSetsHash(searchData)
       }
     }
 
-    while (folderMessageHdrsIterator.hasMoreElements()) {
+    while (   folderMessageHdrsIterator.hasMoreElements() 
+           && (!searchData.limitNumberOfMessages 
+               || (searchData.messagesHashed < searchData.maxMessages)) ) {
       var messageHdr = 
         folderMessageHdrsIterator.getNext()
                .QueryInterface(Components.interfaces.nsIMsgDBHdr);

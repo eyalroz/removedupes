@@ -21,6 +21,10 @@ pref("removedupes.comparison_criteria.body", false);
 pref("removedupes.confirm_search_and_deletion", true);
 pref("removedupes.default_action", 'move');
 
+pref("limit_number_of_processed_messages", false);
+pref("processed_messages_limit", 10000);
+
+
 // hidden prefs
 
 pref("removedupes.allowed_special_folders", "chrome://removedupes/locale/removedupes.properties");
