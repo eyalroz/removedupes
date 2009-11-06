@@ -5,13 +5,24 @@
 
 <ul id="version-history">
 
-<!--<li><a name="0.3.3">version 0.3.3</a>
+<!--<li><a name="0.3.4">version 0.3.4</a>
   <ul>
     <li>
     <li>
     <li>
   </ul>
 </li>-->
+
+<li><a name="0.3.3">version 0.3.3</a>
+  <ul>
+    <li>Now ignoring white space before and after message IDs.
+    <li>Can now limit the maximum number of messages processed (using a hidden pref: <code>removedupes.limit_number_of_processed_messages</code>).
+    <li>Fixed incorrect sorting of German dates.
+    <li>Fixed compatibility issue with several other extensions (Lightining, Image Zoom etc.) due to function name clash and app version misdetection.
+    <li>Seamonkey 2.x: Compatibility with the new customizable toolbars on.
+    <li>Seamonkey 1.x: Fixed menubutton invisibility issue.
+  </ul>
+</li>
 
 <li><a name="0.3.2">version 0.3.2</a>
   <ul>
@@ -48,16 +59,16 @@
     <li>Toolbar button: Added a side-menu for quick-selecting comparison criteria.
     <li>Toolbar button: Button now appears in Seamonkey (well, trunk versions, anyway; I'm having trouble with the 1.1.x versions - help is appreciated).
     <li>Review Dialog: Criteria used in the comparison are now emboldened.
-    <li>Review Dialog: Fixed some sorting and sort column indicator issues.
+d some sorting and sort column indicator issues.
     <li>Review Dialog: You can now include the Message ID and the flags fields as displayed columns.
     <li>Can now use the message status flags as a comparison criteria (read/unread, starred/unstarred, etc.)
-    <li>Fixed some locale mis-installation issues (pl-PL with Thunderbird, many locales with Seamonkey release).
+d some locale mis-installation issues (pl-PL with Thunderbird, many locales with Seamonkey release).
     <li>Added pt-BR, he-IL, ru-RU locales; thanks to the Babelzilla translators.
   </ul>
 </li>
 <li><a name="0.2.1">version 0.2.1</a>
   <ul>
-    <li>Review Dialog: Click behavior fixed.
+d.
   </ul>
 </li>
 <li><a name="0.2">version 0.2</a>
@@ -69,7 +80,7 @@
     <li>Review Dialog: The click behavior has changed: Single-click in the checkbox de/selects the message for deletion, single click elsewhere displays the message in the main Thunderbird/MailNews window, and double-click does nothing special.
     <li>Review dialog 'cosmetic' improvements: The sort order is now indicated, and various choices are now persisted (dialog size, sort order, columns being hidden, etc.).
     <li>Review Dialog: 'Last Copy' button added in addition to 'First Copy'.
-    <li>Other minor bug fixes.
+s.
   </ul>
 </li>
 <li><a name="0.1.5">version 0.1.5</a>
@@ -79,7 +90,7 @@
     <li>Locales now maintained by the kind <a href="www.babelzilla.org">BabelZilla</a> contributors - see <a href="http://www.babelzilla.org/index.php?option=com_wts&Itemid=88&extension=2543&type=lang">removedupes' page</a> there for a list of locales (we now have Japanese, Traditional Chinese, Slovak, Portugese, Italian, French, Netherlands Dutch and maybe some more).
     <li>Tweaked review dialog mouse click behavior.
     <li>Now informing the user that we're searching for dupes, using the status bar, while s/he is waiting.
-    <li>Move to different folder fixed! Can now move dupes to any folder you like; your move target preference is also preserved across uses.
+d! Can now move dupes to any folder you like; your move target preference is also preserved across uses.
     <li>(Hopefully) No longer trying to search for dupes in non-mail folders (e.g. newsgroups)
     <li>Can now compare messages by their recipient and CC lists.
     <li>Can now sort the dupe sets in the review dialog by the various columns.
