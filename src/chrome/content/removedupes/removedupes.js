@@ -663,10 +663,13 @@ function sillyHash(searchData,messageHdr,folder)
   //    the message body
 
   var retVal = '';
-  if (searchData.useCriteria['message_id'])
-    retVal += 
+  if (searchData.useCriteria['message_id']) {
+    var messageId =
       ((searchData.allowMD5IDSubstitutes || messageHdr.messageId.substr(0,4) != 'md5:') ?
-      messageHdr.messageId : '') + '|';
+      messageHdr.messageId : '');
+    // some mail servers add newlines and spaces before or after message IDs
+    retVal += messageId.replace(/(\n|^)\s+|\s+$/,"") + '|';
+  }
   if (searchData.useCriteria['send_time'])
     retVal += messageHdr.dateInSeconds + '|';
   if (searchData.useCriteria['size'])
