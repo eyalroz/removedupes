@@ -32,7 +32,6 @@
   </ul>
 </li>
 
-
 <li><a name="0.3.1">version 0.3.1</a>
   <ul>
     <li>Can now compare fields with addresses canonically, i.e. using only the addresses themselves, sorted.
@@ -56,20 +55,22 @@
 </li>
 <li><a name="0.2.2">version 0.2.2</a>
   <ul>
+
     <li>Toolbar button: Added a side-menu for quick-selecting comparison criteria.
     <li>Toolbar button: Button now appears in Seamonkey (well, trunk versions, anyway; I'm having trouble with the 1.1.x versions - help is appreciated).
     <li>Review Dialog: Criteria used in the comparison are now emboldened.
-d some sorting and sort column indicator issues.
+    <li>Review Dialog: Fixed some sorting and sort column indicator issues.
     <li>Review Dialog: You can now include the Message ID and the flags fields as displayed columns.
     <li>Can now use the message status flags as a comparison criteria (read/unread, starred/unstarred, etc.)
-d some locale mis-installation issues (pl-PL with Thunderbird, many locales with Seamonkey release).
+    <li>Fixed some locale mis-installation issues (pl-PL with Thunderbird, many locales with Seamonkey release).
     <li>Added pt-BR, he-IL, ru-RU locales; thanks to the Babelzilla translators.
   </ul>
 </li>
 <li><a name="0.2.1">version 0.2.1</a>
   <ul>
-d.
+    <li>Review Dialog: Click behavior fixed.
   </ul>
+
 </li>
 <li><a name="0.2">version 0.2</a>
   <ul>
@@ -80,21 +81,23 @@ d.
     <li>Review Dialog: The click behavior has changed: Single-click in the checkbox de/selects the message for deletion, single click elsewhere displays the message in the main Thunderbird/MailNews window, and double-click does nothing special.
     <li>Review dialog 'cosmetic' improvements: The sort order is now indicated, and various choices are now persisted (dialog size, sort order, columns being hidden, etc.).
     <li>Review Dialog: 'Last Copy' button added in addition to 'First Copy'.
-s.
+    <li>Other minor bug fixes.
   </ul>
 </li>
 <li><a name="0.1.5">version 0.1.5</a>
+
   <ul>
     <li>The search for duplicates is now done in a separate thread than the main UI thread, so you can continue reading messages or doing other work while searching for dupes.
     <li>Seamonkey: Messages no longer fail to display in the 3-pane window when you click their line in the review dialog.
     <li>Locales now maintained by the kind <a href="www.babelzilla.org">BabelZilla</a> contributors - see <a href="http://www.babelzilla.org/index.php?option=com_wts&Itemid=88&extension=2543&type=lang">removedupes' page</a> there for a list of locales (we now have Japanese, Traditional Chinese, Slovak, Portugese, Italian, French, Netherlands Dutch and maybe some more).
     <li>Tweaked review dialog mouse click behavior.
     <li>Now informing the user that we're searching for dupes, using the status bar, while s/he is waiting.
-d! Can now move dupes to any folder you like; your move target preference is also preserved across uses.
+    <li>Move to different folder fixed! Can now move dupes to any folder you like; your move target preference is also preserved across uses.
     <li>(Hopefully) No longer trying to search for dupes in non-mail folders (e.g. newsgroups)
     <li>Can now compare messages by their recipient and CC lists.
     <li>Can now sort the dupe sets in the review dialog by the various columns.
   </ul>
+
 </li>
 
 
@@ -111,6 +114,7 @@ d! Can now move dupes to any folder you like; your move target preference is als
     <li>A message's folder can now also be used as one of the comparison criteria.
     <li>The mechanism for deciding which special folders (Inbox, Trash etc.) to include in a search for dupes has been revamped. It is now controlled by the hidden preference <code>removedupes.mail.allowed_special_folders</code>.
   </ul>
+
 </li>
 
 <li><a name="0.1.3">version 0.1.3</a>
@@ -124,6 +128,7 @@ d! Can now move dupes to any folder you like; your move target preference is als
 
 <li><a name="0.1.2">version 0.1.2</a>
   <ul>
+
     <li>First release version.
   </ul>
 </li>
