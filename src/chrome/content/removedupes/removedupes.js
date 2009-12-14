@@ -19,6 +19,7 @@ var gStatusTextField;
 
 var gOriginalsFolders;
 
+var gInboxFolderFlag;
 var gVirtualFolderFlag;
   
 // which criteria will we use in the dupe search if the preferences
@@ -152,15 +153,6 @@ function DupeSearchData()
   this.skippingSpecialFolders = 
     gRemoveDupesPrefs.getBoolPref("skip_special_folders", true);
   
-  if (this.skippingSpecialFolders) {
-    this.allowedSpecialFolders = 
-      new RegExp(gRemoveDupesPrefs.getLocalizedStringPref('allowed_special_folders', ''), 'i');
-#ifdef DEBUG_DupeSearchParameters
-     jsConsoleService.logStringMessage(
-      'allowedSpecialFolders = ' + this.allowedSpecialFolders);
-#endif
-  }
-
   this.useReviewDialog = 
     gRemoveDupesPrefs.getBoolPref("confirm_search_and_deletion", true);
   // we might have to trigger non-blocking IMAP folder updates;
@@ -221,10 +213,11 @@ function searchAndRemoveDuplicateMessages()
 
   // for some reason this is no longer defined recent Seamonkey trunk versions
   try {
-    gVirtualFolderFlag =
-      Components.interfaces.nsMsgFolderFlags.Virtual
+    gInboxFolderFlag   = Components.interfaces.nsMsgFolderFlags.Inbox;
+    gVirtualFolderFlag = Components.interfaces.nsMsgFolderFlags.Virtual;
   } catch(ex) {
-    gVirtualFolderFlag = MSG_FOLDER_FLAG_VIRTUAL;
+    gInboxFolderFlag   = 0x1000; // MSG_FOLDER_FLAG_INBOX
+    gVirtualFolderFlag = 0x0020; // MSG_FOLDER_FLAG_VIRTUAL
   }
     
   //document.getElementById('progress-panel').removeAttribute('collapsed'); 
@@ -278,10 +271,7 @@ function onKeyPress(ev,searchData)
 function beginSearchForDuplicateMessages(searchData)
 {
   searchData.topFolders = GetSelectedMsgFolders();
-#ifdef DEBUG_beginSearchForDuplicateMessages
-  jsConsoleService.logStringMessage('calling collectMessages for selectedFolders = ' + searchData.topFolders);
-#endif
- 
+
   // TODO: check we haven't selected some folders along with
   // their subfolders - this would mean false dupes!
   
@@ -289,16 +279,22 @@ function beginSearchForDuplicateMessages(searchData)
     var folder = searchData.topFolders[i];
     if (searchData.skippingSpecialFolders) {
       if (!folder.canRename && (folder.rootFolder != folder) ) {
-        // one of the top folders is a special folders; if the folder
-        // addition would skip it, let's skip it here already, and inform
-        // the user we're doing that
-        if (!searchData.allowedSpecialFolders.test(folder.abbreviatedName)) {
-          alert(gRemoveDupesStrings.formatStringFromName(
-            'removedupes.skipping_special_folder', [folder.abbreviatedName], 1));
+#ifdef DEBUG_beginSearchForDuplicateMessages
+        jsConsoleService.logStringMessage('special folder ' + folder.abbreviatedName);
+#endif
+        // one of the top folders is a special folders; if it's not
+        // the Inbox (which we do search), skip it
+        if (!(folder.flags & gInboxFolderFlag)) {
+#ifdef DEBUG_beginSearchForDuplicateMessages
+          jsConsoleService.logStringMessage('skipping special folder ' + folder.abbreviatedName + 'due to ' + folder.flags + ' & ' + gInboxFolderFlag + ' = ' + (folder.flags & gInboxFolderFlag));
+#endif
           continue;
         }
       }
     }
+#ifdef DEBUG_beginSearchForDuplicateMessages
+    jsConsoleService.logStringMessage('addSearchFolders for ' + folder.abbreviatedName);
+#endif
     addSearchFolders(folder,searchData);
   }
 
@@ -347,7 +343,7 @@ function addSearchFolders(folder, searchData)
   if (!folder.canRename && (folder.rootFolder != folder) ) {
     // it's a special folder
     if (searchData.skippingSpecialFolders) {
-      if (!searchData.allowedSpecialFolders.test(folder.abbreviatedName)) {
+      if (!(folder.flags & gInboxFolderFlag)) {
 #ifdef DEBUG_addSearchFolders
         jsConsoleService.logStringMessage('skipping special folder ' + folder.abbreviatedName + '\n(matched by ' + searchData.allowedSpecialFolders + ')');
 #endif
@@ -1113,7 +1109,7 @@ function setOriginalsFolders()
       if (!gOriginalsFolders[i].canFileMessages ||
           (gOriginalsFolders[i].rootFolder == gOriginalsFolders[i]) ||
           (!gOriginalsFolders[i].canRename && 
-          (!allowedSpecialFolders.test(gOriginalsFolders[i].abbreviatedName)))) {
+          (!(gOriginalsFolders[i].flags & gInboxFolderFlag)))) {
         alert(gRemoveDupesStrings.GetStringFromName("removedupes.invalid_originals_folders"));
         gOriginalsFolders = null;
       }
