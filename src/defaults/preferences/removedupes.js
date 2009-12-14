@@ -27,7 +27,6 @@ pref("removedupes.processed_messages_limit", 10000);
 
 // hidden prefs
 
-pref("removedupes.allowed_special_folders", "chrome://removedupes/locale/removedupes.properties");
 pref('removedupes.default_target_folder', 'mailbox://nobody@Local%20Folders/Trash');
 
 pref('removedupes.status_report_quantum',500);
