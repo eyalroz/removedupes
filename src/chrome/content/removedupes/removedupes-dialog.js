@@ -14,7 +14,7 @@ var gtreeLineUriColumn;
 #ifdef XBL_FOLDER_PICKER
 // workaround for Mozilla bug 473009 - 
 // the new folder picker DOESN'T EXPOSE ITS F***ING selected folder!
-// ... and thank you very much David Ascher & TB devs for checking ib
+// ... and thank you very much David Ascher & TB devs for checking in
 // a folder picker without the most basic folder picker functionality,
 // forcing me to write a workaround
 
