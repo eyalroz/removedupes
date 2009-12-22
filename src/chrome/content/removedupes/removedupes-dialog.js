@@ -775,5 +775,6 @@ function onTargetFolderClick(targetFolder)
 #ifdef DEBUG_onTargetFolderClick
   jsConsoleService.logStringMessage('in onTargetFolderClick()\ntarget = ' + targetFolder.abbreviatedName);
 #endif
+  document.getElementById('actionTargetFolderPopup').selectFolder(targetFolder);
 }
 #endif
