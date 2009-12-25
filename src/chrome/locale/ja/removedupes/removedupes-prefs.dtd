@@ -1,9 +1,9 @@
 <!ENTITY prefs_dialog_title "Remove Duplicate Messages 設定">
 <!ENTITY guide-url "http://not.yet.written/">
 <!ENTITY message_comparison.tab_title "メッセージ比較設定">
-<!ENTITY message_comparison.criteria_box.label "Message elements used as comparison criteria">
-<!ENTITY message_comparison.skip_special_folders.label "Skip Special Folders (Sent, Drafts etc.)">
-<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Compare addresses stripped and sorted">
+<!ENTITY message_comparison.criteria_box.label "メッセージ要素を比較基準として使用">
+<!ENTITY message_comparison.skip_special_folders.label "特別なフォルダ (送信済みトレイ、下書き、etc.) をスキップ">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "並び替えて取得したアドレスを比較">
 <!ENTITY message_comparison.tab_description "比較条件の項目：">
 <!ENTITY message_comparison.author.label "送信者 (&apos;From&apos;) ">
 <!ENTITY message_comparison.recipients.label "受信者 (&apos;To&apos;) ">
@@ -12,7 +12,7 @@
 <!ENTITY message_comparison.message_id.label "Message ID ">
 <!ENTITY message_comparison.num_lines.label "本文行数 ">
 <!ENTITY message_comparison.send_time.label "送信日時 ">
-<!ENTITY message_comparison.size.label "Size">
+<!ENTITY message_comparison.size.label "サイズ ">
 <!ENTITY message_comparison.subject.label "件名 ">
 <!ENTITY message_comparison.folder.label "フォルダ ">
 <!ENTITY message_comparison.body.label "本文 ">
