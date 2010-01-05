@@ -7,18 +7,18 @@ TARGET="$1"
 case "$TARGET" in
     sm2 | sr | suiterunner)
         TARGET=suiterunner
-#        DEFS="-DMOZ_TOOLKIT_SEAMONKEY -DUSE_THREADS"
-        DEFS="-DMOZ_TOOLKIT_SEAMONKEY"
+#        PREPROCESSOR_PARAMS="-DMOZ_TOOLKIT_SEAMONKEY -DUSE_THREADS"
+        PREPROCESSOR_PARAMS="-DMOZ_TOOLKIT_SEAMONKEY"
         ;;
     tbird | tb | thunderbird)
         TARGET=tbird
-#        DEFS="-DMOZ_THUNDERBIRD -DUSE_THREADS"
-        DEFS="-DMOZ_THUNDERBIRD"
+#        PREPROCESSOR_PARAMS="-DMOZ_THUNDERBIRD -DUSE_THREADS"
+        PREPROCESSOR_PARAMS="-DMOZ_THUNDERBIRD"
         ;;
     suite | sm | seamonkey)
         TARGET=suite
-#        DEFS="-DMOZ_PRETOOLKIT_SEAMONKEY -DUSE_THREADS"
-        DEFS="-DMOZ_PRETOOLKIT_SEAMONKEY"
+#        PREPROCESSOR_PARAMS="-DMOZ_PRETOOLKIT_SEAMONKEY -DUSE_THREADS"
+        PREPROCESSOR_PARAMS="-DMOZ_PRETOOLKIT_SEAMONKEY"
         ;;
     *)
 	echo "please specify either tbird or suite"
@@ -29,15 +29,17 @@ esac
 shift 1
 
 if [ -n "$1" ]; then
-	DEFS+=" -DDEBUG"
+	PREPROCESSOR_PARAMS+=" -DDEBUG"
 	while [ -n "$1" ]; do
-		DEFS="$DEFS -DDEBUG_$1"
+		PREPROCESSOR_PARAMS="$PREPROCESSOR_PARAMS -DDEBUG_$1"
 		shift 1
 	done
+else
+	PREPROCESSOR_PARAMS+=" --no-line-comments"
 fi
 
-DEFS="$DEFS -DVERSION=$VERSION -DSHORTNAME=$SHORTNAME"
-echo -e "Building the XPI with the following definitions:\n\n$DEFS\n"
+PREPROCESSOR_PARAMS="$PREPROCESSOR_PARAMS -DVERSION=$VERSION -DSHORTNAME=$SHORTNAME"
+echo -e "Building the XPI with the following definitions:\n\n$PREPROCESSOR_PARAMS\n"
 BUILDDIR="build/$TARGET"
 XPINAME="${SHORTNAME}_${TARGET}.xpi"
 BUILDTOOLSDIR="buildtools"
@@ -47,10 +49,10 @@ export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
 if [ ! -d build ] ; then mkdir build; fi
 if [ ! -d $BUILDDIR ] ; then mkdir $BUILDDIR; else rm -rf $BUILDDIR/*; fi
 
-$BUILDTOOLSDIR/preprocessor.pl $DEFS jar.mn > $BUILDDIR/jar.mn
-$BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $DEFS"  -s . -d . < $BUILDDIR/jar.mn || exit
+$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILDDIR/jar.mn
+$BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILDDIR/jar.mn || exit
 echo -e "\nJAR files ready\n"
-$BUILDTOOLSDIR/preprocessor.pl $DEFS install.rdf > $BUILDDIR/install.rdf
+$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.rdf > $BUILDDIR/install.rdf
 rm -rf ${SHORTNAME}
 #rm -rf ${SHORTNAME}-mac-skin
 rm -f installed-chrome.txt
@@ -69,7 +71,7 @@ case "$TARGET" in
         mkdir $BUILDDIR/platform/Darwin
         mkdir $BUILDDIR/platform/Darwin/chrome
         mv ${SHORTNAME}-mac-skin.jar $BUILDDIR/platform/Darwin/chrome
-        $BUILDTOOLSDIR/preprocessor.pl $DEFS chrome.manifest > $BUILDDIR/chrome.manifest
+        $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
         cp platform/Darwin/chrome.manifest $BUILDDIR/platform/Darwin/chrome.manifest
         cd $BUILDDIR
 	zip -r $XPINAME  \
@@ -82,7 +84,7 @@ case "$TARGET" in
 	  chrome.manifest || exit
         ;;
     suiterunner)
-        $BUILDTOOLSDIR/preprocessor.pl $DEFS chrome.manifest > $BUILDDIR/chrome.manifest
+        $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
         cd $BUILDDIR
 	zip -r $XPINAME  \
 	  COPYING \
@@ -92,7 +94,7 @@ case "$TARGET" in
 	  chrome.manifest || exit
         ;;
     suite)
-        $BUILDTOOLSDIR/preprocessor.pl $DEFS install.js > $BUILDDIR/install.js
+        $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.js > $BUILDDIR/install.js
         cd $BUILDDIR
 	zip -r $XPINAME  \
 	  COPYING \
