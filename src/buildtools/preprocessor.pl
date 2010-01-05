@@ -74,6 +74,8 @@ while ($_ = $ARGV[0], defined($_) && /^-./) {
         die "$0: unrecognised line ending: $1\n";
     } elsif (/^--marker=(.)$/os) {
         $marker = $1;
+    } elsif (/^--no-line-comments$/os) {
+       $stack->{'lineComments'} = 0; 
     } else {
         die "$0: invalid argument: $_\n";
     }
@@ -129,8 +131,10 @@ sub include {
             # set the current line number in JavaScript if necessary
             my $linein = $stack->{'variables'}->{'LINE'};
             if (++$lineout != $linein) {
-                if ($filename =~ /\.js(|\.in)$/o) {
-                    $stack->print("//\@line $linein \"$filename\"\n")
+                if ($stack->{'lineComments'}) {
+                    if ($filename =~ /\.js(|\.in)$/o) {
+                        $stack->print("//\@line $linein \"$filename\"\n")
+                    }
                 }
                 $lineout = $linein;
             }
@@ -199,6 +203,7 @@ sub new {
         'lastPrinting' => [], # whether we were printing at the n-1th level
         'printing' => 1, # whether we are currently printing at the Nth level
         'dependencies' => 0, # whether we are showing dependencies
+        'lineComments' => 1, # print //@line comments 
         'lineEndings' => "\n", # default to platform conventions
     };
 }
