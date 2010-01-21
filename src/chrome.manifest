@@ -49,6 +49,7 @@ locale removedupes he-IL jar:chrome/removedupes.jar!/locale/he-IL/removedupes/
 locale removedupes ru-RU jar:chrome/removedupes.jar!/locale/ru-RU/removedupes/
 locale removedupes da-DK jar:chrome/removedupes.jar!/locale/da-DK/removedupes/
 locale removedupes cs-CZ jar:chrome/removedupes.jar!/locale/cs-CZ/removedupes/
+locale removedupes es-AR jar:chrome/removedupes.jar!/locale/es-AR/removedupes/
 #ifndef MOZ_PRETOOLKIT_SEAMONKEY
 style chrome://global/content/customizeToolbar.xul chrome://removedupes/skin/removedupes-button.css
 #endif
