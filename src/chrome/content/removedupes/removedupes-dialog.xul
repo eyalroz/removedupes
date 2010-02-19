@@ -43,6 +43,7 @@
             width="700"
             flex="2"
             persist="sortColumn sortDirection"
+            onkeydown="onTreeKeyPress(event);"
             onclick="onClickTree(event);">
         <treecols>
           <treecol width="40"
