@@ -396,28 +396,44 @@ function addSearchFolders(folder, searchData)
 
   // is this an IMAP folder?
   
-  var imapFolder = null;
   try {
-    imapFolder = folder.QueryInterface(Components.interfaces.nsIMsgImapMailFolder);
-
+    var imapFolder = folder.QueryInterface(Components.interfaces.nsIMsgImapMailFolder);
     var listener = new UpdateFolderDoneListener(folder,searchData);
-
     var dummyUrl = new Object;
     gImapService.selectFolder(gEventTarget, folder, listener, msgWindow, dummyUrl);
-    
     // no traversal of children - the listener will take care of that in due time
+#ifdef DEBUG_addSearchFolders
+    jsConsoleService.logStringMessage('returning from addSearchFolders for folder ' + folder.abbreviatedName + ':\ntriggered IMAP folder update');
+#endif
     return;
 
   } catch (ex) {}
   
+  // Is this a locally-stored folder with its DB out-of-date?
+  
+  try {
+    var localFolder = folder.QueryInterface(Components.interfaces.nsIMsgLocalMailFolder);
+    try {
+      var db = localFolder.getDatabaseWOReparse();
+    } catch (ex) {
+      var listener = new UpdateFolderDoneListener(folder,searchData);
+      folder.parseFolder(msgWindow, listener);
+      // no traversal of children - the listener will take care of that in due time
+#ifdef DEBUG_addSearchFolders
+      jsConsoleService.logStringMessage('returning from addSearchFolders for folder ' + folder.abbreviatedName + ':\ntriggered local folder db update');
+#endif
+      return;
+    }
+  } catch (ex) {
+  }
  
-  // If we've gotten here then the folder is locally-stored rather than
-  // an IMAP folder so we don't have to 'update' it before continuing the traversal
+  // We assume at this point the folder is locally-stored and its message db is up-to-date,
+  // so we can traverse its subfolders without any more preparation
   
   traverseSearchFolderSubfolders(folder,searchData);
   
 #ifdef DEBUG_addSearchFolders
-  jsConsoleService.logStringMessage('returning from addSearchFolders for folder ' + folder.abbreviatedName);
+  jsConsoleService.logStringMessage('returning from addSearchFolders for folder ' + folder.abbreviatedName + ':\nperformed traversal');
 #endif
 }
 
@@ -775,9 +791,9 @@ function populateDupeSetsHash(searchData)
         folderMessageHdrsIterator = folder.messages;
       } catch(ex) {
 #ifdef DEBUG
-        jsConsoleService.logStringMessage('accessing messages failed for folder ' + folder.abbreviatedName + ' :\n' + ex);
+          jsConsoleService.logStringMessage('accessing messages failed for folder ' + folder.abbreviatedName + ' :\n' + ex);
 #else
-        dump(gRemoveDupesStrings.formatStringFromName('removedupes.failed_getting_messages', [folder.abbreviatedName], 1) + '\n');
+          dump(gRemoveDupesStrings.formatStringFromName('removedupes.failed_getting_messages', [folder.abbreviatedName], 1) + '\n');
 #endif
       }
     }
