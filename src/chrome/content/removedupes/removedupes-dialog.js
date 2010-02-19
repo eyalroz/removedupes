@@ -462,6 +462,19 @@ function formatSendTime(sendTimeInSeconds)
     date.getSeconds() );
 }
 
+// onTreeKeyPress -
+// Toggle the keep status for Space Bar
+
+function onTreeKeyPress(ev)
+{
+#ifdef DEBUG_onTreeKeyPress
+  jsConsoleService.logStringMessage('onTreeKeyPress, keycode is ' + ev.keyCode);
+#endif
+  if (ev.keyCode == KeyEvent.DOM_VK_SPACE) {
+    toggleDeletionForCurrentRow();
+  }
+}
+
 // onClickTree -
 // Either toggle the deleted status of the message, load it for display,
 // or do nothing
