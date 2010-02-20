@@ -4,6 +4,8 @@ pref("removedupes.search_subfolders", true);
 pref("removedupes.skip_special_folders", true);
 
 pref("removedupes.compare_stripped_and_sorted_addresses", false);
+// possible values are: seconds, minutes, hours, day, month, year
+pref("removedupes.time_comparison_resolution", "seconds");
 pref("removedupes.comparison_criteria.allow_md5_id_substitute", false);
 
 pref("removedupes.comparison_criteria.message_id", true);

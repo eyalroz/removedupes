@@ -147,6 +147,12 @@ function DupeSearchData()
   this.compareStrippedAndSortedAddresses = 
     gRemoveDupesPrefs.getBoolPref("compare_stripped_and_sorted_addresses", false);
 
+  this.timeComparisonResolution = 
+    gRemoveDupesPrefs.getCharPref("time_comparison_resolution", "seconds");
+  this.compareTimeNumerically = 
+    (this.timeComparisonResolution == "seconds");
+
+
   // which of the special folders (inbox, sent, etc.) will we be willing
   // to search in for duplicates?
 
@@ -682,8 +688,33 @@ function sillyHash(searchData,messageHdr,folder)
     // some mail servers add newlines and spaces before or after message IDs
     retVal += messageId.replace(/(\n|^)\s+|\s+$/,"") + '|';
   }
-  if (searchData.useCriteria['send_time'])
-    retVal += messageHdr.dateInSeconds + '|';
+  if (searchData.useCriteria['send_time']) {
+    if (searchData.compareTimeNumerically)
+      retVal += messageHdr.dateInSeconds + '|';
+    else {
+      var date = new Date( messageHdr.dateInSeconds*1000 );
+      switch(searchData.timeComparisonResolution) {
+        case "seconds":
+          retVal += date.getSeconds() + '|';
+        case "minutes":
+          retVal += date.getMinutes() + '|';
+        case "hours":
+          retVal += date.getHours() + '|';
+        case "day":
+          retVal += date.getDate() + '|';
+        case "month":
+          retVal += date.getMonth() + '|';
+        case "year":
+          retVal += date.getFullYear() + '|';
+          break;
+        default:
+          // if someone uses an invalid comparison resolution,
+          // they'll get a maximum-resolution comparison
+          // to avoid false positives
+          retVal += messageHdr.dateInSeconds + '|';
+      }
+    }
+  }
   if (searchData.useCriteria['size'])
     retVal += messageHdr.messageSize + '|';
   if (searchData.useCriteria['folder'])
