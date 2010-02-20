@@ -21,7 +21,6 @@
         title="&removedupes_dialog.dialog_title;">
 
   <script type="application/x-javascript" src="chrome://messenger/content/widgetglue.js"/>
-  <script type="application/x-javascript" src="chrome://removedupes/content/removedupes.js"/>
   <script type="application/x-javascript" src="chrome://removedupes/content/removedupes-common.js"/>
 #ifdef XBL_FOLDER_PICKER
   <script type="application/x-javascript" src="chrome://removedupes/content/removedupes-dialog.js"/>
