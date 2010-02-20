@@ -66,6 +66,9 @@
       <preference id="removedupes.default_action"
                   name="removedupes.default_action"
                   type="string"/>
+      <preference id="removedupes.time_comparison_resolution"
+                  name="removedupes.time_comparison_resolution"
+                  type="string"/>
     </preferences>
 #else
 <page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
@@ -86,6 +89,7 @@
                          "removedupes.skip_special_folders",
                          "removedupes.confirm_search_and_deletion",
                          "removedupes.default_action",
+                         "removedupes.time_comparison_resolution",
                          "removedupes.comparison_criteria.author",
                          "removedupes.comparison_criteria.recipients",
                          "removedupes.comparison_criteria.cc_list",
@@ -125,8 +129,8 @@
               accesskey="&general_settings.confirm_search_and_deletion.access_key;"
               autostretch="never"/>
             <spacer/>
-            <description>&general_settings.default_action.description;</description>
-            <hbox class="indent">
+            <groupbox>
+              <caption label="&general_settings.default_action.description;"/>
               <radiogroup preference="removedupes.default_action"
                 prefstring="removedupes.default_action"
                 id="removedupes.default_action">
@@ -138,11 +142,11 @@
                   label="&general_settings.default_action.delete_permanently.label;"
                   accesskey="&general_settings.default_action.delete_permanently.accesskey;"/>
               </radiogroup>
-            </hbox>
+            </groupbox>
           </vbox>
         </tabpanel>
 
-        <tabpanel id="comparison_criteria_panel">
+        <tabpanel id="comparison_criteria_panel" flex="1">
           <vbox flex="1">
             <checkbox preference="removedupes.skip_special_folders"
               prefstring="removedupes.skip_special_folders"
@@ -157,6 +161,7 @@
               accesskey="&message_comparison.compare_stripped_and_sorted_addresses.access_key;"
               autostretch="never"/>
             <groupbox>
+              <caption label="&message_comparison.criteria_box.label;"/>
               <vbox flex="1">
                 <checkbox preference="removedupes.comparison_criteria.author"
                   prefstring="removedupes.comparison_criteria.author"
@@ -218,12 +223,41 @@
                   label="&message_comparison.body.label;"
                   accesskey="&message_comparison.body.access_key;"
                   autostretch="never"/>
-                </vbox>
-              </groupbox>
-            </vbox>
+              </vbox>
+            </groupbox>
+            <hbox align="baseline">
+              <label value="&message_comparison.time_comparison_resolution.description;"/>
+              <menulist preference="removedupes.time_comparison_resolution"
+                prefstring="removedupes.time_comparison_resolution"
+                id="removedupes.time_comparison_resolution">
+                <menupopup>
+                <menuitem value="seconds" 
+                 label="&message_comparison.time_comparison_resolution.seconds.label;"/>
+                <menuitem value="minutes" 
+                 label="&message_comparison.time_comparison_resolution.minutes.label;"/>
+                <menuitem value="hours" 
+                 label="&message_comparison.time_comparison_resolution.hours.label;"/>
+                <menuitem value="day" 
+                 label="&message_comparison.time_comparison_resolution.day.label;"/>
+                <menuitem value="month" 
+                 label="&message_comparison.time_comparison_resolution.month.label;"/>
+                <menuitem value="year" 
+                 label="&message_comparison.time_comparison_resolution.year.label;"/>
+                </menupopup>
+              </menulist>
+            </hbox>
+          </vbox>
         </tabpanel>
       </tabpanels>
     </tabbox>
+#ifdef MOZ_THUNDERBIRD
+  <!-- workaround for a Thunderbird 3 prefpane layout issue:
+       the prefpane does not expand to contain lowest part of the tabbox,
+       so it's cut out by the Ok & Cancel buttons; we're inserting dummy
+       elements -->
+  <label value=" "/>
+  <label value=" "/>
+#endif
 #ifndef MOZ_PRETOOLKIT_SEAMONKEY
   </prefpane>
 </prefwindow>
