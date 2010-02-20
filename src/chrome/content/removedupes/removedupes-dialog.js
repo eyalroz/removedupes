@@ -593,11 +593,14 @@ function onCancel()
 
 function onAccept()
 {
+  var uri = null;
+  try {
 #ifdef XBL_FOLDER_PICKER
-  var uri = gDupeMoveTargetFolder.URI;
+    var uri = gDupeMoveTargetFolder.URI;
 #else
-  var uri = document.getElementById('actionTargetFolder').getAttribute('uri');
+    var uri = document.getElementById('actionTargetFolder').getAttribute('uri');
 #endif
+  } catch(ex) { }
 
 #ifdef DEBUG_onAccept
   jsConsoleService.logStringMessage('uri is ' + uri);
@@ -612,8 +615,11 @@ function onAccept()
     uri,
     true // the uri's have been replaced with messageRecords
     );
-  if (!deletePermanently) 
-    gRemoveDupesPrefs.setCharPref('default_target_folder', uri);
+  if (!deletePermanently && (uri != null) && (uri != "")) {
+    try {
+      gRemoveDupesPrefs.setCharPref('default_target_folder', uri);
+    } catch(ex) { }
+  }
   delete gDupeSetsHashMap;
 }
 
@@ -674,28 +680,30 @@ function markNoDupesForDeletion()
 
 function initializeFolderPicker()
 {
-  var uri = gRemoveDupesPrefs.getCharPref('default_target_folder', null);
+  var uri, msgFolder;
+  // We might not have a pref for the default folder,
+  // or the folder URIs may have changed for some reason
+  try {
+    uri = gRemoveDupesPrefs.getCharPref('default_target_folder', null);
+    msgFolder = GetMsgFolderFromUri(uri, false);
+  } catch(ex) { }
     
+  if (!msgFolder) {
+    uri = getLocalFoldersTrashFolder().URI;
+    msgFolder = GetMsgFolderFromUri(uri, false);
+  }
+
 #ifdef DEBUG_initializeFolderPicker
   jsConsoleService.logStringMessage('setting folder picker to uri:\n' + uri);
 #endif
 
-#ifndef XBL_FOLDER_PICKER
-  // TODO: perhaps we don't need this when also calling SetFolderPicker ?
-  MsgFolderPickerOnLoad('actionTargetFolder');
-#endif
-  
-  if ( (uri == null) || (uri == "") )
-    return;
-
-  var msgFolder = GetMsgFolderFromUri(uri, false);
 #ifdef XBL_FOLDER_PICKER
   try {
     document.getElementById('actionTargetFolderPopup').selectFolder(msgFolder);
-  }
-  catch(ex) {
-  }
+  } catch(ex) { }
 #else
+  // TODO: perhaps we don't need this when also calling SetFolderPicker ?
+  MsgFolderPickerOnLoad('actionTargetFolder');
   SetFolderPicker(uri, 'actionTargetFolder');
 #endif
   gDupeMoveTargetFolder = msgFolder;

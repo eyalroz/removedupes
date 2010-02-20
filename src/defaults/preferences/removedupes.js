@@ -27,7 +27,7 @@ pref("removedupes.processed_messages_limit", 10000);
 
 // hidden prefs
 
-pref('removedupes.default_target_folder', 'mailbox://nobody@Local%20Folders/Trash');
+// no default for 'removedupes.default_target_folder'
 
 pref('removedupes.status_report_quantum',500);
 pref('removedupes.yield_quantum',2500);
