@@ -5,6 +5,9 @@ var gUseSupportsArray;
 var gCopyService =
   Components.classes["@mozilla.org/messenger/messagecopyservice;1"]
             .getService(Components.interfaces.nsIMsgCopyService);
+var gAccountManager = 
+  Components.classes["@mozilla.org/messenger/account-manager;1"]
+            .getService(Components.interfaces.nsIMsgAccountManager);
 
 // localized strings
 
@@ -199,6 +202,11 @@ var gRemoveDupesPrefs = {
 
 //---------------------------------------------------------
 
+function getLocalFoldersTrashFolder()
+{
+  return gAccountManager.localFoldersServer.rootFolder.getFolderWithFlags(Components.interfaces.nsMsgFolderFlags.Trash);
+}                
+
 // This function is called either after the dupes are collected,
 // without displaying the dialog, in which each element in the hash is
 // an array of Uri's, or after displaying it, in which case the elements have
@@ -234,9 +242,10 @@ function removeDuplicates(
   }
   var targetFolder;
   if (!deletePermanently) {
-    if ((targetFolderUri == null) || (targetFolderUri == ""))
-      targetFolderUri = 'mailbox://nobody@Local%20Folders/Trash';
-    targetFolder = GetMsgFolderFromUri(targetFolderUri, true);
+    if ((targetFolderUri == null) || (targetFolderUri == "")) {
+      targetFolder = getLocalFoldersTrashFolder().URI;
+    }
+    else targetFolder = GetMsgFolderFromUri(targetFolderUri, true);
     if (!targetFolder) {
       alert(gRemoveDupesStrings.formatStringFromName('removedupes.no_such_folder', [targetFolderUri], 1));
       return;
