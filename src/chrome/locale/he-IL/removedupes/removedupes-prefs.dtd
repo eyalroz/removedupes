@@ -29,6 +29,13 @@
 <!ENTITY message_comparison.subject.access_key "א">
 <!ENTITY message_comparison.folder.access_key "ת">
 <!ENTITY message_comparison.body.access_key "ג">
+<!ENTITY message_comparison.time_comparison_resolution.description "רזולוציית השוואת זמנים:" >
+<!ENTITY message_comparison.time_comparison_resolution.seconds.label "שניות">
+<!ENTITY message_comparison.time_comparison_resolution.minutes.label "דקות">
+<!ENTITY message_comparison.time_comparison_resolution.hours.label "שעות">
+<!ENTITY message_comparison.time_comparison_resolution.day.label "יום">
+<!ENTITY message_comparison.time_comparison_resolution.month.label "חודש">
+<!ENTITY message_comparison.time_comparison_resolution.year.label "שנה">
 <!ENTITY general_settings.tab_title "אפשרויות כלליות">
 <!ENTITY general_settings.search_subfolders.label "חפש בתתי-תיקיות של התיקיה הנבחרת">
 <!ENTITY general_settings.search_subfolders_first.label "חפש בתת-תיקיות קודם (postorder)">
