@@ -350,9 +350,6 @@ function addSearchFolders(folder, searchData)
     // it's a special folder
     if (searchData.skippingSpecialFolders) {
       if (!(folder.flags & gInboxFolderFlag)) {
-#ifdef DEBUG_addSearchFolders
-        jsConsoleService.logStringMessage('skipping special folder ' + folder.abbreviatedName + '\n(matched by ' + searchData.allowedSpecialFolders + ')');
-#endif
         return;
       }
 #ifdef DEBUG_addSearchFolders
@@ -1150,8 +1147,6 @@ function setOriginalsFolders()
     gOriginalsFolders = null;
   }
   if (gRemoveDupesPrefs.getBoolPref('skip_special_folders','true')) {
-    var allowedSpecialFolders = 
-      new RegExp(gRemoveDupesPrefs.getLocalizedStringPref('allowed_special_folders', ''), 'i');
     for (var i = 0; i < gOriginalsFolders.length; i++) {
       if (!gOriginalsFolders[i].canFileMessages ||
           (gOriginalsFolders[i].rootFolder == gOriginalsFolders[i]) ||
