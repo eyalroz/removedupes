@@ -5,8 +5,8 @@
 <!ENTITY message_comparison.skip_special_folders.label "Spring særlige mapper over (Sendt, Kladder osv.)">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Sammenlign adresser renset og sorteret">
 <!ENTITY message_comparison.tab_description "Elementer anvendt som sammenlignings-kriterier:">
-<!ENTITY message_comparison.author.label "Afsender (&apos;Fra&apos;)">
-<!ENTITY message_comparison.recipients.label "Modtager (&apos;Til&apos;)">
+<!ENTITY message_comparison.author.label "Afsender ('Fra')">
+<!ENTITY message_comparison.recipients.label "Modtager ('Til')">
 <!ENTITY message_comparison.cc_list.label "CC liste">
 <!ENTITY message_comparison.flags.label "Status">
 <!ENTITY message_comparison.message_id.label "Meddelelses-ID">
@@ -15,7 +15,7 @@
 <!ENTITY message_comparison.size.label "Størrelse">
 <!ENTITY message_comparison.subject.label "Emne">
 <!ENTITY message_comparison.folder.label "Mappe">
-<!ENTITY message_comparison.body.label "Brevtekst">
+<!ENTITY message_comparison.body.label "Meddelelsestekst">
 <!ENTITY message_comparison.skip_special_folders.access_key "p">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.access_key "l">
 <!ENTITY message_comparison.author.access_key "A">
@@ -28,7 +28,14 @@
 <!ENTITY message_comparison.size.access_key "S">
 <!ENTITY message_comparison.subject.access_key "E">
 <!ENTITY message_comparison.folder.access_key "M">
-<!ENTITY message_comparison.body.access_key "B">
+<!ENTITY message_comparison.body.access_key "e">
+<!ENTITY message_comparison.time_comparison_resolution.description "Sammenligning af tidspunkt:">
+<!ENTITY message_comparison.time_comparison_resolution.seconds.label "Sekunder">
+<!ENTITY message_comparison.time_comparison_resolution.minutes.label "Minutter">
+<!ENTITY message_comparison.time_comparison_resolution.hours.label "Timer">
+<!ENTITY message_comparison.time_comparison_resolution.day.label "Dag">
+<!ENTITY message_comparison.time_comparison_resolution.month.label "Måned">
+<!ENTITY message_comparison.time_comparison_resolution.year.label "År">
 <!ENTITY general_settings.tab_title "Generelle indstillinger">
 <!ENTITY general_settings.search_subfolders.label "Søg i valgte mappes undermapper">
 <!ENTITY general_settings.search_subfolders_first.label "Søg i undermapper først (afsendelsesorden)">

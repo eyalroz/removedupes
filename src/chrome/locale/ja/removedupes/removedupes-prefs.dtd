@@ -1,7 +1,7 @@
 <!ENTITY prefs_dialog_title "Remove Duplicate Messages 設定">
 <!ENTITY guide-url "http://not.yet.written/">
 <!ENTITY message_comparison.tab_title "メッセージ比較設定">
-<!ENTITY message_comparison.criteria_box.label "メッセージ要素を比較基準として使用">
+<!ENTITY message_comparison.criteria_box.label "比較条件のメッセージ要素">
 <!ENTITY message_comparison.skip_special_folders.label "特別なフォルダ (送信済みトレイ、下書き、etc.) をスキップ">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "並び替えて取得したアドレスを比較">
 <!ENTITY message_comparison.tab_description "比較条件の項目：">
@@ -29,6 +29,13 @@
 <!ENTITY message_comparison.subject.access_key "S">
 <!ENTITY message_comparison.folder.access_key "o">
 <!ENTITY message_comparison.body.access_key "B">
+<!ENTITY message_comparison.time_comparison_resolution.description "日時比較の単位：">
+<!ENTITY message_comparison.time_comparison_resolution.seconds.label "秒">
+<!ENTITY message_comparison.time_comparison_resolution.minutes.label "分">
+<!ENTITY message_comparison.time_comparison_resolution.hours.label "時">
+<!ENTITY message_comparison.time_comparison_resolution.day.label "日">
+<!ENTITY message_comparison.time_comparison_resolution.month.label "月">
+<!ENTITY message_comparison.time_comparison_resolution.year.label "年">
 <!ENTITY general_settings.tab_title "全般設定">
 <!ENTITY general_settings.search_subfolders.label "選択したフォルダのサブフォルダを検索する">
 <!ENTITY general_settings.search_subfolders_first.label "サブフォルダの検索を優先する (postorder) ">

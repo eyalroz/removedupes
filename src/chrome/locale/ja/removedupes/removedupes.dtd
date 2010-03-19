@@ -2,7 +2,7 @@
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "重複メッセージの削除...">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "重複メッセージ検索用の設定">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">
-<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "O">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "o">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "D">
 <!ENTITY removedupes_dialog.dialog_title "重複メッセージの削除">
