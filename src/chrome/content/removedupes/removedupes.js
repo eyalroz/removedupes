@@ -282,6 +282,12 @@ function beginSearchForDuplicateMessages(searchData)
 {
   searchData.topFolders = GetSelectedMsgFolders();
 
+  if (searchData.topFolders.length == 0) {
+    // no folders selected; we shouldn't get here
+    abortDupeSearch(searchData,'no_folders_selected');
+    return;
+  }
+
   // TODO: check we haven't selected some folders along with
   // their subfolders - this would mean false dupes!
   
@@ -309,12 +315,9 @@ function beginSearchForDuplicateMessages(searchData)
   }
 
   if (searchData.folders.length == 0) {
-    // all the possible folders were skipped for some reason or
-    // another; abort the search
-    window.removeEventListener("keypress", searchData.keyPressEventListener, true);
-    delete searchData;
-    gStatusTextField.label =
-      gRemoveDupesStrings.GetStringFromName('removedupes.search_aborted');
+    // all top folders were special folders and therefore skipped
+    alert(gRemoveDupesStrings.GetStringFromName('removedupes.not_searching_special_folders'));
+    abortDupeSearch(searchData);
     return;
   }
 
@@ -330,6 +333,16 @@ function beginSearchForDuplicateMessages(searchData)
   // so let's call a sleep-poll function
   
   waitForFolderCollection(searchData);
+}
+
+function abortDupeSearch(searchData,labelStringName)
+{
+  window.removeEventListener("keypress", searchData.keyPressEventListener, true);
+  delete searchData;
+  if (labelStringName)
+    gStatusTextField.label =
+      gRemoveDupesStrings.GetStringFromName('removedupes.' + labelStringName);
+  else gStatusTextField.label = null;
 }
 
 // addSearchFolders - 
@@ -515,10 +528,7 @@ function waitForFolderCollection(searchData)
   gStatusTextField.label = gRemoveDupesStrings.GetStringFromName('removedupes.searching_for_dupes');
 
   if (searchData.userAborted) {
-    window.removeEventListener("keypress", searchData.keyPressEventListener, true);
-    delete searchData;
-    gStatusTextField.label =
-      gRemoveDupesStrings.GetStringFromName('removedupes.search_aborted');
+    abortDupeSearch(searchData,'search_aborted');
     return;
   }
 
@@ -550,10 +560,7 @@ function processMessagesInCollectedFoldersPhase1(searchData)
   // relevant folders have been added to the searchData.folders array
 
   if (searchData.userAborted) {
-    window.removeEventListener("keypress", searchData.keyPressEventListener, true);
-    delete searchData;
-    gStatusTextField.label =
-      gRemoveDupesStrings.GetStringFromName('removedupes.search_aborted');
+    abortDupeSearch(searchData,'search_aborted');
     return;
   }
 
@@ -573,10 +580,7 @@ function processMessagesInCollectedFoldersPhase1(searchData)
 function processMessagesInCollectedFoldersPhase2(searchData)
 {
   if (searchData.userAborted) {
-    window.removeEventListener("keypress", searchData.keyPressEventListener, true);
-    delete searchData;
-    gStatusTextField.label =
-      gRemoveDupesStrings.GetStringFromName('removedupes.search_aborted');
+    abortDupeSearch(searchData,'search_aborted');
     return;
   }
   // what happens if generator is null?
@@ -604,10 +608,7 @@ function processMessagesInCollectedFoldersPhase2(searchData)
   refineDupeSets(searchData);
 
   if (searchData.userAborted) {
-    window.removeEventListener("keypress", searchData.keyPressEventListener, true);
-    delete searchData;
-    gStatusTextField.label =
-      gRemoveDupesStrings.GetStringFromName('removedupes.search_aborted');
+    abortDupeSearch(searchData,'search_aborted');
     return;
   }
   
@@ -1068,13 +1069,10 @@ function reviewAndRemoveDupes(searchData)
   jsConsoleService.logStringMessage('in reviewAndRemoveDupes');
 #endif
 
-  window.removeEventListener("keypress", searchData.keyPressEventListener, true);
   if (searchData.userAborted) {
-    delete searchData;
-    gStatusTextField.label =
-      gRemoveDupesStrings.GetStringFromName('removedupes.search_aborted');
-    return;
+    abortDupeSearch(searchData,'search_aborted');
   }
+  window.removeEventListener("keypress", searchData.keyPressEventListener, true);
 
   if (!searchData.useReviewDialog)
   {
