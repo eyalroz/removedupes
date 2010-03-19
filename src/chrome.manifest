@@ -55,4 +55,5 @@ style chrome://global/content/customizeToolbar.xul chrome://removedupes/skin/rem
 #endif
 overlay	chrome://messenger/content/messenger.xul chrome://removedupes/content/removedupes-button.xul
 style chrome://messenger/content/messenger.xul chrome://removedupes/skin/removedupes-button.css
+style chrome://messenger/content/messenger.xul chrome://removedupes/skin/removedupes-messenger.css
 
