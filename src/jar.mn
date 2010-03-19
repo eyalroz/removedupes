@@ -64,6 +64,7 @@ removedupes.jar:
     locale/cs-CZ/removedupes/removedupes.properties               (chrome/locale/cs-CZ/removedupes/removedupes.properties)
 *   content/removedupes/removedupes-prefs.xul                     (chrome/content/removedupes/removedupes-prefs.xul)
 *   content/removedupes/removedupes-button.xul                    (chrome/content/removedupes/removedupes-button.xul)
+*   skin/classic/removedupes/removedupes-messenger.css            (chrome/skin/classic/removedupes/removedupes-messenger.css)
 *   skin/classic/removedupes/removedupes-button.css               (chrome/skin/classic/removedupes/removedupes-button.css)
 *   skin/classic/removedupes/removedupes-dialog.css               (chrome/skin/classic/removedupes/removedupes-dialog.css)
 #ifdef MOZ_THUNDERBIRD

@@ -18,6 +18,7 @@ var gImapService =
 var gStatusTextField;
 
 var gOriginalsFolders;
+var gOriginalsFolderUris;
 
 var gInboxFolderFlag;
 var gVirtualFolderFlag;
@@ -39,6 +40,9 @@ const SearchCriterionUsageDefaults = {
   body: false
 }
 
+window.addEventListener("load", replaceGetCellProperties, false);
+// this is not useful unless the event fires after all folder have
+// been created - which is not the case
 
 //---------------------------------------------------
 
@@ -198,11 +202,8 @@ function DupeSearchData()
     gRemoveDupesPrefs.getIntPref("status_report_quantum", 1500);
 
   if (gOriginalsFolders) {
+    this.originalsFolderUris = gOriginalsFolderUris;
     this.originalsFolders = gOriginalsFolders;
-    this.originalsFolderUris = new Object;
-    for(var i = 0; i < this.originalsFolders.length; i++) {
-      this.originalsFolderUris[this.originalsFolders[i].URI] = true;
-    }
   }
 }
 //---------------------------------------------------
@@ -252,6 +253,9 @@ function searchAndRemoveDuplicateMessages()
   // the marked 'originals folders' are only used as such
   // for this coming search, not for subsequent searches
   gOriginalsFolders = null;
+  gOriginalsFolderUris = null;
+  if (typeof gFolderTreeView != 'undefined')
+    gFolderTreeView._tree.invalidate();
   searchData.keyPressEventListener =
     function(ev) {onKeyPress(ev,searchData);}
   window.addEventListener("keypress", searchData.keyPressEventListener, true);
@@ -1140,23 +1144,80 @@ function removedupesCriteriaPopupMenuInit()
   }
 }
 
+// This function is only used if the gFolderTreeView object is available
+// (for now, in TBird 3.x and later but not in Seamonkey 2.1.x and earlier);
+// it replaces the callback for getting folder tree cell properties with
+// a function which also adds the property of being a removedupes originals
+// folder or not.
+// In the hope that the gFolderTreeView will appear in Seamonkey as well, 
+// I'm not ifdef-ing this function and other relevant code to TBird-only
+
+function replaceGetCellProperties()
+{
+  if (typeof gFolderTreeView == 'undefined')
+    return;
+    
+  var atomService =
+    Components.classes["@mozilla.org/atom-service;1"]
+              .getService(Components.interfaces.nsIAtomService);
+
+  gFolderTreeView.getCellProperties = function gcp(aRow, aCol, aProps) {
+    var row = gFolderTreeView._rowMap[aRow];
+    row.getProperties(aProps, aCol);
+    if (gOriginalsFolderUris && gOriginalsFolderUris[row._folder.URI]) {
+      aProps.AppendElement(atomService.getAtom("isOriginalsFolder-true"));
+    }
+    else {
+      aProps.AppendElement(atomService.getAtom("isOriginalsFolder-false"));
+    }
+  };
+}
+
 function setOriginalsFolders()
 {
-  gOriginalsFolders = GetSelectedMsgFolders();
-  if (gOriginalsFolders.length == 0) {
-    gOriginalsFolders = null;
+  if (typeof gFolderTreeView == 'undefined') {
+    gOriginalsFolders = GetSelectedMsgFolders();
+    gOriginalsFolderUris = new Object;
+    for(var i = 0; i < gOriginalsFolders.length; i++) {
+      gOriginalsFolderUris[gOriginalsFolders[i].URI] = true;
+    }
+    return;
   }
-  if (gRemoveDupesPrefs.getBoolPref('skip_special_folders','true')) {
-    for (var i = 0; i < gOriginalsFolders.length; i++) {
-      if (!gOriginalsFolders[i].canFileMessages ||
-          (gOriginalsFolders[i].rootFolder == gOriginalsFolders[i]) ||
-          (!gOriginalsFolders[i].canRename && 
-          (!(gOriginalsFolders[i].flags & gInboxFolderFlag)))) {
-        alert(gRemoveDupesStrings.GetStringFromName("removedupes.invalid_originals_folders"));
-        gOriginalsFolders = null;
+  
+  // at this point we assume the gFolderTreeView object exists,
+  // i.e. we can set custom properties for folders in the tree
+  
+  var selection = gFolderTreeView._treeElement.view.selection;
+  var rangeCount = selection.getRangeCount();
+  var numSelectedFolders = 0;
+  gOriginalsFolders = new Array;
+  gOriginalsFolderUris = new Object;
+  var skippingSpecialFolders = 
+    gRemoveDupesPrefs.getBoolPref('skip_special_folders','true');
+  for (var i = 0; i < rangeCount; i++) {
+    let startIndex = {};
+    let endIndex = {};
+    selection.getRangeAt(i, startIndex, endIndex);
+    for (let j = startIndex.value; j <= endIndex.value; j++) {
+      if (j >= gFolderTreeView._rowMap.length)
+        break;
+        
+      var folder = gFolderTreeView._rowMap[j]._folder;
+      if (skippingSpecialFolders) {
+        if (!folder.canFileMessages ||
+            (folder.rootFolder == folder) ||
+            (!folder.canRename && 
+            (!(folder.flags & gInboxFolderFlag)))) {
+          alert(gRemoveDupesStrings.GetStringFromName("removedupes.invalid_originals_folders"));
+          continue;
+        }
       }
+      gOriginalsFolders.push(folder);
+      gOriginalsFolderUris[folder.URI] = true;
     }
   }
+  gFolderTreeView._tree.invalidate();
+  
   // TODO: Think of what happens if the user first marks the originals folders,
   // then changes the special folder skipping prefs; if we could clear the originals
   // in that case somehow...

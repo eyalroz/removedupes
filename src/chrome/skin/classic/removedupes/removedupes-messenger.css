@@ -1,0 +1,18 @@
+treechildren::-moz-tree-cell(isOriginalsFolder-false) {
+}
+
+treechildren::-moz-tree-cell-text(isOriginalsFolder-false) {
+}
+
+treechildren::-moz-tree-cell(isOriginalsFolder-true) {
+  /* Setting the background here affects the entire width
+     of the folder tree */
+  /*background: #efef9f;*/
+}
+
+treechildren::-moz-tree-cell-text(isOriginalsFolder-true) {
+  text-decoration: underline;
+  /* Setting the background here affects just the area 
+     of the folder name text */
+  /*background: #efef9f;*/
+}
