@@ -1,11 +1,11 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
-<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Fjerner dubletter...">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Fjerner dubletter…">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Vælg mapper for næste søgning efter dubletter">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "F">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "V">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "D">
-<!ENTITY removedupes_dialog.dialog_title "Sletning af Dubletter">
+<!ENTITY removedupes_dialog.dialog_title "Sletning af dubletter">
 <!ENTITY removedupes_dialog.id "Meddelelses-ID">
 <!ENTITY removedupes_dialog.keep_label "I hvert sæt dubletter, behold:">
 <!ENTITY removedupes_dialog.subject "Emne">
@@ -32,5 +32,5 @@
 <!ENTITY action.move.label "Flyt til:">
 <!ENTITY action.move.accesskey "F">
 <!ENTITY removeduplicates-button.label "Fjern dubletter">
-<!ENTITY removeduplicates-button.tip "Fjern dubletter...">
+<!ENTITY removeduplicates-button.tip "Fjern dubletter…">
 <!ENTITY removedupes.criteria_menu.label "Kriterier for sammenligning:">
