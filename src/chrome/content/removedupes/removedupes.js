@@ -644,13 +644,12 @@ function processMessagesInCollectedFoldersPhase2(searchData)
 // and transfer encoding), strips out the email addresses in it, and
 // returns them, sorted, in a string
 
-const gEmailRegExp = RegExp(
-  "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
-  "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?","g");
-const gEcnodedWordRegExp = RegExp("=\?.*\?=","g");
-  
 function stripAndSortAddresses(headerString)
 {
+  const gEmailRegExp = RegExp(
+    "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
+    "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?","g");
+  const gEncodedWordRegExp = RegExp("=\?.*\?=","g");
 #ifdef DEBUG_stripAndSortAddresses
   jsConsoleService.logStringMessage('stripAndSortAddresses(' + headerString +  ')');
 #endif
@@ -658,7 +657,7 @@ function stripAndSortAddresses(headerString)
   // keep the field the way it is; at worst, we'll have some false-non-dupes
   if ((headerString == null) || (headerString == ""))
     return headerString;
-  if (gEcnodedWordRegExp.test(headerString))
+  if (gEncodedWordRegExp.test(headerString))
     return headerString;
   var matches;
   try {
