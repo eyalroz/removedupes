@@ -22,7 +22,8 @@ var gOriginalsFolderUris;
 
 var gInboxFolderFlag;
 var gVirtualFolderFlag;
-  
+setFolderFlagGlobals();
+
 // which criteria will we use in the dupe search if the preferences
 // are not set?
 
@@ -40,25 +41,6 @@ const SearchCriterionUsageDefaults = {
   body: false
 }
 
-__defineGetter__("gInboxFolderFlag", function() {
-  delete this.gInboxFolderFlag;
-  try {
-    return Components.interfaces.nsMsgFolderFlags.Inbox;
-  } catch(ex) {
-    return 0x1000; // MSG_FOLDER_FLAG_INBOX
-  }
-});
-
-__defineGetter__("gVirtualFolderFlag", function() {
-  delete this.gVirtualFolderFlag;
-  try {
-    return Components.interfaces.nsMsgFolderFlags.Virtual;
-  } catch(ex) {
-    return 0x0020; // MSG_FOLDER_FLAG_VIRTUAL
-  }
-});
-
-setFolderFlagGlobals();
 window.addEventListener("load", replaceGetCellProperties, false);
 // this is not useful unless the event fires after all folder have
 // been created - which is not the case
@@ -270,6 +252,18 @@ function searchAndRemoveDuplicateMessages()
     function(ev) {onKeyPress(ev,searchData);}
   window.addEventListener("keypress", searchData.keyPressEventListener, true);
   beginSearchForDuplicateMessages(searchData);
+}
+
+function setFolderFlagGlobals()
+{
+  try {
+   // for some reason this is no longer defined recent Seamonkey trunk versions
+   gInboxFolderFlag   = Components.interfaces.nsMsgFolderFlags.Inbox;
+   gVirtualFolderFlag = Components.interfaces.nsMsgFolderFlags.Virtual;
+  } catch(ex) {
+    gInboxFolderFlag   = 0x1000; // MSG_FOLDER_FLAG_INBOX
+    gVirtualFolderFlag = 0x0020; // MSG_FOLDER_FLAG_VIRTUAL
+  }
 }
 
 function onKeyPress(ev,searchData)
