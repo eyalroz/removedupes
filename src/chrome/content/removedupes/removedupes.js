@@ -40,6 +40,25 @@ const SearchCriterionUsageDefaults = {
   body: false
 }
 
+__defineGetter__("gInboxFolderFlag", function() {
+  delete this.gInboxFolderFlag;
+  try {
+    return Components.interfaces.nsMsgFolderFlags.Inbox;
+  } catch(ex) {
+    return 0x1000; // MSG_FOLDER_FLAG_INBOX
+  }
+});
+
+__defineGetter__("gVirtualFolderFlag", function() {
+  delete this.gVirtualFolderFlag;
+  try {
+    return Components.interfaces.nsMsgFolderFlags.Virtual;
+  } catch(ex) {
+    return 0x0020; // MSG_FOLDER_FLAG_VIRTUAL
+  }
+});
+
+setFolderFlagGlobals();
 window.addEventListener("load", replaceGetCellProperties, false);
 // this is not useful unless the event fires after all folder have
 // been created - which is not the case
@@ -218,15 +237,6 @@ function searchAndRemoveDuplicateMessages()
   jsConsoleService.logStringMessage('searchAndRemoveDuplicateMessages()');
 #endif
 
-  // for some reason this is no longer defined recent Seamonkey trunk versions
-  try {
-    gInboxFolderFlag   = Components.interfaces.nsMsgFolderFlags.Inbox;
-    gVirtualFolderFlag = Components.interfaces.nsMsgFolderFlags.Virtual;
-  } catch(ex) {
-    gInboxFolderFlag   = 0x1000; // MSG_FOLDER_FLAG_INBOX
-    gVirtualFolderFlag = 0x0020; // MSG_FOLDER_FLAG_VIRTUAL
-  }
-    
   //document.getElementById('progress-panel').removeAttribute('collapsed'); 
   gStatusTextField = document.getElementById('statusText');
   gStatusTextField.label =
