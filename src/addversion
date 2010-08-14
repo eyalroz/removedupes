@@ -51,11 +51,11 @@ cvs -d $CVSROOT tag ${RELEASE_TAG}
 # http://www.mozdev.org/drupal/wiki/MozdevCVSTipsTroubleshooting
 # for details
 
-mkdir ${SRCDIR}/${TMPDIR}
-cd ${SRCDIR}/${TMPDIR}
+mkdir ${SRCDIR}/${TEMPDIR}
+cd ${SRCDIR}/${TEMPDIR}
 cvs -d $CVSROOT export -r ${RELEASE_TAG} -d ${SHORTNAME} ${SHORTNAME}/src
 cd ${SRCDIR}
-#rm -r ${SRCDIR}/${TMPDIR}
+rm -r ${SRCDIR}/${TEMPDIR}
 
 # add the release to the CVS repository
 # (it gets propagated to the mozdev download mirrors)
