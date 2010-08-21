@@ -112,13 +112,25 @@ function getBuildID() {
   return arr[2];
 }
 
-function rdGetAppVersion()
+function rdEnsureMinimumVersion(minVersion)
 {
-  var versionString = 
-    gRemoveDupesPrefs.prefService
-                     .getBranch('extensions.')
-                     .getCharPref('lastAppVersion');
-  return versionString;
+  var version;  
+  if ("@mozilla.org/xre/app-info;1" in Components.classes ) {
+    version = 
+      Components.classes["@mozilla.org/xre/app-info;1"]
+                .getService(Components.interfaces.nsIXULAppInfo).version;  
+  }
+  else {
+    version =
+      Components.classes["@mozilla.org/preferences-service;1"]
+                .getService(Components.interfaces.nsIPrefBranch)
+                .getCharPref("extensions.lastAppVersion");  
+  }
+  var versionChecker =
+    Components.classes["@mozilla.org/xpcom/version-comparator;1"]
+              .getService(Components.interfaces.nsIVersionComparator);  
+    
+  return ( versionChecker.compare( version, minVersion ) >= 0 )  
 }
 
 //---------------------------------------------------------
