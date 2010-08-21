@@ -1,3 +1,12 @@
+#ifdef DEBUG
+// The following enables logging messages to the javascript console:
+__defineGetter__("gJSConsoleService", function() {
+  delete this.gJSConsoleService;
+  return this.gJSConsoleService =
+    Components.classes['@mozilla.org/consoleservice;1']
+              .getService(Components.interfaces.nsIConsoleService);
+});
+#endif
 
 // nsISupportsArray replaced with nsIArray by Mozilla bug 435290
 var gUseSupportsArray;
@@ -224,7 +233,7 @@ function removeDuplicates(
   // and set a global window-global variable of its own
 
 #ifdef DEBUG_removeDuplicates
-  jsConsoleService.logStringMessage('in removeDuplicates\ntargetFolderUri = ' + targetFolderUri + '\ndeletePermanently = ' + deletePermanently);
+  gJSConsoleService.logStringMessage('in removeDuplicates\ntargetFolderUri = ' + targetFolderUri + '\ndeletePermanently = ' + deletePermanently);
 #endif
 
   // nsIMsgCopyService no longer accepts nsISupportsArray's in recent versions;
@@ -259,19 +268,19 @@ function removeDuplicates(
   for (var hashValue in dupeSetsHashMap) {
     var dupeSet = dupeSetsHashMap[hashValue];
 #ifdef DEBUG_removeDuplicates
-    jsConsoleService.logStringMessage('hash value ' + hashValue + '\nnumber of dupes: ' + dupeSet.length);
+    gJSConsoleService.logStringMessage('hash value ' + hashValue + '\nnumber of dupes: ' + dupeSet.length);
 #endif
     if (haveMessageRecords) {
       for(var i = 0; i < dupeSet.length; i++) {
         messageRecord = dupeSet[i];
         if (!messageRecord.toKeep) {
 #ifdef DEBUG_removeDuplicates
-          jsConsoleService.logStringMessage('processing URI ' + messageRecord.uri);
+          gJSConsoleService.logStringMessage('processing URI ' + messageRecord.uri);
 #endif
           messageHeader = messenger.msgHdrFromURI(messageRecord.uri);
 #ifdef DEBUG_removeDuplicates
           if (!messageHeader)
-          jsConsoleService.logStringMessage('header is null for ' + messageRecord.uri);
+          gJSConsoleService.logStringMessage('header is null for ' + messageRecord.uri);
 #endif
           if (!(messageRecord.folderUri in dupesByFolderHashMap)) {
             var folderDupesInfo = new Object; 
@@ -301,7 +310,7 @@ function removeDuplicates(
     else {
       for(var i = 1; i < dupeSet.length; i++) {
 #ifdef DEBUG_removeDuplicates
-        jsConsoleService.logStringMessage('processing URI ' + dupeSet[i]);
+        gJSConsoleService.logStringMessage('processing URI ' + dupeSet[i]);
 #endif
         messageHeader = messenger.msgHdrFromURI(dupeSet[i]);
         var folderUri = messageHeader.folder.URI;
@@ -338,7 +347,7 @@ function removeDuplicates(
   }
 
 #ifdef DEBUG_removeDuplicates
-  jsConsoleService.logStringMessage('done');
+  gJSConsoleService.logStringMessage('done');
 #endif
 }
 
@@ -349,7 +358,7 @@ function removeDupesFromSingleFolder(
   deletePermanently)
 {
 #ifdef DEBUG_removeDuplicates
-//  jsConsoleService.logStringMessage('removalMessageHdrs.GetElementAt(0) = ' + removalMessageHdrs.GetElementAt(0));
+//  gJSConsoleService.logStringMessage('removalMessageHdrs.GetElementAt(0) = ' + removalMessageHdrs.GetElementAt(0));
 #endif
   if (deletePermanently) {
     try{
@@ -369,7 +378,7 @@ function removeDupesFromSingleFolder(
   else {
     try {
 #ifdef DEBUG_removeDuplicates
-  jsConsoleService.logStringMessage(
+  gJSConsoleService.logStringMessage(
     'using supports? ' + (gUseSupportsArray ? 'yes' : 'no') + '\n' +
     'equals 4010d881-6c83-4f8d-9332-d44564cee14a? ' +
       (Components.interfaces.nsIMsgCopyService.equals(Components.ID("{4010d881-6c83-4f8d-9332-d44564cee14a}")) ? 'yes' : 'no') + '\n' +

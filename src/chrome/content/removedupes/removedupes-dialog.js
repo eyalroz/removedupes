@@ -134,7 +134,7 @@ function initDupeReviewDialog()
   
   for(criterion in useCriteria) {
 #ifdef DEBUG_initDupeReviewDialog
-      jsConsoleService.logStringMessage('criterion = ' + criterion);
+      gJSConsoleService.logStringMessage('criterion = ' + criterion);
 #endif
     if (useCriteria[criterion] &&
         (criterion != 'body'))
@@ -157,7 +157,7 @@ function initDupeReviewDialog()
       }
       gTotalNumberOfDupes++;
 #ifdef DEBUG_initDupeReviewDialog
-      jsConsoleService.logStringMessage('dupe ' + i + ' for hash value ' + hashValue + ':\n' + dupeSet[i].uri);
+      gJSConsoleService.logStringMessage('dupe ' + i + ' for hash value ' + hashValue + ':\n' + dupeSet[i].uri);
 #endif
       
     }
@@ -169,7 +169,7 @@ function initDupeReviewDialog()
   }
 #ifdef DEBUG_profile
   gEndTime = (new Date()).getTime();
-  jsConsoleService.logStringMessage('dupe sets hash decoration time = ' + (gEndTime-gStartTime) + ' ms');
+  gJSConsoleService.logStringMessage('dupe sets hash decoration time = ' + (gEndTime-gStartTime) + ' ms');
   gStartTime = (new Date()).getTime();
 #endif
   
@@ -178,12 +178,12 @@ function initDupeReviewDialog()
   // and let her/him decide what to do with them
 
 #ifdef DEBUG_initDupeReviewDialog
-  jsConsoleService.logStringMessage('gTree = ' + gTree);
+  gJSConsoleService.logStringMessage('gTree = ' + gTree);
 #endif
   gTree.currentItem = null;
   gTreeChildren = document.getElementById("dupeSetsTreeChildren");
 #ifdef DEBUG_initDupeReviewDialog
-  jsConsoleService.logStringMessage('gTreeChildren = ' + gTreeChildren);
+  gJSConsoleService.logStringMessage('gTreeChildren = ' + gTreeChildren);
 #endif
 
   createMessageRowTemplate();
@@ -203,7 +203,7 @@ function initDupeReviewDialog()
   rebuildDuplicateSetsTree();
 #ifdef DEBUG_profile
   gEndTime = (new Date()).getTime();
-  jsConsoleService.logStringMessage('rebuildDuplicateSetsTree time = ' + (gEndTime-gStartTime) + ' ms');
+  gJSConsoleService.logStringMessage('rebuildDuplicateSetsTree time = ' + (gEndTime-gStartTime) + ' ms');
   gStartTime = (new Date()).getTime();
 #endif
 }
@@ -274,7 +274,7 @@ function clearStatusBar()
 function rebuildDuplicateSetsTree()
 {
 #ifdef DEBUG_rebuildDuplicateSetsTree
-      jsConsoleService.logStringMessage('in rebuildDuplicateSetsTree');
+      gJSConsoleService.logStringMessage('in rebuildDuplicateSetsTree');
 #endif
 
   clearStatusBar();
@@ -339,7 +339,7 @@ function rebuildDuplicateSetsTree()
 function resetCheckboxValues()
 {
 #ifdef DEBUG_resetCheckboxValues
-      jsConsoleService.logStringMessage('in resetCheckboxValues');
+      gJSConsoleService.logStringMessage('in resetCheckboxValues');
 #endif
 
   clearStatusBar();
@@ -391,7 +391,7 @@ function updateStatusBar()
 function createMessageTreeRow(messageRecord)
 {
 #ifdef DEBUG_createMessageTreeRow
-  jsConsoleService.logStringMessage('makeNewRow');
+  gJSConsoleService.logStringMessage('makeNewRow');
 #endif
 
   var row = gMessageRowTemplate.cloneNode(true);
@@ -427,7 +427,7 @@ function createMessageTreeRow(messageRecord)
   row.childNodes.item(flagsColumnIndex)
      .setAttribute("label", messageRecord.flags);
 #ifdef DEBUG_createMessageTreeRow
-  jsConsoleService.logStringMessage('messageRecord.lineCount = ' + messageRecord.lineCount);
+  gJSConsoleService.logStringMessage('messageRecord.lineCount = ' + messageRecord.lineCount);
 #endif
 
   return row;
@@ -442,13 +442,13 @@ function formatSendTime(sendTimeInSeconds)
     // the Date() constructor expects miliseconds
     
 #ifdef DEBUG_formatSendTime
-  jsConsoleService.logStringMessage('sendTimeInSeconds = ' + sendTimeInSeconds);
-  jsConsoleService.logStringMessage('date = ' + date);
-  jsConsoleService.logStringMessage('date.getFullYear() = ' + date.getFullYear());
-  jsConsoleService.logStringMessage('date.getMonth()+1 = ' + date.getMonth()+1);
-  jsConsoleService.logStringMessage('date.getDate() = ' + date.getDate());
-  jsConsoleService.logStringMessage('date.getHours() = ' + date.getHours());
-  jsConsoleService.logStringMessage('date.getMinutes() = ' + date.getMinutes());
+  gJSConsoleService.logStringMessage('sendTimeInSeconds = ' + sendTimeInSeconds);
+  gJSConsoleService.logStringMessage('date = ' + date);
+  gJSConsoleService.logStringMessage('date.getFullYear() = ' + date.getFullYear());
+  gJSConsoleService.logStringMessage('date.getMonth()+1 = ' + date.getMonth()+1);
+  gJSConsoleService.logStringMessage('date.getDate() = ' + date.getDate());
+  gJSConsoleService.logStringMessage('date.getHours() = ' + date.getHours());
+  gJSConsoleService.logStringMessage('date.getMinutes() = ' + date.getMinutes());
 #endif
   return gDateService.FormatDateTime(
     "", // use application locale
@@ -468,7 +468,7 @@ function formatSendTime(sendTimeInSeconds)
 function onTreeKeyPress(ev)
 {
 #ifdef DEBUG_onTreeKeyPress
-  jsConsoleService.logStringMessage('onTreeKeyPress, keycode is ' + ev.keyCode);
+  gJSConsoleService.logStringMessage('onTreeKeyPress, keycode is ' + ev.keyCode);
 #endif
   if (ev.keyCode == KeyEvent.DOM_VK_SPACE) {
     toggleDeletionForCurrentRow();
@@ -482,7 +482,7 @@ function onTreeKeyPress(ev)
 function onClickTree(ev)
 {
 #ifdef DEBUG_onClickTree
-  jsConsoleService.logStringMessage('in onClickTree()\nclick point = ' + ev.clientX + ':' + ev.clientY);
+  gJSConsoleService.logStringMessage('in onClickTree()\nclick point = ' + ev.clientX + ':' + ev.clientY);
 #endif
 
   var treeBoxOject = gTree.treeBoxObject;
@@ -498,7 +498,7 @@ function onClickTree(ev)
       || !gTree.contentView.getItemAtIndex(gTree.currentIndex).hasAttribute('indexInDupeSet') ) {
     // this isn't a valid cell we can use, or it's in one of the [+]/[-] rows
 #ifdef DEBUG_onClickTree
-    jsConsoleService.logStringMessage('not a valid cell, doing nothing');
+    gJSConsoleService.logStringMessage('not a valid cell, doing nothing');
 #endif
     return;
   }
@@ -517,7 +517,7 @@ function onClickTree(ev)
 function loadCurrentRowMessage()
 {
 #ifdef DEBUG_loadCurrentRowMessage
-  jsConsoleService.logStringMessage('in loadCurrentRowMessage()\ngTree.currentIndex = ' + gTree.currentIndex);
+  gJSConsoleService.logStringMessage('in loadCurrentRowMessage()\ngTree.currentIndex = ' + gTree.currentIndex);
 #endif
   // when we click somewhere in the tree, the focused element should be an inner 'treeitem'
   var focusedTreeItem = gTree.contentView.getItemAtIndex(gTree.currentIndex);
@@ -525,15 +525,15 @@ function loadCurrentRowMessage()
   var dupeSetTreeItem = focusedTreeItem.parentNode.parentNode;
 #ifdef DEBUG_loadCurrentRowMessage
   var node = dupeSetTreeItem;
-  jsConsoleService.logStringMessage('dupeSetTreeItem: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+  gJSConsoleService.logStringMessage('dupeSetTreeItem: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
   var node = dupeSetTreeItem.parentNode;
-  jsConsoleService.logStringMessage('dupeSetTreeItem.parentNode: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+  gJSConsoleService.logStringMessage('dupeSetTreeItem.parentNode: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
   var node = dupeSetTreeItem.parentNode.parentNode;
-  jsConsoleService.logStringMessage('dupeSetTreeItem.parentNode.parentNode: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+  gJSConsoleService.logStringMessage('dupeSetTreeItem.parentNode.parentNode: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
 #endif
   var dupeSetHashValue = dupeSetTreeItem.getAttribute('commonHashValue');
 #ifdef DEBUG_loadCurrentRowMessage
-  jsConsoleService.logStringMessage('dupeSetHashValue = ' + dupeSetHashValue);
+  gJSConsoleService.logStringMessage('dupeSetHashValue = ' + dupeSetHashValue);
 #endif
   var dupeSetItem = gDupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
   var messageUri = dupeSetItem.uri;
@@ -559,7 +559,7 @@ function loadCurrentRowMessage()
 function toggleDeletionForCurrentRow()
 {
 #ifdef DEBUG_toggleDeletionForCurrentRow
-  jsConsoleService.logStringMessage('in toggleDeletionForCurrentRow()\ngTree.currentIndex = ' + gTree.currentIndex);
+  gJSConsoleService.logStringMessage('in toggleDeletionForCurrentRow()\ngTree.currentIndex = ' + gTree.currentIndex);
 #endif
   var focusedTreeItem = gTree.contentView.getItemAtIndex(gTree.currentIndex);
 
@@ -603,7 +603,7 @@ function onAccept()
   } catch(ex) { }
 
 #ifdef DEBUG_onAccept
-  jsConsoleService.logStringMessage('uri is ' + uri);
+  gJSConsoleService.logStringMessage('uri is ' + uri);
 #endif
 
 
@@ -694,7 +694,7 @@ function initializeFolderPicker()
   }
 
 #ifdef DEBUG_initializeFolderPicker
-  jsConsoleService.logStringMessage('setting folder picker to uri:\n' + uri);
+  gJSConsoleService.logStringMessage('setting folder picker to uri:\n' + uri);
 #endif
 
 #ifdef XBL_FOLDER_PICKER
@@ -717,14 +717,14 @@ function initializeFolderPicker()
 function onClickColumn(ev)
 {
 #ifdef DEBUG_onClickColumn
-  jsConsoleService.logStringMessage('in onClickColumn()');
+  gJSConsoleService.logStringMessage('in onClickColumn()');
 #endif
   ev.stopPropagation();
   
   var field = ev.target.getAttribute('fieldName');
 
 #ifdef DEBUG_onClickColumn
-  jsConsoleService.logStringMessage('field = ' + field + '\ngTree.getAttribute(\'sortColumn\') = ' + gTree.getAttribute('sortColumn') );
+  gJSConsoleService.logStringMessage('field = ' + field + '\ngTree.getAttribute(\'sortColumn\') = ' + gTree.getAttribute('sortColumn') );
 #endif
   
   if (!field)
@@ -732,7 +732,7 @@ function onClickColumn(ev)
 
   if (gTree.getAttribute('sortColumn') == ev.target.id) {
 #ifdef DEBUG_onClickColumn
-    jsConsoleService.logStringMessage('reclick ; gTree.getAttribute(\'sortDirection\') = ' + gTree.getAttribute('sortDirection'));
+    gJSConsoleService.logStringMessage('reclick ; gTree.getAttribute(\'sortDirection\') = ' + gTree.getAttribute('sortDirection'));
 #endif
     // re-clicking the current sort indicator means flipping the sort order
     gTree.setAttribute('sortDirection',
@@ -741,14 +741,14 @@ function onClickColumn(ev)
   else {
     if (gTree.getAttribute('sortColumn')) {
 #ifdef DEBUG_onClickColumn
-      jsConsoleService.logStringMessage('clearing old sort column');
+      gJSConsoleService.logStringMessage('clearing old sort column');
 #endif
       document.getElementById(gTree.getAttribute('sortColumn')).removeAttribute('class');
       document.getElementById(gTree.getAttribute('sortColumn')).removeAttribute('sortDirection');
     }
     gTree.setAttribute('sortColumn', ev.target.id);
 #ifdef DEBUG_onClickColumn
-    jsConsoleService.logStringMessage('set gTree.getAttribute(\'sortColumn\') to' + gTree.getAttribute('sortColumn'));
+    gJSConsoleService.logStringMessage('set gTree.getAttribute(\'sortColumn\') to' + gTree.getAttribute('sortColumn'));
 #endif
     gTree.setAttribute('sortDirection', 'ascending');
   }
@@ -756,7 +756,7 @@ function onClickColumn(ev)
   sortDupeSetsByField(field);
 
 #ifdef DEBUG_onClickColumn
-  jsConsoleService.logStringMessage('setting attrs on new sort column' + ev.target + "\nto class and " + gTree.getAttribute('sortDirection'));
+  gJSConsoleService.logStringMessage('setting attrs on new sort column' + ev.target + "\nto class and " + gTree.getAttribute('sortDirection'));
 #endif
   ev.target.setAttribute('class','sortDirectionIndicator');
   ev.target.setAttribute('sortDirection',gTree.getAttribute('sortDirection'));
@@ -794,7 +794,7 @@ function onTargetFolderClick(targetFolder)
 {
   gDupeMoveTargetFolder = targetFolder;
 #ifdef DEBUG_onTargetFolderClick
-  jsConsoleService.logStringMessage('in onTargetFolderClick()\ntarget = ' + targetFolder.abbreviatedName);
+  gJSConsoleService.logStringMessage('in onTargetFolderClick()\ntarget = ' + targetFolder.abbreviatedName);
 #endif
   document.getElementById('actionTargetFolderPopup').selectFolder(targetFolder);
 }
