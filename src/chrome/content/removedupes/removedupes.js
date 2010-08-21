@@ -1,9 +1,4 @@
 #ifdef DEBUG
-// the following 2 lines enable logging messages to the javascript console:
-var jsConsoleService = 
-  Components.classes['@mozilla.org/consoleservice;1']
-            .getService(Components.interfaces.nsIConsoleService);
-
 // used for rough profiling
 var gStartTime;
 var gEndTime;
@@ -68,14 +63,14 @@ UpdateFolderDoneListener.prototype.QueryInterface =
 UpdateFolderDoneListener.prototype.OnStartRunningUrl = 
   function(url) {
 #ifdef DEBUG_UpdateFolderDoneListener
-   jsConsoleService.logStringMessage('OnStartRunningUrl for folder ' + this.folder.abbreviatedName);
+   gJSConsoleService.logStringMessage('OnStartRunningUrl for folder ' + this.folder.abbreviatedName);
 #endif
   }
   
 UpdateFolderDoneListener.prototype.OnStopRunningUrl = 
   function(url, exitCode) {
 #ifdef DEBUG_UpdateFolderDoneListener
-   jsConsoleService.logStringMessage('OnStopRunningUrl for folder ' + this.folder.abbreviatedName);
+   gJSConsoleService.logStringMessage('OnStopRunningUrl for folder ' + this.folder.abbreviatedName);
 #endif
     // TODO: Perhaps we should actually check the exist code...
     // for now we'll just assume the folder update wen't ok,
@@ -108,7 +103,7 @@ function DupeSearchData()
     this.useCriteria['num_lines'] || this.useCriteria['body'];
 
 #ifdef DEBUG_DupeSearchParameters
-  jsConsoleService.logStringMessage('USE criteria: '
+  gJSConsoleService.logStringMessage('USE criteria: '
     + (this.useCriteria['message_id'] ? 'message-ID ' : '') 
     + (this.useCriteria['send_time'] ? 'send-time ' : '') 
     + (this.useCriteria['size'] ? 'size ' : '') 
@@ -121,7 +116,7 @@ function DupeSearchData()
     + (this.useCriteria['flags'] ? 'Flags ' : '') 
     + (this.useCriteria['body']? 'body ' : '') 
     );
-  jsConsoleService.logStringMessage('DON\'T USE criteria: '
+  gJSConsoleService.logStringMessage('DON\'T USE criteria: '
     + (!this.useCriteria['message_id'] ? 'message-ID ' : '') 
     + (!this.useCriteria['send_time'] ? 'send-time ' : '') 
     + (!this.useCriteria['size'] ? 'size ' : '') 
@@ -183,13 +178,13 @@ function DupeSearchData()
   this.limitNumberOfMessages = 
     gRemoveDupesPrefs.getBoolPref("limit_number_of_processed_messages", false);
 #ifdef DEBUG_DupeSearchParameters
-     jsConsoleService.logStringMessage(
+     gJSConsoleService.logStringMessage(
       'this.limitNumberOfMessages ' + this.limitNumberOfMessages);
 #endif
   this.maxMessages = 
     gRemoveDupesPrefs.getIntPref("processed_messages_limit", 10000);
 #ifdef DEBUG_DupeSearchParameters
-     jsConsoleService.logStringMessage(
+     gJSConsoleService.logStringMessage(
       'this.maxMessages ' + this.maxMessages);
 #endif
   
@@ -216,7 +211,7 @@ function DupeSearchData()
 function searchAndRemoveDuplicateMessages()
 {
 #ifdef DEBUG_searchAndRemoveDuplicateMessages
-  jsConsoleService.logStringMessage('searchAndRemoveDuplicateMessages()');
+  gJSConsoleService.logStringMessage('searchAndRemoveDuplicateMessages()');
 #endif
 
   //document.getElementById('progress-panel').removeAttribute('collapsed'); 
@@ -273,12 +268,12 @@ function onKeyPress(ev,searchData)
        ev.keyCode == KeyEvent.DOM_VK_BACK_SPACE) &&
       !ev.shiftKey && !ev.altKey && !ev.ctrlKey && !ev.metaKey) {
 #ifdef DEBUG_onKeyPress
-    jsConsoleService.logStringMessage("Esc Esc");
+    gJSConsoleService.logStringMessage("Esc Esc");
 #endif
     searchData.userAborted = true;
   }
 #ifdef DEBUG_onKeyPress
-  jsConsoleService.logStringMessage("got other keycode: " + ev.keyCode + " | " + String.fromCharCode(ev.keyCode));
+  gJSConsoleService.logStringMessage("got other keycode: " + ev.keyCode + " | " + String.fromCharCode(ev.keyCode));
 #endif
 }
 
@@ -300,20 +295,20 @@ function beginSearchForDuplicateMessages(searchData)
     if (searchData.skippingSpecialFolders) {
       if (!folder.canRename && (folder.rootFolder != folder) ) {
 #ifdef DEBUG_beginSearchForDuplicateMessages
-        jsConsoleService.logStringMessage('special folder ' + folder.abbreviatedName);
+        gJSConsoleService.logStringMessage('special folder ' + folder.abbreviatedName);
 #endif
         // one of the top folders is a special folders; if it's not
         // the Inbox (which we do search), skip it
         if (!(folder.flags & gInboxFolderFlag)) {
 #ifdef DEBUG_beginSearchForDuplicateMessages
-          jsConsoleService.logStringMessage('skipping special folder ' + folder.abbreviatedName + 'due to ' + folder.flags + ' & ' + gInboxFolderFlag + ' = ' + (folder.flags & gInboxFolderFlag));
+          gJSConsoleService.logStringMessage('skipping special folder ' + folder.abbreviatedName + 'due to ' + folder.flags + ' & ' + gInboxFolderFlag + ' = ' + (folder.flags & gInboxFolderFlag));
 #endif
           continue;
         }
       }
     }
 #ifdef DEBUG_beginSearchForDuplicateMessages
-    jsConsoleService.logStringMessage('addSearchFolders for ' + folder.abbreviatedName);
+    gJSConsoleService.logStringMessage('addSearchFolders for ' + folder.abbreviatedName);
 #endif
     addSearchFolders(folder,searchData);
   }
@@ -327,7 +322,7 @@ function beginSearchForDuplicateMessages(searchData)
 
   delete searchData.topFolders;
 #ifdef DEBUG_collectMessages
-   jsConsoleService.logStringMessage('done with addSearchFolders() calls\nsearchData.remainingFolders = ' + searchData.remainingFolders);
+   gJSConsoleService.logStringMessage('done with addSearchFolders() calls\nsearchData.remainingFolders = ' + searchData.remainingFolders);
 #endif
 
   // At this point, one would expected searchData.folders to contain
@@ -360,7 +355,7 @@ function abortDupeSearch(searchData,labelStringName)
 function addSearchFolders(folder, searchData)
 {
 #ifdef DEBUG_addSearchFolders
-  jsConsoleService.logStringMessage('addSearchFolders for folder ' + folder.abbreviatedName +
+  gJSConsoleService.logStringMessage('addSearchFolders for folder ' + folder.abbreviatedName +
    '\nrootFolder = ' + folder.rootFolder + ((folder.rootFolder == folder) ? ' - self!' : ' - not self!') +
    '\ncanFileMessages = ' + folder.canFileMessages +
    '\nfolder.canRename = ' + folder.canRename
@@ -374,14 +369,14 @@ function addSearchFolders(folder, searchData)
         return;
       }
 #ifdef DEBUG_addSearchFolders
-      jsConsoleService.logStringMessage('special folder ' + folder.abbreviatedName + ' is allowed');
+      gJSConsoleService.logStringMessage('special folder ' + folder.abbreviatedName + ' is allowed');
 #endif
     }
   }
   if (folder.flags & gVirtualFolderFlag) {
     // it's a virtual search folder, skip it
 #ifdef DEBUG_addSearchFolders
-    jsConsoleService.logStringMessage('skipping virtual search folder ' + folder.abbreviatedName);
+    gJSConsoleService.logStringMessage('skipping virtual search folder ' + folder.abbreviatedName);
 #endif
     return;
   }
@@ -399,23 +394,23 @@ function addSearchFolders(folder, searchData)
     if (searchData.originalsFolderUris) {
       if (!searchData.originalsFolderUris[folder.URI]) {
 #ifdef DEBUG_addSearchFolders
-        jsConsoleService.logStringMessage('pushing non-originals folder ' + folder.abbreviatedName);
+        gJSConsoleService.logStringMessage('pushing non-originals folder ' + folder.abbreviatedName);
 #endif
         searchData.folders.push(folder);
       }
 #ifdef DEBUG_addSearchFolders
-      else jsConsoleService.logStringMessage('not pushing folder ' + folder.abbreviatedName + ' - it\'s an originals folder');
+      else gJSConsoleService.logStringMessage('not pushing folder ' + folder.abbreviatedName + ' - it\'s an originals folder');
 #endif
     }
     else {
 #ifdef DEBUG_addSearchFolders
-      jsConsoleService.logStringMessage('pushing folder ' + folder.abbreviatedName);
+      gJSConsoleService.logStringMessage('pushing folder ' + folder.abbreviatedName);
 #endif
       searchData.folders.push(folder);
     }
   }
 #ifdef DEBUG_addSearchFolders
-  else jsConsoleService.logStringMessage('not pushing folder ' + folder.abbreviatedName + ' - since it has no root folder or can\'t file messages');
+  else gJSConsoleService.logStringMessage('not pushing folder ' + folder.abbreviatedName + ' - since it has no root folder or can\'t file messages');
 #endif
 
   // is this an IMAP folder?
@@ -427,7 +422,7 @@ function addSearchFolders(folder, searchData)
     gImapService.selectFolder(gEventTarget, folder, listener, msgWindow, dummyUrl);
     // no traversal of children - the listener will take care of that in due time
 #ifdef DEBUG_addSearchFolders
-    jsConsoleService.logStringMessage('returning from addSearchFolders for folder ' + folder.abbreviatedName + ':\ntriggered IMAP folder update');
+    gJSConsoleService.logStringMessage('returning from addSearchFolders for folder ' + folder.abbreviatedName + ':\ntriggered IMAP folder update');
 #endif
     return;
 
@@ -444,7 +439,7 @@ function addSearchFolders(folder, searchData)
       folder.parseFolder(msgWindow, listener);
       // no traversal of children - the listener will take care of that in due time
 #ifdef DEBUG_addSearchFolders
-      jsConsoleService.logStringMessage('returning from addSearchFolders for folder ' + folder.abbreviatedName + ':\ntriggered local folder db update');
+      gJSConsoleService.logStringMessage('returning from addSearchFolders for folder ' + folder.abbreviatedName + ':\ntriggered local folder db update');
 #endif
       return;
     }
@@ -457,7 +452,7 @@ function addSearchFolders(folder, searchData)
   traverseSearchFolderSubfolders(folder,searchData);
   
 #ifdef DEBUG_addSearchFolders
-  jsConsoleService.logStringMessage('returning from addSearchFolders for folder ' + folder.abbreviatedName + ':\nperformed traversal');
+  gJSConsoleService.logStringMessage('returning from addSearchFolders for folder ' + folder.abbreviatedName + ':\nperformed traversal');
 #endif
 }
 
@@ -469,7 +464,7 @@ function addSearchFolders(folder, searchData)
 function traverseSearchFolderSubfolders(folder,searchData)
 {
 #ifdef DEBUG_traverseSearchFolderSubfolders
-  jsConsoleService.logStringMessage('in traverseSearchFolderSubfolders for folder ' + folder.abbreviatedName);
+  gJSConsoleService.logStringMessage('in traverseSearchFolderSubfolders for folder ' + folder.abbreviatedName);
 #endif
 
   gStatusTextField.label = gRemoveDupesStrings.GetStringFromName('removedupes.searching_for_dupes');
@@ -514,7 +509,7 @@ function traverseSearchFolderSubfolders(folder,searchData)
   searchData.remainingFolders--;
 
 #ifdef DEBUG_traverseSearchFolderSubfolders
-  jsConsoleService.logStringMessage('returning from traverseSearchFolderSubfolders for folder ' + folder.abbreviatedName);
+  gJSConsoleService.logStringMessage('returning from traverseSearchFolderSubfolders for folder ' + folder.abbreviatedName);
 #endif
 }
 
@@ -526,7 +521,7 @@ function traverseSearchFolderSubfolders(folder,searchData)
 function waitForFolderCollection(searchData)
 {
 #ifdef DEBUG_waitForFolderCollection
-   jsConsoleService.logStringMessage('in waitForFolderCollection\nsearchData.remainingFolders = ' + searchData.remainingFolders);
+   gJSConsoleService.logStringMessage('in waitForFolderCollection\nsearchData.remainingFolders = ' + searchData.remainingFolders);
 #endif
 
   gStatusTextField.label = gRemoveDupesStrings.GetStringFromName('removedupes.searching_for_dupes');
@@ -569,7 +564,7 @@ function processMessagesInCollectedFoldersPhase1(searchData)
   }
 
 #ifdef DEBUG_collectMessages
-   jsConsoleService.logStringMessage('in continueSearchForDuplicateMessages');
+   gJSConsoleService.logStringMessage('in continueSearchForDuplicateMessages');
 #endif
   searchData.generator = populateDupeSetsHash(searchData);
   setTimeout(processMessagesInCollectedFoldersPhase2, 10, searchData);
@@ -598,7 +593,7 @@ function processMessagesInCollectedFoldersPhase2(searchData)
       // if we've gotten here, it means the populateDupeSetsHash function,
       // associated with the generator, has finally completed its execution
 #ifdef DEBUG_processMessagesInCollectedFoldersPhase2
-  jsConsoleService.logStringMessage('populateDupeSetsHash execution complete');
+  gJSConsoleService.logStringMessage('populateDupeSetsHash execution complete');
 #endif
       delete searchData.generator;
     }
@@ -651,7 +646,7 @@ function stripAndSortAddresses(headerString)
     "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?","g");
   const gEncodedWordRegExp = RegExp("=\?.*\?=","g");
 #ifdef DEBUG_stripAndSortAddresses
-  jsConsoleService.logStringMessage('stripAndSortAddresses(' + headerString +  ')');
+  gJSConsoleService.logStringMessage('stripAndSortAddresses(' + headerString +  ')');
 #endif
   // if we suspect there's undecoded text, let's not do anything and
   // keep the field the way it is; at worst, we'll have some false-non-dupes
@@ -761,7 +756,7 @@ function sillyHash(searchData,messageHdr,folder)
 function populateDupeSetsHash(searchData)
 {
 #ifdef DEBUG_populateDupeSetsHash
-   jsConsoleService.logStringMessage('in populateDupeSetsHash()');
+   gJSConsoleService.logStringMessage('in populateDupeSetsHash()');
 #endif
 
   // messageUriHashmap  will be filled with URIs for _all_ messages;
@@ -772,10 +767,10 @@ function populateDupeSetsHash(searchData)
 
 #ifdef DEBUG_populateDupeSetsHash
    if (searchData.originalsFolders) {
-     jsConsoleService.logStringMessage('number of search folders: ' +
+     gJSConsoleService.logStringMessage('number of search folders: ' +
        searchData.originalsFolders.length + ' originals + ' + searchData.folders.length + ' others' );
    }
-   else  jsConsoleService.logStringMessage('number of search folders: ' + searchData.folders.length);
+   else  gJSConsoleService.logStringMessage('number of search folders: ' + searchData.folders.length);
 #endif
 
   // this next bit of code is super-ugly, because I need the yield'ing to happen from 
@@ -802,7 +797,7 @@ function populateDupeSetsHash(searchData)
     }
     var folder = folders[i];
 #ifdef DEBUG_populateDupeSetsHash
-    jsConsoleService.logStringMessage(
+    gJSConsoleService.logStringMessage(
         'populateDupeSetsHash for folder ' + folder.abbreviatedName + '\n' +
         (allowNewUris ? '' : 'not') + 'allowing new URIs');
 #endif
@@ -815,19 +810,19 @@ function populateDupeSetsHash(searchData)
     var folderMessageHdrsIterator;
     try {
 #ifdef DEBUG_populateDupeSetsHash
-      jsConsoleService.logStringMessage('trying getMessages(msgWindows) for folder ' + folder.abbreviatedName);
+      gJSConsoleService.logStringMessage('trying getMessages(msgWindows) for folder ' + folder.abbreviatedName);
 #endif
       folderMessageHdrsIterator =
         folder.getMessages(msgWindow);
     } catch(ex) {
       try {
 #ifdef DEBUG_populateDupeSetsHash
-        jsConsoleService.logStringMessage('trying getMessages() for folder ' + folder.abbreviatedName);
+        gJSConsoleService.logStringMessage('trying getMessages() for folder ' + folder.abbreviatedName);
 #endif
         folderMessageHdrsIterator = folder.messages;
       } catch(ex) {
 #ifdef DEBUG
-          jsConsoleService.logStringMessage('accessing messages failed for folder ' + folder.abbreviatedName + ' :\n' + ex);
+          gJSConsoleService.logStringMessage('accessing messages failed for folder ' + folder.abbreviatedName + ' :\n' + ex);
 #else
           dump(gRemoveDupesStrings.formatStringFromName('removedupes.failed_getting_messages', [folder.abbreviatedName], 1) + '\n');
 #endif
@@ -847,14 +842,14 @@ function populateDupeSetsHash(searchData)
       if (messageHash in messageUriHashmap) {
         if (messageHash in searchData.dupeSetsHashMap) {
 #ifdef DEBUG_populateDupeSetsHash
-          jsConsoleService.logStringMessage('sillyHash\n' + messageHash + '\nis a third-or-later dupe');
+          gJSConsoleService.logStringMessage('sillyHash\n' + messageHash + '\nis a third-or-later dupe');
 #endif
           // just add the current message's URI, no need to copy anything
           searchData.dupeSetsHashMap[messageHash].push(uri);
         } 
         else {
 #ifdef DEBUG_populateDupeSetsHash
-          jsConsoleService.logStringMessage('sillyHash\n' + messageHash + '\nis a second dupe');
+          gJSConsoleService.logStringMessage('sillyHash\n' + messageHash + '\nis a second dupe');
 #endif
           // the URI in messageUriHashmap[messageHash] has not been copied to
           // the dupes hash since until now we did not know it was a dupe;
@@ -867,7 +862,7 @@ function populateDupeSetsHash(searchData)
       } 
       else {
 #ifdef DEBUG_populateDupeSetsHash
-        jsConsoleService.logStringMessage('sillyHash\n' + messageHash + '\nis not a dupe (or a first dupe)');
+        gJSConsoleService.logStringMessage('sillyHash\n' + messageHash + '\nis not a dupe (or a first dupe)');
 #endif
         if (allowNewUris) {
           messageUriHashmap[messageHash] = uri;
@@ -899,7 +894,7 @@ function messageBodyFromURI(msgURI)
 {
   var msgContent = "";
 #ifdef DEBUG_messageBodyFromURI
-   jsConsoleService.logStringMessage('in messageBodyFromURI(' + msgURI + ')');
+   gJSConsoleService.logStringMessage('in messageBodyFromURI(' + msgURI + ')');
 #endif
   var MsgService;
   try {
@@ -931,15 +926,15 @@ function messageBodyFromURI(msgURI)
   var endOfHeaders = /\r?\n\r?\n/;
   if (endOfHeaders.test(msgContent)) {
 #ifdef DEBUG_messageBodyFromURI
-  //jsConsoleService.logStringMessage('msgContent =\n\n' + msgContent);
-  //jsConsoleService.logStringMessage('msgContent =\n\n' + string2hexWithNewLines(msgContent));
-  jsConsoleService.logStringMessage('RegExp.rightContext =\n\n' + RegExp.rightContext);
+  //gJSConsoleService.logStringMessage('msgContent =\n\n' + msgContent);
+  //gJSConsoleService.logStringMessage('msgContent =\n\n' + string2hexWithNewLines(msgContent));
+  gJSConsoleService.logStringMessage('RegExp.rightContext =\n\n' + RegExp.rightContext);
 #endif
     // return everything after the end-of-headers
     return RegExp.rightContext;
   }
 #ifdef DEBUG_messageBodyFromURI
-  jsConsoleService.logStringMessage('Can\'t match /\\r?\\n\\r?\\n/');
+  gJSConsoleService.logStringMessage('Can\'t match /\\r?\\n\\r?\\n/');
 #endif
   return null;
 }
@@ -998,7 +993,7 @@ function refineDupeSets(searchData)
   for (hashValue in searchData.dupeSetsHashMap) {
     var dupeSet = searchData.dupeSetsHashMap[hashValue];
 #ifdef DEBUG_refineDupeSets
-    jsConsoleService.logStringMessage('refining for dupeSetsHashMap value ' + hashValue + '\nset has ' + dupeSet.length + ' elements initially');
+    gJSConsoleService.logStringMessage('refining for dupeSetsHashMap value ' + hashValue + '\nset has ' + dupeSet.length + ' elements initially');
 #endif
     
     // get the message bodies
@@ -1017,7 +1012,7 @@ function refineDupeSets(searchData)
     }
 
 #ifdef DEBUG_refineDupeSets
-    jsConsoleService.logStringMessage('got the bodies');
+    gJSConsoleService.logStringMessage('got the bodies');
 #endif
     
     // sort the bodies
@@ -1028,7 +1023,7 @@ function refineDupeSets(searchData)
       } );
 
 #ifdef DEBUG_refineDupeSets
-    jsConsoleService.logStringMessage('done sorting');
+    gJSConsoleService.logStringMessage('done sorting');
 #endif
 
     if (searchData.userAborted)
@@ -1069,7 +1064,7 @@ function refineDupeSets(searchData)
 function reviewAndRemoveDupes(searchData)
 {
 #ifdef DEBUG_reviewAndRemove
-  jsConsoleService.logStringMessage('in reviewAndRemoveDupes');
+  gJSConsoleService.logStringMessage('in reviewAndRemoveDupes');
 #endif
 
   if (searchData.userAborted) {
@@ -1094,15 +1089,15 @@ function reviewAndRemoveDupes(searchData)
       gMessengerBundle = document.getElementById("bundle_messenger");
     var dialogURI = "chrome://removedupes/content/removedupes-dialog.xul";
 #ifdef MOZ_THUNDERBIRD
-    if (rdGetAppVersion() < "3") {
+    if (!rdEnsureMinimumVersion("3.0b1")) {
 #ifdef DEBUG_reviewAndRemove
-      jsConsoleService.logStringMessage('App Version >= 3');
+      gJSConsoleService.logStringMessage('App Version < 3.0b1');
 #endif
       dialogURI = "chrome://removedupes/content/removedupes-dialog.tb2.xul"
     }
 #ifdef DEBUG_reviewAndRemove
     else {
-      jsConsoleService.logStringMessage('App Version < 3');
+      gJSConsoleService.logStringMessage('App Version >= 3.0b1');
     }    
 #endif
 #endif
@@ -1252,13 +1247,13 @@ function secondMenuItem()
     content = content + ScriptInputStream .read(512);
   }
   //alert(content);
-  //jsConsoleService.logStringMessage('content of current selected message:\n\n' + content);
+  //gJSConsoleService.logStringMessage('content of current selected message:\n\n' + content);
 /*  var lines = content.split('\n');
   var i = 1;
   for (i = 0; i < lines.length; i++) {
-    jsConsoleService.logStringMessage('line ' + i + ' | length ' + lines[i].length + ' | ' + string2hex(lines[i]));
+    gJSConsoleService.logStringMessage('line ' + i + ' | length ' + lines[i].length + ' | ' + string2hex(lines[i]));
   } */
-  jsConsoleService.logStringMessage('content of current selected message after headers:\n\n' + content.split('\r\n\r\n')[1]);
+  gJSConsoleService.logStringMessage('content of current selected message after headers:\n\n' + content.split('\r\n\r\n')[1]);
 
 }
 #endif
