@@ -1,21 +1,11 @@
 treechildren::-moz-tree-cell(keep) {
-%ifdef MOZ_TOOLKIT_SEAMONKEY
-  list-style-image: url("chrome://messenger/skin/icons/check.png");
-  background: url("chrome://messenger/skin/icons/check.png") no-repeat;
-%else
-  background: url("chrome://messenger/skin/icons/check.gif") no-repeat;
-%endif
+  background: url("chrome://global/skin/checkbox/cbox-check.gif") no-repeat;
   background-position: center center;
 
 }
 
 treechildren::-moz-tree-cell(delete) {
-%ifdef MOZ_TOOLKIT_SEAMONKEY
-  list-style-image: url("chrome://messenger/skin/icons/dot.png");
-  background: url("chrome://messenger/skin/icons/dot.png") no-repeat;
-%else
-  background: url("chrome://messenger/skin/icons/notchecked.gif") no-repeat;
-%endif
+  background: url("chrome://global/skin/checkbox/cbox.gif") no-repeat;
   background-position: center center;
 }
 
