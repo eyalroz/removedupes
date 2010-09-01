@@ -642,8 +642,11 @@ function processMessagesInCollectedFoldersPhase2(searchData)
 function stripAndSortAddresses(headerString)
 {
   const gEmailRegExp = RegExp(
-    "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
-    "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?","g");
+    // recal that ?: at the beginning of the parenthesized sections
+    // means we're not interested in remembering the matching for these
+    // sections specificlaly
+    "\b[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
+    "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\b","gi");
   const gEncodedWordRegExp = RegExp("=\?.*\?=","g");
 #ifdef DEBUG_stripAndSortAddresses
   gJSConsoleService.logStringMessage('stripAndSortAddresses(' + headerString +  ')');
