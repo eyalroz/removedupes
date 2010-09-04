@@ -1160,9 +1160,10 @@ function replaceGetCellProperties()
     Components.classes["@mozilla.org/atom-service;1"]
               .getService(Components.interfaces.nsIAtomService);
 
-  gFolderTreeView.getCellProperties = function gcp(aRow, aCol, aProps) {
+  gFolderTreeView.preRDGetCellProperties = gFolderTreeView.getCellProperties;
+  gFolderTreeView.getCellProperties = function newGcp(aRow, aCol, aProps) {
+    gFolderTreeView.preRDGetCellProperties(aRow, aCol, aProps);
     var row = gFolderTreeView._rowMap[aRow];
-    row.getProperties(aProps, aCol);
     if (gOriginalsFolderUris && gOriginalsFolderUris[row._folder.URI]) {
       aProps.AppendElement(atomService.getAtom("isOriginalsFolder-true"));
     }
