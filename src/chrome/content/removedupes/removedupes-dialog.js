@@ -10,8 +10,6 @@ var msgWindow;
   // the 3-pane window which opened us
 var messenger;
   // msgWindow's messenger
-var messengerBundle; 
-  // the messenger's string bundle
 var dbView; 
   // the 3-pane window's message db view
 var dupeSetsHashMap; 
@@ -129,12 +127,11 @@ function initDupeReviewDialog() {
   msgWindow              = window.arguments[1];
   // XXX TO DO:
   // Do we need this argument?
-  messengerBundle        = window.arguments[2];
-  dbView                 = window.arguments[3];
-  useCriteria            = window.arguments[4];
-  dupeSetsHashMap        = window.arguments[5];
-  originalsFolderUris    = window.arguments[6];
-  allowMD5IDSubstitutes  = window.arguments[7];
+  dbView                 = window.arguments[2];
+  useCriteria            = window.arguments[3];
+  dupeSetsHashMap        = window.arguments[4];
+  originalsFolderUris    = window.arguments[5];
+  allowMD5IDSubstitutes  = window.arguments[6];
 
   // let's replace the URI's with all the necessary information
   // for the display dialog:
