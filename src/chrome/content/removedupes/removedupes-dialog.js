@@ -1,7 +1,4 @@
 
-// different dialog/window - no Cc,Ci definitions..
-
-
 if ("undefined" == typeof(RemoveDupes)) {
 var RemoveDupes = {};
 };
@@ -59,8 +56,8 @@ const  flagsColumnIndex       = 11;
 // state variables for dupe set sorting (see onClickColumn() )
 
 DateService =
-  Cc["@mozilla.org/intl/scriptabledateformat;1"]
-            .getService(Ci.nsIScriptableDateFormat);
+  Components.classes["@mozilla.org/intl/scriptabledateformat;1"]
+            .getService(Components.interfaces.nsIScriptableDateFormat);
 
 var MessageStatusFlagValues = {
   READ:           0x0001,
@@ -557,11 +554,11 @@ function loadCurrentRowMessage() {
   var dupeSetItem = dupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
   var messageUri = dupeSetItem.uri;
   var folder = messenger.msgHdrFromURI(messageUri).folder;
-  //msgFolder = folder.QueryInterface(Ci.nsIMsgFolder);
+  //msgFolder = folder.QueryInterface(Components.interfaces.nsIMsgFolder);
   //msgWindow.RerootFolderForStandAlone(folder.uri);
   //msgWindow.RerootFolder(folder.uri, msgFolder, gCurrentLoadingFolderViewType, gCurrentLoadingFolderViewFlags, gCurrentLoadingFolderSortType, gCurrentLoadingFolderSortOrder);
 
-  msgWindow = msgWindow.QueryInterface(Ci.nsIMsgWindow);
+  msgWindow = msgWindow.QueryInterface(Components.interfaces.nsIMsgWindow);
   if (msgWindow.SelectFolder) {
     // it's an old-skool msgWindow, i.e. before the 2007-05-21 check-in
     // which changed the API
