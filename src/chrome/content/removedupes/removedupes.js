@@ -898,8 +898,6 @@ RemoveDupes.MessengerOverlay = {
         );
     }
     else {
-      if (!gMessengerBundle)
-        gMessengerBundle = document.getElementById("bundle_messenger");
         
       var dialogURI = "chrome://removedupes/content/removedupes-dialog.xul";
 #ifdef MOZ_THUNDERBIRD
@@ -924,7 +922,6 @@ RemoveDupes.MessengerOverlay = {
         "chrome,resizable=yes",
         messenger,
         msgWindow,
-        gMessengerBundle,
         gDBView,
         searchData.useCriteria,
         searchData.dupeSetsHashMap,
