@@ -21,6 +21,11 @@
         title="&removedupes_dialog.dialog_title;">
 
   <script type="application/x-javascript" src="chrome://messenger/content/widgetglue.js"/>
+  <script type="application/x-javascript">
+    const Cc = Components.classes;
+    const Ci = Components.interfaces;
+  </script>
+
   <script type="application/x-javascript" src="chrome://removedupes/content/removedupes-common.js"/>
 #ifdef XBL_FOLDER_PICKER
   <script type="application/x-javascript" src="chrome://removedupes/content/removedupes-dialog.js"/>
@@ -166,11 +171,21 @@
         <description  width="60">
           &removedupes_dialog.keep_label;
         </description>
-        <button id="keepPresetOriginalButton"  label="&removedupes_dialog.keep_preset_originals.label;" oncommand="markKeepPresetOriginals();"/>
-        <button id="keepFirstButton" label="&removedupes_dialog.keep_first.label;" oncommand="markKeepOneInEveryDupeSet(true);"/>
-        <button id="keepLastButton" label="&removedupes_dialog.keep_last.label;" oncommand="markKeepOneInEveryDupeSet(false);"/>
-        <button id="keepAllButton" label="&removedupes_dialog.keep_all.label;" oncommand="markNoDupesForDeletion();"/>
-        <button id="keepNoneButton"  label="&removedupes_dialog.keep_none.label;" oncommand="markAllDupesForDeletion();"/>
+        <button id="keepPresetOriginalButton"
+                label="&removedupes_dialog.keep_preset_originals.label;"
+                oncommand="markKeepPresetOriginals();"/>
+        <button id="keepFirstButton"
+                label="&removedupes_dialog.keep_first.label;"
+                oncommand="markKeepOneInEveryDupeSet(true);"/>
+        <button id="keepLastButton" 
+                label="&removedupes_dialog.keep_last.label;" 
+                oncommand="markKeepOneInEveryDupeSet(false);"/>
+        <button id="keepAllButton" 
+                label="&removedupes_dialog.keep_all.label;" 
+                oncommand="markNoDupesForDeletion();"/>
+        <button id="keepNoneButton" 
+                label="&removedupes_dialog.keep_none.label;" 
+                oncommand="markAllDupesForDeletion();"/>
         <spacer flex="1"/>
       </vbox>
     </hbox>

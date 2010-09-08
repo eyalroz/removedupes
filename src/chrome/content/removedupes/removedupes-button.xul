@@ -22,7 +22,7 @@
 #endif
 
     <toolbarbutton id="removedupes-button"
-                   oncommand="searchAndRemoveDuplicateMessages();"
+                   oncommand="RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages();"
                    label="&removeduplicates-button.label;"
                    tooltiptext="&removeduplicates-button.tip;"
                    type="menu-button"
@@ -30,20 +30,53 @@
                    insertafter="button-stop"
 #endif
                    class="toolbarbutton-1 chromeclass-toolbar-additional custombutton">
-      <menupopup onpopupshowing="removedupesCriteriaPopupMenuInit()">
+      <menupopup onpopupshowing="RemoveDupes.MessengerOverlay.criteriaPopupMenuInit()">
         <label value="&removedupes.criteria_menu.label;" style="font-weight: bold"/>
         <menuseparator />
-        <menuitem type="checkbox" id="removedupesCriterionMenuItem_author" label="&message_comparison.author.label;" oncommand="toggleDupeSearchCriterion(event,'author')"/>
-        <menuitem type="checkbox" id="removedupesCriterionMenuItem_recipients" label="&message_comparison.recipients.label;" oncommand="toggleDupeSearchCriterion(event,'recipients')"/>
-        <menuitem type="checkbox" id="removedupesCriterionMenuItem_cc_list" label="&message_comparison.cc_list.label;" oncommand="toggleDupeSearchCriterion(event,'cc_list')"/>
-        <menuitem type="checkbox" id="removedupesCriterionMenuItem_flags" label="&message_comparison.flags.label;" oncommand="toggleDupeSearchCriterion(event,'flags')"/>
-        <menuitem type="checkbox" id="removedupesCriterionMenuItem_message_id" label="&message_comparison.message_id.label;" oncommand="toggleDupeSearchCriterion(event,'message_id')"/>
-        <menuitem type="checkbox" id="removedupesCriterionMenuItem_num_lines" label="&message_comparison.num_lines.label;" oncommand="toggleDupeSearchCriterion(event,'num_lines')"/>
-        <menuitem type="checkbox" id="removedupesCriterionMenuItem_send_time" label="&message_comparison.send_time.label;" oncommand="toggleDupeSearchCriterion(event,'send_time')"/>
-        <menuitem type="checkbox" id="removedupesCriterionMenuItem_size" label="&message_comparison.size.label;" oncommand="toggleDupeSearchCriterion(event,'size')"/>
-        <menuitem type="checkbox" id="removedupesCriterionMenuItem_subject" label="&message_comparison.subject.label;" oncommand="toggleDupeSearchCriterion(event,'subject')"/>
-        <menuitem type="checkbox" id="removedupesCriterionMenuItem_folder" label="&message_comparison.folder.label;" oncommand="toggleDupeSearchCriterion(event,'folder')"/>
-        <menuitem type="checkbox" id="removedupesCriterionMenuItem_body" label="&message_comparison.body.label;" oncommand="toggleDupeSearchCriterion(event,'body')"/>
+        <menuitem type="checkbox"
+                  id="removedupesCriterionMenuItem_author"
+                  label="&message_comparison.author.label;"
+                  oncommand="RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion(event,'author')"/>
+        <menuitem type="checkbox"
+                  id="removedupesCriterionMenuItem_recipients"
+                  label="&message_comparison.recipients.label;"
+                  oncommand="RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion(event,'recipients')"/>
+        <menuitem type="checkbox"
+                  id="removedupesCriterionMenuItem_cc_list"
+                  label="&message_comparison.cc_list.label;"
+                  oncommand="RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion(event,'cc_list')"/>
+        <menuitem type="checkbox"
+                  id="removedupesCriterionMenuItem_flags"
+                  label="&message_comparison.flags.label;"
+                  oncommand="RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion(event,'flags')"/>
+        <menuitem type="checkbox"
+                  id="removedupesCriterionMenuItem_message_id"
+                  label="&message_comparison.message_id.label;"
+                  oncommand="RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion(event,'message_id')"/>
+        <menuitem type="checkbox"
+                  id="removedupesCriterionMenuItem_num_lines"
+                  label="&message_comparison.num_lines.label;"
+                  oncommand="RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion(event,'num_lines')"/>
+        <menuitem type="checkbox"
+                  id="removedupesCriterionMenuItem_send_time"
+                  label="&message_comparison.send_time.label;"
+                  oncommand="RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion(event,'send_time')"/>
+        <menuitem type="checkbox"
+                  id="removedupesCriterionMenuItem_size"
+                  label="&message_comparison.size.label;"
+                  oncommand="RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion(event,'size')"/>
+        <menuitem type="checkbox"
+                  id="removedupesCriterionMenuItem_subject"
+                  label="&message_comparison.subject.label;"
+                  oncommand="RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion(event,'subject')"/>
+        <menuitem type="checkbox"
+                  id="removedupesCriterionMenuItem_folder"
+                  label="&message_comparison.folder.label;"
+                  oncommand="RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion(event,'folder')"/>
+        <menuitem type="checkbox"
+                  id="removedupesCriterionMenuItem_body"
+                  label="&message_comparison.body.label;"
+                  oncommand="RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion(event,'body')"/>
       </menupopup>
     </toolbarbutton>
 #ifdef MOZ_PRETOOLKIT_SEAMONKEY
