@@ -19,7 +19,7 @@
             dlgbuttons="accept,cancel">
   <prefpane id="removeDupesPrefPane"
             helpURI="&guide-url;"
-            onpaneload="gRemoveDupesPrefPane.init();">
+            onpaneload="RemoveDupes.PrefPane.init();">
     <preferences id="removedupesPrefs">
       <preference id="removedupes.comparison_criteria.author"
                   name="removedupes.comparison_criteria.author"
