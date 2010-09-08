@@ -1,6 +1,14 @@
+
 if ("undefined" == typeof(RemoveDupes)) {
   var RemoveDupes = {};
 };
+
+RemoveDupes.__defineGetter__("ImapService", function() {
+  delete RemoveDupes.ImapService;
+  return RemoveDupes.ImapService =
+    Components.classes['@mozilla.org/messenger/imapservice;1']
+              .getService(Components.interfaces.nsIImapService);
+  });
 
 RemoveDupes.MessengerOverlay = {
 
@@ -23,9 +31,6 @@ RemoveDupes.MessengerOverlay = {
 
   // see searchAndRemoveDuplicateMessages
   EventTarget : null,
-  ImapService :
-    Cc['@mozilla.org/messenger/imapservice;1'].getService(Ci.nsIImapService),
-
   StatusTextField : null,
   originalsFolders : null,
   originalsFolderUris : null,
@@ -37,25 +42,27 @@ RemoveDupes.MessengerOverlay = {
 
   searchAndRemoveDuplicateMessages : function() {
 #ifdef DEBUG_searchAndRemoveDuplicateMessages
-    RemoveDupes.JSConsoleService.logStringMessage('searchAndRemoveDuplicateMessages()');
+    RemoveDupes.JSConsoleService.logStringMessage(
+      'searchAndRemoveDuplicateMessages()');
 #endif
 
     //document.getElementById('progress-panel').removeAttribute('collapsed'); 
-    RemoveDupes.MessengerOverlay.statusTextField = document.getElementById('statusText');
+    RemoveDupes.MessengerOverlay.statusTextField =
+      document.getElementById('statusText');
     RemoveDupes.MessengerOverlay.statusTextField.label =
       RemoveDupes.Strings.GetStringFromName('removedupes.searching_for_dupes');
 
     // we'll need this for some calls involving UrlListeners
 
     if (RemoveDupes.MessengerOverlay.eventTarget == null) {
-      if ("nsIThreadManager" in Ci) {
+      if ("nsIThreadManager" in Components.interfaces) {
          RemoveDupes.MessengerOverlay.eventTarget = 
            Components.classes['@mozilla.org/thread-manager;1']
                      .getService().currentThread;
       } else {
          var eventQueueService =
            Components.classes['@mozilla.org/event-queue-service;1']
-                     .getService(Ci.nsIEventQueueService);
+                     .getService(Components.interfaces.nsIEventQueueService);
          RemoveDupes.MessengerOverlay.eventTarget = 
            eventQueueService.getSpecialEventQueue(
              eventQueueService.CURRENT_THREAD_EVENT_QUEUE);
@@ -78,8 +85,10 @@ RemoveDupes.MessengerOverlay = {
   setFolderFlagGlobals : function() {
     try {
      // for some reason this is no longer defined recent Seamonkey trunk versions
-     RemoveDupes.MessengerOverlay.InboxFolderFlag   = Ci.nsMsgFolderFlags.Inbox;
-     RemoveDupes.MessengerOverlay.VirtualFolderFlag = Ci.nsMsgFolderFlags.Virtual;
+     RemoveDupes.MessengerOverlay.InboxFolderFlag   =
+       Components.interfaces.nsMsgFolderFlags.Inbox;
+     RemoveDupes.MessengerOverlay.VirtualFolderFlag =
+       Components.interfaces.nsMsgFolderFlags.Virtual;
     } catch(ex) {
       RemoveDupes.MessengerOverlay.InboxFolderFlag   = 0x1000; // MSG_FOLDER_FLAG_INBOX
       RemoveDupes.MessengerOverlay.VirtualFolderFlag = 0x0020; // MSG_FOLDER_FLAG_VIRTUAL
@@ -97,7 +106,8 @@ RemoveDupes.MessengerOverlay = {
       searchData.userAborted = true;
     }
 #ifdef DEBUG_onKeyPress
-    RemoveDupes.JSConsoleService.logStringMessage("got other keycode: " + ev.keyCode + " | " + String.fromCharCode(ev.keyCode));
+    RemoveDupes.JSConsoleService.logStringMessage(
+      "got other keycode: " + ev.keyCode + " | " + String.fromCharCode(ev.keyCode));
 #endif
   },
 
@@ -106,7 +116,8 @@ RemoveDupes.MessengerOverlay = {
 
     if (searchData.topFolders.length == 0) {
       // no folders selected; we shouldn't get here
-      RemoveDupes.MessengerOverlay.abortDupeSearch(searchData,'no_folders_selected');
+      RemoveDupes.MessengerOverlay.abortDupeSearch(
+        searchData,'no_folders_selected');
       return;
     }
 
@@ -118,34 +129,43 @@ RemoveDupes.MessengerOverlay = {
       if (searchData.skippingSpecialFolders) {
         if (!folder.canRename && (folder.rootFolder != folder) ) {
 #ifdef DEBUG_beginSearchForDuplicateMessages
-          RemoveDupes.JSConsoleService.logStringMessage('special folder ' + folder.abbreviatedName);
+          RemoveDupes.JSConsoleService.logStringMessage(
+            'special folder ' + folder.abbreviatedName);
 #endif
           // one of the top folders is a special folders; if it's not
           // the Inbox (which we do search), skip it
           if (!(folder.flags & RemoveDupes.MessengerOverlay.InboxFolderFlag)) {
 #ifdef DEBUG_beginSearchForDuplicateMessages
-            RemoveDupes.JSConsoleService.logStringMessage('skipping special folder ' + folder.abbreviatedName + 'due to ' + folder.flags + ' & ' + RemoveDupes.MessengerOverlay.InboxFolderFlag + ' = ' + (folder.flags & RemoveDupes.MessengerOverlay.InboxFolderFlag));
+            RemoveDupes.JSConsoleService.logStringMessage(
+              'skipping special folder ' + folder.abbreviatedName + 
+              'due to ' + folder.flags + ' & ' +
+              RemoveDupes.MessengerOverlay.InboxFolderFlag + ' = ' + 
+              (folder.flags & RemoveDupes.MessengerOverlay.InboxFolderFlag));
 #endif
            continue;
           }
         }
       }
 #ifdef DEBUG_beginSearchForDuplicateMessages
-      RemoveDupes.JSConsoleService.logStringMessage('addSearchFolders for ' + folder.abbreviatedName);
+      RemoveDupes.JSConsoleService.logStringMessage(
+        'addSearchFolders for ' + folder.abbreviatedName);
 #endif
       RemoveDupes.MessengerOverlay.addSearchFolders(folder,searchData);
     }
 
     if (searchData.folders.length == 0) {
       // all top folders were special folders and therefore skipped
-      alert(RemoveDupes.Strings.GetStringFromName('removedupes.not_searching_special_folders'));
+      alert(RemoveDupes.Strings.GetStringFromName(
+        'removedupes.not_searching_special_folders'));
       RemoveDupes.MessengerOverlay.abortDupeSearch(searchData);
       return;
     }
 
     delete searchData.topFolders;
 #ifdef DEBUG_collectMessages
-     RemoveDupes.JSConsoleService.logStringMessage('done with RemoveDupes.MessengerOverlay.addSearchFolders() calls\nsearchData.remainingFolders = ' + searchData.remainingFolders);
+     RemoveDupes.JSConsoleService.logStringMessage(
+       'done with RemoveDupes.MessengerOverlay.addSearchFolders()' +
+       'calls\nsearchData.remainingFolders = ' + searchData.remainingFolders);
 #endif
 
     // At this point, one would expected searchData.folders to contain
@@ -237,10 +257,10 @@ RemoveDupes.MessengerOverlay = {
     // is this an IMAP folder?
 
     try {
-      var imapFolder = folder.QueryInterface(Ci.nsIMsgImapMailFolder);
+      var imapFolder = folder.QueryInterface(Components.interfaces.nsIMsgImapMailFolder);
       var listener = new RemoveDupes.UpdateFolderDoneListener(folder,searchData);
       var dummyUrl = new Object;
-      RemoveDupes.MessengerOverlay.ImapService.selectFolder(RemoveDupes.MessengerOverlay.eventTarget, folder, listener, msgWindow, dummyUrl);
+      RemoveDupes.ImapService.selectFolder(RemoveDupes.MessengerOverlay.eventTarget, folder, listener, msgWindow, dummyUrl);
       // no traversal of children - the listener will take care of that in due time
 #ifdef DEBUG_addSearchFolders
       RemoveDupes.JSConsoleService.logStringMessage('returning from addSearchFolders for folder ' + folder.abbreviatedName + ':\ntriggered IMAP folder update');
@@ -252,7 +272,7 @@ RemoveDupes.MessengerOverlay = {
     // Is this a locally-stored folder with its DB out-of-date?
 
     try {
-      var localFolder = folder.QueryInterface(Ci.nsIMsgLocalMailFolder);
+      var localFolder = folder.QueryInterface(Components.interfaces.nsIMsgLocalMailFolder);
       try {
         var db = localFolder.getDatabaseWOReparse();
       } catch (ex) {
@@ -306,7 +326,7 @@ RemoveDupes.MessengerOverlay = {
         do {
           RemoveDupes.MessengerOverlay.addSearchFolders(
           subFoldersIterator.currentItem().QueryInterface(
-            Ci.nsIMsgFolder),
+            Components.interfaces.nsIMsgFolder),
             searchData);
           try {
             subFoldersIterator.next();
@@ -320,7 +340,7 @@ RemoveDupes.MessengerOverlay = {
         while (subFoldersEnumerator.hasMoreElements()) {
           RemoveDupes.MessengerOverlay.addSearchFolders(
             subFoldersEnumerator.getNext().QueryInterface(
-            Ci.nsIMsgFolder),
+            Components.interfaces.nsIMsgFolder),
           searchData);
         }
       }
@@ -329,7 +349,8 @@ RemoveDupes.MessengerOverlay = {
     searchData.remainingFolders--;
 
 #ifdef DEBUG_traverseSearchFolderSubfolders
-    RemoveDupes.JSConsoleService.logStringMessage('returning from traverseSearchFolderSubfolders for folder ' + folder.abbreviatedName);
+    RemoveDupes.JSConsoleService.logStringMessage('
+      returning from traverseSearchFolderSubfolders for folder ' + folder.abbreviatedName);
 #endif
   },
 
@@ -340,10 +361,12 @@ RemoveDupes.MessengerOverlay = {
 
   waitForFolderCollection : function(searchData) {
 #ifdef DEBUG_waitForFolderCollection
-     RemoveDupes.JSConsoleService.logStringMessage('in waitForFolderCollection\nsearchData.remainingFolders = ' + searchData.remainingFolders);
+     RemoveDupes.JSConsoleService.logStringMessage(
+       'in waitForFolderCollection\nsearchData.remainingFolders = ' + searchData.remainingFolders);
 #endif
 
-    RemoveDupes.MessengerOverlay.statusTextField.label = RemoveDupes.Strings.GetStringFromName('removedupes.searching_for_dupes');
+    RemoveDupes.MessengerOverlay.statusTextField.label =
+      RemoveDupes.Strings.GetStringFromName('removedupes.searching_for_dupes');
 
     if (searchData.userAborted) {
       abortDupeSearch(searchData,'search_aborted');
@@ -382,10 +405,14 @@ RemoveDupes.MessengerOverlay = {
     }
 
 #ifdef DEBUG_collectMessages
-     RemoveDupes.JSConsoleService.logStringMessage('in continueSearchForDuplicateMessages');
+     RemoveDupes.JSConsoleService.logStringMessage(
+       'in continueSearchForDuplicateMessages');
 #endif
-    searchData.generator = RemoveDupes.MessengerOverlay.populateDupeSetsHash(searchData);
-    setTimeout(RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2, 10, searchData);
+    searchData.generator =
+      RemoveDupes.MessengerOverlay.populateDupeSetsHash(searchData);
+    setTimeout(
+      RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2,
+      10, searchData);
   },
 
   // processMessagesInCollectedFoldersPhase2 - 
@@ -403,14 +430,17 @@ RemoveDupes.MessengerOverlay = {
     if (searchData.generator) {
       try {
         searchData.generator.next();
-        setTimeout(RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2, 100, searchData);
+        setTimeout(
+          RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2,
+          100, searchData);
         return;
       }
       catch (ex if ex instanceof StopIteration) { 
         // if we've gotten here, it means the populateDupeSetsHash function,
         // associated with the generator, has finally completed its execution
 #ifdef DEBUG_processMessagesInCollectedFoldersPhase2
-    RemoveDupes.JSConsoleService.logStringMessage('populateDupeSetsHash execution complete');
+    RemoveDupes.JSConsoleService.logStringMessage(
+      'populateDupeSetsHash execution complete');
 #endif
         delete searchData.generator;
       }
@@ -430,16 +460,18 @@ RemoveDupes.MessengerOverlay = {
 
     if (RemoveDupes.JS.isEmpty(searchData.dupeSetsHashMap)) {
       if (searchData.useReviewDialog) {
-        // if the user wants a dialog to pop up for the dupes, we can bother him/her
-        // with a message box for 'no dupes'
+        // if the user wants a dialog to pop up for the dupes,
+        // we can bother him/her with a message box for 'no dupes'
         RemoveDupes.MessengerOverlay.statusTextField.label = '';
-        alert(RemoveDupes.Strings.GetStringFromName("removedupes.no_duplicates_found"));
+        alert(RemoveDupes.Strings.GetStringFromName(
+          "removedupes.no_duplicates_found"));
       }
       else {
         // if the user wanted silent removal, we'll be more quiet about telling
         // him/her there are no dupes
         RemoveDupes.MessengerOverlay.statusTextField.label = 
-  	RemoveDupes.Strings.GetStringFromName("removedupes.no_duplicates_found");
+  	RemoveDupes.Strings.GetStringFromName(
+  	  "removedupes.no_duplicates_found");
       }
       delete(searchData);
     }
@@ -545,12 +577,16 @@ RemoveDupes.MessengerOverlay = {
     if (searchData.useCriteria['author'])
       retVal += 
         (searchData.compareStrippedAndSortedAddresses ?
-        RemoveDupes.MessengerOverlay.stripAndSortAddresses(messageHdr.mime2DecodedAuthor) : messageHdr.author)
+         RemoveDupes.MessengerOverlay
+                    .stripAndSortAddresses(messageHdr.mime2DecodedAuthor) :
+         messageHdr.author)
         + '|^#=)A?mUi5|';
     if (searchData.useCriteria['recipients'])
       retVal += 
         (searchData.compareStrippedAndSortedAddresses ?
-        RemoveDupes.MessengerOverlay.stripAndSortAddresses(messageHdr.mime2DecodedRecipients) : messageHdr.recipients)
+         RemoveDupes.MessengerOverlay
+                   .stripAndSortAddresses(messageHdr.mime2DecodedRecipients) :
+         messageHdr.recipients)
         + '|Ei4iXn=Iv*|';
     // note: 
     // We're stripping here the non-MIME-transfer-encoding-decoded CC list!
@@ -559,7 +595,9 @@ RemoveDupes.MessengerOverlay = {
     if (searchData.useCriteria['cc_list'])
       retVal += 
         (searchData.compareStrippedAndSortedAddresses ?
-        RemoveDupes.MessengerOverlay.stripAndSortAddresses(messageHdr.ccList) : messageHdr.ccList)
+         RemoveDupes.MessengerOverlay
+                    .stripAndSortAddresses(messageHdr.ccList) :
+         messageHdr.ccList)
         + '|w7Exh\' s%k|';
     if (searchData.useCriteria['num_lines'])
       retVal += messageHdr.lineCount + '|';
@@ -573,7 +611,8 @@ RemoveDupes.MessengerOverlay = {
 
   populateDupeSetsHash : function(searchData) {
 #ifdef DEBUG_populateDupeSetsHash
-     RemoveDupes.JSConsoleService.logStringMessage('in populateDupeSetsHash()');
+     RemoveDupes.JSConsoleService.logStringMessage(
+       'in populateDupeSetsHash()');
 #endif
 
     // messageUriHashmap  will be filled with URIs for _all_ messages;
@@ -585,9 +624,11 @@ RemoveDupes.MessengerOverlay = {
 #ifdef DEBUG_populateDupeSetsHash
      if (searchData.originalsFolders) {
        RemoveDupes.JSConsoleService.logStringMessage('number of search folders: ' +
-         searchData.originalsFolders.length + ' originals + ' + searchData.folders.length + ' others' );
+         searchData.originalsFolders.length + ' originals + ' +
+         searchData.folders.length + ' others' );
      }
-     else  RemoveDupes.JSConsoleService.logStringMessage('number of search folders: ' + searchData.folders.length);
+     else RemoveDupes.JSConsoleService.logStringMessage(
+       'number of search folders: ' + searchData.folders.length);
 #endif
 
     // this next bit of code is super-ugly, because I need the yield'ing to happen from 
@@ -651,7 +692,7 @@ RemoveDupes.MessengerOverlay = {
   	       || (searchData.messagesHashed < searchData.maxMessages)) ) {
         var messageHdr = 
   	folderMessageHdrsIterator.getNext()
-  	       .QueryInterface(Ci.nsIMsgDBHdr);
+  	       .QueryInterface(Components.interfaces.nsIMsgDBHdr);
 
         var messageHash = RemoveDupes.MessengerOverlay.sillyHash(searchData,messageHdr,folder);
         var uri = folder.getUriForMsg(messageHdr);
@@ -720,9 +761,9 @@ RemoveDupes.MessengerOverlay = {
       return null;
     }
     var MsgStream =  Components.classes["@mozilla.org/network/sync-stream-listener;1"].createInstance();
-    var consumer = MsgStream.QueryInterface(Ci.nsIInputStream);
+    var consumer = MsgStream.QueryInterface(Components.interfaces.nsIInputStream);
     var ScriptInput = Components.classes["@mozilla.org/scriptableinputstream;1"].createInstance();
-    var ScriptInputStream = ScriptInput.QueryInterface(Ci.nsIScriptableInputStream);
+    var ScriptInputStream = ScriptInput.QueryInterface(Components.interfaces.nsIScriptableInputStream);
     ScriptInputStream.init(consumer);
     try {
       MsgService .streamMessage(msgURI, MsgStream, msgWindow, null, false, null);
@@ -963,7 +1004,7 @@ RemoveDupes.MessengerOverlay = {
 
     var atomService =
       Components.classes["@mozilla.org/atom-service;1"]
-  	      .getService(Ci.nsIAtomService);
+  	      .getService(Components.interfaces.nsIAtomService);
 
     gFolderTreeView.preRDGetCellProperties = gFolderTreeView.getCellProperties;
     gFolderTreeView.getCellProperties = function newGcp(aRow, aCol, aProps) {
@@ -1044,8 +1085,8 @@ RemoveDupes.UpdateFolderDoneListener = function (folder,searchData) {
 
 RemoveDupes.UpdateFolderDoneListener.prototype.QueryInterface =
   function(iid) {
-    if (iid.equals(Ci.nsIUrlListener) ||
-        iid.equals(Ci.nsISupports))
+    if (iid.equals(Components.interfaces.nsIUrlListener) ||
+        iid.equals(Components.interfaces.nsISupports))
       return this;
     throw Components.results.NS_ERROR_NO_INTERFACE;
   };
