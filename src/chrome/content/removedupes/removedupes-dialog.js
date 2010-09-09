@@ -695,6 +695,11 @@ function initializeFolderPicker() {
   } catch(ex) { }
 
   if (!msgFolder) {
+#ifdef DEBUG_initializeFolderPicker
+    for (var prop in RemoveDupes.Removal) {
+      RemoveDupes.JSConsoleService.logStringMessage(prop);
+    }
+#endif
     uri = RemoveDupes.Removal.getLocalFoldersTrashFolder().URI;
     msgFolder = GetMsgFolderFromUri(uri, false);
   }

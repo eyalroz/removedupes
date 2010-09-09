@@ -5,6 +5,23 @@ if ("undefined" == typeof(RemoveDupes)) {
   var RemoveDupes = {};
 };
 
+try {
+  // for some reason this is no longer defined recent Seamonkey trunk versions
+  RemoveDupes.FolderFlags = {}
+  RemoveDupes.FolderFlags.Inbox   =
+    Components.interfaces.nsMsgFolderFlags.Inbox;
+  RemoveDupes.FolderFlags.Virtual =
+    Components.interfaces.nsMsgFolderFlags.Virtual;
+  RemoveDupes.FolderFlags.Trash =
+    Components.interfaces.nsMsgFolderFlags.Trash;
+} catch(ex) {
+  // constants from nsMsgFolderFlags.idl
+  RemoveDupes.FolderFlags.Inbox   = 0x1000;
+  RemoveDupes.FolderFlags.Virtual = 0x0020;
+  RemoveDupes.FolderFlags.Trash   = 0x0100;
+};
+
+
 //---------------------------------------------------------
 
 // Extension-Global Variables
@@ -231,11 +248,9 @@ RemoveDupes.Removal = {
     var accountManager =
       Components.classes["@mozilla.org/messenger/account-manager;1"]
         .getService(Components.interfaces.nsIMsgAccountManager);
-    return 
-      accountManager.localFoldersServer
-                    .rootFolder
-                    .getFolderWithFlags(
-                      Components.interfaces.nsMsgFolderFlags.Trash);
+    var rootFolder = 
+      accountManager.localFoldersServer.rootFolder;
+    return rootFolder.getFolderWithFlags(RemoveDupes.FolderFlags.Trash);
   },
 
   // This function is called either after the dupes are collected,
@@ -442,3 +457,4 @@ RemoveDupes.Removal = {
     }
   }
 }
+
