@@ -34,8 +34,6 @@ RemoveDupes.MessengerOverlay = {
   StatusTextField : null,
   originalsFolders : null,
   originalsFolderUris : null,
-  InboxFolderFlag : null,
-  VirtualFolderFlag : null,
 
   // searchAndRemoveDuplicateMessages - 
   // Called from the UI to trigger a new dupe search
@@ -82,19 +80,6 @@ RemoveDupes.MessengerOverlay = {
     RemoveDupes.MessengerOverlay.beginSearchForDuplicateMessages(searchData);
   },
 
-  setFolderFlagGlobals : function() {
-    try {
-     // for some reason this is no longer defined recent Seamonkey trunk versions
-     RemoveDupes.MessengerOverlay.InboxFolderFlag   =
-       Components.interfaces.nsMsgFolderFlags.Inbox;
-     RemoveDupes.MessengerOverlay.VirtualFolderFlag =
-       Components.interfaces.nsMsgFolderFlags.Virtual;
-    } catch(ex) {
-      RemoveDupes.MessengerOverlay.InboxFolderFlag   = 0x1000; // MSG_FOLDER_FLAG_INBOX
-      RemoveDupes.MessengerOverlay.VirtualFolderFlag = 0x0020; // MSG_FOLDER_FLAG_VIRTUAL
-    }
-  },
-
   onKeyPress : function(ev,searchData) {
     if ((ev.keyCode == KeyEvent.DOM_VK_CANCEL ||
          ev.keyCode == 27 ||
@@ -134,13 +119,13 @@ RemoveDupes.MessengerOverlay = {
 #endif
           // one of the top folders is a special folders; if it's not
           // the Inbox (which we do search), skip it
-          if (!(folder.flags & RemoveDupes.MessengerOverlay.InboxFolderFlag)) {
+          if (!(folder.flags & RemoveDupes.FolderFlags.Inbox)) {
 #ifdef DEBUG_beginSearchForDuplicateMessages
             RemoveDupes.JSConsoleService.logStringMessage(
               'skipping special folder ' + folder.abbreviatedName + 
               'due to ' + folder.flags + ' & ' +
-              RemoveDupes.MessengerOverlay.InboxFolderFlag + ' = ' + 
-              (folder.flags & RemoveDupes.MessengerOverlay.InboxFolderFlag));
+              RemoveDupes.FolderFlags.Inbox + ' = ' + 
+              (folder.flags & RemoveDupes.FolderFlags.Inbox));
 #endif
            continue;
           }
@@ -206,7 +191,7 @@ RemoveDupes.MessengerOverlay = {
     if (!folder.canRename && (folder.rootFolder != folder) ) {
       // it's a special folder
       if (searchData.skippingSpecialFolders) {
-        if (!(folder.flags & RemoveDupes.MessengerOverlay.InboxFolderFlag)) {
+        if (!(folder.flags & RemoveDupes.FolderFlags.Inbox)) {
           return;
         }
 #ifdef DEBUG_addSearchFolders
@@ -214,7 +199,7 @@ RemoveDupes.MessengerOverlay = {
 #endif
       }
     }
-    if (folder.flags & RemoveDupes.MessengerOverlay.VirtualFolderFlag) {
+    if (folder.flags & RemoveDupes.FolderFlags.Virtual) {
       // it's a virtual search folder, skip it
 #ifdef DEBUG_addSearchFolders
       RemoveDupes.JSConsoleService.logStringMessage('skipping virtual search folder ' + folder.abbreviatedName);
@@ -1052,7 +1037,7 @@ RemoveDupes.MessengerOverlay = {
   	if (!folder.canFileMessages ||
   	    (folder.rootFolder == folder) ||
   	    (!folder.canRename && 
-  	    (!(folder.flags & RemoveDupes.MessengerOverlay.InboxFolderFlag)))) {
+  	    (!(folder.flags & RemoveDupes.FolderFlags.Inbox)))) {
   	  alert(RemoveDupes.Strings.GetStringFromName("removedupes.invalid_originals_folders"));
   	  continue;
   	}
@@ -1235,8 +1220,6 @@ RemoveDupes.DupeSearchData = function ()
 }
 //---------------------------------------------------
 
-
-RemoveDupes.MessengerOverlay.setFolderFlagGlobals();
 
 window.addEventListener("load", RemoveDupes.MessengerOverlay.replaceGetCellProperties, false);
 // this is not useful unless the event fires after all folder have
