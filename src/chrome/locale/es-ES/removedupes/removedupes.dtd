@@ -1,0 +1,36 @@
+<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Borrar duplicados...">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Establecer carpeta/s de mensajes para la próxima búsqueda de duplicados">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "b">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "m">
+<!ENTITY key-removedupes.modifiers "accel,shift">
+<!ENTITY key-removedupes.keycode "D">
+<!ENTITY removedupes_dialog.dialog_title "Borrar mensajes duplicados">
+<!ENTITY removedupes_dialog.id "Identificación del mensaje">
+<!ENTITY removedupes_dialog.keep_label "Por cada conjunto de mensajes duplicados, conservar:">
+<!ENTITY removedupes_dialog.subject "Asunto">
+<!ENTITY removedupes_dialog.sender "Remitente">
+<!ENTITY removedupes_dialog.author "Autor">
+<!ENTITY removedupes_dialog.recipients "Destinatarios">
+<!ENTITY removedupes_dialog.cc_list "Lista CC">
+<!ENTITY removedupes_dialog.flags "Estado">
+<!ENTITY removedupes_dialog.folder "Carpeta">
+<!ENTITY removedupes_dialog.line_count "Núm. de lineas">
+<!ENTITY removedupes_dialog.date "Fecha">
+<!ENTITY removedupes_dialog.send_time "Hora de envío">
+<!ENTITY removedupes_dialog.size "Tamaño">
+<!ENTITY removedupes_dialog.keep_preset_originals.label "Preestablecer originales">
+<!ENTITY removedupes_dialog.keep_first.label "Primera copia">
+<!ENTITY removedupes_dialog.keep_last.label "Ultima copia">
+<!ENTITY removedupes_dialog.keep_none.label "Ninguna copia">
+<!ENTITY removedupes_dialog.keep_all.label "Todas las copias">
+<!ENTITY removedupes_dialog.tree_label "Conjuntos de mensajes duplicados">
+<!ENTITY removedupes_dialog.keep_flag "¿Conservar?">
+<!ENTITY removedupes_dialog.action_label "Acción:">
+<!ENTITY action.delete_permanently.label "Borrar permanentemente">
+<!ENTITY action.delete_permanently.accesskey "b">
+<!ENTITY action.move.label "Mover a:">
+<!ENTITY action.move.accesskey "m">
+<!ENTITY removeduplicates-button.label "Borrar duplicados">
+<!ENTITY removeduplicates-button.tip "Borrar mensajes duplicados...">
+<!ENTITY removedupes.criteria_menu.label "Criterios de comparación:">
