@@ -29,7 +29,7 @@
 <!ENTITY message_comparison.subject.access_key "א">
 <!ENTITY message_comparison.folder.access_key "ת">
 <!ENTITY message_comparison.body.access_key "ג">
-<!ENTITY message_comparison.time_comparison_resolution.description "רזולוציית השוואת זמנים:" >
+<!ENTITY message_comparison.time_comparison_resolution.description "רזולוציית השוואת זמנים:">
 <!ENTITY message_comparison.time_comparison_resolution.seconds.label "שניות">
 <!ENTITY message_comparison.time_comparison_resolution.minutes.label "דקות">
 <!ENTITY message_comparison.time_comparison_resolution.hours.label "שעות">
