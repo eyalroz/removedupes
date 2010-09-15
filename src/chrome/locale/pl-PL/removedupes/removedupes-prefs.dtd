@@ -29,6 +29,13 @@
 <!ENTITY message_comparison.subject.access_key "T">
 <!ENTITY message_comparison.folder.access_key "o">
 <!ENTITY message_comparison.body.access_key "w">
+<!ENTITY message_comparison.time_comparison_resolution.description "Wynik porównania czasów:">
+<!ENTITY message_comparison.time_comparison_resolution.seconds.label "sekund">
+<!ENTITY message_comparison.time_comparison_resolution.minutes.label "minut">
+<!ENTITY message_comparison.time_comparison_resolution.hours.label "godzin">
+<!ENTITY message_comparison.time_comparison_resolution.day.label "dni">
+<!ENTITY message_comparison.time_comparison_resolution.month.label "miesięcy">
+<!ENTITY message_comparison.time_comparison_resolution.year.label "lat">
 <!ENTITY general_settings.tab_title "Ustawienia globalne">
 <!ENTITY general_settings.search_subfolders.label "Przeszukuj podfoldery wybranych folderów">
 <!ENTITY general_settings.search_subfolders_first.label "Najpierw przeszukaj podfoldery (postorder)">

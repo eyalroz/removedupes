@@ -29,6 +29,13 @@
 <!ENTITY message_comparison.subject.access_key "S">
 <!ENTITY message_comparison.folder.access_key "p">
 <!ENTITY message_comparison.body.access_key "m">
+<!ENTITY message_comparison.time_comparison_resolution.description "Comparação de tempo:">
+<!ENTITY message_comparison.time_comparison_resolution.seconds.label "Segundos">
+<!ENTITY message_comparison.time_comparison_resolution.minutes.label "Minutos">
+<!ENTITY message_comparison.time_comparison_resolution.hours.label "Horas">
+<!ENTITY message_comparison.time_comparison_resolution.day.label "Dia">
+<!ENTITY message_comparison.time_comparison_resolution.month.label "Mês">
+<!ENTITY message_comparison.time_comparison_resolution.year.label "Ano">
 <!ENTITY general_settings.tab_title "Configurações gerais">
 <!ENTITY general_settings.search_subfolders.label "Procurar nas subpastas das pastas raízes selecionadas">
 <!ENTITY general_settings.search_subfolders_first.label "Procurar em sub-pastas primeiro (ordem da mensagem)">

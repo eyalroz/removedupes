@@ -29,6 +29,13 @@
 <!ENTITY message_comparison.subject.access_key "m">
 <!ENTITY message_comparison.folder.access_key "S">
 <!ENTITY message_comparison.body.access_key "T">
+<!ENTITY message_comparison.time_comparison_resolution.description "Porovnání data a času:">
+<!ENTITY message_comparison.time_comparison_resolution.seconds.label "Sekundy">
+<!ENTITY message_comparison.time_comparison_resolution.minutes.label "Minuty">
+<!ENTITY message_comparison.time_comparison_resolution.hours.label "Hodiny">
+<!ENTITY message_comparison.time_comparison_resolution.day.label "Den">
+<!ENTITY message_comparison.time_comparison_resolution.month.label "Měsíc">
+<!ENTITY message_comparison.time_comparison_resolution.year.label "Rok">
 <!ENTITY general_settings.tab_title "Obecná nastavení">
 <!ENTITY general_settings.search_subfolders.label "Procházet podsložky vybraných složek">
 <!ENTITY general_settings.search_subfolders_first.label "Procházet nejdříve podsložky">

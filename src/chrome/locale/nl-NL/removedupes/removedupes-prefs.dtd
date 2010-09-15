@@ -29,6 +29,13 @@
 <!ENTITY message_comparison.subject.access_key "w">
 <!ENTITY message_comparison.folder.access_key "M">
 <!ENTITY message_comparison.body.access_key "i">
+<!ENTITY message_comparison.time_comparison_resolution.description "Time Comparison Resolution:">
+<!ENTITY message_comparison.time_comparison_resolution.seconds.label "Seconds">
+<!ENTITY message_comparison.time_comparison_resolution.minutes.label "Minutes">
+<!ENTITY message_comparison.time_comparison_resolution.hours.label "Hours">
+<!ENTITY message_comparison.time_comparison_resolution.day.label "Day">
+<!ENTITY message_comparison.time_comparison_resolution.month.label "Month">
+<!ENTITY message_comparison.time_comparison_resolution.year.label "Year">
 <!ENTITY general_settings.tab_title "Algemene instellingen">
 <!ENTITY general_settings.search_subfolders.label "Submappen van geselecteerde map(pen) doorzoeken">
 <!ENTITY general_settings.search_subfolders_first.label "Submappen eerst doorzoeken (postvolgorde)">
