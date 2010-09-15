@@ -5,13 +5,28 @@
 
 <ul id="version-history">
 
-<!--<li><a name="0.3.4">version 0.3.4</a>
+<!--<li><a name="0.3.5">version 0.3.5</a>
   <ul>
     <li>
     <li>
     <li>
   </ul>
 </li>-->
+
+<li><a name="0.3.4">version 0.3.4</a>
+  <ul>
+    <li>No longer skipping local folders whose summary file / local message db needs to be rebuilt - a rebuild/reparse is now triggered.
+    <li>Can now toggle keep/delete in the review dialog using the Space Bar.
+    <li>The target folder now properly defaults to the Local Folders Trash for all locales.
+    <li>Can now compare time values using a lower resolution: minute, hour, day etc.
+    <li>It is now possible to visually indicate originals folders, although the actual css has been commented-out, and this is only for Thunderbird for now.
+    <li>User gets a specific error message when only trying to search special folders, if these are set to be skipped.
+    <li>Fixed some compatibility problems with trunk builds.
+    <li>Fixed most/all cases of the checked/unchecked icons missing in the review dialog with certain themes (e.g. Mostly Crystal) on certain platforms.
+    <li>Resolved two issues regarding the use of stripped & sorted addresses for comparison.
+    <li>Resolved two issues in which the review dialog would come up empty (due to an app version detection problem or issues with Thunderbird 3.x).
+  </ul>
+</li>
 
 <li><a name="0.3.3">version 0.3.3</a>
   <ul>
