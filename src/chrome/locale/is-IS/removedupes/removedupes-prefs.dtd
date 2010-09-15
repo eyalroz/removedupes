@@ -1,0 +1,52 @@
+<!ENTITY prefs_dialog_title "Fjarlægja endurtekin tölvupóstskeyti (Annað) - Stillingar">
+<!ENTITY guide-url "http://not.yet.written/">
+<!ENTITY message_comparison.tab_title "Samanburður skeyta">
+<!ENTITY message_comparison.criteria_box.label "Hlutar tölvupóstskeyta sem notaðir eru við samanburð">
+<!ENTITY message_comparison.skip_special_folders.label "Sleppa sérstökum möppum (Sent, Uppköst o.þ.h.)">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Bera saman netföng eftir strípun og röðun">
+<!ENTITY message_comparison.tab_description "Hlutar tölvupóstskeyta sem notaðir eru við samanburð:">
+<!ENTITY message_comparison.author.label "Höfundur (&apos;Frá&apos;)">
+<!ENTITY message_comparison.recipients.label "Viðtakendur (&apos;Til&apos;)">
+<!ENTITY message_comparison.cc_list.label "CC listi">
+<!ENTITY message_comparison.flags.label "Stöðuflögg">
+<!ENTITY message_comparison.message_id.label "Auðkenni skeytis - ID">
+<!ENTITY message_comparison.num_lines.label "Fjöldi lína í skeyti">
+<!ENTITY message_comparison.send_time.label "Sendingartími">
+<!ENTITY message_comparison.size.label "Stærð">
+<!ENTITY message_comparison.subject.label "Efnislína">
+<!ENTITY message_comparison.folder.label "Mappa">
+<!ENTITY message_comparison.body.label "Meginefni">
+<!ENTITY message_comparison.skip_special_folders.access_key "k">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.access_key "r">
+<!ENTITY message_comparison.author.access_key "A">
+<!ENTITY message_comparison.flags.access_key "F">
+<!ENTITY message_comparison.recipients.access_key "R">
+<!ENTITY message_comparison.cc_list.access_key "C">
+<!ENTITY message_comparison.message_id.access_key "I">
+<!ENTITY message_comparison.num_lines.access_key "l">
+<!ENTITY message_comparison.send_time.access_key "t">
+<!ENTITY message_comparison.size.access_key "s">
+<!ENTITY message_comparison.subject.access_key "S">
+<!ENTITY message_comparison.folder.access_key "o">
+<!ENTITY message_comparison.body.access_key "B">
+<!ENTITY message_comparison.time_comparison_resolution.description "Nákvæmni tímasamanburðar:">
+<!ENTITY message_comparison.time_comparison_resolution.seconds.label "Sekúndur">
+<!ENTITY message_comparison.time_comparison_resolution.minutes.label "Mínútur">
+<!ENTITY message_comparison.time_comparison_resolution.hours.label "Klukkustundir">
+<!ENTITY message_comparison.time_comparison_resolution.day.label "Dagur">
+<!ENTITY message_comparison.time_comparison_resolution.month.label "Mánuður">
+<!ENTITY message_comparison.time_comparison_resolution.year.label "Ár">
+<!ENTITY general_settings.tab_title "Almennar stillingar">
+<!ENTITY general_settings.search_subfolders.label "Leita í undirmöppum valinna efstastigsmappa">
+<!ENTITY general_settings.search_subfolders_first.label "Leita fyrst í undirmöppum (postorder)">
+<!ENTITY general_settings.confirm_search_and_deletion.label "Yfirfara leitarniðurstöður áður en eytt er">
+<!ENTITY general_settings.default_action.description "Sjálfgefin aðgerð fyrir margtekin skeyti:">
+<!ENTITY general_settings.default_action.delete_permanently.label "Eyða endanlega">
+<!ENTITY general_settings.default_action.move.label "Flytja í rusl">
+<!ENTITY general_settings.default_action.delete_permanently.accesskey "P">
+<!ENTITY general_settings.default_action.move.accesskey "M">
+<!ENTITY general_settings.search_subfolders_first.access_key "s">
+<!ENTITY general_settings.search_subfolders.access_key "s">
+<!ENTITY general_settings.confirm_search_and_deletion.access_key "c">
+<!ENTITY removedupes-preftree-label "Fjarlægja afrit">
+<!ENTITY removedupes-preftree-page-title "Fjarlægja endurtekin tölvupóstskeyti (Annað)">

@@ -1,0 +1,36 @@
+<!ENTITY removedupes.title "Fjarlægja endurtekin tölvupóstskeyti (Annað)">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Fjarlægja afrit">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Veldu upprunalega möppu(r) fyrir næstu leit að afritum">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "o">
+<!ENTITY key-removedupes.modifiers "accel,shift">
+<!ENTITY key-removedupes.keycode "D">
+<!ENTITY removedupes_dialog.dialog_title "Eyðing margtekinna tölvupóstskeyta">
+<!ENTITY removedupes_dialog.id "Auðkenni skeytis ID">
+<!ENTITY removedupes_dialog.keep_label "Í hverju afritasetti, halda eftir:">
+<!ENTITY removedupes_dialog.subject "Efni">
+<!ENTITY removedupes_dialog.sender "Sendandi">
+<!ENTITY removedupes_dialog.author "Höfundur">
+<!ENTITY removedupes_dialog.recipients "Viðtakendur">
+<!ENTITY removedupes_dialog.cc_list "CC listi">
+<!ENTITY removedupes_dialog.flags "Flögg">
+<!ENTITY removedupes_dialog.folder "Mappa">
+<!ENTITY removedupes_dialog.line_count "# lína">
+<!ENTITY removedupes_dialog.date "Dagsetning">
+<!ENTITY removedupes_dialog.send_time "Sendingartími">
+<!ENTITY removedupes_dialog.size "Stærð">
+<!ENTITY removedupes_dialog.keep_preset_originals.label "Forstilla upprunalegt">
+<!ENTITY removedupes_dialog.keep_first.label "Fyrsta afrit">
+<!ENTITY removedupes_dialog.keep_last.label "Síðasta afrit">
+<!ENTITY removedupes_dialog.keep_none.label "Engin afrit">
+<!ENTITY removedupes_dialog.keep_all.label "Öll afrit">
+<!ENTITY removedupes_dialog.tree_label "Afritasett skeyta:">
+<!ENTITY removedupes_dialog.keep_flag "Halda?">
+<!ENTITY removedupes_dialog.action_label "Aðgerð:">
+<!ENTITY action.delete_permanently.label "Eyða endanlega">
+<!ENTITY action.delete_permanently.accesskey "n">
+<!ENTITY action.move.label "Færa í:">
+<!ENTITY action.move.accesskey "f">
+<!ENTITY removeduplicates-button.label "Fjarlægja afrit">
+<!ENTITY removeduplicates-button.tip "Fjarlægja endurtekin tölvupóstskeyti...">
+<!ENTITY removedupes.criteria_menu.label "Samanburðarskilyrði:">
