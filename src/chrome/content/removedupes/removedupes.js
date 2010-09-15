@@ -363,7 +363,7 @@ RemoveDupes.MessengerOverlay = {
     // search, so we may have to wait some more
 
     if (searchData.remainingFolders > 0) {
-      setTimeout(waitForFolderCollection,100,searchData);
+      setTimeout(RemoveDupes.MessengerOverlay.waitForFolderCollection,100,searchData);
       return;
     }
     RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase1(searchData);

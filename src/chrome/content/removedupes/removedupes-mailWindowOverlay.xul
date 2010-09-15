@@ -29,7 +29,7 @@
               oncommand="RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages();" />
     <menuitem id="removeDuplicatesMenuItemsSetOriginals" 
               label="&removedupes.remove_duplicates_menuitems.set_originals.label;"
-              oncommand="RemoveDupes.MessengerOverlay.originalsFolder();"/> 
+              oncommand="RemoveDupes.MessengerOverlay.setOriginalsFolders();"/> 
     <menuseparator id="folderPaneContext-removedupes-separator" 
                    insertafter="folderPaneContext-copy-location"/>  
   </popup> 
@@ -43,7 +43,7 @@
     <menuitem id="removeDuplicatesMenuItemsSetOriginals" 
               label="&removedupes.remove_duplicates_menuitems.set_originals.label;"
               accesskey="&removedupes.remove_duplicates_menuitems.set_originals.accesskey;" 
-              oncommand="RemoveDupes.MessengerOverlay.originalsFolder();"/>
+              oncommand="RemoveDupes.MessengerOverlay.setOriginalsFolders();"/>
   </menupopup>
 
 </overlay>
