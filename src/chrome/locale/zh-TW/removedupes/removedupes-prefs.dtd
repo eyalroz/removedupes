@@ -29,6 +29,13 @@
 <!ENTITY message_comparison.subject.access_key "S">
 <!ENTITY message_comparison.folder.access_key "o">
 <!ENTITY message_comparison.body.access_key "B">
+<!ENTITY message_comparison.time_comparison_resolution.description "Time Comparison Resolution:">
+<!ENTITY message_comparison.time_comparison_resolution.seconds.label "Seconds">
+<!ENTITY message_comparison.time_comparison_resolution.minutes.label "Minutes">
+<!ENTITY message_comparison.time_comparison_resolution.hours.label "Hours">
+<!ENTITY message_comparison.time_comparison_resolution.day.label "Day">
+<!ENTITY message_comparison.time_comparison_resolution.month.label "Month">
+<!ENTITY message_comparison.time_comparison_resolution.year.label "Year">
 <!ENTITY general_settings.tab_title "一般設定">
 <!ENTITY general_settings.search_subfolders.label "搜尋所選上層資料夾的子資料夾">
 <!ENTITY general_settings.search_subfolders_first.label "先搜尋子資料夾 (postorder)">

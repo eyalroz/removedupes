@@ -29,6 +29,7 @@
 <!ENTITY message_comparison.subject.access_key "G">
 <!ENTITY message_comparison.folder.access_key "T">
 <!ENTITY message_comparison.body.access_key "P">
+<!ENTITY message_comparison.time_comparison_resolution.description "Risoluzione temporale:">
 <!ENTITY message_comparison.time_comparison_resolution.seconds.label "Secondi">
 <!ENTITY message_comparison.time_comparison_resolution.minutes.label "Minuti">
 <!ENTITY message_comparison.time_comparison_resolution.hours.label "Ore">

@@ -29,6 +29,13 @@
 <!ENTITY message_comparison.subject.access_key "Т">
 <!ENTITY message_comparison.folder.access_key "П">
 <!ENTITY message_comparison.body.access_key "С">
+<!ENTITY message_comparison.time_comparison_resolution.description "Точность сравнения по времени:">
+<!ENTITY message_comparison.time_comparison_resolution.seconds.label "секунд">
+<!ENTITY message_comparison.time_comparison_resolution.minutes.label "минут">
+<!ENTITY message_comparison.time_comparison_resolution.hours.label "часов">
+<!ENTITY message_comparison.time_comparison_resolution.day.label "дней">
+<!ENTITY message_comparison.time_comparison_resolution.month.label "месяцев">
+<!ENTITY message_comparison.time_comparison_resolution.year.label "лет">
 <!ENTITY general_settings.tab_title "Основные настройки">
 <!ENTITY general_settings.search_subfolders.label "Search subfolders of selected top folder(s)">
 <!ENTITY general_settings.search_subfolders_first.label "Сначала искать в подпапках (обратный порядок)">
