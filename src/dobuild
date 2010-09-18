@@ -5,7 +5,7 @@ VERSION="0.3.4"
 
 TARGET="$1"
 case "$TARGET" in
-    sm2 | sr | suiterunner)
+    sm2 | sr | suiterunner | seamonkey)
         TARGET=suiterunner
 #        PREPROCESSOR_PARAMS="-DMOZ_TOOLKIT_SEAMONKEY -DUSE_THREADS"
         PREPROCESSOR_PARAMS="-DMOZ_TOOLKIT_SEAMONKEY"
@@ -15,13 +15,13 @@ case "$TARGET" in
 #        PREPROCESSOR_PARAMS="-DMOZ_THUNDERBIRD -DUSE_THREADS"
         PREPROCESSOR_PARAMS="-DMOZ_THUNDERBIRD"
         ;;
-    suite | sm | seamonkey)
-        TARGET=suite
+    suitelegacy | sl | sm1)
+        TARGET=suitelegacy
 #        PREPROCESSOR_PARAMS="-DMOZ_PRETOOLKIT_SEAMONKEY -DUSE_THREADS"
         PREPROCESSOR_PARAMS="-DMOZ_PRETOOLKIT_SEAMONKEY"
         ;;
     *)
-	echo "please specify either tbird or suite"
+	echo "please specify either tbird or seamonkey"
 	exit 1
 	;;
 esac
@@ -93,7 +93,7 @@ case "$TARGET" in
 	  install.rdf \
 	  chrome.manifest || exit
         ;;
-    suite)
+    suitelegacy)
         $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.js > $BUILDDIR/install.js
         cd $BUILDDIR
 	zip -r $XPINAME  \
