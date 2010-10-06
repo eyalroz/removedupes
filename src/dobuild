@@ -26,6 +26,12 @@ case "$TARGET" in
 	;;
 esac
 
+# build betas by default
+
+if [ -z "$EXTENSION_RELEASE" ]; then
+	VERSION="${VERSION}b"
+fi
+
 shift 1
 
 if [ -n "$1" ]; then
@@ -41,7 +47,7 @@ fi
 PREPROCESSOR_PARAMS="$PREPROCESSOR_PARAMS -DVERSION=$VERSION -DSHORTNAME=$SHORTNAME"
 echo -e "Building the XPI with the following definitions:\n\n$PREPROCESSOR_PARAMS\n"
 BUILDDIR="build/$TARGET"
-XPINAME="${SHORTNAME}_${TARGET}.xpi"
+XPINAME="${SHORTNAME}_${VERSION}_${TARGET}.xpi"
 BUILDTOOLSDIR="buildtools"
 export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
 
