@@ -292,15 +292,16 @@ function rebuildDuplicateSetsTree() {
 
   clearStatusBar();
 
-  var dupeSetTreeChildren = document.getElementById("dupeSetsTreeChildren");
-#ifdef DEBUG_initializeDuplicateSetsTree
-  RemoveDupes.JSConsoleService.logStringMessage('dupeSetTreeChildren = ' + dupeSetTreeChildren);
+  var dupeSetsTreeChildren = document.getElementById("dupeSetsTreeChildren");
+#ifdef DEBUG_rebuildDuplicateSetsTree
+  RemoveDupes.JSConsoleService.logStringMessage('dupeSetsTreeChildren = ' + dupeSetsTreeChildren);
 #endif
-  if (dupeSetTreeChildren) {
-    dupeSetTree.removeChild(dupeSetTreeChildren);
+  if (dupeSetsTreeChildren) {
+    dupeSetTree.removeChild(dupeSetsTreeChildren);
   }
 
-  dupeSetTreeChildren = document.createElement("treechildren");
+  dupeSetsTreeChildren = document.createElement("treechildren");
+  dupeSetsTreeChildren.setAttribute("id","dupeSetsTreeChildren");
 
   document.getElementById("main-status-panel").setAttribute("label",
     RemoveDupes.Strings.GetStringFromName("removedupes.status_panel.populating_list"));
@@ -351,10 +352,10 @@ function rebuildDuplicateSetsTree() {
     dupeSetTreeItem.setAttribute("container", true);
     dupeSetTreeItem.setAttribute("open", true);
 
-    dupeSetTreeChildren.appendChild(dupeSetTreeItem);
+    dupeSetsTreeChildren.appendChild(dupeSetTreeItem);
   }
   // only with this statement does any of the tree contents become visible
-  dupeSetTree.appendChild(dupeSetTreeChildren);
+  dupeSetTree.appendChild(dupeSetsTreeChildren);
   updateStatusBar();
 }
 
@@ -365,6 +366,11 @@ function resetCheckboxValues() {
 
   clearStatusBar();
 
+  var dupeSetsTreeChildren = document.getElementById("dupeSetsTreeChildren");
+#ifdef DEBUG_resetCheckboxValues
+  RemoveDupes.JSConsoleService.logStringMessage('dupeSetsTreeChildren = ' + dupeSetsTreeChildren);
+#endif
+
   document.getElementById("main-status-panel").setAttribute("label",
     RemoveDupes.Strings.GetStringFromName("removedupes.status_panel.updating_list"));
 
@@ -373,7 +379,7 @@ function resetCheckboxValues() {
   // to understand how this code works, see the comment regarding the tree
   // structure in the code of rebuildDuplicateSetsTree()
 
-  var dupeSetTreeItem  =  dupeSetTreeChildren.firstChild;
+  var dupeSetTreeItem  = dupeSetsTreeChildren.firstChild;
   while (dupeSetTreeItem) {
     var hashValue = dupeSetTreeItem.getAttribute('commonHashValue');
     var dupeSet = dupeSetsHashMap[hashValue];
