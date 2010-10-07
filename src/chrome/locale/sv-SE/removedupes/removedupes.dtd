@@ -1,0 +1,36 @@
+<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Ta bort duplikat...">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Ange originalmeddelandemapp(ar) för nästa duplikatsökning">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "T">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "o">
+<!ENTITY key-removedupes.modifiers "kortkommando,skift">
+<!ENTITY key-removedupes.keycode "T">
+<!ENTITY removedupes_dialog.dialog_title "Borttagning av meddelandeduplikat">
+<!ENTITY removedupes_dialog.id "Meddelande-ID">
+<!ENTITY removedupes_dialog.keep_label "I varje duplikatgrupp, behåll:">
+<!ENTITY removedupes_dialog.subject "Ämne">
+<!ENTITY removedupes_dialog.sender "Avsändare">
+<!ENTITY removedupes_dialog.author "Författare">
+<!ENTITY removedupes_dialog.recipients "Mottagare">
+<!ENTITY removedupes_dialog.cc_list "Kopie-mottagarlista">
+<!ENTITY removedupes_dialog.flags "Flaggor">
+<!ENTITY removedupes_dialog.folder "Mapp">
+<!ENTITY removedupes_dialog.line_count "Antal rader">
+<!ENTITY removedupes_dialog.date "Datum">
+<!ENTITY removedupes_dialog.send_time "Tidpunkt för sändning">
+<!ENTITY removedupes_dialog.size "Storlek">
+<!ENTITY removedupes_dialog.keep_preset_originals.label "Förvalda original">
+<!ENTITY removedupes_dialog.keep_first.label "Första kopian">
+<!ENTITY removedupes_dialog.keep_last.label "Senaste kopian">
+<!ENTITY removedupes_dialog.keep_none.label "Inga kopior">
+<!ENTITY removedupes_dialog.keep_all.label "Alla kopior">
+<!ENTITY removedupes_dialog.tree_label "Meddelandeduplikatgrupper:">
+<!ENTITY removedupes_dialog.keep_flag "Behåll?">
+<!ENTITY removedupes_dialog.action_label "Åtgärd:">
+<!ENTITY action.delete_permanently.label "Ta bort permanent">
+<!ENTITY action.delete_permanently.accesskey "p">
+<!ENTITY action.move.label "Flytta till:">
+<!ENTITY action.move.accesskey "F">
+<!ENTITY removeduplicates-button.label "Ta bort">
+<!ENTITY removeduplicates-button.tip "Ta bort meddelandeduplikat...">
+<!ENTITY removedupes.criteria_menu.label "Jämförelsekriterier:">
