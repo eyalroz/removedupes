@@ -13,12 +13,13 @@ TEMPDIR="deleteme"
 BUILDTOOLS="buildtools"
 
 # determine version number
-VERSION=`grep VERSION=\" dobuild | cut -d\" -f2`
+VERSION=`grep VERSION=\" dobuild | cut -d\" -f2 | head -1`
 SHORTNAME=`grep SHORTNAME=\" dobuild | cut -d\" -f2`
 USCORED_VERSION=`echo $VERSION | tr . _`
 CAPS_SHORTNAME=`echo ${SHORTNAME} | tr a-z A-Z`
 RELEASE_TAG="${CAPS_SHORTNAME}_RELEASE_${USCORED_VERSION}"
-
+# make dobuild not build a beta
+export EXTENSION_RELEASE=1
 
 # create new version directory
 
@@ -31,8 +32,8 @@ fi
 (./dobuild suitelegacy && ./dobuild tbird && ./dobuild suiterunner ) || exit
 
 for target in tbird suitelegacy suiterunner; do
-        cp build/${target}/${SHORTNAME}_${target}.xpi ${DOWNLOADS}/${VERSION}/${SHORTNAME}_${VERSION}_${target}.xpi
-        cp build/${target}/${SHORTNAME}_${target}.xpi ${DOWNLOADS}/latest/
+        cp build/${target}/${SHORTNAME}_${VERSION}_${target}.xpi ${DOWNLOADS}/${VERSION}
+        cp build/${target}/${SHORTNAME}_${VERSION}_${target}.xpi ${DOWNLOADS}/latest/${SHORTNAME}_${target}.xpi
 done
 
 
@@ -46,18 +47,14 @@ cd ${SRCDIR}/${BUILDTOOLS}
 cvs -d $CVSROOT tag -d ${RELEASE_TAG}
 cvs -d $CVSROOT tag ${RELEASE_TAG}
 
+cd ${SRCDIR}
 
 # Workaround for a mozdev cvs tagging bug, see
 # https://www.mozdev.org/bugs/show_bug.cgi?id=14797
 # and
 # http://www.mozdev.org/drupal/wiki/MozdevCVSTipsTroubleshooting
 # for details
-
-mkdir ${SRCDIR}/${TEMPDIR}
-cd ${SRCDIR}/${TEMPDIR}
-cvs -d $CVSROOT export -r ${RELEASE_TAG} -d ${SHORTNAME} ${SHORTNAME}/src
-cd ${SRCDIR}
-rm -r ${SRCDIR}/${TEMPDIR}
+./dummy_export ${CVS_USERNAME}
 
 # add the release to the CVS repository
 # (it gets propagated to the mozdev download mirrors)
