@@ -39,7 +39,7 @@
 <!ENTITY general_settings.tab_title "Allmänt">
 <!ENTITY general_settings.search_subfolders.label "Sök i undermappar till markerade toppmappar">
 <!ENTITY general_settings.search_subfolders_first.label "Sök i undermapparna först (postorder)">
-<!ENTITY general_settings.confirm_search_and_deletion.label "Granska sökresultat före borttagning">
+<!ENTITY general_settings.use_dialog_before_removal.label "Granska sökresultat före borttagning">
 <!ENTITY general_settings.default_action.description "Standardåtgärd för meddelandeduplikat:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Ta bort permanent">
 <!ENTITY general_settings.default_action.move.label "Flytta till Papperskorgen">
@@ -47,6 +47,6 @@
 <!ENTITY general_settings.default_action.move.accesskey "F">
 <!ENTITY general_settings.search_subfolders_first.access_key "u">
 <!ENTITY general_settings.search_subfolders.access_key "m">
-<!ENTITY general_settings.confirm_search_and_deletion.access_key "G">
+<!ENTITY general_settings.use_dialog_before_removal.access_key "G">
 <!ENTITY removedupes-preftree-label "Ta bort duplikat">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">

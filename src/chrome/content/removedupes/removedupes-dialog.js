@@ -18,6 +18,8 @@ var allowMD5IDSubstitutes;
   // how do we treat MD5 hashes as substitutes for message IDs?
 var useCriteria;
   // the comparison criteria used in the search
+var confirmPermanentDeletion;
+  // confirm permanent deletions again, after Ok'ing on the dialog?
 
 // used to refer to chrome elements
 var dupeSetTree;
@@ -143,6 +145,8 @@ function initDupeReviewDialog() {
   initializeFolderPicker();
   document.getElementById('action').value =
     RemoveDupes.Prefs.getCharPref('default_action', 'move');
+  confirmPermanentDeletion =
+    RemoveDupes.Prefs.getBoolPref("confirm_permanent_deletion", true);
   dupeSetTree = document.getElementById("dupeSetsTree");
 
   // indicate which columns were used in the search
@@ -629,6 +633,7 @@ function onAccept() {
   RemoveDupes.Removal.removeDuplicates(
     dupeSetsHashMap,
     deletePermanently,
+    confirmPermanentDeletion,
     uri,
     true // the uri's have been replaced with messageRecords
     );

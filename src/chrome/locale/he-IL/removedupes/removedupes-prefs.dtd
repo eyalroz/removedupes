@@ -39,7 +39,7 @@
 <!ENTITY general_settings.tab_title "אפשרויות כלליות">
 <!ENTITY general_settings.search_subfolders.label "חפש בתתי-תיקיות של התיקיה הנבחרת">
 <!ENTITY general_settings.search_subfolders_first.label "חפש בתת-תיקיות קודם (postorder)">
-<!ENTITY general_settings.confirm_search_and_deletion.label "עבור על תוצאות החיפוש לפני המחיקה">
+<!ENTITY general_settings.use_dialog_before_removal.label "עבור על תוצאות החיפוש לפני המחיקה">
 <!ENTITY general_settings.default_action.description "הפעולה לביצוע כברירת-המחדל על הודעות כפולות:">
 <!ENTITY general_settings.default_action.delete_permanently.label "מחק לצמיתות">
 <!ENTITY general_settings.default_action.move.label "העבר לאשפה">
@@ -47,6 +47,6 @@
 <!ENTITY general_settings.default_action.move.accesskey "ע">
 <!ENTITY general_settings.search_subfolders_first.access_key "ק">
 <!ENTITY general_settings.search_subfolders.access_key "ת">
-<!ENTITY general_settings.confirm_search_and_deletion.access_key "ב">
+<!ENTITY general_settings.use_dialog_before_removal.access_key "ב">
 <!ENTITY removedupes-preftree-label "הסר כפולים">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">

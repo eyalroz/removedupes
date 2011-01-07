@@ -20,7 +20,8 @@ pref("removedupes.comparison_criteria.cc_list", false);
 pref("removedupes.comparison_criteria.flags", false);
 pref("removedupes.comparison_criteria.body", false);
 
-pref("removedupes.confirm_search_and_deletion", true);
+pref("removedupes.use_dialog_before_removal", true);
+pref("removedupes.confirm_permanent_deletion", true);
 pref("removedupes.default_action", 'move');
 
 pref("removedupes.limit_number_of_processed_messages", false);

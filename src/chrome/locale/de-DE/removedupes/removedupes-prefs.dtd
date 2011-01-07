@@ -39,7 +39,7 @@
 <!ENTITY general_settings.tab_title "Allgemeine Einstellungen">
 <!ENTITY general_settings.search_subfolders.label "Unterordner der ausgewählten Ordner durchsuchen">
 <!ENTITY general_settings.search_subfolders_first.label "Unterordner zuerst durchsuchen (nachgestelle Ordnung)">
-<!ENTITY general_settings.confirm_search_and_deletion.label "Suchergebnis vor dem Löschen anzeigen">
+<!ENTITY general_settings.use_dialog_before_removal.label "Suchergebnis vor dem Löschen anzeigen">
 <!ENTITY general_settings.default_action.description "Löschmethode:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Vollständiges Löschen">
 <!ENTITY general_settings.default_action.move.label "In den Papierkorb verschieben (normales Löschen)">
@@ -47,6 +47,6 @@
 <!ENTITY general_settings.default_action.move.accesskey "P">
 <!ENTITY general_settings.search_subfolders_first.access_key "z">
 <!ENTITY general_settings.search_subfolders.access_key "U">
-<!ENTITY general_settings.confirm_search_and_deletion.access_key "c">
+<!ENTITY general_settings.use_dialog_before_removal.access_key "c">
 <!ENTITY removedupes-preftree-label "Duplikate löschen">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate) [de]">
