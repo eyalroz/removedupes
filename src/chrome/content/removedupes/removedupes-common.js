@@ -374,6 +374,7 @@ RemoveDupes.Removal = {
   removeDuplicates : function(
     dupeSetsHashMap,
     deletePermanently,
+    confirmPermanentDeletion,
     targetFolderUri,
     haveMessageRecords) {
     // note that messenger and msgWindow have to be defined! if we're running from the
@@ -405,24 +406,44 @@ RemoveDupes.Removal = {
         dupeSetsHashMap,haveMessageRecords);
 
     for (folderUri in dupesByFolderHashMap) {
-      RemoveDupes.Removal.removeDupesFromSingleFolder(
-        dupesByFolderHashMap[folderUri].folder,
-        dupesByFolderHashMap[folderUri].removalHeaders,
-        targetFolder,
-        deletePermanently);
+      var retVal = 
+        RemoveDupes.Removal.removeDupesFromSingleFolder(
+          dupesByFolderHashMap[folderUri].folder,
+          dupesByFolderHashMap[folderUri].removalHeaders,
+          targetFolder,
+          deletePermanently,
+          confirmPermanentDeletion);
+      if (!retVal) break;
     }
 #ifdef DEBUG_removeDuplicates
     RemoveDupes.JSConsoleService.logStringMessage('done');
 #endif
   },
 
+  // if this returns false, something's amiss (currently an abortion)
+  // and the deletion should not go on.
   removeDupesFromSingleFolder : function(
     sourceFolder,
     removalMessageHdrs,
     targetFolder,
-    deletePermanently) {
+    deletePermanently,
+    confirmPermanentDeletion) {
     if (deletePermanently) {
-      try{
+      try {
+        if (confirmPermanentDeletion) {
+          var numMessagesToDelete = 
+            (RemoveDupes.UseSupportsArray ?
+             removalMessageHdrs.Count() : removalMessageHdrs.length);
+          var message = RemoveDupes.Strings.formatStringFromName(
+  	    'removedupes.confirm_permanent_deletion_from_folder',
+  	    [numMessagesToDelete ,sourceFolder.abbreviatedName], 2);
+
+          if (!window.confirm(message)) {
+            alert(RemoveDupes.Strings.GetStringFromName('removedupes.deletion_aborted'));
+            return false;
+          }
+        }
+
         sourceFolder.deleteMessages(
           removalMessageHdrs, 
           msgWindow,

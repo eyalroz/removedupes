@@ -60,8 +60,8 @@
       <preference id="removedupes.skip_special_folders"
                   name="removedupes.skip_special_folders"
                   type="bool"/>
-      <preference id="removedupes.confirm_search_and_deletion"
-                  name="removedupes.confirm_search_and_deletion"
+      <preference id="removedupes.use_dialog_before_removal"
+                  name="removedupes.use_dialog_before_removal"
                   type="bool"/>
       <preference id="removedupes.default_action"
                   name="removedupes.default_action"
@@ -87,7 +87,7 @@
       var _elementIDs = ["removedupes.search_subfolders",
                          "removedupes.compare_stripped_and_sorted_addresses",
                          "removedupes.skip_special_folders",
-                         "removedupes.confirm_search_and_deletion",
+                         "removedupes.use_dialog_before_removal",
                          "removedupes.default_action",
                          "removedupes.time_comparison_resolution",
                          "removedupes.comparison_criteria.author",
@@ -122,11 +122,11 @@
               label="&general_settings.search_subfolders.label;"
               accesskey="&general_settings.search_subfolders.access_key;"
               autostretch="never"/>
-            <checkbox preference="removedupes.confirm_search_and_deletion"
-              prefstring="removedupes.confirm_search_and_deletion"
-              id="removedupes.confirm_search_and_deletion"
-              label="&general_settings.confirm_search_and_deletion.label;"
-              accesskey="&general_settings.confirm_search_and_deletion.access_key;"
+            <checkbox preference="removedupes.use_dialog_before_removal"
+              prefstring="removedupes.use_dialog_before_removal"
+              id="removedupes.use_dialog_before_removal"
+              label="&general_settings.use_dialog_before_removal.label;"
+              accesskey="&general_settings.use_dialog_before_removal.access_key;"
               autostretch="never"/>
             <spacer/>
             <groupbox>

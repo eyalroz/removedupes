@@ -39,7 +39,7 @@
 <!ENTITY general_settings.tab_title "Paramètres principaux">
 <!ENTITY general_settings.search_subfolders.label "Recherche les sous-dossiers du ou des dossiers sélectionnés">
 <!ENTITY general_settings.search_subfolders_first.label "Rechercher d&apos;abord dans les sous-dossiers">
-<!ENTITY general_settings.confirm_search_and_deletion.label "Avant la suppression, apercevoir les résultats de la recherche">
+<!ENTITY general_settings.use_dialog_before_removal.label "Avant la suppression, apercevoir les résultats de la recherche">
 <!ENTITY general_settings.default_action.description "Action par défaut pour les doublons :">
 <!ENTITY general_settings.default_action.delete_permanently.label "Supprimer définitivement">
 <!ENTITY general_settings.default_action.move.label "Mettre à la corbeille">
@@ -47,6 +47,6 @@
 <!ENTITY general_settings.default_action.move.accesskey "M">
 <!ENTITY general_settings.search_subfolders_first.access_key "s">
 <!ENTITY general_settings.search_subfolders.access_key "s">
-<!ENTITY general_settings.confirm_search_and_deletion.access_key "v">
+<!ENTITY general_settings.use_dialog_before_removal.access_key "v">
 <!ENTITY removedupes-preftree-label "Supprimer les doublons">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternatif)">

@@ -39,7 +39,7 @@
 <!ENTITY general_settings.tab_title "Configuración general">
 <!ENTITY general_settings.search_subfolders.label "Buscar en las subcarpetas de la/s carpeta/s principal/es">
 <!ENTITY general_settings.search_subfolders_first.label "Buscar primero en las subcarpetas (orden inverso)">
-<!ENTITY general_settings.confirm_search_and_deletion.label "Revisar resultados de búsquedas antes de eliminar">
+<!ENTITY general_settings.use_dialog_before_removal.label "Revisar resultados de búsquedas antes de eliminar">
 <!ENTITY general_settings.default_action.description "Acción predeterminada para mensajes duplicados:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Eliminar permanentemente">
 <!ENTITY general_settings.default_action.move.label "Mover a la Papelera">
@@ -47,6 +47,6 @@
 <!ENTITY general_settings.default_action.move.accesskey "M">
 <!ENTITY general_settings.search_subfolders_first.access_key "s">
 <!ENTITY general_settings.search_subfolders.access_key "B">
-<!ENTITY general_settings.confirm_search_and_deletion.access_key "C">
+<!ENTITY general_settings.use_dialog_before_removal.access_key "C">
 <!ENTITY removedupes-preftree-label "Quitar duplicados">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
