@@ -38,7 +38,21 @@ RemoveDupes.__defineGetter__("JSConsoleService", function() {
 #endif
 
 // nsISupportsArray was replaced with nsIArray; see Mozilla bug 435290
-RemoveDupes.UseSupportsArray = null,
+RemoveDupes.__defineGetter__("UseSupportsArray", function() {
+  delete RemoveDupes.UseSupportsArray;
+  // nsIMsgCopyService no longer accepts nsISupportsArray's in recent versions;
+  // I don't know how better to check that other than using the interface's UUID
+  switch (Components.interfaces.nsIMsgCopyService.number) {
+    case "{4010d881-6c83-4f8d-9332-d44564cee14a}":
+    case "{f0ee3821-e382-43de-9b71-bd9a4a594fcb}":
+    case "{c9255b88-5e0f-4614-8fdc-ebb97a0f333e}":
+    case "{bce41600-28df-11d3-abf7-00805f8ac968}":
+      return RemoveDupes.UseSupportsArray = true;
+      break;
+    default:
+      // should be {f21e428b-73c5-4607-993b-d37325b33722} or later
+      return RemoveDupes.UseSupportsArray = false;
+  }});
 
 // localized strings
 RemoveDupes.__defineGetter__("Strings", function() {
@@ -263,52 +277,15 @@ RemoveDupes.Removal = {
     }
   },
 
-  // This function is called either after the dupes are collected,
-  // without displaying the dialog, in which each element in the hash is
-  // an array of Uri's, or after displaying it, in which case the elements have
-  // been replaced with messageRecord objects (which also include indications
-  // of which messages to keep)
-  removeDuplicates : function(
-    dupeSetsHashMap,
-    deletePermanently,
-    targetFolderUri,
-    haveMessageRecords) {
-    // note that messenger and msgWindow have to be defined! if we're running from the
-    // overlay of the 3-pane window, then this is ensured; otherwise,
-    // the dupes review dialog should have gotten it as a parameter
-    // and set a global window-global variable of its own
+  // This function is called from removeDuplicateMessageas,
+  // either after the dupes are collected,
+  // without displaying the dialog, in which case each element in the hash is
+  // an array of Uri's and haveMessageRecords is false, or after displaying the
+  // dialog, in which case the elements have been replaced with messageRecord 
+  // objects (which also include indications of which messages to keep)
 
-#ifdef DEBUG_removeDuplicates
-    RemoveDupes.JSConsoleService.logStringMessage(
-      'in removeDuplicates\ntargetFolderUri = ' + targetFolderUri +
-      '\ndeletePermanently = ' + deletePermanently);
-#endif
-
-    // nsIMsgCopyService no longer accepts nsISupportsArray's in recent versions;
-    // I don't know how better to check that other than using the interface's UUID
-    switch (Components.interfaces.nsIMsgCopyService.number) {
-      case "{4010d881-6c83-4f8d-9332-d44564cee14a}":
-      case "{f0ee3821-e382-43de-9b71-bd9a4a594fcb}":
-      case "{c9255b88-5e0f-4614-8fdc-ebb97a0f333e}":
-      case "{bce41600-28df-11d3-abf7-00805f8ac968}":
-        RemoveDupes.UseSupportsArray = true;
-        break;
-      default:
-        // should be {f21e428b-73c5-4607-993b-d37325b33722} or later
-        RemoveDupes.UseSupportsArray = false;
-    }
-    var targetFolder;
-    if (!deletePermanently) {
-      if ((targetFolderUri == null) || (targetFolderUri == "")) {
-        targetFolder = getLocalFoldersTrashFolder().URI;
-      }
-      else targetFolder = GetMsgFolderFromUri(targetFolderUri, true);
-      if (!targetFolder) {
-        alert(RemoveDupes.Strings.formatStringFromName(
-          'removedupes.no_such_folder', [targetFolderUri], 1));
-        return;
-      }
-    }
+  createDupesByFolderHashMap : function(
+    dupeSetsHashMap,haveMessageRecords) {
 
     var dupesByFolderHashMap = new Object;
     var messageHeader;
@@ -322,73 +299,111 @@ RemoveDupes.Removal = {
 #endif
       if (haveMessageRecords) {
         for(var i = 0; i < dupeSet.length; i++) {
-    messageRecord = dupeSet[i];
-    if (!messageRecord.toKeep) {
+          messageRecord = dupeSet[i];
+          if (!messageRecord.toKeep) {
 #ifdef DEBUG_removeDuplicates
-      RemoveDupes.JSConsoleService.logStringMessage('processing URI ' +
-        messageRecord.uri);
+            RemoveDupes.JSConsoleService.logStringMessage('processing URI ' +
+              messageRecord.uri);
 #endif
-      messageHeader = messenger.msgHdrFromURI(messageRecord.uri);
+            messageHeader = messenger.msgHdrFromURI(messageRecord.uri);
 #ifdef DEBUG_removeDuplicates
-      if (!messageHeader)
-      RemoveDupes.JSConsoleService.logStringMessage('header is null for ' +
-        messageRecord.uri);
+            if (!messageHeader)
+              RemoveDupes.JSConsoleService.logStringMessage('header is null for ' +
+              messageRecord.uri);
 #endif
-      if (!(messageRecord.folderUri in dupesByFolderHashMap)) {
-        var folderDupesInfo = new Object; 
-        folderDupesInfo.folder = messageHeader.folder;
-        folderDupesInfo.previousFolderUri = previousFolderUri;
-        previousFolderUri = messageRecord.folderUri;
-        folderDupesInfo.removalHeaders =
-          (RemoveDupes.UseSupportsArray ?
-        // nsISupportsArray replaced with nsIArray by Mozilla bug 435290
-           Components.classes["@mozilla.org/supports-array;1"]
-         .createInstance(Components.interfaces.nsISupportsArray) :
-           Components.classes["@mozilla.org/array;1"]
-         .createInstance(Components.interfaces.nsIMutableArray) );
+            if (!(messageRecord.folderUri in dupesByFolderHashMap)) {
+              var folderDupesInfo = new Object; 
+              folderDupesInfo.folder = messageHeader.folder;
+              folderDupesInfo.previousFolderUri = previousFolderUri;
+              previousFolderUri = messageRecord.folderUri;
+              folderDupesInfo.removalHeaders =
+                (RemoveDupes.UseSupportsArray ?
+                // nsISupportsArray replaced with nsIArray by Mozilla bug 435290
+                Components.classes["@mozilla.org/supports-array;1"]
+                          .createInstance(Components.interfaces.nsISupportsArray) :
+                Components.classes["@mozilla.org/array;1"]
+                          .createInstance(Components.interfaces.nsIMutableArray) );
 
-        dupesByFolderHashMap[messageRecord.folderUri] = folderDupesInfo;
-      }
-      // TODO: make sure using a weak reference is the right thing here
-      if (RemoveDupes.UseSupportsArray)
-        dupesByFolderHashMap[messageRecord.folderUri].removalHeaders.
-          AppendElement(messageHeader);
-      else 
-        dupesByFolderHashMap[messageRecord.folderUri].removalHeaders.
-          appendElement(messageHeader,false);
-    }
+              dupesByFolderHashMap[messageRecord.folderUri] = folderDupesInfo;
+            }
+            // TODO: make sure using a weak reference is the right thing here
+            if (RemoveDupes.UseSupportsArray)
+              dupesByFolderHashMap[messageRecord.folderUri].removalHeaders.
+                AppendElement(messageHeader);
+            else 
+              dupesByFolderHashMap[messageRecord.folderUri].removalHeaders.
+                appendElement(messageHeader,false);
+          }
         }
       }
       else {
         for(var i = 1; i < dupeSet.length; i++) {
 #ifdef DEBUG_removeDuplicates
-    RemoveDupes.JSConsoleService.logStringMessage(
-      'processing URI ' + dupeSet[i]);
+          RemoveDupes.JSConsoleService.logStringMessage(
+            'processing URI ' + dupeSet[i]);
 #endif
-    messageHeader = messenger.msgHdrFromURI(dupeSet[i]);
-    var folderUri = messageHeader.folder.URI;
-    if (!dupesByFolderHashMap[folderUri]) {
-      var folderDupesInfo = new Object;
-      folderDupesInfo.folder = messageHeader.folder;
-      folderDupesInfo.previousFolderUri = previousFolderUri;
-      previousFolderUri = folderUri;
-      folderDupesInfo.removalHeaders =
-        (RemoveDupes.UseSupportsArray ?
-         Components.classes["@mozilla.org/supports-array;1"]
-             .createInstance(Components.interfaces.nsISupportsArray) :
-         Components.classes["@mozilla.org/array;1"]
-             .createInstance(Components.interfaces.nsIMutableArray) );
-      dupesByFolderHashMap[folderUri] = folderDupesInfo;
-    }
-    if (RemoveDupes.UseSupportsArray)
-      dupesByFolderHashMap[folderUri].removalHeaders.
-        AppendElement(messageHeader);
-    else 
-      dupesByFolderHashMap[folderUri].removalHeaders.
-        appendElement(messageHeader,false);
+          messageHeader = messenger.msgHdrFromURI(dupeSet[i]);
+          var folderUri = messageHeader.folder.URI;
+          if (!dupesByFolderHashMap[folderUri]) {
+            var folderDupesInfo = new Object;
+            folderDupesInfo.folder = messageHeader.folder;
+            folderDupesInfo.previousFolderUri = previousFolderUri;
+            previousFolderUri = folderUri;
+            folderDupesInfo.removalHeaders =
+             (RemoveDupes.UseSupportsArray ?
+                Components.classes["@mozilla.org/supports-array;1"]
+                          .createInstance(Components.interfaces.nsISupportsArray) :
+                Components.classes["@mozilla.org/array;1"]
+                          .createInstance(Components.interfaces.nsIMutableArray) );
+            dupesByFolderHashMap[folderUri] = folderDupesInfo;
+          }
+          if (RemoveDupes.UseSupportsArray)
+            dupesByFolderHashMap[folderUri].removalHeaders.
+              AppendElement(messageHeader);
+          else 
+            dupesByFolderHashMap[folderUri].removalHeaders.
+              appendElement(messageHeader,false);
         }
       }
     }
+    return dupesByFolderHashMap;
+  },
+
+  // see createDupesByFolderHashMap for explanation regarding the
+  // haveMessageRecords parameter
+  removeDuplicates : function(
+    dupeSetsHashMap,
+    deletePermanently,
+    targetFolderUri,
+    haveMessageRecords) {
+    // note that messenger and msgWindow have to be defined! if we're running from the
+    // overlay of the 3-pane window, then this is ensured; otherwise,
+    // the dupes review dialog should have gotten it as a parameter
+    // and set a window-global variable of its own
+
+#ifdef DEBUG_removeDuplicates
+    RemoveDupes.JSConsoleService.logStringMessage(
+      'in removeDuplicates\ntargetFolderUri = ' + targetFolderUri +
+      '\ndeletePermanently = ' + deletePermanently);
+#endif
+
+    var targetFolder;
+    if (!deletePermanently) {
+      if ((targetFolderUri == null) || (targetFolderUri == "")) {
+        targetFolder = getLocalFoldersTrashFolder().URI;
+      }
+      else targetFolder = GetMsgFolderFromUri(targetFolderUri, true);
+      if (!targetFolder) {
+        alert(RemoveDupes.Strings.formatStringFromName(
+          'removedupes.no_such_folder', [targetFolderUri], 1));
+        return;
+      }
+    }
+
+    var dupesByFolderHashMap =
+      RemoveDupes.Removal.createDupesByFolderHashMap(
+        dupeSetsHashMap,haveMessageRecords);
+
     for (folderUri in dupesByFolderHashMap) {
       RemoveDupes.Removal.removeDupesFromSingleFolder(
         dupesByFolderHashMap[folderUri].folder,
