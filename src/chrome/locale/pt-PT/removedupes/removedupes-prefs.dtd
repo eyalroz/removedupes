@@ -39,7 +39,7 @@
 <!ENTITY general_settings.tab_title "Definições Gerais">
 <!ENTITY general_settings.search_subfolders.label "Procurar nas sub-pastas das pastas principais seleccionadas">
 <!ENTITY general_settings.search_subfolders_first.label "Procurar primeiro em Sub-pastas">
-<!ENTITY general_settings.confirm_search_and_deletion.label "Rever os resultados de procura antes de eliminar">
+<!ENTITY general_settings.use_dialog_before_removal.label "Rever os resultados de procura antes de eliminar">
 <!ENTITY general_settings.default_action.description "Acção pré-definida para mensagens duplicadas:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Apagar permanentemente">
 <!ENTITY general_settings.default_action.move.label "Mover para o Lixo">
@@ -47,6 +47,6 @@
 <!ENTITY general_settings.default_action.move.accesskey "M">
 <!ENTITY general_settings.search_subfolders_first.access_key "v">
 <!ENTITY general_settings.search_subfolders.access_key "s">
-<!ENTITY general_settings.confirm_search_and_deletion.access_key "c">
+<!ENTITY general_settings.use_dialog_before_removal.access_key "c">
 <!ENTITY removedupes-preftree-label "Remover Duplicados">
 <!ENTITY removedupes-preftree-page-title "Remover Mensagens Duplicadas (Alternativo)">

@@ -39,7 +39,7 @@
 <!ENTITY general_settings.tab_title "Generelle indstillinger">
 <!ENTITY general_settings.search_subfolders.label "Søg i valgte mappes undermapper">
 <!ENTITY general_settings.search_subfolders_first.label "Søg i undermapper først (afsendelsesorden)">
-<!ENTITY general_settings.confirm_search_and_deletion.label "Gennemgå søgeresultater inden sletning">
+<!ENTITY general_settings.use_dialog_before_removal.label "Gennemgå søgeresultater inden sletning">
 <!ENTITY general_settings.default_action.description "Standardhandling for dubletter:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Slet permanent">
 <!ENTITY general_settings.default_action.move.label "Flyt til papirkurv">
@@ -47,6 +47,6 @@
 <!ENTITY general_settings.default_action.move.accesskey "y">
 <!ENTITY general_settings.search_subfolders_first.access_key "S">
 <!ENTITY general_settings.search_subfolders.access_key "S">
-<!ENTITY general_settings.confirm_search_and_deletion.access_key "G">
+<!ENTITY general_settings.use_dialog_before_removal.access_key "G">
 <!ENTITY removedupes-preftree-label "Fjern dubletter">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">

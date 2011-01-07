@@ -39,7 +39,7 @@
 <!ENTITY general_settings.tab_title "Algemene instellingen">
 <!ENTITY general_settings.search_subfolders.label "Submappen van geselecteerde map(pen) doorzoeken">
 <!ENTITY general_settings.search_subfolders_first.label "Submappen eerst doorzoeken (postvolgorde)">
-<!ENTITY general_settings.confirm_search_and_deletion.label "Zoekresultaten bekijken voor verwijderen">
+<!ENTITY general_settings.use_dialog_before_removal.label "Zoekresultaten bekijken voor verwijderen">
 <!ENTITY general_settings.default_action.description "Standaardactie bij dubbele berichten:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Permanent verwijderen">
 <!ENTITY general_settings.default_action.move.label "Naar Prullenbak verplaatsen">
@@ -47,6 +47,6 @@
 <!ENTITY general_settings.default_action.move.accesskey "r">
 <!ENTITY general_settings.search_subfolders_first.access_key "u">
 <!ENTITY general_settings.search_subfolders.access_key "s">
-<!ENTITY general_settings.confirm_search_and_deletion.access_key "k">
+<!ENTITY general_settings.use_dialog_before_removal.access_key "k">
 <!ENTITY removedupes-preftree-label "Duplicaten verwijderen">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">

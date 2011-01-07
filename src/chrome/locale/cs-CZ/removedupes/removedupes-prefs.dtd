@@ -39,7 +39,7 @@
 <!ENTITY general_settings.tab_title "Obecná nastavení">
 <!ENTITY general_settings.search_subfolders.label "Procházet podsložky vybraných složek">
 <!ENTITY general_settings.search_subfolders_first.label "Procházet nejdříve podsložky">
-<!ENTITY general_settings.confirm_search_and_deletion.label "Před smazáním zkontrolovat výsledky">
+<!ENTITY general_settings.use_dialog_before_removal.label "Před smazáním zkontrolovat výsledky">
 <!ENTITY general_settings.default_action.description "Implicitní akce pro duplicitní zprávy:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Trvale odstranit">
 <!ENTITY general_settings.default_action.move.label "Přesunout do koše">
@@ -47,6 +47,6 @@
 <!ENTITY general_settings.default_action.move.accesskey "K">
 <!ENTITY general_settings.search_subfolders_first.access_key "p">
 <!ENTITY general_settings.search_subfolders.access_key "s">
-<!ENTITY general_settings.confirm_search_and_deletion.access_key "c">
+<!ENTITY general_settings.use_dialog_before_removal.access_key "c">
 <!ENTITY removedupes-preftree-label "Odstranit duplicitní">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">

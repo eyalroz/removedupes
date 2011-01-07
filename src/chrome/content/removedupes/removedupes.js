@@ -919,6 +919,7 @@ RemoveDupes.MessengerOverlay = {
       RemoveDupes.Removal.removeDuplicates(
         searchData.dupeSetsHashMap,
         (RemoveDupes.Prefs.getCharPref('default_action', 'move') == 'delete_permanently'),
+        RemoveDupes.Prefs.getBoolPref("confirm_permanent_deletion", true),
         RemoveDupes.Prefs.getCharPref('default_target_folder', null),
         false // the uri's have not been replaced with messageRecords
         );
@@ -1176,7 +1177,8 @@ RemoveDupes.DupeSearchData = function ()
     RemoveDupes.Prefs.getBoolPref("skip_special_folders", true);
   
   this.useReviewDialog = 
-    RemoveDupes.Prefs.getBoolPref("confirm_search_and_deletion", true);
+    RemoveDupes.Prefs.getBoolPref("use_dialog_before_removal", true);
+    
   // we might have to trigger non-blocking IMAP folder updates;
   // each trigger will increase this, each folder update completing
   // will decrease this
