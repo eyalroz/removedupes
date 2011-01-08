@@ -60,7 +60,7 @@ $BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $PREPRO
 echo -e "\nJAR files ready\n"
 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.rdf > $BUILDDIR/install.rdf
 rm -rf ${SHORTNAME}
-#rm -rf ${SHORTNAME}-mac-skin
+rm -rf ${SHORTNAME}-mac-skin
 rm -f installed-chrome.txt
 
 mkdir $BUILDDIR/defaults
