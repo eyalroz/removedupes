@@ -33,7 +33,7 @@ overlay chrome://messenger/content/mailWindowOverlay.xul chrome://removedupes/co
 style chrome://removedupes/content/removedupes-dialog.xul chrome://removedupes/skin/style.css
 skin removedupes classic/1.0 jar:chrome/removedupes.jar!/skin/classic/removedupes/
 locale removedupes en-US jar:chrome/removedupes.jar!/locale/en-US/removedupes/
-locale removedupes de-DE jar:chrome/removedupes.jar!/locale/de-DE/removedupes/
+locale removedupes de jar:chrome/removedupes.jar!/locale/de/removedupes/
 locale removedupes it-IT jar:chrome/removedupes.jar!/locale/it-IT/removedupes/
 locale removedupes ja jar:chrome/removedupes.jar!/locale/ja/removedupes/
 locale removedupes ja-JP-mac jar:chrome/removedupes.jar!/locale/ja/removedupes/
@@ -42,12 +42,12 @@ locale removedupes sk-SK jar:chrome/removedupes.jar!/locale/sk-SK/removedupes/
 locale removedupes pt-PT jar:chrome/removedupes.jar!/locale/pt-PT/removedupes/
 locale removedupes pt-BR jar:chrome/removedupes.jar!/locale/pt-BR/removedupes/
 locale removedupes pt-PT jar:chrome/removedupes.jar!/locale/pt-PT/removedupes/
-locale removedupes nl-NL jar:chrome/removedupes.jar!/locale/nl-NL/removedupes/
-locale removedupes fr-FR jar:chrome/removedupes.jar!/locale/fr-FR/removedupes/
-locale removedupes pl-PL jar:chrome/removedupes.jar!/locale/pl-PL/removedupes/
+locale removedupes nl jar:chrome/removedupes.jar!/locale/nl/removedupes/
+locale removedupes fr jar:chrome/removedupes.jar!/locale/fr/removedupes/
+locale removedupes pl jar:chrome/removedupes.jar!/locale/pl/removedupes/
 locale removedupes he-IL jar:chrome/removedupes.jar!/locale/he-IL/removedupes/
 locale removedupes ru-RU jar:chrome/removedupes.jar!/locale/ru-RU/removedupes/
-locale removedupes da-DK jar:chrome/removedupes.jar!/locale/da-DK/removedupes/
+locale removedupes da jar:chrome/removedupes.jar!/locale/da/removedupes/
 locale removedupes cs-CZ jar:chrome/removedupes.jar!/locale/cs-CZ/removedupes/
 locale removedupes es-AR jar:chrome/removedupes.jar!/locale/es-AR/removedupes/
 locale removedupes es-ES jar:chrome/removedupes.jar!/locale/es-ES/removedupes/
