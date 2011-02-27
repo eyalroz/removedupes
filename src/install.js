@@ -41,7 +41,7 @@ if(retval == SUCCESS)
     registerChrome(contentFlag, folder, "content/" + name + "/");
 
     registerChrome(localeFlag, folder, "locale/en-US/" + name + "/");
-    registerChrome(localeFlag, folder, "locale/de-DE/" + name + "/");
+    registerChrome(localeFlag, folder, "locale/de/" + name + "/");
     registerChrome(localeFlag, folder, "locale/it-IT/" + name + "/");
     registerChrome(localeFlag, folder, "locale/ja/" + name + "/");
     //registerChrome(localeFlag, folder, "locale/ja-JP-mac/" + name + "/");
@@ -49,12 +49,12 @@ if(retval == SUCCESS)
     registerChrome(localeFlag, folder, "locale/sk-SK/" + name + "/");
     registerChrome(localeFlag, folder, "locale/pt-PT/" + name + "/");
     registerChrome(localeFlag, folder, "locale/pt-BR/" + name + "/");
-    registerChrome(localeFlag, folder, "locale/nl-NL/" + name + "/");
-    registerChrome(localeFlag, folder, "locale/fr-FR/" + name + "/");
-    registerChrome(localeFlag, folder, "locale/pl-PL/" + name + "/");
+    registerChrome(localeFlag, folder, "locale/nl/" + name + "/");
+    registerChrome(localeFlag, folder, "locale/fr/" + name + "/");
+    registerChrome(localeFlag, folder, "locale/pl/" + name + "/");
     registerChrome(localeFlag, folder, "locale/he-IL/" + name + "/");
     registerChrome(localeFlag, folder, "locale/ru-RU/" + name + "/");
-    registerChrome(localeFlag, folder, "locale/da-DK/" + name + "/");
+    registerChrome(localeFlag, folder, "locale/da/" + name + "/");
     registerChrome(localeFlag, folder, "locale/cs-CZ/" + name + "/");
     registerChrome(localeFlag, folder, "locale/es-AR/" + name + "/");
     registerChrome(localeFlag, folder, "locale/is-IS/" + name + "/");
