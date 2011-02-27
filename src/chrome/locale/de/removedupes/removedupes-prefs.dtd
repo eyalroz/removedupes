@@ -1,0 +1,52 @@
+<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) [de] - Einstellungen">
+<!ENTITY guide-url "http://not.yet.written/">
+<!ENTITY message_comparison.tab_title "Vergleich der Nachrichten">
+<!ENTITY message_comparison.criteria_box.label "Message elements used as comparison criteria">
+<!ENTITY message_comparison.skip_special_folders.label "Skip Special Folders (Sent, Drafts etc.)">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Compare addresses stripped and sorted">
+<!ENTITY message_comparison.tab_description "Nachrichtenelemente, die als Vergleichskriterium verwendet werden sollen:">
+<!ENTITY message_comparison.author.label "Absender (&apos;Absender&apos; Adresse)">
+<!ENTITY message_comparison.recipients.label "Empfänger">
+<!ENTITY message_comparison.cc_list.label "CC-Empfänger">
+<!ENTITY message_comparison.flags.label "Status (z.B. Junk, ungelesen, usw.)">
+<!ENTITY message_comparison.message_id.label "Nachrichten-ID">
+<!ENTITY message_comparison.num_lines.label "Anzahl der Zeilen in der Nachricht">
+<!ENTITY message_comparison.send_time.label "Versandzeit">
+<!ENTITY message_comparison.size.label "Size">
+<!ENTITY message_comparison.subject.label "Betreff">
+<!ENTITY message_comparison.folder.label "Ordner">
+<!ENTITY message_comparison.body.label "Nachrichtentext">
+<!ENTITY message_comparison.skip_special_folders.access_key "k">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.access_key "r">
+<!ENTITY message_comparison.author.access_key "A">
+<!ENTITY message_comparison.flags.access_key "F">
+<!ENTITY message_comparison.recipients.access_key "E">
+<!ENTITY message_comparison.cc_list.access_key "C">
+<!ENTITY message_comparison.message_id.access_key "N">
+<!ENTITY message_comparison.num_lines.access_key "Z">
+<!ENTITY message_comparison.send_time.access_key "V">
+<!ENTITY message_comparison.size.access_key "s">
+<!ENTITY message_comparison.subject.access_key "B">
+<!ENTITY message_comparison.folder.access_key "O">
+<!ENTITY message_comparison.body.access_key "N">
+<!ENTITY message_comparison.time_comparison_resolution.description "Time Comparison Resolution:">
+<!ENTITY message_comparison.time_comparison_resolution.seconds.label "Seconds">
+<!ENTITY message_comparison.time_comparison_resolution.minutes.label "Minutes">
+<!ENTITY message_comparison.time_comparison_resolution.hours.label "Hours">
+<!ENTITY message_comparison.time_comparison_resolution.day.label "Day">
+<!ENTITY message_comparison.time_comparison_resolution.month.label "Month">
+<!ENTITY message_comparison.time_comparison_resolution.year.label "Year">
+<!ENTITY general_settings.tab_title "Allgemeine Einstellungen">
+<!ENTITY general_settings.search_subfolders.label "Unterordner der ausgewählten Ordner durchsuchen">
+<!ENTITY general_settings.search_subfolders_first.label "Unterordner zuerst durchsuchen (nachgestelle Ordnung)">
+<!ENTITY general_settings.use_dialog_before_removal.label "Suchergebnis vor dem Löschen anzeigen">
+<!ENTITY general_settings.default_action.description "Löschmethode:">
+<!ENTITY general_settings.default_action.delete_permanently.label "Vollständiges Löschen">
+<!ENTITY general_settings.default_action.move.label "In den Papierkorb verschieben (normales Löschen)">
+<!ENTITY general_settings.default_action.delete_permanently.accesskey "V">
+<!ENTITY general_settings.default_action.move.accesskey "P">
+<!ENTITY general_settings.search_subfolders_first.access_key "z">
+<!ENTITY general_settings.search_subfolders.access_key "U">
+<!ENTITY general_settings.use_dialog_before_removal.access_key "c">
+<!ENTITY removedupes-preftree-label "Duplikate löschen">
+<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate) [de]">

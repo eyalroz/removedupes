@@ -1,0 +1,36 @@
+<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate) [de]">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Doppelte Nachrichten entfernen...">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Original festlegen">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "O">
+<!ENTITY key-removedupes.modifiers "accel,shift">
+<!ENTITY key-removedupes.keycode "D">
+<!ENTITY removedupes_dialog.dialog_title "Entfernen von Duplikaten">
+<!ENTITY removedupes_dialog.id "Nachrichten ID">
+<!ENTITY removedupes_dialog.keep_label "In jeder Gruppe von Duplikaten behalten:">
+<!ENTITY removedupes_dialog.subject "Betreff">
+<!ENTITY removedupes_dialog.sender "Absender">
+<!ENTITY removedupes_dialog.author "Absender">
+<!ENTITY removedupes_dialog.recipients "Empfänger">
+<!ENTITY removedupes_dialog.cc_list "CC-Empfänger">
+<!ENTITY removedupes_dialog.flags "Status (z.B. Junk, ungelesen, usw.)">
+<!ENTITY removedupes_dialog.folder "Ordner">
+<!ENTITY removedupes_dialog.line_count "# Zeilen">
+<!ENTITY removedupes_dialog.date "Datum">
+<!ENTITY removedupes_dialog.send_time "Absendezeit">
+<!ENTITY removedupes_dialog.size "Size">
+<!ENTITY removedupes_dialog.keep_preset_originals.label "Original ist">
+<!ENTITY removedupes_dialog.keep_first.label "Erstes Exemplar">
+<!ENTITY removedupes_dialog.keep_last.label "Letztes Exemplar">
+<!ENTITY removedupes_dialog.keep_none.label "Kein Exemplar">
+<!ENTITY removedupes_dialog.keep_all.label "Alle Exemplare">
+<!ENTITY removedupes_dialog.tree_label "Doppelte Einträge:">
+<!ENTITY removedupes_dialog.keep_flag "Behalten?">
+<!ENTITY removedupes_dialog.action_label "Aktion:">
+<!ENTITY action.delete_permanently.label "Vollständiges löschen (nicht in den Papierkorb verschieben)">
+<!ENTITY action.delete_permanently.accesskey "v">
+<!ENTITY action.move.label "Verschieben nach:">
+<!ENTITY action.move.accesskey "V">
+<!ENTITY removeduplicates-button.label "Duplikate löschen">
+<!ENTITY removeduplicates-button.tip "Doppelte Nachrichten entfernen...">
+<!ENTITY removedupes.criteria_menu.label "Vergleichskriterium:">
