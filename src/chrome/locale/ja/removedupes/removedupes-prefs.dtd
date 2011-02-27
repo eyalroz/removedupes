@@ -39,7 +39,7 @@
 <!ENTITY general_settings.tab_title "全般設定">
 <!ENTITY general_settings.search_subfolders.label "選択したフォルダのサブフォルダを検索する">
 <!ENTITY general_settings.search_subfolders_first.label "サブフォルダの検索を優先する (postorder) ">
-<!ENTITY general_settings.confirm_search_and_deletion.label "削除前に検索結果を表示する ">
+<!ENTITY general_settings.use_dialog_before_removal.label "削除前に検索結果を表示する ">
 <!ENTITY general_settings.default_action.description "重複メッセージのデフォルト処理：">
 <!ENTITY general_settings.default_action.delete_permanently.label "完全削除 ">
 <!ENTITY general_settings.default_action.move.label "ごみ箱へ移動 ">
@@ -47,6 +47,6 @@
 <!ENTITY general_settings.default_action.move.accesskey "M">
 <!ENTITY general_settings.search_subfolders_first.access_key "s">
 <!ENTITY general_settings.search_subfolders.access_key "s">
-<!ENTITY general_settings.confirm_search_and_deletion.access_key "c">
+<!ENTITY general_settings.use_dialog_before_removal.access_key "c">
 <!ENTITY removedupes-preftree-label "重複の削除">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
