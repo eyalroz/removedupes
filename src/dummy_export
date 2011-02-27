@@ -1,0 +1,37 @@
+#!/bin/sh -e
+#
+# Workaround for a mozdev cvs tagging bug, see
+# https://www.mozdev.org/bugs/show_bug.cgi?id=14797
+# and
+# http://www.mozdev.org/drupal/wiki/MozdevCVSTipsTroubleshooting
+# for details
+
+set -o errexit
+
+if [ -z $1 ]; then
+	echo "Enter CVS username"
+	exit
+fi
+
+CVS_USERNAME=$1
+CVSROOT=":pserver:${CVS_USERNAME}@www.mozdev.org:/cvs"
+CVS_MODULE_NAME="removedupes"
+SRCDIR=`pwd`
+# the following are paths relative to the source dir ${SRCDIR}
+TEMPDIR="${SRCDIR}/tmp"
+
+# determine version number
+VERSION=`grep VERSION=\" dobuild | cut -d\" -f2 | head -1`
+SHORTNAME=`grep SHORTNAME=\" dobuild | cut -d\" -f2`
+USCORED_VERSION=`echo $VERSION | tr . _`
+CAPS_SHORTNAME=`echo ${SHORTNAME} | tr a-z A-Z`
+RELEASE_TAG="${CAPS_SHORTNAME}_RELEASE_${USCORED_VERSION}"
+
+if [ ! -d ${TEMPDIR} ]; then
+        mkdir ${TEMPDIR}
+fi
+cd ${TEMPDIR}
+cvs -d $CVSROOT export -r ${RELEASE_TAG} -d ${CVS_MODULE_NAME} ${CVS_MODULE_NAME}/src
+cd ${SRCDIR}
+rm -r ${TEMPDIR}
+
