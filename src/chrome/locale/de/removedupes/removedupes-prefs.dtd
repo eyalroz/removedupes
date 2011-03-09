@@ -5,7 +5,7 @@
 <!ENTITY message_comparison.skip_special_folders.label "Skip Special Folders (Sent, Drafts etc.)">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Compare addresses stripped and sorted">
 <!ENTITY message_comparison.tab_description "Nachrichtenelemente, die als Vergleichskriterium verwendet werden sollen:">
-<!ENTITY message_comparison.author.label "Absender (&apos;Absender&apos; Adresse)">
+<!ENTITY message_comparison.author.label "Absender ('Absender' Adresse)">
 <!ENTITY message_comparison.recipients.label "Empfänger">
 <!ENTITY message_comparison.cc_list.label "CC-Empfänger">
 <!ENTITY message_comparison.flags.label "Status (z.B. Junk, ungelesen, usw.)">
