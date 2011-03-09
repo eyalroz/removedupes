@@ -1,6 +1,6 @@
-<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - Ustawienia">
+<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - ustawienia">
 <!ENTITY guide-url "http://not.yet.written/">
-<!ENTITY message_comparison.tab_title "Porównanie wiadomości">
+<!ENTITY message_comparison.tab_title "Porównywanie wiadomości">
 <!ENTITY message_comparison.criteria_box.label "Elementy wiadomości używane jako kryteria porównawcze">
 <!ENTITY message_comparison.skip_special_folders.label "Pomiń specjalne foldery (&quot;Wysłane&quot;, &quot;Szkice&quot; itp.)">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Porównaj adresy przycięte i posortowane">
@@ -15,38 +15,38 @@
 <!ENTITY message_comparison.size.label "Rozmiar">
 <!ENTITY message_comparison.subject.label "Temat">
 <!ENTITY message_comparison.folder.label "Folder">
-<!ENTITY message_comparison.body.label "Zawartość">
-<!ENTITY message_comparison.skip_special_folders.access_key "k">
-<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.access_key "r">
-<!ENTITY message_comparison.author.access_key "F">
+<!ENTITY message_comparison.body.label "Treść">
+<!ENTITY message_comparison.skip_special_folders.access_key "s">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.access_key "p">
+<!ENTITY message_comparison.author.access_key "N">
 <!ENTITY message_comparison.flags.access_key "F">
-<!ENTITY message_comparison.recipients.access_key "r">
-<!ENTITY message_comparison.cc_list.access_key "C">
+<!ENTITY message_comparison.recipients.access_key "A">
+<!ENTITY message_comparison.cc_list.access_key "k">
 <!ENTITY message_comparison.message_id.access_key "I">
 <!ENTITY message_comparison.num_lines.access_key "l">
-<!ENTITY message_comparison.send_time.access_key "C">
-<!ENTITY message_comparison.size.access_key "s">
+<!ENTITY message_comparison.send_time.access_key "D">
+<!ENTITY message_comparison.size.access_key "R">
 <!ENTITY message_comparison.subject.access_key "T">
-<!ENTITY message_comparison.folder.access_key "o">
-<!ENTITY message_comparison.body.access_key "w">
-<!ENTITY message_comparison.time_comparison_resolution.description "Wynik porównania czasów:">
-<!ENTITY message_comparison.time_comparison_resolution.seconds.label "sekund">
-<!ENTITY message_comparison.time_comparison_resolution.minutes.label "minut">
-<!ENTITY message_comparison.time_comparison_resolution.hours.label "godzin">
+<!ENTITY message_comparison.folder.access_key "F">
+<!ENTITY message_comparison.body.access_key "r">
+<!ENTITY message_comparison.time_comparison_resolution.description "Dokładność porównań czasów:">
+<!ENTITY message_comparison.time_comparison_resolution.seconds.label "sekundy">
+<!ENTITY message_comparison.time_comparison_resolution.minutes.label "minuty">
+<!ENTITY message_comparison.time_comparison_resolution.hours.label "godziny">
 <!ENTITY message_comparison.time_comparison_resolution.day.label "dni">
-<!ENTITY message_comparison.time_comparison_resolution.month.label "miesięcy">
-<!ENTITY message_comparison.time_comparison_resolution.year.label "lat">
-<!ENTITY general_settings.tab_title "Ustawienia globalne">
+<!ENTITY message_comparison.time_comparison_resolution.month.label "miesiące">
+<!ENTITY message_comparison.time_comparison_resolution.year.label "lata">
+<!ENTITY general_settings.tab_title "Ustawienia ogólne">
 <!ENTITY general_settings.search_subfolders.label "Przeszukuj podfoldery wybranych folderów">
 <!ENTITY general_settings.search_subfolders_first.label "Najpierw przeszukaj podfoldery (postorder)">
-<!ENTITY general_settings.use_dialog_before_removal.label "Wyświetl potwierdzenie usuwania z wynikami wyszukiwania">
+<!ENTITY general_settings.use_dialog_before_removal.label "Przejrzyj wyniki wyszukiwania przed usunięciem ich">
 <!ENTITY general_settings.default_action.description "Domyślna operacja dla duplikatów wiadomości:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Trwale usuń">
 <!ENTITY general_settings.default_action.move.label "Przenieś do kosza">
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "U">
-<!ENTITY general_settings.default_action.move.accesskey "P">
-<!ENTITY general_settings.search_subfolders_first.access_key "s">
+<!ENTITY general_settings.default_action.move.accesskey "k">
+<!ENTITY general_settings.search_subfolders_first.access_key "P">
 <!ENTITY general_settings.search_subfolders.access_key "s">
-<!ENTITY general_settings.use_dialog_before_removal.access_key "c">
+<!ENTITY general_settings.use_dialog_before_removal.access_key "w">
 <!ENTITY removedupes-preftree-label "Usuń duplikaty">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">

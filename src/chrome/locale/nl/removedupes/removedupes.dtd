@@ -1,5 +1,5 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
-<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Duplicaten verwijderen...">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Duplicaten verwijderen…">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Originelen instellen voor zoeken naar duplicaten">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "O">
@@ -32,5 +32,5 @@
 <!ENTITY action.move.label "Verplaatsen naar:">
 <!ENTITY action.move.accesskey "V">
 <!ENTITY removeduplicates-button.label "Duplicaten verwijderen">
-<!ENTITY removeduplicates-button.tip "Duplicaatberichten verwijderen...">
+<!ENTITY removeduplicates-button.tip "Duplicaatberichten verwijderen…">
 <!ENTITY removedupes.criteria_menu.label "Vergelijkingscriteria:">
