@@ -61,6 +61,11 @@ cd ${SRCDIR}
 
 cd ${SRCDIR}/${DOWNLOADS}
 
-cvs -d $CVSROOT add ${VERSION}/
-cvs -d $CVSROOT add `ls ${VERSION}/*.xpi`
+if [ ! -e ${VERSION}/CVS ]; then
+        cvs -d $CVSROOT add ${VERSION}/
+fi
+XPI_ENTIRES_IN_VERSION_DIR=`grep xpi ${VERSION}/CVS/Entries | wc -l`
+if [ ${XPI_ENTIRES_IN_VERSION_DIR} == 0 ]; then
+        cvs -d $CVSROOT add `ls ${VERSION}/*.xpi`
+fi
 cvs -d $CVSROOT ci ${VERSION}/ latest/
