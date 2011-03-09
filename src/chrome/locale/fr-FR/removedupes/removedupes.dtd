@@ -1,0 +1,36 @@
+<!ENTITY removedupes.title "Remove Duplicate Messages (Alternatif)">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Supprimer les doublons">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Choisir les originaux pour la recherche de doublons">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "d">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "o">
+<!ENTITY key-removedupes.modifiers "Accel,Maj">
+<!ENTITY key-removedupes.keycode "d">
+<!ENTITY removedupes_dialog.dialog_title "Suppression des messages en double…">
+<!ENTITY removedupes_dialog.id "Identifiant du message">
+<!ENTITY removedupes_dialog.keep_label "Dans chaque lot de copies, conserver :">
+<!ENTITY removedupes_dialog.subject "Sujet">
+<!ENTITY removedupes_dialog.sender "Expéditeur">
+<!ENTITY removedupes_dialog.author "Expéditeur">
+<!ENTITY removedupes_dialog.recipients "Destinataires">
+<!ENTITY removedupes_dialog.cc_list "Liste Cc">
+<!ENTITY removedupes_dialog.flags "Drapeaux">
+<!ENTITY removedupes_dialog.folder "Dossier">
+<!ENTITY removedupes_dialog.line_count "Nombre de lignes">
+<!ENTITY removedupes_dialog.date "Date">
+<!ENTITY removedupes_dialog.send_time "Heure d&apos;envoi">
+<!ENTITY removedupes_dialog.size "Taille">
+<!ENTITY removedupes_dialog.keep_preset_originals.label "Présélectionner les originaux">
+<!ENTITY removedupes_dialog.keep_first.label "La première">
+<!ENTITY removedupes_dialog.keep_last.label "La dernière">
+<!ENTITY removedupes_dialog.keep_none.label "Aucune">
+<!ENTITY removedupes_dialog.keep_all.label "Toutes">
+<!ENTITY removedupes_dialog.tree_label "Ensemble des doublons de messages :">
+<!ENTITY removedupes_dialog.keep_flag "Conserver ?">
+<!ENTITY removedupes_dialog.action_label "Action :">
+<!ENTITY action.delete_permanently.label "Supprimer définitivement">
+<!ENTITY action.delete_permanently.accesskey "d">
+<!ENTITY action.move.label "Déplacer vers :">
+<!ENTITY action.move.accesskey "D">
+<!ENTITY removeduplicates-button.label "Enlever les doublons">
+<!ENTITY removeduplicates-button.tip "Enlever des messages en double…">
+<!ENTITY removedupes.criteria_menu.label "Critères de comparaison :">

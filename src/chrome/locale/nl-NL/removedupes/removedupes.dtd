@@ -1,0 +1,36 @@
+<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Duplicaten verwijderen...">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Originelen instellen voor zoeken naar duplicaten">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "O">
+<!ENTITY key-removedupes.modifiers "accel, shift">
+<!ENTITY key-removedupes.keycode "D">
+<!ENTITY removedupes_dialog.dialog_title "Duplicaatberichten verwijderen">
+<!ENTITY removedupes_dialog.id "Bericht-ID">
+<!ENTITY removedupes_dialog.keep_label "In elke set duplicaten het volgende bewaren:">
+<!ENTITY removedupes_dialog.subject "Onderwerp">
+<!ENTITY removedupes_dialog.sender "Afzender">
+<!ENTITY removedupes_dialog.author "Schrijver">
+<!ENTITY removedupes_dialog.recipients "Ontvangers">
+<!ENTITY removedupes_dialog.cc_list "CC-lijst">
+<!ENTITY removedupes_dialog.flags "Labels">
+<!ENTITY removedupes_dialog.folder "Map">
+<!ENTITY removedupes_dialog.line_count "Aantal regels">
+<!ENTITY removedupes_dialog.date "Datum">
+<!ENTITY removedupes_dialog.send_time "Verzendtijd">
+<!ENTITY removedupes_dialog.size "Grootte">
+<!ENTITY removedupes_dialog.keep_preset_originals.label "Ingestelde originelen">
+<!ENTITY removedupes_dialog.keep_first.label "Eerste exemplaar">
+<!ENTITY removedupes_dialog.keep_last.label "Laatste exemplaar">
+<!ENTITY removedupes_dialog.keep_none.label "Geen exemplaren">
+<!ENTITY removedupes_dialog.keep_all.label "Alle exemplaren">
+<!ENTITY removedupes_dialog.tree_label "Dubbele berichten:">
+<!ENTITY removedupes_dialog.keep_flag "Behouden?">
+<!ENTITY removedupes_dialog.action_label "Actie:">
+<!ENTITY action.delete_permanently.label "Permanent verwijderen">
+<!ENTITY action.delete_permanently.accesskey "P">
+<!ENTITY action.move.label "Verplaatsen naar:">
+<!ENTITY action.move.accesskey "V">
+<!ENTITY removeduplicates-button.label "Duplicaten verwijderen">
+<!ENTITY removeduplicates-button.tip "Duplicaatberichten verwijderen...">
+<!ENTITY removedupes.criteria_menu.label "Vergelijkingscriteria:">
