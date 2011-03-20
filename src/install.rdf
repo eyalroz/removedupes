@@ -12,6 +12,7 @@
     <em:description>Locates duplicate messages in mail folders and removes them.</em:description>
     <em:creator>Eyal Rozenberg</em:creator>
     <em:homepageURL>http://removedupes.mozdev.org/</em:homepageURL>
+    <em:type>2</em:type> <!-- type=extension --> 
 
     <!-- Target Application this extension can install into, 
          with minimum and maximum supported versions. --> 
