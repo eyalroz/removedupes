@@ -397,7 +397,7 @@ RemoveDupes.Removal = {
       if (!targetFolder) {
         alert(RemoveDupes.Strings.formatStringFromName(
           'removedupes.no_such_folder', [targetFolderUri], 1));
-        return;
+        return false;
       }
     }
 
@@ -456,6 +456,7 @@ RemoveDupes.Removal = {
         alert(RemoveDupes.Strings.GetStringFromName('removedupes.failed_to_erase'));
         throw(ex);
       }
+      return true;
     }
     else {
       try {
@@ -500,6 +501,7 @@ RemoveDupes.Removal = {
         alert(RemoveDupes.Strings.formatStringFromName('removedupes.failed_to_move_to_folder', [targetFolder.URI], 1));
         throw(ex);
       }
+      return true;
     }
   }
 }
