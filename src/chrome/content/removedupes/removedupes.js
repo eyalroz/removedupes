@@ -478,8 +478,8 @@ RemoveDupes.MessengerOverlay = {
       // recal that ?: at the beginning of the parenthesized sections
       // means we're not interested in remembering the matching for these
       // sections specificlaly
-      "\b[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
-      "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\b","gi");
+      "(?:\b|^)[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
+      "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\b|')","gi");
     const gEncodedWordRegExp = RegExp("=\?.*\?=","g");
 #ifdef DEBUG_stripAndSortAddresses
     RemoveDupes.JSConsoleService.logStringMessage('stripAndSortAddresses(' + headerString +  ')');
@@ -492,8 +492,28 @@ RemoveDupes.MessengerOverlay = {
       return headerString;
     var matches;
     try {
-      matches = headerString.match(gEmailRegExp).sort();
-    } catch(ex) {}
+      matches = headerString.match(gEmailRegExp);
+      if (matches == null)
+        return headerString;
+      // This next command strips single quotes from arround addresses,
+      // with or without it, however, our parsing is _very_ simplistic,
+      // and we may sometime get invalid addresses due to quirky use of
+      // quotes. See:
+      // https://www.mozdev.org/bugs/show_bug.cgi?id=23963
+      // https://www.mozdev.org/bugs/show_bug.cgi?id=23964
+      matches = matches.map(function(addr) {
+          return addr.replace(/^'(.*)'$/,"$1");
+        } );
+      matches = matches.sort();
+    } catch(ex) {
+#ifdef DEBUG_stripAndSortAddresses
+      RemoveDupes.JSConsoleService.logStringMessage('Failed sorting addresses:\n' + ex);
+#endif
+      // something's wrong with either the matching or the sorting 
+      // (e.g. maybe we get an empty list); let's panic and keep
+      // the field as it is
+      return headerString;
+    }
     return matches;
   },
 
