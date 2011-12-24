@@ -1,16 +1,21 @@
-#!/bin/sh -x
+#!/bin/sh -e
 #
-# run this from the source directory!
+# We currently assume this script is run from the source directory
+# (otherwise set a different value for SOURCE_DIR); the
+# dummy_export script also makes certain assumptions
 
 set -o errexit
 
-CVS_USERNAME="eyalroz"
+if [ -z $1 ]; then
+	echo "usage: $0 <CVS username>"
+	exit
+fi
+
+CVS_USERNAME=$1
 CVSROOT=":pserver:${CVS_USERNAME}@www.mozdev.org:/cvs"
-SRCDIR=`pwd`
-# the following are paths relative to the source dir ${SRCDIR}
-DOWNLOADS="../downloads"
-TEMPDIR="deleteme"
-BUILDTOOLS="buildtools"
+SOURCE_DIR=`pwd`
+DOWNLOADS_DIR="$SOURCE_DIR/../downloads"
+BUILDTOOLS_DIR="$SOURCE_DIR/buildtools"
 
 # determine version number
 VERSION=`grep VERSION=\" dobuild | cut -d\" -f2 | head -1`
@@ -18,54 +23,53 @@ SHORTNAME=`grep SHORTNAME=\" dobuild | cut -d\" -f2`
 USCORED_VERSION=`echo $VERSION | tr . _`
 CAPS_SHORTNAME=`echo ${SHORTNAME} | tr a-z A-Z`
 RELEASE_TAG="${CAPS_SHORTNAME}_RELEASE_${USCORED_VERSION}"
-# make dobuild not build a beta
+# this causes the dobuild script not to build a beta version
 export EXTENSION_RELEASE=1
 
 # create new version directory
 
-if [ ! -d ${DOWNLOADS}/${VERSION} ]; then
-        mkdir ${DOWNLOADS}/${VERSION}
+if [ ! -d "${DOWNLOADS_DIR}/${VERSION}" ]; then
+        mkdir "${DOWNLOADS_DIR}/${VERSION}"
 fi
 
 # build the release versions and place them in the appropriate directories
 
-(./dobuild suitelegacy && ./dobuild tbird && ./dobuild suiterunner ) || exit
+(./dobuild suitelegacy && ./dobuild suiterunner && ./dobuild tbird) || exit
 
-for target in tbird suitelegacy suiterunner; do
-        cp build/${target}/${SHORTNAME}_${VERSION}_${target}.xpi ${DOWNLOADS}/${VERSION}
-        cp build/${target}/${SHORTNAME}_${VERSION}_${target}.xpi ${DOWNLOADS}/latest/${SHORTNAME}_${target}.xpi
+for target in tbird suiterunner suitelegacy; do
+        cp build/${target}/${SHORTNAME}_${VERSION}_${target}.xpi
+        cp build/${target}/${SHORTNAME}_${VERSION}_${target}.xpi ${DOWNLOADS_DIR}/latest/${SHORTNAME}_${target}.xpi
 done
 
 
 # create a CVS tag for the code used to build the release
 
-cvs -d $CVSROOT tag -d ${RELEASE_TAG}
-cvs -d $CVSROOT tag ${RELEASE_TAG}
+cd ${SOURCE_DIR}
+until cvs -d $CVSROOT tag -d ${RELEASE_TAG}; do : ; done
+until cvs -d $CVSROOT tag ${RELEASE_TAG}; do : ; done
 
-cd ${SRCDIR}/${BUILDTOOLS}
+cd ${BUILDTOOLS_DIR}
+until cvs -d $CVSROOT tag -d ${RELEASE_TAG}; do : ; done
+until cvs -d $CVSROOT tag ${RELEASE_TAG}; do : ; done
 
-cvs -d $CVSROOT tag -d ${RELEASE_TAG}
-cvs -d $CVSROOT tag ${RELEASE_TAG}
-
-cd ${SRCDIR}
-
+cd ${SOURCE_DIR}
 # Workaround for a mozdev cvs tagging bug, see
 # https://www.mozdev.org/bugs/show_bug.cgi?id=14797
 # and
 # http://www.mozdev.org/drupal/wiki/MozdevCVSTipsTroubleshooting
 # for details
-./dummy_export ${CVS_USERNAME}
+until ${SOURCE_DIR}/dummy_export ${CVS_USERNAME}; do : ; done
 
 # add the release to the CVS repository
 # (it gets propagated to the mozdev download mirrors)
 
-cd ${SRCDIR}/${DOWNLOADS}
+cd ${DOWNLOADS_DIR}
 
 if [ ! -e ${VERSION}/CVS ]; then
-        cvs -d $CVSROOT add ${VERSION}/
+	until cvs -d $CVSROOT add ${VERSION}/; do : ; done
 fi
 XPI_ENTIRES_IN_VERSION_DIR=`grep xpi ${VERSION}/CVS/Entries | wc -l`
 if [ ${XPI_ENTIRES_IN_VERSION_DIR} == 0 ]; then
-        cvs -d $CVSROOT add `ls ${VERSION}/*.xpi`
+        until cvs -d $CVSROOT add `ls ${VERSION}/*.xpi`; do : ; done
 fi
-cvs -d $CVSROOT ci ${VERSION}/ latest/
+until cvs -d $CVSROOT ci ${VERSION}/ latest/; do : ; done
