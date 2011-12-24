@@ -29,7 +29,7 @@ export EXTENSION_RELEASE=1
 # create new version directory
 
 if [ ! -d "${DOWNLOADS_DIR}/${VERSION}" ]; then
-        mkdir "${DOWNLOADS_DIR}/${VERSION}"
+        mkdir ${DOWNLOADS_DIR}/${VERSION}
 fi
 
 # build the release versions and place them in the appropriate directories
@@ -37,7 +37,7 @@ fi
 (./dobuild suitelegacy && ./dobuild suiterunner && ./dobuild tbird) || exit
 
 for target in tbird suiterunner suitelegacy; do
-        cp build/${target}/${SHORTNAME}_${VERSION}_${target}.xpi
+        cp build/${target}/${SHORTNAME}_${VERSION}_${target}.xpi ${DOWNLOADS_DIR}/${VERSION}
         cp build/${target}/${SHORTNAME}_${VERSION}_${target}.xpi ${DOWNLOADS_DIR}/latest/${SHORTNAME}_${target}.xpi
 done
 
