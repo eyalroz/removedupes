@@ -472,29 +472,52 @@ RemoveDupes.MessengerOverlay = {
   // Takes a MIME header field (hopefully, decoded for appropriate charset
   // and transfer encoding), strips out the email addresses in it, and
   // returns them, sorted, in a string
+  //
+  // Note: This function may have issues when addresses are quoted
+  // and/or when addresses are used within names preceding addresses, see
+  //
+  // https://www.mozdev.org/bugs/show_bug.cgi?id=23963
+  // https://www.mozdev.org/bugs/show_bug.cgi?id=23964
+  // 
 
   stripAndSortAddresses : function(headerString) {
     const gEmailRegExp = RegExp(
       // recal that ?: at the beginning of the parenthesized sections
       // means we're not interested in remembering the matching for these
       // sections specificlaly
-      "\b[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
-      "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\b","gi");
+      //
+      // disallowed email address beginning with an apostrophy (') to 
+      // better handle single-quoted addresses such as
+      // 'my.addr@somewhere.com'
+      "(?:\b|^)[a-z0-9!#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
+      "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\b|$)","gi");
+    const gSingleQuotedEmailRegExp = RegExp(
+      "(?:\b|^)'[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
+      "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?'","gi");
     const gEncodedWordRegExp = RegExp("=\?.*\?=","g");
 #ifdef DEBUG_stripAndSortAddresses
     RemoveDupes.JSConsoleService.logStringMessage('stripAndSortAddresses(' + headerString +  ')');
 #endif
-    // if we suspect there's undecoded text, let's not do anything and
-    // keep the field the way it is; at worst, we'll have some false-non-dupes
     if ((headerString == null) || (headerString == ""))
       return headerString;
+    // if we suspect there's undecoded text, let's not do anything and
+    // keep the field the way it is; at worst, we'll have some false-non-dupes
     if (gEncodedWordRegExp.test(headerString))
       return headerString;
     var matches;
-    try {
-      matches = headerString.match(gEmailRegExp).sort();
-    } catch(ex) {}
-    return matches;
+    matches = headerString.match(gEmailRegExp);
+    if (!matches) {
+      // let's try looking for addresses within single quotes, 
+      // and clip the quotes
+      matches = headerString.match(gSingleQuotedEmailRegExp);
+      // again, if we can't get any addresses, let's stay with the
+      // original header string rather than assume there are no addresses
+      if (!matches) return headerString;
+      for(var i = 0; i < matches.length; i++) {
+        matches[i] = matches[i].substr(1,matches[i].length - 2);
+      }
+    }
+    return matches.sort();
   },
 
   // sillyHash - 
