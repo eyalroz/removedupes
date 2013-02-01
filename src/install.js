@@ -46,6 +46,7 @@ if(retval == SUCCESS)
     registerChrome(localeFlag, folder, "locale/ja/" + name + "/");
     //registerChrome(localeFlag, folder, "locale/ja-JP-mac/" + name + "/");
     registerChrome(localeFlag, folder, "locale/zh-TW/" + name + "/");
+    registerChrome(localeFlag, folder, "locale/zh-CN/" + name + "/");
     registerChrome(localeFlag, folder, "locale/sk-SK/" + name + "/");
     registerChrome(localeFlag, folder, "locale/pt-PT/" + name + "/");
     registerChrome(localeFlag, folder, "locale/pt-BR/" + name + "/");
