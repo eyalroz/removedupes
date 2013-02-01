@@ -1,0 +1,36 @@
+<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "移除重复消息...">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "设置为下次重复搜索的原始消息文件夹">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "o">
+<!ENTITY key-removedupes.modifiers "accel,shift">
+<!ENTITY key-removedupes.keycode "D">
+<!ENTITY removedupes_dialog.dialog_title "删除重复消息">
+<!ENTITY removedupes_dialog.id "消息 ID">
+<!ENTITY removedupes_dialog.keep_label "保留每组重复中的：">
+<!ENTITY removedupes_dialog.subject "主题">
+<!ENTITY removedupes_dialog.sender "发件人">
+<!ENTITY removedupes_dialog.author "作者">
+<!ENTITY removedupes_dialog.recipients "收件人">
+<!ENTITY removedupes_dialog.cc_list "抄送列表">
+<!ENTITY removedupes_dialog.flags "标志">
+<!ENTITY removedupes_dialog.folder "文件夹">
+<!ENTITY removedupes_dialog.line_count "行数">
+<!ENTITY removedupes_dialog.date "日期">
+<!ENTITY removedupes_dialog.send_time "发送时间">
+<!ENTITY removedupes_dialog.size "大小">
+<!ENTITY removedupes_dialog.keep_preset_originals.label "预设原始文件夹">
+<!ENTITY removedupes_dialog.keep_first.label "第一个副本">
+<!ENTITY removedupes_dialog.keep_last.label "最后一个副本">
+<!ENTITY removedupes_dialog.keep_none.label "所有副本都不保存">
+<!ENTITY removedupes_dialog.keep_all.label "所有副本">
+<!ENTITY removedupes_dialog.tree_label "重复的消息组：">
+<!ENTITY removedupes_dialog.keep_flag "保留？">
+<!ENTITY removedupes_dialog.action_label "动作：">
+<!ENTITY action.delete_permanently.label "永久移除">
+<!ENTITY action.delete_permanently.accesskey "p">
+<!ENTITY action.move.label "移动到：">
+<!ENTITY action.move.accesskey "m">
+<!ENTITY removeduplicates-button.label "移除重复">
+<!ENTITY removeduplicates-button.tip "移除重复消息...">
+<!ENTITY removedupes.criteria_menu.label "比较条件：">
