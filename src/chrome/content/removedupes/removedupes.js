@@ -1004,30 +1004,44 @@ RemoveDupes.MessengerOverlay = {
   // it replaces the callback for getting folder tree cell properties with
   // a function which also adds the property of being a removedupes originals
   // folder or not.
-  // In the hope that the gFolderTreeView will appear in Seamonkey as well, 
-  // I'm not ifdef-ing this function and other relevant code to TBird-only
 
   replaceGetCellProperties : function () {
-  
-    if (   (typeof gFolderTreeView == 'undefined') 
-        || (!RemoveDupes.App.ensureMaximumVersion(17)))
+
+#ifndef MOZ_THUNDERBIRD
+    return;
+#else
+
+    if (typeof gFolderTreeView == 'undefined') 
       return;
-
-    var atomService =
-      Components.classes["@mozilla.org/atom-service;1"]
-  	      .getService(Components.interfaces.nsIAtomService);
-
     gFolderTreeView.preRDGetCellProperties = gFolderTreeView.getCellProperties;
-    gFolderTreeView.getCellProperties = function newGcp(aRow, aCol, aProps) {
-      gFolderTreeView.preRDGetCellProperties(aRow, aCol, aProps);
-      var row = gFolderTreeView._rowMap[aRow];
-      if (RemoveDupes.MessengerOverlay.originalsFolderUris && RemoveDupes.MessengerOverlay.originalsFolderUris[row._folder.URI]) {
-        aProps.AppendElement(atomService.getAtom("isOriginalsFolder-true"));
-      }
-      else {
-        aProps.AppendElement(atomService.getAtom("isOriginalsFolder-false"));
-      }
-    };
+
+    if(RemoveDupes.App.ensureMaximumVersion("17.1")) {
+      var atomService =
+        Components.classes["@mozilla.org/atom-service;1"]
+                  .getService(Components.interfaces.nsIAtomService);
+      gFolderTreeView.getCellProperties = function newGcp(aRow, aCol, aProps) {
+        gFolderTreeView.preRDGetCellProperties(aRow, aCol, aProps);
+        var row = gFolderTreeView._rowMap[aRow];
+        if (RemoveDupes.MessengerOverlay.originalsFolderUris && RemoveDupes.MessengerOverlay.originalsFolderUris[row._folder.URI]) {
+          aProps.AppendElement(atomService.getAtom("isOriginalsFolder-true"));
+        }
+        else {
+          aProps.AppendElement(atomService.getAtom("isOriginalsFolder-false"));
+        }
+      };
+      return;
+    }
+    if(RemoveDupes.App.ensureMinimumVersion("23.0")) {
+      gFolderTreeView.getCellProperties = function newGcp(aRow, aCol) {
+        var properties = gFolderTreeView.preRDGetCellProperties(aRow, aCol);
+        var row = gFolderTreeView._rowMap[aRow];
+        if (RemoveDupes.MessengerOverlay.originalsFolderUris && RemoveDupes.MessengerOverlay.originalsFolderUris[row._folder.URI]) {
+          properties += " isOriginalsFolder-true";
+        }
+        return properties;
+      };
+    }
+#endif
   },
 
   setOriginalsFolders : function() {
