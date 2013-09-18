@@ -174,7 +174,7 @@ RemoveDupes.App = {
 RemoveDupes.Prefs = {
 
   // const
-  preferencePrefix : "removedupes.",
+  preferencePrefix : "extensions.removedupes.",
 
   _prefService: null,
 
