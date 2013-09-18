@@ -1008,8 +1008,13 @@ RemoveDupes.MessengerOverlay = {
   // I'm not ifdef-ing this function and other relevant code to TBird-only
 
   replaceGetCellProperties : function () {
-    if (typeof gFolderTreeView == 'undefined')
+  
+    alert("here");
+  
+    if (   (typeof gFolderTreeView == 'undefined') 
+        || (!RemoveDupes.App.ensureMaximumVersion(17)))
       return;
+    	
 
     var atomService =
       Components.classes["@mozilla.org/atom-service;1"]

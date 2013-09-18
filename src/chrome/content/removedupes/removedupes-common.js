@@ -134,7 +134,8 @@ RemoveDupes.App = {
     return arr[2];
   },
 
-  ensureMinimumVersion : function(minVersion) {
+  // returns true if the app version is equal-or-higher to minVersion, false otherwise;
+  ensureVersion : function(versionThreshold, checkMinimum) {
     var version;  
     if ("@mozilla.org/xre/app-info;1" in Components.classes ) {
       version = 
@@ -150,8 +151,18 @@ RemoveDupes.App = {
     var versionChecker =
       Components.classes["@mozilla.org/xpcom/version-comparator;1"]
                 .getService(Components.interfaces.nsIVersionComparator);  
-     
-    return ( versionChecker.compare( version, minVersion ) >= 0 )  
+    
+    var vccResult = versionChecker.compare( version, versionThreshold );
+    return (   (checkMinimum  && (vccResult >= 0))
+            || (!checkMinimum && (vccResult <= 0)));
+  },
+
+  ensureMinimumVersion : function(minVersion) {
+  	return this.ensureVersion(minVersion, true);
+  },
+
+  ensureMaximumVersion : function(maxVersion) {
+  	return this.ensureVersion(maxVersion, false);
   }
 }
 
