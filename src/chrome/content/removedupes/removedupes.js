@@ -1009,12 +1009,9 @@ RemoveDupes.MessengerOverlay = {
 
   replaceGetCellProperties : function () {
   
-    alert("here");
-  
     if (   (typeof gFolderTreeView == 'undefined') 
         || (!RemoveDupes.App.ensureMaximumVersion(17)))
       return;
-    	
 
     var atomService =
       Components.classes["@mozilla.org/atom-service;1"]
