@@ -15,6 +15,7 @@
 
 #ifndef MOZ_PRETOOLKIT_SEAMONKEY
 <prefwindow xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+            id="removeDupesPrefsDialogTitle"
             title="&prefs_dialog_title;"
             dlgbuttons="accept,cancel">
   <prefpane id="removeDupesPrefPane"
