@@ -117,6 +117,12 @@
       <tabpanels flex="1">
         <tabpanel id="general_settings_panel">
           <vbox flex="1">
+            <checkbox preference="extensions.removedupes.skip_special_folders"
+              prefstring="extensions.removedupes.skip_special_folders"
+              id="extensions.removedupes.skip_special_folders"
+              label="&message_comparison.skip_special_folders.label;"
+              accesskey="&message_comparison.skip_special_folders.access_key;"
+              autostretch="never"/>
             <checkbox preference="extensions.removedupes.search_subfolders"
               prefstring="extensions.removedupes.search_subfolders"
               id="extensions.removedupes.search_subfolders"
@@ -149,12 +155,6 @@
 
         <tabpanel id="comparison_criteria_panel" flex="1">
           <vbox flex="1">
-            <checkbox preference="extensions.removedupes.skip_special_folders"
-              prefstring="extensions.removedupes.skip_special_folders"
-              id="extensions.removedupes.skip_special_folders"
-              label="&message_comparison.skip_special_folders.label;"
-              accesskey="&message_comparison.skip_special_folders.access_key;"
-              autostretch="never"/>
             <checkbox preference="extensions.removedupes.compare_stripped_and_sorted_addresses"
               prefstring="extensions.removedupes.compare_stripped_and_sorted_addresses"
               id="extensions.removedupes.compare_stripped_and_sorted_addresses"
