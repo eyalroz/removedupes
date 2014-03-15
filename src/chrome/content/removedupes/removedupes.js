@@ -745,7 +745,7 @@ RemoveDupes.MessengerOverlay = {
         }
         if (currentTime - searchData.lastYield > searchData.yieldQuantum) {
   	searchData.lastYield = currentTime;
-  	yield;
+  	yield undefined;
         }
       }
       i++;
