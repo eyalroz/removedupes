@@ -61,22 +61,6 @@ DateService =
   Components.classes["@mozilla.org/intl/scriptabledateformat;1"]
             .getService(Components.interfaces.nsIScriptableDateFormat);
 
-var MessageStatusFlagValues = {
-  READ:           0x0001,
-  REPLIED:        0x0002,
-  MARKED:         0x0004,
-  EXPUNGED:       0x0008,
-  HAS_RE:         0x0010,
-  ELIDED:         0x0020,
-  OFFLINE:        0x0080,
-  WATCHED:        0x0100,
-  SENDER_AUTHED:  0x0200,
-  PARTIAL:        0x0400,
-  QUEUED:         0x0800,
-  FORWARDED:      0x1000,
-  PRIORITIES:     0xE000
-};
-
 // DupeMessageRecord - a self-describing class;
 // each dupe message in each dupe set will have a record built
 DupeMessageRecord = function(messageUri) {
@@ -105,8 +89,8 @@ DupeMessageRecord = function(messageUri) {
 
 function flagsToString(flags) {
   var str = '';
-  for(flagName in MessageStatusFlagValues) {
-    if (flags & MessageStatusFlagValues[flagName])
+  for(flagName in RemoveDupes.MessageStatusFlags) {
+    if (flags & RemoveDupes.MessageStatusFlags[flagName])
       str += ' | ' + flagName;
   }
   return str.replace(' | ','');

@@ -21,6 +21,30 @@ try {
   RemoveDupes.FolderFlags.Trash   = 0x0100;
 };
 
+RemoveDupes.MessageStatusFlags = {
+  READ:            0x00000001,
+  REPLIED:         0x00000002,
+  MARKED:          0x00000004,
+  EXPUNGED:        0x00000008,
+  HAS_RE:          0x00000010,
+  ELIDED:          0x00000020,
+  FEED_MSG:        0x00000040,
+  OFFLINE:         0x00000080,
+  WATCHED:         0x00000100,
+  SENDER_AUTHED:   0x00000200,
+  PARTIAL:         0x00000400,
+  QUEUED:          0x00000800,
+  FORWARDED:       0x00001000,
+//  PRIORITIES:      0x0000E000,
+//  NEW:             0x00010000,
+//  THREAD_IGNORED:  0x00040000,
+  IMAP_DELETED:    0x00200000,
+//  MDN_REPORT_NEEDED: 0x00400000,
+//  MDN_REPORT_SENT: 0x00800000,
+  IS_TEMPLATE:     0x01000000,
+  HAS_ATTACHMENTS: 0x10000000
+// LABELS:         0x0E000000;
+};
 
 //---------------------------------------------------------
 
