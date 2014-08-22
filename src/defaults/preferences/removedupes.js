@@ -2,6 +2,7 @@
 
 pref("extensions.removedupes.search_subfolders", true);
 pref("extensions.removedupes.skip_special_folders", true);
+pref("extensions.removedupes.skip_imap_deleted_messages", true);
 
 pref("extensions.removedupes.compare_stripped_and_sorted_addresses", false);
 // possible values are: seconds, minutes, hours, day, month, year

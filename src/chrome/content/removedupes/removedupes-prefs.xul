@@ -61,6 +61,9 @@
       <preference id="extensions.removedupes.skip_special_folders"
                   name="extensions.removedupes.skip_special_folders"
                   type="bool"/>
+      <preference id="extensions.removedupes.skip_imap_deleted_messages"
+                  name="extensions.removedupes.skip_imap_deleted_messages"
+                  type="bool"/>
       <preference id="extensions.removedupes.use_dialog_before_removal"
                   name="extensions.removedupes.use_dialog_before_removal"
                   type="bool"/>
@@ -88,6 +91,7 @@
       var _elementIDs = ["removedupes.search_subfolders",
                          "removedupes.compare_stripped_and_sorted_addresses",
                          "removedupes.skip_special_folders",
+                         "removedupes.skip_imap_deleted_messages",
                          "removedupes.use_dialog_before_removal",
                          "removedupes.default_action",
                          "removedupes.time_comparison_resolution",
@@ -122,6 +126,12 @@
               id="extensions.removedupes.skip_special_folders"
               label="&message_comparison.skip_special_folders.label;"
               accesskey="&message_comparison.skip_special_folders.access_key;"
+              autostretch="never"/>
+            <checkbox preference="extensions.removedupes.skip_imap_deleted_messages"
+              prefstring="extensions.removedupes.skip_imap_deleted_messages"
+              id="extensions.removedupes.skip_imap_deleted_messages"
+              label="&message_comparison.skip_imap_deleted_messages.label;"
+              accesskey="&message_comparison.skip_imap_deleted_messages.access_key;"
               autostretch="never"/>
             <checkbox preference="extensions.removedupes.search_subfolders"
               prefstring="extensions.removedupes.search_subfolders"
