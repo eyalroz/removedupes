@@ -46,6 +46,27 @@ RemoveDupes.MessageStatusFlags = {
 // LABELS:         0x0E000000;
 };
 
+RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
+  let msgfolder = null;
+  if (typeof MailUtils != 'undefined' && MailUtils.getFolderForURI) {
+    return MailUtils.getFolderForURI(uri, checkFolderAttributes);
+  }
+  try {
+    let resource = GetResourceFromUri(uri);
+    msgfolder = resource.QueryInterface(Components.interfaces.nsIMsgFolder);
+    if (checkFolderAttributes) {
+      if (!(msgfolder && (msgfolder.parent || msgfolder.isServer))) {
+        msgfolder = null;
+      }
+    }
+  }
+  catch (ex)  {
+    //dump("failed to get the folder resource\n"); 
+  }
+  return msgfolder;
+};
+
+
 //---------------------------------------------------------
 
 // Extension-Global Variables
@@ -428,7 +449,7 @@ RemoveDupes.Removal = {
       if ((targetFolderUri == null) || (targetFolderUri == "")) {
         targetFolder = getLocalFoldersTrashFolder().URI;
       }
-      else targetFolder = GetMsgFolderFromUri(targetFolderUri, true);
+      else targetFolder = RemoveDupes.GetMsgFolderFromUri(targetFolderUri, true);
       if (!targetFolder) {
         alert(RemoveDupes.Strings.formatStringFromName(
           'removedupes.no_such_folder', [targetFolderUri], 1));
