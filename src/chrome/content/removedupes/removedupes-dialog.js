@@ -686,7 +686,7 @@ function initializeFolderPicker() {
   // or the folder URIs may have changed for some reason
   try {
     uri = RemoveDupes.Prefs.getCharPref('default_target_folder', null);
-    msgFolder = GetMsgFolderFromUri(uri, false);
+    msgFolder = RemoveDupes.GetMsgFolderFromUri(uri, false);
   } catch(ex) { }
 
   if (!msgFolder) {
@@ -696,7 +696,7 @@ function initializeFolderPicker() {
     }
 #endif
     uri = RemoveDupes.Removal.getLocalFoldersTrashFolder().URI;
-    msgFolder = GetMsgFolderFromUri(uri, false);
+    msgFolder = RemoveDupes.GetMsgFolderFromUri(uri, false);
   }
 
 #ifdef DEBUG_initializeFolderPicker
