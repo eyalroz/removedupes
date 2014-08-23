@@ -50,3 +50,5 @@
 <!ENTITY general_settings.use_dialog_before_removal.access_key "G">
 <!ENTITY removedupes-preftree-label "Ta bort duplikat">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
+<!ENTITY message_comparison.skip_imap_deleted_messages.label "Skip IMAP messages marked 'Deleted'">
+<!ENTITY message_comparison.skip_imap_deleted_messages.access_key "d">
