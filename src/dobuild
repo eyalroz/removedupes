@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SHORTNAME="removedupes"
-VERSION="0.3.10"
+VERSION="0.3.11"
 
 TARGET="$1"
 case "$TARGET" in
