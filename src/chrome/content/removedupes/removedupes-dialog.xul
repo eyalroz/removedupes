@@ -48,6 +48,7 @@
             flex="2"
             persist="sortColumn sortDirection"
             onkeydown="onTreeKeyPress(event);"
+            onkeyup="onTreeKeyUp(event);"
             onclick="onClickTree(event);">
         <treecols>
           <treecol width="40"
@@ -157,7 +158,7 @@
                    accesskey="&action.move.accesskey;"/>
             <menulist id="actionTargetFolder" flex="1">
 #ifdef XBL_FOLDER_PICKER
-              <menupopup id="actionTargetFolderPopup" type="folder" mode="filing"
+              <menupopup id="actionTargetFolderPopup" type="folder" mode="filing" showFileHereLabel="true"
                          style="-moz-binding: url('chrome://messenger/content/folderWidgets.xml#folder-menupopup');"
                          oncommand="onTargetFolderClick(event.target._folder);"/>
 #endif
