@@ -31,6 +31,10 @@ var numberOfDupeSets;
 var totalNumberOfDupes;
 var numberToKeep;
 
+// used to detect tree selection changes, as onselect doesn't work for some reason
+var selectedRow = -1;
+
+
 #ifdef XBL_FOLDER_PICKER
 var dupeMoveTargetFolder;
   // workaround for Mozilla bug 473009 - 
@@ -485,6 +489,21 @@ function onTreeKeyPress(ev) {
   }
 }
 
+function onTreeKeyUp(ev) {
+#ifdef DEBUG_onTreeKeyUp
+  RemoveDupes.JSConsoleService.logStringMessage('onTreeKeyUp, keycode is ' + ev.keyCode);
+#endif
+ 
+#ifdef DEBUG_onTreeKeyPress
+  RemoveDupes.JSConsoleService.logStringMessage('selectedRow was ' + selectedRow + ', will now be ' + dupeSetTree.currentIndex);
+#endif
+  if (selectedRow != dupeSetTree.currentIndex) {
+    loadCurrentRowMessage();
+    selectedRow = dupeSetTree.currentIndex;
+  }
+}
+
+
 // onClickTree -
 // Either toggle the deleted status of the message, load it for display,
 // or do nothing
@@ -519,6 +538,10 @@ function onClickTree(ev) {
     return;
   }
 
+#ifdef DEBUG_onTreeKeyPress
+  RemoveDupes.JSConsoleService.logStringMessage('selectedRow was ' + selectedRow + ', will now be ' + dupeSetTree.currentIndex);
+#endif
+  selectedRow = dupeSetTree.currentIndex;
   loadCurrentRowMessage();
 }
 
@@ -545,7 +568,16 @@ function loadCurrentRowMessage() {
 #ifdef DEBUG_loadCurrentRowMessage
   RemoveDupes.JSConsoleService.logStringMessage('dupeSetHashValue = ' + dupeSetHashValue);
 #endif
-  var dupeSetItem = dupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
+  var dupeSetItem;
+  try {
+    dupeSetItem = dupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
+  } catch(ex) {
+#ifdef DEBUG_loadCurrentRowMessage
+  RemoveDupes.JSConsoleService.logStringMessage('Error retrieving dupe set item ' + messageIndexInDupeSet + ' in dupe set with hash ' + dupeSetHashValue);
+#endif
+    return;
+  }
+  
   var messageUri = dupeSetItem.uri;
   var folder = messenger.msgHdrFromURI(messageUri).folder;
   //msgFolder = folder.QueryInterface(Components.interfaces.nsIMsgFolder);
@@ -624,7 +656,11 @@ function onAccept() {
   if (!deletePermanently && (uri != null) && (uri != "")) {
     try {
       RemoveDupes.Prefs.setCharPref('default_target_folder', uri);
-    } catch(ex) { }
+    } catch(ex) { 
+#ifdef DEBUG_onAccept
+      RemoveDupes.JSConsoleService.logStringMessage('preference setting exception:\n' + ex);
+#endif
+    }
   }
   delete dupeSetsHashMap;
 }
