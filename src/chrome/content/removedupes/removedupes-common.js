@@ -5,6 +5,16 @@ if ("undefined" == typeof(RemoveDupes)) {
   var RemoveDupes = {};
 };
 
+if ("undefined" == typeof(MailUtils)) {
+  try {
+    Components.utils.import("resource:///modules/MailUtils.js");
+  } catch(ex) {
+#ifdef DEBUG_GetMsgFolderFromUri
+      RemoveDupes.JSConsoleService.logStringMessage('Failed importing MailUtils.js: \n' + ex);
+#endif
+  }
+};
+
 try {
   // for some reason this is no longer defined recent Seamonkey trunk versions
   RemoveDupes.FolderFlags = {}
@@ -47,23 +57,26 @@ RemoveDupes.MessageStatusFlags = {
 };
 
 RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
-  let msgfolder = null;
+  let messageFolder = null;
   if (typeof MailUtils != 'undefined' && MailUtils.getFolderForURI) {
     return MailUtils.getFolderForURI(uri, checkFolderAttributes);
   }
   try {
     let resource = GetResourceFromUri(uri);
-    msgfolder = resource.QueryInterface(Components.interfaces.nsIMsgFolder);
+    messageFolder = resource.QueryInterface(Components.interfaces.nsIMsgFolder);
     if (checkFolderAttributes) {
-      if (!(msgfolder && (msgfolder.parent || msgfolder.isServer))) {
-        msgfolder = null;
+      if (!(messageFolder && (messageFolder.parent || messageFolder.isServer))) {
+        messageFolder = null;
       }
     }
   }
   catch (ex)  {
-    //dump("failed to get the folder resource\n"); 
+#ifdef DEBUG_GetMsgFolderFromUri
+      RemoveDupes.JSConsoleService.logStringMessage(
+      'Failed obtaining a message folder object using the folder URI ' + uri + ' :\n' + ex);
+#endif
   }
-  return msgfolder;
+  return messageFolder;
 };
 
 
@@ -456,6 +469,9 @@ RemoveDupes.Removal = {
         return false;
       }
     }
+#ifdef DEBUG_removeDuplicates
+    RemoveDupes.JSConsoleService.logStringMessage('trgetFolder: ' + targetFolder);
+#endif
 
     var dupesByFolderHashMap =
       RemoveDupes.Removal.createDupesByFolderHashMap(
