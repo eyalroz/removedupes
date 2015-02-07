@@ -74,6 +74,9 @@ removedupes.jar:
     locale/sv-SE/removedupes/removedupes.dtd                      (chrome/locale/sv-SE/removedupes/removedupes.dtd)
     locale/sv-SE/removedupes/removedupes-prefs.dtd                (chrome/locale/sv-SE/removedupes/removedupes-prefs.dtd)
     locale/sv-SE/removedupes/removedupes.properties               (chrome/locale/sv-SE/removedupes/removedupes.properties)
+    locale/sl-SI/removedupes/removedupes.dtd                      (chrome/locale/sl-SI/removedupes/removedupes.dtd)
+    locale/sl-SI/removedupes/removedupes-prefs.dtd                (chrome/locale/sl-SI/removedupes/removedupes-prefs.dtd)
+    locale/sl-SI/removedupes/removedupes.properties               (chrome/locale/sl-SI/removedupes/removedupes.properties)
 *   content/removedupes/removedupes-prefs.xul                     (chrome/content/removedupes/removedupes-prefs.xul)
 *   content/removedupes/removedupes-button.xul                    (chrome/content/removedupes/removedupes-button.xul)
 *   skin/classic/removedupes/removedupes-messenger.css            (chrome/skin/classic/removedupes/removedupes-messenger.css)
@@ -112,6 +115,7 @@ removedupes.jar:
     locale/sv-SE/removedupes/contents.rdf                         (chrome/locale/sv-SE/removedupes/contents.rdf)
     locale/es-ES/removedupes/contents.rdf                         (chrome/locale/es-ES/removedupes/contents.rdf)
     locale/es-AR/removedupes/contents.rdf                         (chrome/locale/es-AR/removedupes/contents.rdf)
+    locale/sl-SI/removedupes/contents.rdf                         (chrome/locale/sl-SI/removedupes/contents.rdf)
 #endif
 
 #ifdef MOZ_THUNDERBIRD

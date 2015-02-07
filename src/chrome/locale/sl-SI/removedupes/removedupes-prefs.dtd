@@ -1,0 +1,54 @@
+﻿<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - Nastavitve">
+<!ENTITY guide-url "http://not.yet.written/">
+<!ENTITY message_comparison.tab_title "Primerjava sporočil">
+<!ENTITY message_comparison.criteria_box.label "Elementi sporočil, ki naj se uporabijo kot merilo za primerjavo">
+<!ENTITY message_comparison.skip_special_folders.label "Preskoči posebne mape (Poslano, Osnutki, itd.)">
+<!ENTITY message_comparison.skip_imap_deleted_messages.label "Preskoči sporočila IMAP označena 'Izbrisano'">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Primerjaj skrajšane in razvrščene naslove">
+<!ENTITY message_comparison.tab_description "Elementi sporočil, ki naj se uporabijo kot merilo za primerjavo:">
+<!ENTITY message_comparison.author.label "Avthor ('Od')">
+<!ENTITY message_comparison.recipients.label "Prejemniki ('Za')">
+<!ENTITY message_comparison.cc_list.label "Seznam Kp">
+<!ENTITY message_comparison.flags.label "Zastavice stanja">
+<!ENTITY message_comparison.message_id.label "ID sporočila">
+<!ENTITY message_comparison.num_lines.label "Število vrstic sporočila">
+<!ENTITY message_comparison.send_time.label "Čas pošiljanja">
+<!ENTITY message_comparison.size.label "Velikost">
+<!ENTITY message_comparison.subject.label "Zadeva">
+<!ENTITY message_comparison.folder.label "Mapa">
+<!ENTITY message_comparison.body.label "Telo">
+<!ENTITY message_comparison.skip_special_folders.access_key "b">
+<!ENTITY message_comparison.skip_imap_deleted_messages.access_key "a">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.access_key "e">
+<!ENTITY message_comparison.author.access_key "A">
+<!ENTITY message_comparison.flags.access_key "Z">
+<!ENTITY message_comparison.recipients.access_key "P">
+<!ENTITY message_comparison.cc_list.access_key "S">
+<!ENTITY message_comparison.message_id.access_key "D">
+<!ENTITY message_comparison.num_lines.access_key "Š">
+<!ENTITY message_comparison.send_time.access_key "Č">
+<!ENTITY message_comparison.size.access_key "V">
+<!ENTITY message_comparison.subject.access_key "Z">
+<!ENTITY message_comparison.folder.access_key "M">
+<!ENTITY message_comparison.body.access_key "T">
+<!ENTITY message_comparison.time_comparison_resolution.description "Ločljivost časovne primerjave:">
+<!ENTITY message_comparison.time_comparison_resolution.seconds.label "Sekunde">
+<!ENTITY message_comparison.time_comparison_resolution.minutes.label "Minute">
+<!ENTITY message_comparison.time_comparison_resolution.hours.label "Ure">
+<!ENTITY message_comparison.time_comparison_resolution.day.label "Dnevi">
+<!ENTITY message_comparison.time_comparison_resolution.month.label "Meseci">
+<!ENTITY message_comparison.time_comparison_resolution.year.label "Leta">
+<!ENTITY general_settings.tab_title "Splošne nastavitve">
+<!ENTITY general_settings.search_subfolders.label "Išči po podmapah izbranih nadrejenih map">
+<!ENTITY general_settings.search_subfolders_first.label "Išči najprej po podmapah (obratni vrstni red)">
+<!ENTITY general_settings.use_dialog_before_removal.label "Pred izbrisom preglej rezultate iskanja">
+<!ENTITY general_settings.default_action.description "Privzeto dejanje za podvojena sporočila:">
+<!ENTITY general_settings.default_action.delete_permanently.label "Trajno izbriši">
+<!ENTITY general_settings.default_action.move.label "Premakni v Koš">
+<!ENTITY general_settings.default_action.delete_permanently.accesskey "T">
+<!ENTITY general_settings.default_action.move.accesskey "P">
+<!ENTITY general_settings.search_subfolders_first.access_key "n">
+<!ENTITY general_settings.search_subfolders.access_key "š">
+<!ENTITY general_settings.use_dialog_before_removal.access_key "e">
+<!ENTITY removedupes-preftree-label "Odstrani podvojena sporočila">
+<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">

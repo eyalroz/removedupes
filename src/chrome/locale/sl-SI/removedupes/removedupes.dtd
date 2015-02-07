@@ -1,0 +1,36 @@
+﻿<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Odstrani podvojena sporočila …">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Nastavi mape izv. sporočil za naslednje iskanje pod. sporočil">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "O">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "N">
+<!ENTITY key-removedupes.modifiers "accel,shift">
+<!ENTITY key-removedupes.keycode "O">
+<!ENTITY removedupes_dialog.dialog_title "Izbris podvojenih sporočil">
+<!ENTITY removedupes_dialog.id "ID sporočila">
+<!ENTITY removedupes_dialog.keep_label "V vsakem nizu podvojenih sporočil ohrani:">
+<!ENTITY removedupes_dialog.subject "Zadeva">
+<!ENTITY removedupes_dialog.sender "Pošiljatelj">
+<!ENTITY removedupes_dialog.author "Avtor">
+<!ENTITY removedupes_dialog.recipients "Prejemniki">
+<!ENTITY removedupes_dialog.cc_list "Seznam Kp">
+<!ENTITY removedupes_dialog.flags "Zastavice">
+<!ENTITY removedupes_dialog.folder "Mapa">
+<!ENTITY removedupes_dialog.line_count "Št. vrstic">
+<!ENTITY removedupes_dialog.date "Datum">
+<!ENTITY removedupes_dialog.send_time "Čas pošiljanja">
+<!ENTITY removedupes_dialog.size "Velikost">
+<!ENTITY removedupes_dialog.keep_preset_originals.label "Prednastavi izvirna sporočila">
+<!ENTITY removedupes_dialog.keep_first.label "prvo kopijo">
+<!ENTITY removedupes_dialog.keep_last.label "zadnjo kopijo">
+<!ENTITY removedupes_dialog.keep_none.label "nobene kopije">
+<!ENTITY removedupes_dialog.keep_all.label "vse kopije">
+<!ENTITY removedupes_dialog.tree_label "Nizi podvojenih sporočil:">
+<!ENTITY removedupes_dialog.keep_flag "Ohrani?">
+<!ENTITY removedupes_dialog.action_label "Dejanje:">
+<!ENTITY action.delete_permanently.label "Trajno izbriši">
+<!ENTITY action.delete_permanently.accesskey "T">
+<!ENTITY action.move.label "Premakni v:">
+<!ENTITY action.move.accesskey "P">
+<!ENTITY removeduplicates-button.label "Odstrani podvojena sporočila">
+<!ENTITY removeduplicates-button.tip "Odstrani podvojena sporočila …">
+<!ENTITY removedupes.criteria_menu.label "Merilo za primerjavo:">
