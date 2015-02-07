@@ -61,6 +61,7 @@ if(retval == SUCCESS)
     registerChrome(localeFlag, folder, "locale/is-IS/" + name + "/");
     registerChrome(localeFlag, folder, "locale/es-ES/" + name + "/");
     registerChrome(localeFlag, folder, "locale/sv-SE/" + name + "/");
+    registerChrome(localeFlag, folder, "locale/sl-SI/" + name + "/");
 
     registerChrome(skinFlag, folder, "skin/classic/" + name + "/");
 //    registerChrome(skinFlag, folder, "skin/modern/" + name + "/");
