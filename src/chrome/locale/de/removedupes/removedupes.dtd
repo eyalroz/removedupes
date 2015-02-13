@@ -18,7 +18,7 @@
 <!ENTITY removedupes_dialog.line_count "# Zeilen">
 <!ENTITY removedupes_dialog.date "Datum">
 <!ENTITY removedupes_dialog.send_time "Absendezeit">
-<!ENTITY removedupes_dialog.size "Size">
+<!ENTITY removedupes_dialog.size "Größe">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "Original ist">
 <!ENTITY removedupes_dialog.keep_first.label "Erstes Exemplar">
 <!ENTITY removedupes_dialog.keep_last.label "Letztes Exemplar">

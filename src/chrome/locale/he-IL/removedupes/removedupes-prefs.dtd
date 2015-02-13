@@ -3,7 +3,6 @@
 <!ENTITY message_comparison.tab_title "השוואת הודעות">
 <!ENTITY message_comparison.criteria_box.label "רכיבי ההודעה המשמשים להשוואת הודעות">
 <!ENTITY message_comparison.skip_special_folders.label "דלג על תיקיות מיוחדות (נשלח, טיוטות וכיוצא באלה)">
-<!ENTITY message_comparison.skip_imap_deleted_messages.label "דלג על הודעות IMAP המסומנות 'הודעה מחוקה'">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "השווה כתובות עריות וממוינות">
 <!ENTITY message_comparison.tab_description "רכיבים בהודעה המשמשים כקריטריונים להשוואה:">
 <!ENTITY message_comparison.author.label "מחבר (&apos;מאת&apos;)">
@@ -11,14 +10,13 @@
 <!ENTITY message_comparison.cc_list.label "מקבלי עותק">
 <!ENTITY message_comparison.flags.label "דגלי מצב">
 <!ENTITY message_comparison.message_id.label "מזהה הודעה">
-<!ENTITY message_comparison.num_lines.label "מספר שורות בגוף ההודעה">
+<!ENTITY message_comparison.num_lines.label "מספר שורות בהודעה">
 <!ENTITY message_comparison.send_time.label "זמן משלוח">
 <!ENTITY message_comparison.size.label "גודל">
 <!ENTITY message_comparison.subject.label "נושא">
 <!ENTITY message_comparison.folder.label "תיקיה">
 <!ENTITY message_comparison.body.label "גוף ההודעה">
 <!ENTITY message_comparison.skip_special_folders.access_key "ת">
-<!ENTITY message_comparison.skip_imap_deleted_messages.access_key "מ">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.access_key "ע">
 <!ENTITY message_comparison.author.access_key "מ">
 <!ENTITY message_comparison.flags.access_key "ד">
