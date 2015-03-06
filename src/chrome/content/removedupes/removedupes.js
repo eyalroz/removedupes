@@ -138,7 +138,7 @@ RemoveDupes.MessengerOverlay = {
       RemoveDupes.MessengerOverlay.addSearchFolders(folder,searchData);
     }
 
-    if (searchData.folders.length == 0) {
+    if (searchData.folders.size == 0) {
       // all top folders were special folders and therefore skipped
       alert(RemoveDupes.Strings.GetStringFromName(
         'removedupes.not_searching_special_folders'));
@@ -218,11 +218,11 @@ RemoveDupes.MessengerOverlay = {
 
     if (folder.URI.substring(0,7) != 'news://') {
       if (searchData.originalsFolderUris) {
-        if (!searchData.originalsFolderUris[folder.URI]) {
+        if (!searchData.originalsFolderUris.has(folder.URI)) {
 #ifdef DEBUG_addSearchFolders
           RemoveDupes.JSConsoleService.logStringMessage('pushing non-originals folder ' + folder.abbreviatedName);
 #endif
-          searchData.folders.push(folder);
+          searchData.folders.add(folder);
         }
 #ifdef DEBUG_addSearchFolders
         else RemoveDupes.JSConsoleService.logStringMessage('not pushing folder ' + folder.abbreviatedName + ' - it\'s an originals folder');
@@ -232,7 +232,7 @@ RemoveDupes.MessengerOverlay = {
 #ifdef DEBUG_addSearchFolders
         RemoveDupes.JSConsoleService.logStringMessage('pushing folder ' + folder.abbreviatedName);
 #endif
-        searchData.folders.push(folder);
+        searchData.folders.add(folder);
       }
     }
 #ifdef DEBUG_addSearchFolders
@@ -334,8 +334,8 @@ RemoveDupes.MessengerOverlay = {
     searchData.remainingFolders--;
 
 #ifdef DEBUG_traverseSearchFolderSubfolders
-    RemoveDupes.JSConsoleService.logStringMessage('
-      returning from traverseSearchFolderSubfolders for folder ' + folder.abbreviatedName);
+    RemoveDupes.JSConsoleService.logStringMessage(
+      'returning from traverseSearchFolderSubfolders for folder ' + folder.abbreviatedName);
 #endif
   },
 
@@ -632,44 +632,84 @@ RemoveDupes.MessengerOverlay = {
 #ifdef DEBUG_populateDupeSetsHash
      if (searchData.originalsFolders) {
        RemoveDupes.JSConsoleService.logStringMessage('number of search folders: ' +
-         searchData.originalsFolders.length + ' originals + ' +
-         searchData.folders.length + ' others' );
+         searchData.originalsFolders.size + ' originals + ' +
+         searchData.folders.size + ' others' );
      }
      else RemoveDupes.JSConsoleService.logStringMessage(
-       'number of search folders: ' + searchData.folders.length);
+       'Before iteration. Number of search folders: ' + searchData.folders.size);
 #endif
 
-    // this next bit of code is super-ugly, because I need the yield'ing to happen from 
+    // This next bit of code is super-ugly, because I need the yield'ing to happen from 
     // this function - can't yield from a function you're calling; isn't life great?
     // isn't lack of threading fun?
+    //
+    // Anyway, we want to have a function which takes an iterator into a collection of
+    // folders, populating the hash with the messages in each folder - and run it twice,
+    // first for the originals folder (allowing the creation of new dupe sets), then
+    // for the search folders (allowing the creation of dupe sets if there are no originals,
+    // and allowing the addition of dupes to existing sets
+
+#ifdef DEBUG_populateDupeSetsHash
     var i = 0;
-    var endI = 0;
-    if (searchData.originalsFolders)
-      endI = searchData.originalsFolders.length;
-    var allowNewUris = true;
-    var doneWithOriginals = false;
-    var folders = searchData.originalsFolders;
-    while (   (i < endI || !doneWithOriginals)
-           && (   !searchData.limitNumberOfMessages 
-               || (searchData.messagesHashed < searchData.maxMessages))  ) {
-      if (i == endI) {
+#endif
+
+    var allowNewDupeSets = true;
+    var doneWithOriginals;
+    var foldersIterator;
+    if (searchData.originalsFolders && searchData.originalsFolders.size() != 0) {
+      doneWithOriginals = false;
+      foldersIterator = searchData.originalsFolders.values();
+    }
+    else {
+      doneWithOriginals = true;
+      foldersIterator = searchData.folders.values();
+    }
+    var maybeNext = foldersIterator.next();
+#ifdef DEBUG_populateDupeSetsHash
+    RemoveDupes.JSConsoleService.logStringMessage('next()ed!');
+#endif
+
+    while (!maybeNext.done || !doneWithOriginals) {
+
+#ifdef DEBUG_populateDupeSetsHash
+      RemoveDupes.JSConsoleService.logStringMessage('At iteration ' + i + '.');
+#endif
+
+      if (maybeNext.done) { 
+        // ... we continued looping since !doneWithOriginals . Now
+        // let's move on to iterating the search folders.
         doneWithOriginals = true;
-        folders = searchData.folders;
-        if (folders.length == 0)
+        if (searchData.folders.size == 0) {
+          // this should really not happen...
           break;
-        endI = folders.length;
-        allowNewUris = (searchData.originalsFolders ? false : true);
-        i = 0;
+        }
+        foldersIterator = searchData.folders.values();
+        allowNewDupeSets = (searchData.originalsFolders ? false : true);
+        maybeNext = foldersIterator.next();
       }
-      var folder = folders[i];
+      var folder = maybeNext.value.QueryInterface(Components.interfaces.nsIMsgFolder);
+#ifdef DEBUG_populateDupeSetsHash
+      if (i > 100) break;
+#endif
+      if (!folder) {
+
+#ifdef DEBUG_populateDupeSetsHash
+      RemoveDupes.JSConsoleService.logStringMessage(
+          'populateDupeSetsHash got a supposed-folter to traverse which isn\'t a folder: ' + maybeNext.value);
+#endif
+        break;
+      }
 #ifdef DEBUG_populateDupeSetsHash
       RemoveDupes.JSConsoleService.logStringMessage(
           'populateDupeSetsHash for folder ' + folder.abbreviatedName + '\n' +
-          (allowNewUris ? '' : 'not') + 'allowing new URIs');
+          (allowNewDupeSets ? '' : 'not') + 'allowing new URIs');
 #endif
       if (folder.isServer == true) {
-        // shouldn't get here
-        i++;
+        // shouldn't get here - these should have been filtered out already
+        maybeNext = foldersIterator.next();
+#ifdef DEBUG_populateDupeSetsHash
+    RemoveDupes.JSConsoleService.logStringMessage('next()ed!');
+#endif
         continue;
       }
 
@@ -688,9 +728,9 @@ RemoveDupes.MessengerOverlay = {
           folderMessageHdrsIterator = folder.messages;
         } catch(ex) {
 #ifdef DEBUG
-            RemoveDupes.JSConsoleService.logStringMessage('accessing messages failed for folder ' + folder.abbreviatedName + ' :\n' + ex);
+          RemoveDupes.JSConsoleService.logStringMessage('accessing messages failed for folder ' + folder.abbreviatedName + ' :\n' + ex);
 #else
-            dump(RemoveDupes.Strings.formatStringFromName('removedupes.failed_getting_messages', [folder.abbreviatedName], 1) + '\n');
+          dump(RemoveDupes.Strings.formatStringFromName('removedupes.failed_getting_messages', [folder.abbreviatedName], 1) + '\n');
 #endif
         }
       }
@@ -737,7 +777,7 @@ RemoveDupes.MessengerOverlay = {
 #ifdef DEBUG_populateDupeSetsHash
           RemoveDupes.JSConsoleService.logStringMessage('RemoveDupes.MessengerOverlay.sillyHash\n' + messageHash + '\nis not a dupe (or a first dupe)');
 #endif
-          if (allowNewUris) {
+          if (allowNewDupeSets) {
             messageUriHashmap[messageHash] = uri;
           }
         }
@@ -755,7 +795,13 @@ RemoveDupes.MessengerOverlay = {
           yield undefined;
         }
       }
+#ifdef DEBUG_populateDupeSetsHash
       i++;
+#endif
+      maybeNext = foldersIterator.next();
+#ifdef DEBUG_populateDupeSetsHash
+      RemoveDupes.JSConsoleService.logStringMessage('next()ed!');
+#endif
     }
   },
 
@@ -1029,7 +1075,7 @@ RemoveDupes.MessengerOverlay = {
       gFolderTreeView.getCellProperties = function newGcp(aRow, aCol, aProps) {
         gFolderTreeView.preRDGetCellProperties(aRow, aCol, aProps);
         var row = gFolderTreeView._rowMap[aRow];
-        if (RemoveDupes.MessengerOverlay.originalsFolderUris && RemoveDupes.MessengerOverlay.originalsFolderUris[row._folder.URI]) {
+        if (RemoveDupes.MessengerOverlay.originalsFolderUris && RemoveDupes.MessengerOverlay.originalsFolderUris.has(row._folder.URI)) {
           aProps.AppendElement(atomService.getAtom("isOriginalsFolder-true"));
         }
         else {
@@ -1042,7 +1088,7 @@ RemoveDupes.MessengerOverlay = {
       gFolderTreeView.getCellProperties = function newGcp(aRow, aCol) {
         var properties = gFolderTreeView.preRDGetCellProperties(aRow, aCol);
         var row = gFolderTreeView._rowMap[aRow];
-        if (RemoveDupes.MessengerOverlay.originalsFolderUris && RemoveDupes.MessengerOverlay.originalsFolderUris[row._folder.URI]) {
+        if (RemoveDupes.MessengerOverlay.originalsFolderUris && RemoveDupes.MessengerOverlay.originalsFolderUris.has(row._folder.URI)) {
           properties += " isOriginalsFolder-true";
         }
         return properties;
@@ -1053,10 +1099,12 @@ RemoveDupes.MessengerOverlay = {
 
   setOriginalsFolders : function() {
     if (typeof gFolderTreeView == 'undefined') {
-      RemoveDupes.MessengerOverlay.originalsFolders = GetSelectedMsgFolders();
-      RemoveDupes.MessengerOverlay.originalsFolderUris = new Object;
-      for(var i = 0; i < RemoveDupes.MessengerOverlay.originalsFolders.length; i++) {
-        RemoveDupes.MessengerOverlay.originalsFolderUris[RemoveDupes.MessengerOverlay.originalsFolders[i].URI] = true;
+      var GetSelectedMsgFolders = GetSelectedMsgFolders();
+      RemoveDupes.MessengerOverlay.originalsFolders = new Set;
+      RemoveDupes.MessengerOverlay.originalsFolderUris = new Set;
+      for(var i = 0; i < GetSelectedMsgFolders.length; i++) {
+        RemoveDupes.MessengerOverlay.originalsFolders.add(RemoveDupes.MessengerOverlay.originalsFolders[i]);
+        RemoveDupes.MessengerOverlay.originalsFolderUris.add(RemoveDupes.MessengerOverlay.originalsFolders[i].URI);
       }
       return;
     }
@@ -1067,8 +1115,8 @@ RemoveDupes.MessengerOverlay = {
     var selection = gFolderTreeView._treeElement.view.selection;
     var rangeCount = selection.getRangeCount();
     var numSelectedFolders = 0;
-    RemoveDupes.MessengerOverlay.originalsFolders = new Array;
-    RemoveDupes.MessengerOverlay.originalsFolderUris = new Object;
+    RemoveDupes.MessengerOverlay.originalsFolders = new Set;
+    RemoveDupes.MessengerOverlay.originalsFolderUris = new Set;
     var skipSpecialFolders = 
       RemoveDupes.Prefs.getBoolPref('skip_special_folders','true');
     for (var i = 0; i < rangeCount; i++) {
@@ -1089,8 +1137,8 @@ RemoveDupes.MessengerOverlay = {
             continue;
           }
         }
-        RemoveDupes.MessengerOverlay.originalsFolders.push(folder);
-        RemoveDupes.MessengerOverlay.originalsFolderUris[folder.URI] = true;
+        RemoveDupes.MessengerOverlay.originalsFolders.add(folder);
+        RemoveDupes.MessengerOverlay.originalsFolderUris.add(folder.URI);
       }
     }
     gFolderTreeView._tree.invalidate();
@@ -1235,7 +1283,7 @@ RemoveDupes.DupeSearchData = function ()
   this.remainingFolders = 0;
 
   this.dupeSetsHashMap = new Object;
-  this.folders = new Array;
+  this.folders = new Set;
 
   // these are used for reporting progress in the status bar
   this.messagesHashed = 0;

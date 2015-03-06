@@ -12,7 +12,7 @@ var dbView;
 var dupeSetsHashMap; 
   // the sets of duplicate messages we're reviewing for deletion
 var originalsFolderUris;
-  // the URIs of the folders containing the original
+  // A set of the URIs of the folders containing the original
   // messages, if the search specified these
 var allowMD5IDSubstitutes;
   // how do we treat MD5 hashes as substitutes for message IDs?
@@ -162,8 +162,7 @@ function initDupeReviewDialog() {
       if (originalsFolderUris) {
         // if we have pre-set originals folders, the default is to 
         // keep all of messages in them and remove their dupes elsewhere
-        dupeSet[i].toKeep =
-          (originalsFolderUris[dupeSet[i].folderUri] ? true : false);
+        dupeSet[i].toKeep = originalsFolderUris.has(dupeSet[i].folderUri);
       }
       totalNumberOfDupes++;
 #ifdef DEBUG_initDupeReviewDialog
@@ -698,8 +697,7 @@ function markKeepPresetOriginals() {
   for (hashValue in dupeSetsHashMap) {
     var dupeSet = dupeSetsHashMap[hashValue];
     for (var i=0; i < dupeSet.length; i++ ) {
-      dupeSet[i].toKeep =
-        (originalsFolderUris[dupeSet[i].folderUri] ? true : false);
+      dupeSet[i].toKeep = originalsFolderUris.has(dupeSet[i].folderUri);
     }
   }
   resetCheckboxValues();
