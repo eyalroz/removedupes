@@ -656,7 +656,7 @@ RemoveDupes.MessengerOverlay = {
     var allowNewDupeSets = true;
     var doneWithOriginals;
     var foldersIterator;
-    if (searchData.originalsFolders && searchData.originalsFolders.size() != 0) {
+    if (searchData.originalsFolders && searchData.originalsFolders.size != 0) {
       doneWithOriginals = false;
       foldersIterator = searchData.originalsFolders.values();
     }
