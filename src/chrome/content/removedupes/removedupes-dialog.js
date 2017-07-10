@@ -79,9 +79,21 @@ DupeMessageRecord = function(messageUri) {
     messageHdr.messageId : '');
   this.send_time    = messageHdr.dateInSeconds;
   this.size         = messageHdr.messageSize;
-  this.subject      = messageHdr.mime2DecodedSubject;
-  this.author       = messageHdr.mime2DecodedAuthor;
-  this.recipients   = messageHdr.mime2DecodedRecipients;
+  try {
+    this.subject    = messageHdr.mime2DecodedSubject;
+  } catch(ex) {
+    this.subject    = '(decoding failure)';
+  }
+  try {
+    this.author     = messageHdr.mime2DecodedAuthor;
+  } catch(ex) {
+    this.author     = '(decoding failure)';
+  }
+  try {
+    this.recipients = messageHdr.mime2DecodedRecipients;
+  } catch(ex) {
+    this.recipients = '(decoding failure)';
+  }
   this.cc_list      = messageHdr.ccList;
   //this.flags      = "0x" + num2hex(messageHdr.flags);
   this.flags        = 
