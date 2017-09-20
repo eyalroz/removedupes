@@ -3,6 +3,7 @@
 <!ENTITY message_comparison.tab_title "郵件比對">
 <!ENTITY message_comparison.criteria_box.label "用來做為比對基準的郵件元素">
 <!ENTITY message_comparison.skip_special_folders.label "略過指定的資料夾 (寄件匣、草稿匣等。)">
+<!ENTITY message_comparison.skip_imap_deleted_messages.label "Skip IMAP messages marked 'Deleted'">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "比對 stripped 和已排序的地址">
 <!ENTITY message_comparison.tab_description "用來做為比對標準的郵件元素:">
 <!ENTITY message_comparison.author.label "寄件者 (&apos;From&apos; 地址)">
@@ -17,6 +18,7 @@
 <!ENTITY message_comparison.folder.label "資料夾">
 <!ENTITY message_comparison.body.label "內文">
 <!ENTITY message_comparison.skip_special_folders.access_key "k">
+<!ENTITY message_comparison.skip_imap_deleted_messages.access_key "d">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.access_key "r">
 <!ENTITY message_comparison.author.access_key "A">
 <!ENTITY message_comparison.flags.access_key "F">
