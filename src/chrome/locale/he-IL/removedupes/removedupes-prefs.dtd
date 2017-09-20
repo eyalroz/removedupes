@@ -1,12 +1,13 @@
-<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - אפשרויות">
+<!ENTITY prefs_dialog_title "הסר הודעות כפולות (ההרחבה החלופית) - אפשרויות">
 <!ENTITY guide-url "http://not.yet.written/">
 <!ENTITY message_comparison.tab_title "השוואת הודעות">
 <!ENTITY message_comparison.criteria_box.label "רכיבי ההודעה המשמשים להשוואת הודעות">
 <!ENTITY message_comparison.skip_special_folders.label "דלג על תיקיות מיוחדות (נשלח, טיוטות וכיוצא באלה)">
+<!ENTITY message_comparison.skip_imap_deleted_messages.label "דלג על הודעות IMAP מחוקות">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "השווה כתובות עריות וממוינות">
-<!ENTITY message_comparison.tab_description "רכיבים בהודעה המשמשים כקריטריונים להשוואה:">
-<!ENTITY message_comparison.author.label "מחבר (&apos;מאת&apos;)">
-<!ENTITY message_comparison.recipients.label "נמנענים (&apos;אל&apos;)">
+<!ENTITY message_comparison.tab_description "רכיבים בהודעה המשמשים כאבני בוחן להשוואה:">
+<!ENTITY message_comparison.author.label "מחבר ('מאת')">
+<!ENTITY message_comparison.recipients.label "נמנענים ('אל')">
 <!ENTITY message_comparison.cc_list.label "מקבלי עותק">
 <!ENTITY message_comparison.flags.label "דגלי מצב">
 <!ENTITY message_comparison.message_id.label "מזהה הודעה">
@@ -17,6 +18,7 @@
 <!ENTITY message_comparison.folder.label "תיקיה">
 <!ENTITY message_comparison.body.label "גוף ההודעה">
 <!ENTITY message_comparison.skip_special_folders.access_key "ת">
+<!ENTITY message_comparison.skip_imap_deleted_messages.access_key "ח">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.access_key "ע">
 <!ENTITY message_comparison.author.access_key "מ">
 <!ENTITY message_comparison.flags.access_key "ד">
@@ -49,4 +51,4 @@
 <!ENTITY general_settings.search_subfolders.access_key "ת">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "ב">
 <!ENTITY removedupes-preftree-label "הסר כפולים">
-<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes-preftree-page-title "הסר הודעות כפולות (ההרחבה החלופית)">

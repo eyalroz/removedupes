@@ -3,6 +3,7 @@
 <!ENTITY message_comparison.tab_title "Comparação de Mensagens">
 <!ENTITY message_comparison.criteria_box.label "Elementos da mensagem utilizados como critério de comparação">
 <!ENTITY message_comparison.skip_special_folders.label "Saltar pastas especiais (Enviados, Rascunhos etc.)">
+<!ENTITY message_comparison.skip_imap_deleted_messages.label "Skip IMAP messages marked 'Deleted'">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Comparar endereços cortados e ordenados">
 <!ENTITY message_comparison.tab_description "Elementos da mensagem utilizados como critério de comparação:">
 <!ENTITY message_comparison.author.label "Autor (Campo &apos;De&apos;)">
@@ -17,6 +18,7 @@
 <!ENTITY message_comparison.folder.label "Pasta">
 <!ENTITY message_comparison.body.label "Corpo">
 <!ENTITY message_comparison.skip_special_folders.access_key "l">
+<!ENTITY message_comparison.skip_imap_deleted_messages.access_key "d">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.access_key "r">
 <!ENTITY message_comparison.author.access_key "A">
 <!ENTITY message_comparison.flags.access_key "E">
