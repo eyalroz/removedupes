@@ -83,10 +83,10 @@
 
 #endif
 
-    <script type="application/x-javascript"
+    <script type="application/javascript"
       src="chrome://removedupes/content/removedupes-prefs.js"/>
 #ifdef MOZ_PRETOOLKIT_SEAMONKEY
-    <script type="application/x-javascript">
+    <script type="application/javascript">
       var panel = "chrome://removedupes/content/removedupes-prefs.xul";
       var _elementIDs = ["removedupes.search_subfolders",
                          "removedupes.compare_stripped_and_sorted_addresses",
