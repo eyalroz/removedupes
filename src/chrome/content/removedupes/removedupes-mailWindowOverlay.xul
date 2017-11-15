@@ -11,8 +11,8 @@
 
 <overlay id="removedupesOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-  <script type="application/javascript;version=1.7" src="chrome://removedupes/content/removedupes.js"/>
-  <script type="application/javascript;version=1.7" src="chrome://removedupes/content/removedupes-common.js"/>
+  <script type="application/javascript" src="chrome://removedupes/content/removedupes.js"/>
+  <script type="application/javascript" src="chrome://removedupes/content/removedupes-common.js"/>
 
   <keyset id="mailKeys">
     <key id="key-removedupes"
