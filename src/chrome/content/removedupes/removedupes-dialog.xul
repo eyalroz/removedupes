@@ -20,20 +20,20 @@
         id="removeDuplicatesReviewDialog"
         title="&removedupes_dialog.dialog_title;">
 
-  <script type="application/x-javascript" src="chrome://messenger/content/widgetglue.js"/>
-  <script type="application/x-javascript">
+  <script type="application/javascript" src="chrome://messenger/content/widgetglue.js"/>
+  <script type="application/javascript">
     const Cc = Components.classes;
     const Ci = Components.interfaces;
   </script>
 
-  <script type="application/x-javascript" src="chrome://removedupes/content/removedupes-common.js"/>
+  <script type="application/javascript" src="chrome://removedupes/content/removedupes-common.js"/>
 #ifdef XBL_FOLDER_PICKER
-  <script type="application/x-javascript" src="chrome://removedupes/content/removedupes-dialog.js"/>
+  <script type="application/javascript" src="chrome://removedupes/content/removedupes-dialog.js"/>
 #else
 #ifdef MOZ_THUNDERBIRD
-  <script type="application/x-javascript" src="chrome://removedupes/content/removedupes-dialog.tb2.js"/>
+  <script type="application/javascript" src="chrome://removedupes/content/removedupes-dialog.tb2.js"/>
 #else
-  <script type="application/x-javascript" src="chrome://removedupes/content/removedupes-dialog.js"/>
+  <script type="application/javascript" src="chrome://removedupes/content/removedupes-dialog.js"/>
 #endif
 #endif
 
