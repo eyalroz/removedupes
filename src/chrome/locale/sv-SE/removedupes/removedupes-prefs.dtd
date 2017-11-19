@@ -3,16 +3,16 @@
 <!ENTITY message_comparison.tab_title "Meddelandejämförelse">
 <!ENTITY message_comparison.criteria_box.label "Jämförelsekriterier">
 <!ENTITY message_comparison.skip_special_folders.label "Uteslut specialmappar (Skickat, Utkast etc.)">
-<!ENTITY message_comparison.skip_imap_deleted_messages.label "Skip IMAP messages marked 'Deleted'">
+<!ENTITY message_comparison.skip_imap_deleted_messages.label "Hoppa över IMAP-meddelanden som är markerade med 'Raderad'">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Jämför avskalade och sorterade adresser">
 <!ENTITY message_comparison.tab_description "Meddelandeelement som skall jämföras:">
-<!ENTITY message_comparison.author.label "Författare (&apos;Från&apos;)">
-<!ENTITY message_comparison.recipients.label "Mottagare (&apos;Till&apos;)">
-<!ENTITY message_comparison.cc_list.label "Kopie-mottagarlista (&apos;CC&apos;)">
+<!ENTITY message_comparison.author.label "Författare ('Från')">
+<!ENTITY message_comparison.recipients.label "Mottagare ('Till')">
+<!ENTITY message_comparison.cc_list.label "Kopie-mottagarlista ('CC')">
 <!ENTITY message_comparison.flags.label "Statusflaggor">
 <!ENTITY message_comparison.message_id.label "Meddelande-ID">
 <!ENTITY message_comparison.num_lines.label "Antal rader i meddelandet">
-<!ENTITY message_comparison.send_time.label "Tidpunkt för sändning (&apos;Datum&apos;)">
+<!ENTITY message_comparison.send_time.label "Tidpunkt för sändning ('Datum')">
 <!ENTITY message_comparison.size.label "Storlek">
 <!ENTITY message_comparison.subject.label "Ämne">
 <!ENTITY message_comparison.folder.label "Mapp">
