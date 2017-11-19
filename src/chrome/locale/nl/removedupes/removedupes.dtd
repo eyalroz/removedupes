@@ -5,19 +5,19 @@
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "O">
 <!ENTITY key-removedupes.modifiers "accel, shift">
 <!ENTITY key-removedupes.keycode "D">
-<!ENTITY removedupes_dialog.dialog_title "Duplicaatberichten verwijderen">
+<!ENTITY removedupes_dialog.dialog_title "Dubbele berichten verwijderen">
 <!ENTITY removedupes_dialog.id "Bericht-ID">
-<!ENTITY removedupes_dialog.keep_label "In elke set duplicaten het volgende bewaren:">
+<!ENTITY removedupes_dialog.keep_label "In elke set duplicaten, behouden:">
 <!ENTITY removedupes_dialog.subject "Onderwerp">
 <!ENTITY removedupes_dialog.sender "Afzender">
 <!ENTITY removedupes_dialog.author "Schrijver">
 <!ENTITY removedupes_dialog.recipients "Ontvangers">
 <!ENTITY removedupes_dialog.cc_list "CC-lijst">
-<!ENTITY removedupes_dialog.flags "Labels">
+<!ENTITY removedupes_dialog.flags "Vlaggen">
 <!ENTITY removedupes_dialog.folder "Map">
 <!ENTITY removedupes_dialog.line_count "Aantal regels">
 <!ENTITY removedupes_dialog.date "Datum">
-<!ENTITY removedupes_dialog.send_time "Verzendtijd">
+<!ENTITY removedupes_dialog.send_time "Tijdstip van verzenden">
 <!ENTITY removedupes_dialog.size "Grootte">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "Ingestelde originelen">
 <!ENTITY removedupes_dialog.keep_first.label "Eerste exemplaar">
@@ -32,5 +32,5 @@
 <!ENTITY action.move.label "Verplaatsen naar:">
 <!ENTITY action.move.accesskey "V">
 <!ENTITY removeduplicates-button.label "Duplicaten verwijderen">
-<!ENTITY removeduplicates-button.tip "Duplicaatberichten verwijderen…">
+<!ENTITY removeduplicates-button.tip "Dubbele berichten verwijderen…">
 <!ENTITY removedupes.criteria_menu.label "Vergelijkingscriteria:">

@@ -1,36 +1,36 @@
-<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - instellingen">
+<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - Instellingen">
 <!ENTITY guide-url "http://nog.niet.geschreven/">
 <!ENTITY message_comparison.tab_title "Berichtvergelijking">
-<!ENTITY message_comparison.criteria_box.label "Berichtelementen die worden gebruikt als vergelijkingscriteria">
-<!ENTITY message_comparison.skip_special_folders.label "Speciale mappen (Verzonden, Concepten enz.) overslaan">
+<!ENTITY message_comparison.criteria_box.label "Berichtelementen die als vergelijkingscriteria worden gebruikt">
+<!ENTITY message_comparison.skip_special_folders.label "Speciale mappen (Verzonden, Concepten etc.) overslaan">
 <!ENTITY message_comparison.skip_imap_deleted_messages.label "Als ‘Verwijderd’ gemarkeerde IMAP-berichten overslaan">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Adressen gestript en gesorteerd vergelijken">
-<!ENTITY message_comparison.tab_description "Berichtelementen die gebruikt worden als vergelijkingscriteria:">
+<!ENTITY message_comparison.tab_description "Berichtelementen die als vergelijkingscriteria worden gebruikt:">
 <!ENTITY message_comparison.author.label "Schrijver (‘Van’)">
 <!ENTITY message_comparison.recipients.label "Ontvangers (‘Aan’)">
 <!ENTITY message_comparison.cc_list.label "CC-lijst">
-<!ENTITY message_comparison.flags.label "Statuslabels">
+<!ENTITY message_comparison.flags.label "Statusvlaggen">
 <!ENTITY message_comparison.message_id.label "Bericht-ID">
-<!ENTITY message_comparison.num_lines.label "Aantal regels in het bericht">
+<!ENTITY message_comparison.num_lines.label "Aantal regels in bericht">
 <!ENTITY message_comparison.send_time.label "Tijdstip van verzenden">
 <!ENTITY message_comparison.size.label "Grootte">
 <!ENTITY message_comparison.subject.label "Onderwerp">
 <!ENTITY message_comparison.folder.label "Map">
 <!ENTITY message_comparison.body.label "Bericht">
-<!ENTITY message_comparison.skip_special_folders.access_key "l">
-<!ENTITY message_comparison.skip_imap_deleted_messages.access_key "V">
-<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.access_key "i">
+<!ENTITY message_comparison.skip_special_folders.access_key "m">
+<!ENTITY message_comparison.skip_imap_deleted_messages.access_key "k">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.access_key "A">
 <!ENTITY message_comparison.author.access_key "S">
-<!ENTITY message_comparison.flags.access_key "l">
+<!ENTITY message_comparison.flags.access_key "v">
 <!ENTITY message_comparison.recipients.access_key "O">
 <!ENTITY message_comparison.cc_list.access_key "C">
-<!ENTITY message_comparison.message_id.access_key "B">
+<!ENTITY message_comparison.message_id.access_key "I">
 <!ENTITY message_comparison.num_lines.access_key "R">
 <!ENTITY message_comparison.send_time.access_key "T">
-<!ENTITY message_comparison.size.access_key "s">
+<!ENTITY message_comparison.size.access_key "G">
 <!ENTITY message_comparison.subject.access_key "w">
 <!ENTITY message_comparison.folder.access_key "M">
-<!ENTITY message_comparison.body.access_key "i">
+<!ENTITY message_comparison.body.access_key "B">
 <!ENTITY message_comparison.time_comparison_resolution.description "Tijdsvergelijkingsresolutie:">
 <!ENTITY message_comparison.time_comparison_resolution.seconds.label "Seconden">
 <!ENTITY message_comparison.time_comparison_resolution.minutes.label "Minuten">
@@ -41,14 +41,14 @@
 <!ENTITY general_settings.tab_title "Algemene instellingen">
 <!ENTITY general_settings.search_subfolders.label "Submappen van geselecteerde map(pen) doorzoeken">
 <!ENTITY general_settings.search_subfolders_first.label "Submappen eerst doorzoeken (postvolgorde)">
-<!ENTITY general_settings.use_dialog_before_removal.label "Zoekresultaten bekijken voor verwijdering">
+<!ENTITY general_settings.use_dialog_before_removal.label "Zoekresultaten voor verwijdering beoordelen">
 <!ENTITY general_settings.default_action.description "Standaardactie bij dubbele berichten:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Permanent verwijderen">
-<!ENTITY general_settings.default_action.move.label "Naar Prullenbak verplaatsen">
+<!ENTITY general_settings.default_action.move.label "Verplaatsen naar Prullenbak">
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "P">
-<!ENTITY general_settings.default_action.move.accesskey "r">
+<!ENTITY general_settings.default_action.move.accesskey "V">
 <!ENTITY general_settings.search_subfolders_first.access_key "u">
 <!ENTITY general_settings.search_subfolders.access_key "s">
-<!ENTITY general_settings.use_dialog_before_removal.access_key "w">
+<!ENTITY general_settings.use_dialog_before_removal.access_key "b">
 <!ENTITY removedupes-preftree-label "Duplicaten verwijderen">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
