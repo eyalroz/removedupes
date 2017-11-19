@@ -61,9 +61,28 @@ const  flagsColumnIndex       = 11;
 
 // state variables for dupe set sorting (see onClickColumn() )
 
-DateService =
-  Components.classes["@mozilla.org/intl/scriptabledateformat;1"]
-            .getService(Components.interfaces.nsIScriptableDateFormat);
+
+var DateService;
+var DateTimeFormatter;
+#ifdef MOZ_THUNDERBIRD
+if (RemoveDupes.App.ensureMinimumVersion("56"))
+{
+  var IntlService = Components.classes["@mozilla.org/mozintl;1"]
+              .getService(Components.interfaces.mozIMozIntl);
+  var formattingOptions = {
+    year: 'numeric', month:  'numeric', day:    'numeric',
+    hour: 'numeric', minute: 'numeric', second: 'numeric',
+    timeZoneName: 'short'
+  };
+  DateTimeFormatter = IntlService.createDateTimeFormat(undefined, formattingOptions);
+}
+else
+#endif
+{
+  DateService =
+    Components.classes["@mozilla.org/intl/scriptabledateformat;1"]
+              .getService(Components.interfaces.nsIScriptableDateFormat);
+}
 
 // DupeMessageRecord - a self-describing class;
 // each dupe message in each dupe set will have a record built
@@ -476,16 +495,26 @@ function formatSendTime(sendTimeInSeconds) {
   RemoveDupes.JSConsoleService.logStringMessage('date.getHours() = ' + date.getHours());
   RemoveDupes.JSConsoleService.logStringMessage('date.getMinutes() = ' + date.getMinutes());
 #endif
-  return DateService.FormatDateTime(
-    "", // use application locale
-    DateService.dateFormatShort,
-    DateService.timeFormatSeconds, 
-    date.getFullYear(),
-    date.getMonth()+1, 
-    date.getDate(),
-    date.getHours(),
-    date.getMinutes(), 
-    date.getSeconds() );
+
+  var formattedDate;
+  if (DateTimeFormatter) {
+     // We'll be using this for Thunderbird >= 56 
+     // (when the older formatting service was removed)
+     formattedDate = DateTimeFormatter.format(date);
+  }
+  else {
+    formattedDate = DateService.FormatDateTime(
+      "", // use application locale
+      DateService.dateFormatShort,
+      DateService.timeFormatSeconds, 
+      date.getFullYear(),
+      date.getMonth()+1, 
+      date.getDate(),
+      date.getHours(),
+      date.getMinutes(), 
+      date.getSeconds() );
+  }
+  return formattedDate;
 }
 
 // onTreeKeyPress -
