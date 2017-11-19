@@ -413,22 +413,18 @@ RemoveDupes.MessengerOverlay = {
     }
     // what happens if generator is null?
     if (searchData.generator) {
-      try {
-        searchData.generator.next();
+      var next = searchData.generator.next();
+      if (!next.done) {
         setTimeout(
           RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2,
           100, searchData);
         return;
       }
-      catch (ex if ex instanceof StopIteration) { 
-        // if we've gotten here, it means the populateDupeSetsHash function,
-        // associated with the generator, has finally completed its execution
 #ifdef DEBUG_processMessagesInCollectedFoldersPhase2
     RemoveDupes.JSConsoleService.logStringMessage(
       'populateDupeSetsHash execution complete');
 #endif
-        delete searchData.generator;
-      }
+      delete searchData.generator;
     }
     delete searchData.folders;
 
@@ -617,7 +613,7 @@ RemoveDupes.MessengerOverlay = {
   // The actual first phase of message processing (see
   // processMessagesInCollectedFoldersPhase1 for more details)
 
-  populateDupeSetsHash : function(searchData) {
+  populateDupeSetsHash : function*(searchData) {
 #ifdef DEBUG_populateDupeSetsHash
      RemoveDupes.JSConsoleService.logStringMessage(
        'in populateDupeSetsHash()');
