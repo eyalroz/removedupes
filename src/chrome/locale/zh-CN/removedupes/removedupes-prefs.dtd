@@ -3,6 +3,7 @@
 <!ENTITY message_comparison.tab_title "消息比较">
 <!ENTITY message_comparison.criteria_box.label "用作比较条件的消息元素">
 <!ENTITY message_comparison.skip_special_folders.label "跳过特殊文件夹(已发送邮件、草稿等)">
+<!ENTITY message_comparison.skip_imap_deleted_messages.label "Skip IMAP messages marked 'Deleted'">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "比较拆开并分类排序的地址">
 <!ENTITY message_comparison.tab_description "用作比较条件的消息元素：">
 <!ENTITY message_comparison.author.label "作者(“从”)">
@@ -17,6 +18,7 @@
 <!ENTITY message_comparison.folder.label "文件夹">
 <!ENTITY message_comparison.body.label "消息体">
 <!ENTITY message_comparison.skip_special_folders.access_key "k">
+<!ENTITY message_comparison.skip_imap_deleted_messages.access_key "d">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.access_key "r">
 <!ENTITY message_comparison.author.access_key "A">
 <!ENTITY message_comparison.flags.access_key "F">
@@ -50,5 +52,3 @@
 <!ENTITY general_settings.use_dialog_before_removal.access_key "c">
 <!ENTITY removedupes-preftree-label "删除重复消息">
 <!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
-<!ENTITY message_comparison.skip_imap_deleted_messages.label "Skip IMAP messages marked 'Deleted'">
-<!ENTITY message_comparison.skip_imap_deleted_messages.access_key "d">

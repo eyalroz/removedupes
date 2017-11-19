@@ -1,4 +1,4 @@
-﻿<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Odstrani podvojena sporočila …">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Nastavi mape izv. sporočil za naslednje iskanje pod. sporočil">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "O">
