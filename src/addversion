@@ -69,7 +69,7 @@ if [ ! -e ${VERSION}/CVS ]; then
 	until cvs -d $CVSROOT add ${VERSION}/; do : ; done
 fi
 XPI_ENTIRES_IN_VERSION_DIR=`grep xpi ${VERSION}/CVS/Entries | wc -l`
-if [ ${XPI_ENTIRES_IN_VERSION_DIR} == 0 ]; then
+if [ "${XPI_ENTIRES_IN_VERSION_DIR}" -eq 0 ]; then
         until cvs -d $CVSROOT add `ls ${VERSION}/*.xpi`; do : ; done
 fi
 until cvs -d $CVSROOT ci ${VERSION}/ latest/; do : ; done
