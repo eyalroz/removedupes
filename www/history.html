@@ -15,6 +15,17 @@ Note that the history lists more significant changes. Additional minor tweaks an
   </ul>
 </li>-->
 
+<li><a name="0.3.15">version 0.3.15</a>
+  <ul>
+    <li>Compatiblity: Thunderbird v56 dropped support for the way we were formatting dates; we not account for that
+    <li>Compatiblity: Thunderbird v59 changed the name of the date formatting service
+    <li>Compatiblity: Thunderbird 57 dropped support for what is now a "legacy" version of the generator mechanism, in favor of the ECMAScript ES 6 standardized mechanism for generators; now using that.
+    <li>Fix/Compatiblity: Newer versions of Thunderbird don't accept a JS version number in the script type field in XUL files, so -we've dropped them
+    <li>Fix: Shortcut key clash with the Lightning (calender) extension
+    <li>
+  </ul>
+</li>
+
 <li><a name="0.3.14">version 0.3.14</a>
   <ul>
     <li>Fix: Bug when obtaining the number of originals folder (was using .size() instead of .size)
