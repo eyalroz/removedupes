@@ -1,10 +1,10 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Duplicaten verwijderen…">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Originelen instellen voor zoeken naar duplicaten">
-<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "P">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "O">
 <!ENTITY key-removedupes.modifiers "accel, shift">
-<!ENTITY key-removedupes.keycode "D">
+<!ENTITY key-removedupes.keycode "P">
 <!ENTITY removedupes_dialog.dialog_title "Dubbele berichten verwijderen">
 <!ENTITY removedupes_dialog.id "Bericht-ID">
 <!ENTITY removedupes_dialog.keep_label "In elke set duplicaten, behouden:">

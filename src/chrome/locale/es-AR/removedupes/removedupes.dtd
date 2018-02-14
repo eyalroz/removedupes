@@ -1,10 +1,10 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Quitar duplicados...">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Establecer carpeta/s de mensajes para la próxima búsqueda de duplicados">
-<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "P">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "t">
 <!ENTITY key-removedupes.modifiers "accel,shift">
-<!ENTITY key-removedupes.keycode "D">
+<!ENTITY key-removedupes.keycode "P">
 <!ENTITY removedupes_dialog.dialog_title "Eliminar mensajes duplicados">
 <!ENTITY removedupes_dialog.id "Identificación del mensaje">
 <!ENTITY removedupes_dialog.keep_label "Por cada set de mensajes duplicados, conservar:">
