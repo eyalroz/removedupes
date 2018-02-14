@@ -1,10 +1,10 @@
 <!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "移除重复消息...">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "设置为下次重复搜索的原始消息文件夹">
-<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "P">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "o">
 <!ENTITY key-removedupes.modifiers "accel,shift">
-<!ENTITY key-removedupes.keycode "D">
+<!ENTITY key-removedupes.keycode "P">
 <!ENTITY removedupes_dialog.dialog_title "删除重复消息">
 <!ENTITY removedupes_dialog.id "消息 ID">
 <!ENTITY removedupes_dialog.keep_label "保留每组重复中的：">

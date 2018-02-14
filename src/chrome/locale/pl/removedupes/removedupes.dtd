@@ -4,7 +4,7 @@
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "U">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "O">
 <!ENTITY key-removedupes.modifiers "accel,shift">
-<!ENTITY key-removedupes.keycode "D">
+<!ENTITY key-removedupes.keycode "P">
 <!ENTITY removedupes_dialog.dialog_title "Usuwanie duplikatów wiadomości">
 <!ENTITY removedupes_dialog.id "Identyfikator wiadomości">
 <!ENTITY removedupes_dialog.keep_label "Z każdego zestawu duplikatów pozostaw:">
