@@ -65,8 +65,9 @@ const  flagsColumnIndex       = 11;
 var DateService;
 var DateTimeFormatter;
 #ifdef MOZ_THUNDERBIRD
-if (RemoveDupes.App.ensureMinimumVersion("56"))
-{
+if (RemoveDupes.App.ensureMinimumVersion("56")) {
+  // see https://wiki.mozilla.org/Thunderbird/Add-ons_Guide_57
+  // for details regarding this change
   var IntlService = Components.classes["@mozilla.org/mozintl;1"]
               .getService(Components.interfaces.mozIMozIntl);
   var formattingOptions = {
@@ -74,7 +75,14 @@ if (RemoveDupes.App.ensureMinimumVersion("56"))
     hour: 'numeric', minute: 'numeric', second: 'numeric',
     timeZoneName: 'short'
   };
-  DateTimeFormatter = IntlService.createDateTimeFormat(undefined, formattingOptions);
+
+  try {
+    // This should work for TB versions 59 and onwards
+    DateTimeFormatter = IntlService.DateTimeFormat(undefined, formattingOptions);
+  } catch(ex) {
+    // This should work for versions 57, 58 and maybe 56
+    DateTimeFormatter = IntlService.createDateTimeFormat(undefined, formattingOptions);
+  }
 }
 else
 #endif
@@ -498,7 +506,7 @@ function formatSendTime(sendTimeInSeconds) {
 
   var formattedDate;
   if (DateTimeFormatter) {
-     // We'll be using this for Thunderbird >= 56 
+     // We'll be using this for Thunderbird >= 56 (or 57?) 
      // (when the older formatting service was removed)
      formattedDate = DateTimeFormatter.format(date);
   }
