@@ -195,17 +195,20 @@ RemoveDupes.App = {
   // returns true if the app version is equal-or-higher to minVersion, false otherwise;
   ensureVersion : function(versionThreshold, checkMinimum) {
     var version;  
-    if ("@mozilla.org/xre/app-info;1" in Components.classes ) {
+    // Dropping support for super-old versions in this check,
+    // since addons.mozilla.org complains about it; plus,
+    // we have other code which breaks that support anyway.
+    // if ("@mozilla.org/xre/app-info;1" in Components.classes ) {
       version = 
         Components.classes["@mozilla.org/xre/app-info;1"]
                   .getService(Components.interfaces.nsIXULAppInfo).version;  
-    }
-    else {
-      version =
-         Components.classes["@mozilla.org/preferences-service;1"]
-                  .getService(Components.interfaces.nsIPrefBranch)
-                  .getCharPref("extensions.lastAppVersion");  
-    }
+    //}
+    // else {
+    //   version =
+    //      Components.classes["@mozilla.org/preferences-service;1"]
+    //               .getService(Components.interfaces.nsIPrefBranch)
+    //               .getCharPref("extensions.lastAppVersion");  
+    // }
     var versionChecker =
       Components.classes["@mozilla.org/xpcom/version-comparator;1"]
                 .getService(Components.interfaces.nsIVersionComparator);  
