@@ -1,11 +1,9 @@
 treechildren::-moz-tree-cell(keep) {
-  background: url("chrome://global/skin/checkbox/cbox-check.gif") no-repeat;
+  background: url("chrome://removedupes/content/check.svg") no-repeat;
   background-position: center center;
-
 }
 
 treechildren::-moz-tree-cell(delete) {
-  background: url("chrome://global/skin/checkbox/cbox.gif") no-repeat;
   background-position: center center;
 }
 
