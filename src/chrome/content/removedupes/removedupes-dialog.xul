@@ -15,7 +15,7 @@
         persist="width height screenX screenY sizemode"
         onload="initDupeReviewDialog();"
         buttons="accept,cancel"
-        ondialogaccept="onAccept();"
+        ondialogaccept="return onAccept();"
         ondialogcancel="onCancel();"
         id="removeDuplicatesReviewDialog"
         title="&removedupes_dialog.dialog_title;">
