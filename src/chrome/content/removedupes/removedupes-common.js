@@ -441,8 +441,16 @@ RemoveDupes.Removal = {
     return dupesByFolderHashMap;
   },
 
-  // see createDupesByFolderHashMap for explanation regarding the
-  // haveMessageRecords parameter
+  //
+  // removeDuplicates() returns...
+  //
+  //   true   if all requested deletions were performed 
+  //   false  if no deletions were performed or none were requested
+  //   null   if some deletions were performed but some failed or were
+  //          aborted
+  //
+  // Also, see createDupesByFolderHashMap for explanation regarding 
+  // the haveMessageRecords parameter
   removeDuplicates : function(
     dupeSetsHashMap,
     deletePermanently,
@@ -480,19 +488,34 @@ RemoveDupes.Removal = {
       RemoveDupes.Removal.createDupesByFolderHashMap(
         dupeSetsHashMap,haveMessageRecords);
 
+    var any_deletions_performed = false;
+    var any_deletions_failed_or_aborted = false;
     for (folderUri in dupesByFolderHashMap) {
-      var retVal = 
+      retVal = 
         RemoveDupes.Removal.removeDupesFromSingleFolder(
           dupesByFolderHashMap[folderUri].folder,
           dupesByFolderHashMap[folderUri].removalHeaders,
           targetFolder,
           deletePermanently,
           confirmPermanentDeletion);
-      if (!retVal) break;
+      any_deletions_failed_or_aborted = any_deletions_failed_or_aborted || (!retVal);
+      any_deletions_performed = any_deletions_performed || (!!retVal);
     }
 #ifdef DEBUG_removeDuplicates
-    RemoveDupes.JSConsoleService.logStringMessage('done');
+    RemoveDupes.JSConsoleService.logStringMessage('Done. ' +
+      'any_deletions_performed ? ' + any_deletions_performed + '; '
+      'any_deletions_failed_or_aborted ? ' + any_deletions_performed);
 #endif
+    if (any_deletions_performed && any_deletions_failed_or_aborted) {
+      return null;
+    }
+    if (!any_deletions_performed && any_deletions_failed_or_aborted) {
+      return false;
+    }
+    if (any_deletions_performed && !any_deletions_failed_or_aborted) {
+      return true;
+    }
+    throw Components.results.NS_ERROR_UNEXPECTED;
   },
 
   // if this returns false, something's amiss (currently an abortion)

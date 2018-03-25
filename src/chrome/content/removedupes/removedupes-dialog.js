@@ -76,11 +76,13 @@ if (RemoveDupes.App.ensureMinimumVersion("56")) {
     timeZoneName: 'short'
   };
 
-  try {
-    // This should work for TB versions 59 and onwards
+  if (RemoveDupes.App.ensureMinimumVersion("59.0b2")) {
+    DateTimeFormatter = new IntlService.DateTimeFormat(undefined, formattingOptions);
+  }
+  else if (RemoveDupes.App.ensureMinimumVersion("56")) {
     DateTimeFormatter = IntlService.DateTimeFormat(undefined, formattingOptions);
-  } catch(ex) {
-    // This should work for versions 57, 58 and maybe 56
+  }
+  else {
     DateTimeFormatter = IntlService.createDateTimeFormat(undefined, formattingOptions);
   }
 }
@@ -694,13 +696,16 @@ function onAccept() {
 
   var deletePermanently =
     (document.getElementById('action').getAttribute('value') == 'delete_permanently');
-  RemoveDupes.Removal.removeDuplicates(
+  var retVal = RemoveDupes.Removal.removeDuplicates(
     dupeSetsHashMap,
     deletePermanently,
     confirmPermanentDeletion,
     uri,
     true // the uri's have been replaced with messageRecords
     );
+#ifdef DEBUG_onAccept
+    RemoveDupes.JSConsoleService.logStringMessage('got retVal ' + retVal + ' in onAccept()');
+#endif
   if (!deletePermanently && (uri != null) && (uri != "")) {
     try {
       RemoveDupes.Prefs.setCharPref('default_target_folder', uri);
@@ -710,7 +715,18 @@ function onAccept() {
 #endif
     }
   }
+#ifdef DEBUG_onAccept
+  RemoveDupes.JSConsoleService.logStringMessage('onAccept() got retVal: ' + retVal);
+#endif
+  if (retVal == false) {
+    // This means we've not deleted/moved _anything_, so the dialog is still usable
+    return false;
+  }
+  // If we've gotten here, either the deletion was succesful, or it
+  // was partially successful, and at any rate - the dialog's contents are
+  // stale, so it needs to go away
   delete dupeSetsHashMap;
+  return true;
 }
 
 function markAllDupesForDeletion() {
