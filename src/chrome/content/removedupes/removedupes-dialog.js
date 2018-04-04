@@ -79,16 +79,22 @@ if (RemoveDupes.App.ensureMinimumVersion("56")) {
   if (RemoveDupes.App.ensureMinimumVersion("59.0b2")) {
     DateTimeFormatter = new IntlService.DateTimeFormat(undefined, formattingOptions);
   }
-  else if (RemoveDupes.App.ensureMinimumVersion("56")) {
-    DateTimeFormatter = IntlService.DateTimeFormat(undefined, formattingOptions);
-  }
   else {
-    DateTimeFormatter = IntlService.createDateTimeFormat(undefined, formattingOptions);
+    try {
+      // Suppored versions here: 56.0b4, 57.0b2, 58.0b3
+      DateTimeFormatter = IntlService.createDateTimeFormat(undefined, formattingOptions);
+    }
+    catch(ex) {
+      // we should probably never get here, but just in case...
+      DateTimeFormatter = IntlService.DateTimeFormat(undefined, formattingOptions);
+    }
   }
 }
 else
 #endif
 {
+  // Either we're in Seamonkey or with Thunderbird version before the 56.0 betas.
+  // Note that after 52.x there weren't any release versions 53.x, 54.x or 55.x
   DateService =
     Components.classes["@mozilla.org/intl/scriptabledateformat;1"]
               .getService(Components.interfaces.nsIScriptableDateFormat);
@@ -513,6 +519,8 @@ function formatSendTime(sendTimeInSeconds) {
      formattedDate = DateTimeFormatter.format(date);
   }
   else {
+    // with older Thunderbird versions, we format the data directly with
+    // the global service, rather than a custom formatter.
     formattedDate = DateService.FormatDateTime(
       "", // use application locale
       DateService.dateFormatShort,
