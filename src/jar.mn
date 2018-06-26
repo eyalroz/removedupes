@@ -82,7 +82,6 @@ removedupes.jar:
 *   skin/classic/removedupes/removedupes-messenger.css            (chrome/skin/classic/removedupes/removedupes-messenger.css)
 *   skin/classic/removedupes/removedupes-button.css               (chrome/skin/classic/removedupes/removedupes-button.css)
 *   skin/classic/removedupes/removedupes-dialog.css               (chrome/skin/classic/removedupes/removedupes-dialog.css)
-    content/removedupes/check.svg                                 (chrome/content/removedupes/check.svg)
 #ifdef MOZ_THUNDERBIRD
     content/removedupes/removedupes-button-16x16.png              (chrome/content/removedupes/removedupes-button-16x16.png)
     content/removedupes/removedupes-button-24x24.png              (chrome/content/removedupes/removedupes-button-24x24.png)
