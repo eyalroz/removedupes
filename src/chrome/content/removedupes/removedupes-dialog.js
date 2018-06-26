@@ -688,6 +688,9 @@ function onCancel() {
   delete dupeSetsHashMap;
 }
 
+// Note: This function returns true if any messages
+// were deleted and no deletion failed, or false
+// otherwise.
 function onAccept() {
   var uri = null;
   try {
@@ -701,6 +704,13 @@ function onAccept() {
 #ifdef DEBUG_onAccept
   RemoveDupes.JSConsoleService.logStringMessage('uri is ' + uri);
 #endif
+
+  if (totalNumberOfDupes == numberToKeep) {
+#ifdef DEBUG_onAccept
+    RemoveDupes.JSConsoleService.logStringMessage('No deletions will be performed as all message are to bR kept.');
+#endif
+    return false;
+  }
 
   var deletePermanently =
     (document.getElementById('action').getAttribute('value') == 'delete_permanently');
