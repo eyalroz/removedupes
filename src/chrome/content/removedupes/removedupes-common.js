@@ -115,9 +115,16 @@ RemoveDupes.__defineGetter__("UseSupportsArray", function() {
 // localized strings
 RemoveDupes.__defineGetter__("Strings", function() {
   delete RemoveDupes.Strings;
+  var stringBundleService;
+  try {
+    stringBundleService = Services.strings;
+  re
+  } catch(ex) {
+    // Thunderbird 62 or earlier
+    stringBundleService = Components.classes["@mozilla.org/intl/stringbundle;1"]
+      .getService(Components.interfaces.nsIStringBundleService);
+  }
   return RemoveDupes.Strings =
-    Components.classes["@mozilla.org/intl/stringbundle;1"]
-      .getService(Components.interfaces.nsIStringBundleService)
       .createBundle("chrome://removedupes/locale/removedupes.properties");
   });
 
