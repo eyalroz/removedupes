@@ -55,7 +55,8 @@ locale removedupes is-IS jar:chrome/removedupes.jar!/locale/is-IS/removedupes/
 locale removedupes sv-SE jar:chrome/removedupes.jar!/locale/sv-SE/removedupes/
 locale removedupes sl-SI jar:chrome/removedupes.jar!/locale/sl-SI/removedupes/
 #ifndef MOZ_PRETOOLKIT_SEAMONKEY
-style chrome://global/content/customizeToolbar.xul chrome://removedupes/skin/removedupes-button.css
+style chrome://global/content/customizeToolbar.xul chrome://removedupes/skin/removedupes-button.css appversion<59.0a1
+style chrome://messenger/content/customizeToolbar.xul chrome://removedupes/skin/removedupes-button.css appversion>=59.0a1
 #endif
 overlay	chrome://messenger/content/messenger.xul chrome://removedupes/content/removedupes-button.xul
 style chrome://messenger/content/messenger.xul chrome://removedupes/skin/removedupes-button.css
