@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SHORTNAME="removedupes"
-VERSION="0.3.17"
+VERSION="0.3.18"
 UUID="{a300a000-5e21-4ee0-a115-9ec8f4eaa92b}"
 
 TARGET="$1"
@@ -60,7 +60,8 @@ $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILDDIR/jar.mn
 $BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILDDIR/jar.mn || exit
 echo -e "\nJAR files ready\n"
 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.rdf > $BUILDDIR/install.rdf
-$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS manifest.json > $BUILDDIR/manifest.json
+# Holding back on the JSON manifest for now
+#$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS manifest.json > $BUILDDIR/manifest.json
 rm -rf ${SHORTNAME}
 rm -rf ${SHORTNAME}-mac-skin
 rm -f installed-chrome.txt
