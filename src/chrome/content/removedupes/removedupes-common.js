@@ -117,15 +117,15 @@ RemoveDupes.__defineGetter__("Strings", function() {
   delete RemoveDupes.Strings;
   var stringBundleService;
   try {
+    // Thunderbird 63 or later
     stringBundleService = Services.strings;
-  re
   } catch(ex) {
     // Thunderbird 62 or earlier
     stringBundleService = Components.classes["@mozilla.org/intl/stringbundle;1"]
       .getService(Components.interfaces.nsIStringBundleService);
   }
   return RemoveDupes.Strings =
-      .createBundle("chrome://removedupes/locale/removedupes.properties");
+      stringBundleService.createBundle("chrome://removedupes/locale/removedupes.properties");
   });
 
 #ifdef DEBUG
