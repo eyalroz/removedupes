@@ -59,6 +59,7 @@ $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILDDIR/jar.mn
 $BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILDDIR/jar.mn || exit
 echo -e "\nJAR files ready\n"
 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.rdf > $BUILDDIR/install.rdf
+$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS manifest.json > $BUILDDIR/manifest.json
 rm -rf ${SHORTNAME}
 rm -rf ${SHORTNAME}-mac-skin
 rm -f installed-chrome.txt
@@ -87,6 +88,7 @@ case "$TARGET" in
 	  platform/Darwin/chrome.manifest \
 	  platform/Darwin/chrome/${SHORTNAME}-mac-skin.jar \
 	  install.rdf \
+	  manifest.json \
 	  chrome.manifest || exit
         ;;
     suiterunner)
