@@ -1,6 +1,8 @@
-if ("undefined" == typeof(RemoveDupes)) {
-  var RemoveDupes = {};
-};
+var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
+
+if ("undefined" == typeof(messenger)) {
+  var messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
+}
 
 RemoveDupes.__defineGetter__("ImapService", function() {
   delete RemoveDupes.ImapService;
@@ -988,6 +990,8 @@ RemoveDupes.MessengerOverlay = {
       // without user confirmation or review; we're keeping the first dupe
       // in every sequence of dupes and deleting the rest
       RemoveDupes.Removal.removeDuplicates(
+        window,
+        msgWindow,
         searchData.dupeSetsHashMap,
         (RemoveDupes.Prefs.getCharPref('default_action', 'move') == 'delete_permanently'),
         RemoveDupes.Prefs.getBoolPref("confirm_permanent_deletion", true),

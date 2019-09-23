@@ -1,6 +1,4 @@
-if ("undefined" == typeof(RemoveDupes)) {
-  var RemoveDupes = {};
-};
+var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
 
 RemoveDupes.PrefPane = {
 
