@@ -145,7 +145,7 @@ RemoveDupes.JS = {
   isEmpty: function(obj) {
     var i;
     if (typeof obj === 'object' || typeof obj === 'function') {
-      for (i in obj) {
+      for (let i in obj) {
         if (obj.hasOwnProperty(i)) {
           return false;
         }
@@ -165,7 +165,7 @@ RemoveDupes.JS = {
 
   string2hex : function(str) {
     var res = "";
-    for(i = 0; i < str.length-1; i++) {
+    for (let i = 0; i < str.length-1; i++) {
       res += this.d2h(str.charCodeAt(i)) + " ";  
     }
     if (str.length > 0)
@@ -175,7 +175,7 @@ RemoveDupes.JS = {
 
   string2hexWithNewLines : function (str) {
     var res = "";
-    for(i = 0; i < str.length-1; i++) {
+    for (let i = 0; i < str.length-1; i++) {
       res += this.d2h(str.charCodeAt(i)) + " ";  
       if (str.charCodeAt(i) == 10)
         res += '\n';
@@ -370,15 +370,15 @@ RemoveDupes.Removal = {
     var messageHeader;
     var previousFolderUri = null;
 
-    for (var hashValue in dupeSetsHashMap) {
+    for (let hashValue in dupeSetsHashMap) {
       var dupeSet = dupeSetsHashMap[hashValue];
 #ifdef DEBUG_removeDuplicates
       RemoveDupes.JSConsoleService.logStringMessage('hash value ' +
         hashValue + '\nnumber of dupes: ' + dupeSet.length);
 #endif
       if (haveMessageRecords) {
-        for(var i = 0; i < dupeSet.length; i++) {
-          messageRecord = dupeSet[i];
+        for (let i = 0; i < dupeSet.length; i++) {
+          var messageRecord = dupeSet[i];
           if (!messageRecord.toKeep) {
 #ifdef DEBUG_removeDuplicates
             RemoveDupes.JSConsoleService.logStringMessage('processing URI ' +
@@ -416,7 +416,7 @@ RemoveDupes.Removal = {
         }
       }
       else {
-        for(var i = 1; i < dupeSet.length; i++) {
+        for (let i = 1; i < dupeSet.length; i++) {
 #ifdef DEBUG_removeDuplicates
           RemoveDupes.JSConsoleService.logStringMessage(
             'processing URI ' + dupeSet[i]);
@@ -497,7 +497,7 @@ RemoveDupes.Removal = {
 
     var any_deletions_performed = false;
     var any_deletions_failed_or_aborted = false;
-    for (folderUri in dupesByFolderHashMap) {
+    for (let folderUri in dupesByFolderHashMap) {
       retVal = 
         RemoveDupes.Removal.removeDupesFromSingleFolder(
           dupesByFolderHashMap[folderUri].folder,
