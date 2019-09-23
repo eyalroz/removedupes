@@ -1,10 +1,13 @@
-//uncomment the following when this file becomes a module
-//var EXPORTED_SYMBOLS = [ "RemoveDupes" ];
+var EXPORTED_SYMBOLS = ["Removedupes"];
 
-if ("undefined" == typeof(RemoveDupes)) {
-  var RemoveDupes = {};
-};
+if ("undefined" == typeof(messenger)) {
+  var messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
+}
 
+var RemoveDupes = {};
+
+// TODO: Either import MailUtils where you need it, or switch this code
+// to native module import
 if ("undefined" == typeof(MailUtils)) {
   try {
     Components.utils.import("resource:///modules/MailUtils.js");
@@ -459,6 +462,8 @@ RemoveDupes.Removal = {
   // Also, see createDupesByFolderHashMap for explanation regarding 
   // the haveMessageRecords parameter
   removeDuplicates : function(
+    appWindow,
+    msgWindow,
     dupeSetsHashMap,
     deletePermanently,
     confirmPermanentDeletion,
@@ -482,7 +487,7 @@ RemoveDupes.Removal = {
       }
       else targetFolder = RemoveDupes.GetMsgFolderFromUri(targetFolderUri, true);
       if (!targetFolder) {
-        alert(RemoveDupes.Strings.formatStringFromName(
+        appWindow.alert(RemoveDupes.Strings.formatStringFromName(
           'removedupes.no_such_folder', [targetFolderUri], 1));
         return false;
       }
@@ -498,8 +503,10 @@ RemoveDupes.Removal = {
     var any_deletions_performed = false;
     var any_deletions_failed_or_aborted = false;
     for (let folderUri in dupesByFolderHashMap) {
-      retVal = 
+      var retVal = 
         RemoveDupes.Removal.removeDupesFromSingleFolder(
+          appWindow,
+          msgWindow,
           dupesByFolderHashMap[folderUri].folder,
           dupesByFolderHashMap[folderUri].removalHeaders,
           targetFolder,
@@ -528,6 +535,8 @@ RemoveDupes.Removal = {
   // if this returns false, something's amiss (currently an abortion)
   // and the deletion should not go on.
   removeDupesFromSingleFolder : function(
+    appWindow,
+    msgWindow,
     sourceFolder,
     removalMessageHdrs,
     targetFolder,
@@ -543,8 +552,8 @@ RemoveDupes.Removal = {
   	    'removedupes.confirm_permanent_deletion_from_folder',
   	    [numMessagesToDelete ,sourceFolder.abbreviatedName], 2);
 
-          if (!window.confirm(message)) {
-            alert(RemoveDupes.Strings.GetStringFromName('removedupes.deletion_aborted'));
+          if (!appWindow.confirm(message)) {
+            appWindow.alert(RemoveDupes.Strings.GetStringFromName('removedupes.deletion_aborted'));
             return false;
           }
         }
@@ -558,7 +567,7 @@ RemoveDupes.Removal = {
           true // allow undo... will this be possible at all?
         );
       } catch(ex) {
-        alert(RemoveDupes.Strings.GetStringFromName('removedupes.failed_to_erase'));
+        appWindow.alert(RemoveDupes.Strings.GetStringFromName('removedupes.failed_to_erase'));
         throw(ex);
       }
       return true;
@@ -603,7 +612,7 @@ RemoveDupes.Removal = {
           true // allow undo... what does this mean exactly?
         );
       } catch(ex) {
-        alert(RemoveDupes.Strings.formatStringFromName('removedupes.failed_to_move_to_folder', [targetFolder.URI], 1));
+        appWindow.alert(RemoveDupes.Strings.formatStringFromName('removedupes.failed_to_move_to_folder', [targetFolder.URI], 1));
         throw(ex);
       }
       return true;
