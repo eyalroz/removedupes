@@ -1,7 +1,4 @@
-
-if ("undefined" == typeof(RemoveDupes)) {
-  var RemoveDupes = {};
-};
+var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
 
 var msgWindow; 
   // the 3-pane window which opened us
@@ -715,6 +712,8 @@ function onAccept() {
   var deletePermanently =
     (document.getElementById('action').getAttribute('value') == 'delete_permanently'); 
   var retVal = RemoveDupes.Removal.removeDuplicates(
+    window,
+    msgWindow,
     dupeSetsHashMap,
     deletePermanently,
     confirmPermanentDeletion,
