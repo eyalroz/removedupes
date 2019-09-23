@@ -1,4 +1,3 @@
-
 if ("undefined" == typeof(RemoveDupes)) {
   var RemoveDupes = {};
 };
@@ -109,7 +108,7 @@ RemoveDupes.MessengerOverlay = {
     // TODO: check we haven't selected some folders along with
     // their subfolders - this would mean false dupes!
 
-    for(var i = 0; i < searchData.topFolders.length; i++) {
+    for (let i = 0; i < searchData.topFolders.length; i++) {
       var folder = searchData.topFolders[i];
       if (searchData.skipSpecialFolders) {
         if (!folder.canRename && (folder.rootFolder != folder) ) {
@@ -509,7 +508,7 @@ RemoveDupes.MessengerOverlay = {
       // again, if we can't get any addresses, let's stay with the
       // original header string rather than assume there are no addresses
       if (!matches) return headerString;
-      for(var i = 0; i < matches.length; i++) {
+      for (let i = 0; i < matches.length; i++) {
         matches[i] = matches[i].substr(1,matches[i].length - 2);
       }
     }
@@ -902,7 +901,7 @@ RemoveDupes.MessengerOverlay = {
     // a comparison record created for it, then for every j we call
     // ourcomparefunc(comparisonrecord, dupeSet[j])
 
-    for (hashValue in searchData.dupeSetsHashMap) {
+    for (let hashValue in searchData.dupeSetsHashMap) {
       var dupeSet = searchData.dupeSetsHashMap[hashValue];
 #ifdef DEBUG_refineDupeSets
       RemoveDupes.JSConsoleService.logStringMessage('refining for dupeSetsHashMap value ' + hashValue + '\nset has ' + dupeSet.length + ' elements initially');
@@ -912,7 +911,7 @@ RemoveDupes.MessengerOverlay = {
 
       var initialSetSize = dupeSet.length;
 
-      for (var i=0; i < dupeSet.length; i++) {
+      for (let i=0; i < dupeSet.length; i++) {
         var dupeUri = dupeSet[i];
         dupeSet[i] = {
           uri: dupeUri, 
@@ -1040,7 +1039,7 @@ RemoveDupes.MessengerOverlay = {
   },
 
   criteriaPopupMenuInit : function() {
-    for(criterion in RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults) {
+    for (let criterion in RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults) {
       document.getElementById('removedupesCriterionMenuItem_' + criterion)
               .setAttribute("checked",
                 (RemoveDupes.Prefs.getBoolPref("comparison_criteria." + criterion, 
@@ -1098,7 +1097,7 @@ RemoveDupes.MessengerOverlay = {
       var GetSelectedMsgFolders = GetSelectedMsgFolders();
       RemoveDupes.MessengerOverlay.originalsFolders = new Set;
       RemoveDupes.MessengerOverlay.originalsFolderUris = new Set;
-      for(var i = 0; i < GetSelectedMsgFolders.length; i++) {
+      for (let i = 0; i < GetSelectedMsgFolders.length; i++) {
         RemoveDupes.MessengerOverlay.originalsFolders.add(RemoveDupes.MessengerOverlay.originalsFolders[i]);
         RemoveDupes.MessengerOverlay.originalsFolderUris.add(RemoveDupes.MessengerOverlay.originalsFolders[i].URI);
       }
@@ -1115,7 +1114,7 @@ RemoveDupes.MessengerOverlay = {
     RemoveDupes.MessengerOverlay.originalsFolderUris = new Set;
     var skipSpecialFolders = 
       RemoveDupes.Prefs.getBoolPref('skip_special_folders','true');
-    for (var i = 0; i < rangeCount; i++) {
+    for (let i = 0; i < rangeCount; i++) {
       let startIndex = {};
       let endIndex = {};
       selection.getRangeAt(i, startIndex, endIndex);
@@ -1197,7 +1196,7 @@ RemoveDupes.DupeSearchData = function ()
 
   this.useCriteria = new Object;
   // which information will we use for comparing messages?
-  for(criterion in RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults) {
+  for (let criterion in RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults) {
     this.useCriteria[criterion] = 
      RemoveDupes.Prefs.getBoolPref("comparison_criteria." + criterion, 
                 RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults[criterion]);
