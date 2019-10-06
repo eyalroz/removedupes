@@ -29,7 +29,9 @@
 # **** END LICENSE BLOCK ****
 
 content removedupes jar:chrome/removedupes.jar!/content/removedupes/
-overlay chrome://messenger/content/mailWindowOverlay.xul chrome://removedupes/content/removedupes-mailWindowOverlay.xul
+overlay chrome://messenger/content/mailWindowOverlay.xul chrome://removedupes/content/removedupes-mailWindowOverlay.xul appversion<65.0a1
+overlay chrome://messenger/content/messenger.xul chrome://removedupes/content/removedupes-mailWindowOverlay.xul appversion>=65.0a1
+style chrome://removedupes/content/removedupes-dialog.tb68.xul chrome://removedupes/skin/style.css appversion>=68.0
 style chrome://removedupes/content/removedupes-dialog.xul chrome://removedupes/skin/style.css
 skin removedupes classic/1.0 jar:chrome/removedupes.jar!/skin/classic/removedupes/
 locale removedupes en-US jar:chrome/removedupes.jar!/locale/en-US/removedupes/
