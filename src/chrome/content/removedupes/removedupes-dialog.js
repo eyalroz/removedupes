@@ -1,5 +1,16 @@
-var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
+var rdModuleURI = "chrome://removedupes/content/removedupes-common.js";
+if (ChromeUtils && ChromeUtils.import) {
+  // Thunderbird 67 or later
+  var { RemoveDupes } = ChromeUtils.import(rdModuleURI);
+}
+else {
+  Components.utils.import(rdModuleURI);
+}
 
+const Cc = Components.classes;
+const Ci = Components.interfaces;
+
+ 
 var msgWindow; 
   // the 3-pane window which opened us
 var messenger;
@@ -32,7 +43,7 @@ var numberToKeep;
 var selectedRow = -1;
 
 
-#ifdef XBL_FOLDER_PICKER
+#ifdef XBL_FOLDER_PICKER_OR_REPLACEMENT
 var dupeMoveTargetFolder;
   // workaround for Mozilla bug 473009 - 
   // the new folder picker DOESN'T EXPOSE ITS F***ING selected folder!
@@ -62,7 +73,7 @@ const  flagsColumnIndex       = 11;
 var DateService;
 var DateTimeFormatter;
 #ifdef MOZ_THUNDERBIRD
-if (RemoveDupes.App.ensureMinimumVersion("56")) {
+if (RemoveDupes.App.versionIsAtLeast("56")) {
   // see https://wiki.mozilla.org/Thunderbird/Add-ons_Guide_57
   // for details regarding this change
   var IntlService = Components.classes["@mozilla.org/mozintl;1"]
@@ -73,7 +84,7 @@ if (RemoveDupes.App.ensureMinimumVersion("56")) {
     timeZoneName: 'short'
   };
 
-  if (RemoveDupes.App.ensureMinimumVersion("59.0b2")) {
+  if (RemoveDupes.App.versionIsAtLeast("59.0b2")) {
     DateTimeFormatter = new IntlService.DateTimeFormat(undefined, formattingOptions);
   }
   else {
@@ -313,11 +324,19 @@ function createMessageRowTemplate() {
   messageRowTemplate.setAttribute('indexInDupeSet', 0);
 }
 
+function setStatusBarPanelText(panelId, text) {
+  let panel = document.getElementById(panelId);
+  // This works for statusbarpanel elements (used upto Thunderbird 68)
+  panel.setAttribute("label", text);
+  // This works for label elements (used starting with Thunderbird 68)
+  panel.setAttribute("value", text);
+}
+
 function clearStatusBar() {
-  document.getElementById("total-status-panel").setAttribute("label", "");
-  document.getElementById("sets-status-panel").setAttribute("label", "");
-  document.getElementById("keeping-status-panel").setAttribute("label", "");
-  document.getElementById("main-status-panel").setAttribute("label","");
+  setStatusBarPanelText("total-status-panel","");
+  setStatusBarPanelText("sets-status-panel","");
+  setStatusBarPanelText("keeping-status-panel","");
+  setStatusBarPanelText("main-status-panel","");
 }
 
 function rebuildDuplicateSetsTree() {
@@ -338,8 +357,9 @@ function rebuildDuplicateSetsTree() {
   dupeSetsTreeChildren = document.createElement("treechildren");
   dupeSetsTreeChildren.setAttribute("id","dupeSetsTreeChildren");
 
-  document.getElementById("main-status-panel").setAttribute("label",
-    RemoveDupes.Strings.GetStringFromName("removedupes.status_panel.populating_list"));
+  setStatusBarPanelText("main-status-panel",
+    RemoveDupes.Strings.GetStringFromName("removedupes.status_panel.populating_list")
+  );
 
   numberToKeep = 0;
 
@@ -406,8 +426,9 @@ function resetCheckboxValues() {
   RemoveDupes.JSConsoleService.logStringMessage('dupeSetsTreeChildren = ' + dupeSetsTreeChildren);
 #endif
 
-  document.getElementById("main-status-panel").setAttribute("label",
-    RemoveDupes.Strings.GetStringFromName("removedupes.status_panel.updating_list"));
+  setStatusBarPanelText("main-status-panel",
+    RemoveDupes.Strings.GetStringFromName("removedupes.status_panel.updating_list")
+  );
 
   numberToKeep = 0;
 
@@ -434,13 +455,16 @@ function resetCheckboxValues() {
 }
 
 function updateStatusBar() {
-  document.getElementById("sets-status-panel").setAttribute("label",
-    RemoveDupes.Strings.GetStringFromName("removedupes.status_panel.number_of_sets") + " " + numberOfDupeSets);
-  document.getElementById("total-status-panel").setAttribute("label", 
-    RemoveDupes.Strings.GetStringFromName("removedupes.status_panel.total_number_of_dupes") + " " + totalNumberOfDupes);
-  document.getElementById("keeping-status-panel").setAttribute("label", 
-    RemoveDupes.Strings.GetStringFromName("removedupes.status_panel.number_of_kept_dupes") + " " + numberToKeep);
-  document.getElementById("main-status-panel").setAttribute("label", "");
+  setStatusBarPanelText("sets-status-panel",
+    RemoveDupes.Strings.GetStringFromName("removedupes.status_panel.number_of_sets") + " " + numberOfDupeSets
+  );
+  setStatusBarPanelText("total-status-panel",
+    RemoveDupes.Strings.GetStringFromName("removedupes.status_panel.total_number_of_dupes") + " " + totalNumberOfDupes
+  );
+  setStatusBarPanelText("keeping-status-panel", 
+    RemoveDupes.Strings.GetStringFromName("removedupes.status_panel.number_of_kept_dupes") + " " + numberToKeep
+  );
+  setStatusBarPanelText("main-status-panel","");
 }
 
 // createMessageTreeRow -
@@ -558,29 +582,44 @@ function onTreeKeyUp(ev) {
   }
 }
 
+function getFocusedDupeTreeItem() {
+  let view = dupeSetTree.view || dupeSetTree.contentView;
+  return view.getItemAtIndex(dupeSetTree.currentIndex);
+}
 
 // onClickTree -
 // Either toggle the deleted status of the message, load it for display,
 // or do nothing
 
 function onClickTree(ev) {
+
+  dupeSetTreeBoxObject = 
+    RemoveDupes.App.versionIsAtLeast("61") ? dupeSetTree : dupeSetTree.treeBoxObject;
+
+
 #ifdef DEBUG_onClickTree
   RemoveDupes.JSConsoleService.logStringMessage('in onClickTree()\nclick point = ' + ev.clientX + ':' + ev.clientY);
 #endif
 
-  var treeBoxOject = dupeSetTree.treeBoxObject;
-  var row = {}, col = {}, obj = {};
-  treeBoxOject.getCellAt(ev.clientX, ev.clientY, row, col, obj);
+  var row = null;
+  var col = null;
 
-//  var x = {}, y = {}, w = {}, h = {};
-//  treeBoxOject.getCoordsForCellItem(row.value, col.value, "treecell", x, y, w, h);
+  try {
+    let cell = dupeSetTreeBoxObject.getCellAt(ev.clientX, ev.clientY);
+    row = cell.row;
+    col = cell.col;
+  } catch(ex) {
+    let rowObject = {}, colObject = {}; obj = {};
+    dupeSetTreeBoxObject.getCellAt(ev.clientX, ev.clientY, rowObject, col, obj);
+    if (colObject.value) { col = colObject.value; }
+    if (rowObject.value) { row = rowObject.value; }
+  }
 
-  if (   !col.value
-      || !row.value 
-      || !col.value.index 
-      || !dupeSetTree.contentView
-                     .getItemAtIndex(dupeSetTree
-                                                .currentIndex).hasAttribute('indexInDupeSet') ) {
+  if (   !col
+      || !row
+      || !col.index 
+      || !getFocusedDupeTreeItem().hasAttribute('indexInDupeSet') 
+     ) {
     // this isn't a valid cell we can use, or it's in one of the [+]/[-] rows
 #ifdef DEBUG_onClickTree
     RemoveDupes.JSConsoleService.logStringMessage('not a valid cell, doing nothing');
@@ -588,7 +627,7 @@ function onClickTree(ev) {
     return;
   }
 
-  if (col.value.index == toKeepColumnIndex) {
+  if (col.index == toKeepColumnIndex) {
     toggleDeletionForCurrentRow();
     return;
   }
@@ -608,7 +647,7 @@ function loadCurrentRowMessage() {
   RemoveDupes.JSConsoleService.logStringMessage('in loadCurrentRowMessage()\ngTree.currentIndex = ' + dupeSetTree.currentIndex);
 #endif
   // when we click somewhere in the tree, the focused element should be an inner 'treeitem'
-  var focusedTreeItem = dupeSetTree.contentView.getItemAtIndex(dupeSetTree.currentIndex);
+  var focusedTreeItem = getFocusedDupeTreeItem()
   var messageIndexInDupeSet = focusedTreeItem.getAttribute('indexInDupeSet');
   var dupeSetTreeItem = focusedTreeItem.parentNode.parentNode;
 #ifdef DEBUG_loadCurrentRowMessage
@@ -656,7 +695,7 @@ function toggleDeletionForCurrentRow() {
 #ifdef DEBUG_toggleDeletionForCurrentRow
   RemoveDupes.JSConsoleService.logStringMessage('in toggleDeletionForCurrentRow()\ngTree.currentIndex = ' + dupeSetTree.currentIndex);
 #endif
-  var focusedTreeItem = dupeSetTree.contentView.getItemAtIndex(dupeSetTree.currentIndex);
+  var focusedTreeItem = getDupeTreeItemAtIndex(dupeSetTree.currentIndex);
 
   // The user has clicked a message row, so change it status
   // from 'Keep' to 'Delete' or vice-versa
@@ -691,7 +730,7 @@ function onCancel() {
 function onAccept() {
   var uri = null;
   try {
-#ifdef XBL_FOLDER_PICKER
+#ifdef XBL_FOLDER_PICKER_OR_REPLACEMENT
     var uri = dupeMoveTargetFolder.URI;
 #else
     var uri = document.getElementById('actionTargetFolder').getAttribute('uri');
@@ -711,6 +750,9 @@ function onAccept() {
 
   var deletePermanently =
     (document.getElementById('action').getAttribute('value') == 'delete_permanently'); 
+
+  if (!uri && !deletePermanently) { throw("Unable to determine URI of folder to move duplicates into."); }
+
   var retVal = RemoveDupes.Removal.removeDuplicates(
     window,
     msgWindow,
@@ -819,7 +861,7 @@ function initializeFolderPicker() {
   RemoveDupes.JSConsoleService.logStringMessage('setting folder picker to uri:\n' + uri);
 #endif
 
-#ifdef XBL_FOLDER_PICKER
+#ifdef XBL_FOLDER_PICKER_OR_REPLACEMENT
   try {
     document.getElementById('actionTargetFolderPopup').selectFolder(msgFolder);
   } catch(ex) { }
@@ -909,7 +951,7 @@ function sortDupeSetsByField(field) {
   }
 }
 
-#ifdef XBL_FOLDER_PICKER
+#ifdef XBL_FOLDER_PICKER_OR_REPLACEMENT
 function onTargetFolderClick(targetFolder) {
   dupeMoveTargetFolder = targetFolder;
 #ifdef DEBUG_onTargetFolderClick

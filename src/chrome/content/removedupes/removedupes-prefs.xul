@@ -2,11 +2,11 @@
 
 <?xml-stylesheet href="chrome://global/skin/"?>
 <?xml-stylesheet href="chrome://messenger/skin/preferences/preferences.css"?>
+<?xml-stylesheet href="chrome://messenger/skin/messenger.css" type="text/css"?>
 
 #ifdef MOZ_PRETOOLKIT_SEAMONKEY
 <!DOCTYPE prefwindow [
-  <!ENTITY % removedupesprefDTD SYSTEM
-             "chrome://removedupes/locale/removedupes-prefs.dtd">
+  <!ENTITY % removedupesprefDTD SYSTEM "chrome://removedupes/locale/removedupes-prefs.dtd">
   %removedupesprefDTD;
 ]>
 #else
@@ -14,13 +14,23 @@
 #endif
 
 #ifndef MOZ_PRETOOLKIT_SEAMONKEY
-<prefwindow xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+#expand	<__PREFWINDOW_ELEMENT__ xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
             id="removeDupesPrefsDialogTitle"
             title="&prefs_dialog_title;"
             dlgbuttons="accept,cancel">
-  <prefpane id="removeDupesPrefPane"
+#expand	  <__PREFPANE_ELEMENT__ id="removeDupesPrefPane"
             helpURI="&guide-url;"
             onpaneload="RemoveDupes.PrefPane.init();">
+#else
+<page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      onload="parent.initPanel(panel);"
+      onunload="gBDMPrefPane.onunload();"
+      headertitle="&removedupes-preftree-page-title;">
+
+#endif
+
+#ifdef HAVE_PREFERENCE_ELEMENTS
     <preferences id="extensions.removedupes.refs">
       <preference id="extensions.removedupes.comparison_criteria.author"
                   name="extensions.removedupes.comparison_criteria.author"
@@ -74,17 +84,13 @@
                   name="extensions.removedupes.time_comparison_resolution"
                   type="string"/>
     </preferences>
-#else
-<page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-      xmlns:html="http://www.w3.org/1999/xhtml"
-      onload="parent.initPanel(panel);"
-      onunload="gBDMPrefPane.onunload();"
-      headertitle="&removedupes-preftree-page-title;">
-
+#endif
+#ifdef MOZ_THUNDERBIRD
+    <script type="application/javascript" src="chrome://global/content/preferencesBindings.js" />
+    <script type="application/javascript" src="chrome://removedupes/content/removedupes-set-preference-types.js" />
 #endif
 
-    <script type="application/javascript"
-      src="chrome://removedupes/content/removedupes-prefs.js"/>
+    <script type="application/javascript" src="chrome://removedupes/content/removedupes-prefs.js"/>
 #ifdef MOZ_PRETOOLKIT_SEAMONKEY
     <script type="application/javascript">
       var panel = "chrome://removedupes/content/removedupes-prefs.xul";
@@ -107,7 +113,6 @@
                          "removedupes.comparison_criteria.body"];
     </script>
 #endif
-
 
     <tabbox id="prefsTabBox" flex="1" persist="selectedIndex">
 
@@ -147,7 +152,7 @@
               autostretch="never"/>
             <spacer/>
             <groupbox>
-              <caption label="&general_settings.default_action.description;"/>
+#expand	              __CAPTION_START__&general_settings.default_action.description;__CAPTION_END__
               <radiogroup preference="extensions.removedupes.default_action"
                 prefstring="extensions.removedupes.default_action"
                 id="extensions.removedupes.default_action">
@@ -172,7 +177,7 @@
               accesskey="&message_comparison.compare_stripped_and_sorted_addresses.access_key;"
               autostretch="never"/>
             <groupbox>
-              <caption label="&message_comparison.criteria_box.label;"/>
+#expand	              __CAPTION_START__&message_comparison.criteria_box.label;__CAPTION_END__
               <vbox flex="1">
                 <checkbox preference="extensions.removedupes.comparison_criteria.author"
                   prefstring="extensions.removedupes.comparison_criteria.author"
@@ -266,12 +271,12 @@
        the prefpane does not expand to contain lowest part of the tabbox,
        so it's cut out by the Ok & Cancel buttons; we're inserting dummy
        elements -->
-  <label value=" "/>
-  <label value=" "/>
+    <label value=" "/>
+    <label value=" "/>
 #endif
 #ifndef MOZ_PRETOOLKIT_SEAMONKEY
-  </prefpane>
-</prefwindow>
+#expand	  </__PREFPANE_ELEMENT__>
+#expand	</__PREFWINDOW_ELEMENT__>
 #else
 
 </page>

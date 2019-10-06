@@ -1,4 +1,11 @@
-var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
+var rdModuleURI = "chrome://removedupes/content/removedupes-common.js";
+if (ChromeUtils && ChromeUtils.import) {
+  // Thunderbird 67 or later
+  var { RemoveDupes } = ChromeUtils.import(rdModuleURI);
+}
+else {
+  Components.utils.import(rdModuleURI);
+}
 
 RemoveDupes.PrefPane = {
 

@@ -6,12 +6,15 @@ removedupes.jar:
 *   content/removedupes/removedupes-dialog.xul                    (chrome/content/removedupes/removedupes-dialog.xul)
 *   content/removedupes/removedupes-dialog.js                     (chrome/content/removedupes/removedupes-dialog.js)
 #else
-*   content/removedupes/removedupes-dialog.xul                    (chrome/content/removedupes/removedupes-dialog.xul) -DXBL_FOLDER_PICKER
-*   content/removedupes/removedupes-dialog.js                     (chrome/content/removedupes/removedupes-dialog.js) -DXBL_FOLDER_PICKER  
+*   content/removedupes/removedupes-dialog.tb68.xul               (chrome/content/removedupes/removedupes-dialog.xul) -DXBL_FOLDER_PICKER_OR_REPLACEMENT -DSTATUSBARPANEL_ELEMENT_AND_CLASS="label class=\"statusbarpanel\"" -DSTATUSBAR_ELEMENT="hbox" -DSTATUSBAR_CLASS="class=\"statusbar\""
+*   content/removedupes/removedupes-dialog.xul                    (chrome/content/removedupes/removedupes-dialog.xul) -DXBL_FOLDER_PICKER_OR_REPLACEMENT -DSTATUSBARPANEL_ELEMENT_AND_CLASS="statusbarpanel" -DSTATUSBAR_ELEMENT="statusbar"
+*   content/removedupes/removedupes-dialog.js                     (chrome/content/removedupes/removedupes-dialog.js) -DXBL_FOLDER_PICKER_OR_REPLACEMENT  
 #endif
 #ifdef MOZ_THUNDERBIRD
 *   content/removedupes/removedupes-dialog.tb2.xul                (chrome/content/removedupes/removedupes-dialog.xul)
 *   content/removedupes/removedupes-dialog.tb2.js                 (chrome/content/removedupes/removedupes-dialog.js)
+*   content/removedupes/removedupes-prefs.tb68.xul                (chrome/content/removedupes/removedupes-prefs.xul) -DPREFWINDOW_ELEMENT="dialog" -DPREFPANE_ELEMENT="vbox"  -DCAPTION_START="<hbox class=\"groupbox-title\"><label class=\"header\">" -DCAPTION_END="</label></hbox>"
+    content/removedupes/removedupes-set-preference-types.js       (chrome/content/removedupes/removedupes-set-preference-types.js)
 #endif
 *   content/removedupes/removedupes-mailWindowOverlay.xul         (chrome/content/removedupes/removedupes-mailWindowOverlay.xul)
     locale/en-US/removedupes/removedupes.dtd                      (chrome/locale/en-US/removedupes/removedupes.dtd)
@@ -77,7 +80,7 @@ removedupes.jar:
     locale/sl-SI/removedupes/removedupes.dtd                      (chrome/locale/sl-SI/removedupes/removedupes.dtd)
     locale/sl-SI/removedupes/removedupes-prefs.dtd                (chrome/locale/sl-SI/removedupes/removedupes-prefs.dtd)
     locale/sl-SI/removedupes/removedupes.properties               (chrome/locale/sl-SI/removedupes/removedupes.properties)
-*   content/removedupes/removedupes-prefs.xul                     (chrome/content/removedupes/removedupes-prefs.xul)
+*   content/removedupes/removedupes-prefs.xul                     (chrome/content/removedupes/removedupes-prefs.xul)  -DPREFWINDOW_ELEMENT="prefwindow" -DPREFPANE_ELEMENT="prefpane" -DHAVE_PREFERENCE_ELEMENTS -DCAPTION_START="<caption label=\""  -DCAPTION_END="\"/>"
 *   content/removedupes/removedupes-button.xul                    (chrome/content/removedupes/removedupes-button.xul)
 *   skin/classic/removedupes/removedupes-messenger.css            (chrome/skin/classic/removedupes/removedupes-messenger.css)
 *   skin/classic/removedupes/removedupes-button.css               (chrome/skin/classic/removedupes/removedupes-button.css)
