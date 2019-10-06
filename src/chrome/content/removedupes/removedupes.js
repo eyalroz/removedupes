@@ -1,4 +1,11 @@
-var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
+var rdModuleURI = "chrome://removedupes/content/removedupes-common.js";
+if (ChromeUtils && ChromeUtils.import) {
+  // Thunderbird 67 or later
+  var { RemoveDupes } = ChromeUtils.import(rdModuleURI);
+}
+else {
+  Components.utils.import(rdModuleURI);
+}
 
 if ("undefined" == typeof(messenger)) {
   var messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
@@ -1001,19 +1008,21 @@ RemoveDupes.MessengerOverlay = {
     }
     else {
         
-      var dialogURI = "chrome://removedupes/content/removedupes-dialog.xul";
+      var dialogURI;
 #ifdef MOZ_THUNDERBIRD
-      if (!RemoveDupes.App.ensureMinimumVersion("3.0b1")) {
-#ifdef DEBUG_reviewAndRemove
-        RemoveDupes.JSConsoleService.logStringMessage('App Version < 3.0b1');
-#endif
-        dialogURI = "chrome://removedupes/content/removedupes-dialog.tb2.xul"
+      if (RemoveDupes.App.versionIsAtLeast("68")) {
+        dialogURI = "chrome://removedupes/content/removedupes-dialog.tb68.xul";
       }
-#ifdef DEBUG_reviewAndRemove
+      else if (!RemoveDupes.App.versionIsAtLeast("3.0b1")) {
+        dialogURI = "chrome://removedupes/content/removedupes-dialog.tb2.xul";
+      }
       else {
-        RemoveDupes.JSConsoleService.logStringMessage('App Version >= 3.0b1');
+        dialogURI = "chrome://removedupes/content/removedupes-dialog.xul";
       }
 #endif
+
+#ifdef DEBUG_reviewAndRemove
+      RemoveDupes.JSConsoleService.logStringMessage("Using review dialog at " + dialogURI);
 #endif
 
       // open up a dialog in which the user sees all dupes we've found,
@@ -1067,7 +1076,7 @@ RemoveDupes.MessengerOverlay = {
       return;
     gFolderTreeView.preRDGetCellProperties = gFolderTreeView.getCellProperties;
 
-    if(RemoveDupes.App.ensureMaximumVersion("17.1")) {
+    if(RemoveDupes.App.versionIsAtMost("17.1")) {
       var atomService =
         Components.classes["@mozilla.org/atom-service;1"]
                   .getService(Components.interfaces.nsIAtomService);
@@ -1083,7 +1092,7 @@ RemoveDupes.MessengerOverlay = {
       };
       return;
     }
-    if(RemoveDupes.App.ensureMinimumVersion("23.0")) {
+    if(RemoveDupes.App.versionIsAtLeast("23.0")) {
       gFolderTreeView.getCellProperties = function newGcp(aRow, aCol) {
         var properties = gFolderTreeView.preRDGetCellProperties(aRow, aCol);
         var row = gFolderTreeView._rowMap[aRow];

@@ -1,25 +1,24 @@
 {
-  "manifest_version": 2,
-  "applications": {
-    "gecko": {
-#expand      "id": "__UUID__",
-      "strict_min_version": "61.0a1"
-    }
-  },
-  "author": "Eyal Rozenberg",
-  "name": "Remove Duplicate Messages (Alternate)",
-  "description": "Integrated Calendaring & Scheduling for your Email client",
-#expand   "version": "__VERSION__",
-  "legacy" : {
-    "options" : {
-      "page" : "chrome://removedupes/content/removedupes-prefs.xul",
-      "open_in_tab" : false
-    }
-  },
-  "homepage_url": "https://removedupes.mozdev.org/",
-  "icons": {
-    "32": "chrome/content/removedupes.png"
-  }
+	"manifest_version": 2,
+	"applications": {
+		"gecko": {
+#expand                 "id": "__UUID__",
+                        "strict_min_version": "65.0a1"
+		}
+	},
+	"author": "Eyal Rozenberg",
+	"name": "Remove Duplicate Messages (Alternate)",
+	"description": "Searches mail folders for duplicate messages and lets the user remove them",
+#expand		"version": "__VERSION__",
+#ifdef VERSION_NAME
+#expand		"version_name": "__VERSION_NAME__",
+#endif
+        "legacy" : {
+                "type" : "xul",
+                "options" : {
+                        "page" : "chrome://removedupes/content/removedupes-prefs.tb68.xul",
+                        "open_in_tab": false
+                }
+        }
 }
-
 

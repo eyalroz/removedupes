@@ -1,4 +1,7 @@
-var EXPORTED_SYMBOLS = ["Removedupes"];
+var EXPORTED_SYMBOLS = ["RemoveDupes"];
+
+const Cc = Components.classes;
+const Ci = Components.interfaces;
 
 if ("undefined" == typeof(messenger)) {
   var messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
@@ -223,16 +226,16 @@ RemoveDupes.App = {
       Components.classes["@mozilla.org/xpcom/version-comparator;1"]
                 .getService(Components.interfaces.nsIVersionComparator);  
     
-    var vccResult = versionChecker.compare( version, versionThreshold );
-    return (   (checkMinimum  && (vccResult >= 0))
-            || (!checkMinimum && (vccResult <= 0)));
+    var versionCheckResult = versionChecker.compare( version, versionThreshold );
+    return (   (checkMinimum  && (versionCheckResult >= 0))
+            || (!checkMinimum && (versionCheckResult <= 0)));
   },
 
-  ensureMinimumVersion : function(minVersion) {
+  versionIsAtLeast : function(minVersion) {
   	return this.ensureVersion(minVersion, true);
   },
 
-  ensureMaximumVersion : function(maxVersion) {
+  versionIsAtMost : function(maxVersion) {
   	return this.ensureVersion(maxVersion, false);
   }
 }
@@ -322,16 +325,27 @@ RemoveDupes.Prefs = {
     this.prefService.setIntPref(
       RemoveDupes.Prefs.preferencePrefix + prefName, val);
   },
+
+  setAppStringPref: function(appPrefName, str) {
+#ifdef MOZ_THUNDERBIRD
+      if (BiDiMailUI.App.versionIsAtLeast("58.0b1")) {
+        BiDiMailUI.Prefs.prefService.setStringPref(appPrefName, str);
+      }
+      else
+#endif
+      {     
+        BiDiMailUI.Prefs.prefService.setComplexValue(
+          appPrefName, Components.interfaces.nsISupportsString, str);
+      }
+  },
   
   setLocalizedStringPref: function (prefName, val) {
     var pls = 
       Components.classes["@mozilla.org/pref-localizedstring;1"]
                 .createInstance(Components.interfaces.nsIPrefLocalizedString);
     pls.data = val;
-    this.prefService
-        .setComplexValue(
-          RemoveDupes.Prefs.preferencePrefix +
-          prefName,Components.interfaces.nsIPrefLocalizedString, pls);
+    setAppStringPref(RemoveDupes.Prefs.preferencePrefix +
+          prefName, pls);
   }
 
 }

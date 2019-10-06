@@ -1,9 +1,14 @@
 <?xml version="1.0"?>
 
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
 <?xml-stylesheet href="chrome://communicator/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://messenger/skin/prefPanels.css" type="text/css"?>
+<?xml-stylesheet href="chrome://messenger/skin/messenger.css" type="text/css"?>
+<?xml-stylesheet href="chrome://messenger/skin/dialogs.css" type="text/css"?>
+<?xml-stylesheet href="chrome://messenger/skin/folderMenus.css" type="text/css"?>
 <?xml-stylesheet href="chrome://removedupes/skin/removedupes-dialog.css" type="text/css"?>
-#ifndef XBL_FOLDER_PICKER
+#ifndef XBL_FOLDER_PICKER_OR_REPLACEMENT
 
 <?xul-overlay href="chrome://messenger/content/msgFolderPickerOverlay.xul"?>
 
@@ -21,21 +26,7 @@
         title="&removedupes_dialog.dialog_title;">
 
   <script type="application/javascript" src="chrome://messenger/content/widgetglue.js"/>
-  <script type="application/javascript">
-    const Cc = Components.classes;
-    const Ci = Components.interfaces;
-  </script>
-
-  <script type="application/javascript" src="chrome://removedupes/content/removedupes-common.js"/>
-#ifdef XBL_FOLDER_PICKER
   <script type="application/javascript" src="chrome://removedupes/content/removedupes-dialog.js"/>
-#else
-#ifdef MOZ_THUNDERBIRD
-  <script type="application/javascript" src="chrome://removedupes/content/removedupes-dialog.tb2.js"/>
-#else
-  <script type="application/javascript" src="chrome://removedupes/content/removedupes-dialog.js"/>
-#endif
-#endif
 
   <hbox flex="1">
     <vbox flex="2">
@@ -54,26 +45,30 @@
           <treecol width="40"
                    persist="width hidden class sortDirection"
                    id="dummyCell"
-                   primary="true"/>
+                   primary="true"
+                   closemenu="none"/>
           <splitter class="tree-splitter"/>
           <treecol id="keepColumn"
                    width="60"
                    persist="width hidden class sortDirection"
-                   label="&removedupes_dialog.keep_flag;" />
+                   label="&removedupes_dialog.keep_flag;"
+                   closemenu="none"/>
           <splitter class="tree-splitter"/>
           <treecol id="authorColumn"
                    fieldName="author"
                    label="&removedupes_dialog.author;"
                    flex="5"
                    persist="width hidden class sortDirection"
-                   onclick="onClickColumn(event);" />
+                   onclick="onClickColumn(event);"
+                   closemenu="none"/>
           <splitter class="tree-splitter"/>
           <treecol id="recipientsColumn"
                    fieldName="recipients"
                    label="&removedupes_dialog.recipients;"
                    flex="5"
                    persist="width hidden class sortDirection"
-                   onclick="onClickColumn(event);" />
+                   onclick="onClickColumn(event);"
+                   closemenu="none"/>
           <splitter class="tree-splitter"/>
           <treecol id="cc_listColumn"
                    fieldName="cc_list"
@@ -81,68 +76,76 @@
                    hidden="true"
                    flex="5"
                    persist="width hidden class sortDirection"
-                   onclick="onClickColumn(event);" />
+                   onclick="onClickColumn(event);"
+                   closemenu="none"/>
           <splitter class="tree-splitter"/>
           <treecol id="subjectColumn"
                    fieldName="subject"
                    label="&removedupes_dialog.subject;" 
                    flex="5"
                    persist="width hidden class sortDirection"
-                   onclick="onClickColumn(event);" />
+                   onclick="onClickColumn(event);"
+                   closemenu="none"/>
           <splitter class="tree-splitter"/>
           <treecol id="folderColumn"
                    fieldName="folder"
                    label="&removedupes_dialog.folder;" 
                    flex="2"
                    persist="width hidden class sortDirection"
-                   onclick="onClickColumn(event);" />
+                   onclick="onClickColumn(event);"
+                   closemenu="none"/>
           <splitter class="tree-splitter"/>
           <treecol id="send_timeColumn"  width="150"
                    fieldName="send_time"
                    label="&removedupes_dialog.send_time;"
                    flex="3"
                    persist="width hidden class sortDirection"
-                   onclick="onClickColumn(event);" />
+                   onclick="onClickColumn(event);"
+                   closemenu="none"/>
           <splitter class="tree-splitter"/>
           <treecol id="sizeColumn"  width="150"
                    fieldName="size"
                    label="&removedupes_dialog.size;"
                    flex="3"
                    persist="width hidden class sortDirection"
-                   onclick="onClickColumn(event);" />
+                   onclick="onClickColumn(event);"
+                   closemenu="none"/>
           <splitter class="tree-splitter"/>
           <treecol id="num_linesColumn"
                    fieldName="num_lines"
                    label="&removedupes_dialog.line_count;" 
                    flex="2"
                    persist="width hidden class sortDirection"
-                   onclick="onClickColumn(event);" />
+                   onclick="onClickColumn(event);"
+                   closemenu="none"/>
           <treecol id="message_idColumn"
                    fieldName="message_id"
                    label="&removedupes_dialog.id;" 
                    hidden="true"
                    flex="2"
                    persist="width hidden class sortDirection"
-                   onclick="onClickColumn(event);" />
+                   onclick="onClickColumn(event);"
+                   closemenu="none"/>
           <treecol id="flagsColumn"
                    fieldName="flags"
                    label="&removedupes_dialog.flags;" 
                    hidden="true"
                    flex="2"
                    persist="width hidden class sortDirection"
-                   onclick="onClickColumn(event);" />
+                   onclick="onClickColumn(event);"
+                   closemenu="none"/>
           <splitter class="tree-splitter"/>
         </treecols>
         <treechildren id="dupeSetsTreeChildren"/>
       </tree>
-      <hbox>
+#expand      <__STATUSBAR_ELEMENT__ __STATUSBAR_CLASS__ >
         <spacer width="5" />
-        <statusbarpanel id="main-status-panel" flex="6"/>
-        <statusbarpanel id="sets-status-panel" flex="1"/>
-        <statusbarpanel id="total-status-panel" flex="1"/>
-        <statusbarpanel id="keeping-status-panel" flex="1"/>
+#expand         <__STATUSBARPANEL_ELEMENT_AND_CLASS__ id="main-status-panel"  flex="6"/>
+#expand         <__STATUSBARPANEL_ELEMENT_AND_CLASS__ id="sets-status-panel"  flex="1"/>
+#expand         <__STATUSBARPANEL_ELEMENT_AND_CLASS__ id="total-status-panel"  flex="1"/>
+#expand         <__STATUSBARPANEL_ELEMENT_AND_CLASS__ id="keeping-status-panel" flex="1"/>
         <spacer width="2.5" />
-      </hbox>
+#expand      </__STATUSBAR_ELEMENT__>
       <spacer height="10"/>
       <groupbox>
         <caption label="&removedupes_dialog.action_label;"/>
@@ -157,10 +160,16 @@
                    label="&action.move.label;"
                    accesskey="&action.move.accesskey;"/>
             <menulist id="actionTargetFolder" flex="1">
-#ifdef XBL_FOLDER_PICKER
-              <menupopup id="actionTargetFolderPopup" type="folder" mode="filing" showFileHereLabel="true"
-                         style="-moz-binding: url('chrome://messenger/content/folderWidgets.xml#folder-menupopup');"
-                         oncommand="onTargetFolderClick(event.target._folder);"/>
+#ifdef XBL_FOLDER_PICKER_OR_REPLACEMENT
+              <menupopup 
+                   is="folder-menupopup"
+                   id="actionTargetFolderPopup" 
+                   class="menulist-menupopup"
+                   type="folder"
+                   mode="filing"
+                   showFileHereLabel="true"
+                   style="-moz-binding: url('chrome://messenger/content/folderWidgets.xml#folder-menupopup');"
+                   oncommand="onTargetFolderClick(event.target._folder);"/>
 #endif
             </menulist>
           </hbox>

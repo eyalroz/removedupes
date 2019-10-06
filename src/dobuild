@@ -1,13 +1,13 @@
 #!/bin/bash
 
 SHORTNAME="removedupes"
-VERSION="0.3.18"
+VERSION="0.4"
 BETA_SUBVERSION="1"
 UUID="{a300a000-5e21-4ee0-a115-9ec8f4eaa92b}"
 
 TARGET="$1"
 case "$TARGET" in
-    sm2 | sr | suiterunner | seamonkey)
+    suiterunner | sr | srunner)
         TARGET=suiterunner
 #        PREPROCESSOR_PARAMS="-DMOZ_TOOLKIT_SEAMONKEY -DUSE_THREADS"
         PREPROCESSOR_PARAMS="-DMOZ_TOOLKIT_SEAMONKEY"
@@ -23,7 +23,7 @@ case "$TARGET" in
         PREPROCESSOR_PARAMS="-DMOZ_PRETOOLKIT_SEAMONKEY"
         ;;
     *)
-	echo "please specify either tbird or seamonkey"
+	echo "Please specify either thunderbird, suiterunner or suitelegacy."
 	exit 1
 	;;
 esac
@@ -35,6 +35,20 @@ if [ -z "$EXTENSION_RELEASE" ]; then
 fi
 
 shift 1
+
+# all arguments after the target app are #define 'd in the XUL preprocessor,
+# with a DEBUG_ prefix; so if you want to, say, have debugging code specific
+# to the function myFancyFunc(), write it like so:
+#
+#   #ifdef DEBUG_myFancyFunc 
+#     debugging code etc. etc.
+#   #endif
+# 
+# then invoke
+#
+#   dobuild tbird myFancyFunc
+#
+# to have your debugging code enabled
 
 if [ -n "$1" ]; then
 	PREPROCESSOR_PARAMS+=" -DDEBUG"
@@ -50,6 +64,7 @@ PREPROCESSOR_PARAMS="$PREPROCESSOR_PARAMS -DVERSION=$VERSION -DUUID=$UUID -DSHOR
 echo -e "Building the XPI with the following definitions:\n\n$PREPROCESSOR_PARAMS\n"
 BUILDDIR="build/$TARGET"
 XPINAME="${SHORTNAME}_${VERSION}_${TARGET}.xpi"
+LINKNAME="${SHORTNAME}_${TARGET}.xpi"
 BUILDTOOLSDIR="buildtools"
 export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
 
@@ -61,7 +76,7 @@ $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILDDIR/jar.mn
 $BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILDDIR/jar.mn || exit
 echo -e "\nJAR files ready\n"
 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.rdf > $BUILDDIR/install.rdf # For pre-68 Thunderbird versions
-# $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS manifest.json > $BUILDDIR/manifest.json # For Thunderbird 68 and later
+$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS manifest.json > $BUILDDIR/manifest.json # For Thunderbird 68 and later
 rm -rf ${SHORTNAME}
 rm -rf ${SHORTNAME}-mac-skin
 rm -f installed-chrome.txt
@@ -90,8 +105,8 @@ case "$TARGET" in
 	  platform/Darwin/chrome.manifest \
 	  platform/Darwin/chrome/${SHORTNAME}-mac-skin.jar \
 	  install.rdf \
+	  manifest.json \
 	  chrome.manifest || exit
-#	  manifest.json \
         ;;
     suiterunner)
         $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
@@ -101,6 +116,7 @@ case "$TARGET" in
 	  chrome/${SHORTNAME}.jar \
 	  defaults/ \
 	  install.rdf \
+	  manifest.json \
 	  chrome.manifest || exit
         ;;
     suitelegacy)
@@ -114,5 +130,5 @@ case "$TARGET" in
 	  install.js || exit
         ;;
 esac
-
+ln $XPINAME $LINKNAME
 echo -e "\nXPI ready\n"
