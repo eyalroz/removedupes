@@ -1325,6 +1325,10 @@ RemoveDupes.DupeSearchData = function ()
     this.originalsFolderUris = RemoveDupes.MessengerOverlay.originalsFolderUris;
     this.originalsFolders = RemoveDupes.MessengerOverlay.originalsFolders;
   }
+  else {
+    // Just to avoid some JS warnings later about using a non-existent member
+    this.originalsFolderUris = null
+  }
 }
 //---------------------------------------------------
 

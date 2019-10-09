@@ -110,7 +110,7 @@ else
 
 // DupeMessageRecord - a self-describing class;
 // each dupe message in each dupe set will have a record built
-DupeMessageRecord = function(messageUri) {
+var DupeMessageRecord = function(messageUri) {
   var messageHdr  = messenger.msgHdrFromURI(messageUri);
   
   this.uri          = messageUri;
@@ -156,6 +156,10 @@ function flagsToString(flags) {
 }
 
 function initDupeReviewDialog() {
+#ifdef DEBUG_initDupeReviewDialog
+    RemoveDupes.JSConsoleService.logStringMessage('in initDupeReviewDialog()');
+#endif
+
 #ifdef DEBUG_profile
   RemoveDupes.startTime = (new Date()).getTime();
 #endif
@@ -695,7 +699,7 @@ function toggleDeletionForCurrentRow() {
 #ifdef DEBUG_toggleDeletionForCurrentRow
   RemoveDupes.JSConsoleService.logStringMessage('in toggleDeletionForCurrentRow()\ngTree.currentIndex = ' + dupeSetTree.currentIndex);
 #endif
-  var focusedTreeItem = getDupeTreeItemAtIndex(dupeSetTree.currentIndex);
+  var focusedTreeItem = getFocusedDupeTreeItem();
 
   // The user has clicked a message row, so change it status
   // from 'Keep' to 'Delete' or vice-versa
@@ -721,7 +725,10 @@ function toggleDeletionForCurrentRow() {
 }
 
 function onCancel() {
-  delete dupeSetsHashMap;
+#ifdef DEBUG_onCancel
+  RemoveDupes.JSConsoleService.logStringMessage('in onCancel()');
+#endif
+  dupeSetsHashMap = null;
 }
 
 // Note: This function returns true if any messages
@@ -738,7 +745,7 @@ function onAccept() {
   } catch(ex) { }
 
 #ifdef DEBUG_onAccept
-  RemoveDupes.JSConsoleService.logStringMessage('uri is ' + uri);
+  RemoveDupes.JSConsoleService.logStringMessage('target folder uri (if we\'re moving) is ' + uri);
 #endif
 
   if (totalNumberOfDupes == numberToKeep) {
@@ -784,7 +791,7 @@ function onAccept() {
   // If we've gotten here, either the deletion was succesful, or it
   // was partially successful, and at any rate - the dialog's contents are
   // stale, so it needs to go away
-  delete dupeSetsHashMap;
+  dupeSetsHashMap = null;
   return true;
 }
 
