@@ -85,12 +85,12 @@
                   type="string"/>
     </preferences>
 #endif
-#ifdef MOZ_THUNDERBIRD
+    <script type="application/javascript" src="chrome://removedupes/content/removedupes-prefs.js"/>
+#ifdef USE_TB68_SCRIPTS
     <script type="application/javascript" src="chrome://global/content/preferencesBindings.js" />
     <script type="application/javascript" src="chrome://removedupes/content/removedupes-set-preference-types.js" />
 #endif
 
-    <script type="application/javascript" src="chrome://removedupes/content/removedupes-prefs.js"/>
 #ifdef MOZ_PRETOOLKIT_SEAMONKEY
     <script type="application/javascript">
       var panel = "chrome://removedupes/content/removedupes-prefs.xul";
