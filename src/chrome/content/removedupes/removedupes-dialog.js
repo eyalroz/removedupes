@@ -10,8 +10,7 @@ else {
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 
- 
-var msgWindow; 
+ var msgWindow; 
   // the 3-pane window which opened us
 var messenger;
   // msgWindow's messenger
@@ -336,11 +335,15 @@ function setStatusBarPanelText(panelId, text) {
   panel.setAttribute("value", text);
 }
 
+function setNamedStatus(panelId, statusName) {
+  setStatusBarPanelText(panelId, statusName ? RemoveDupes.Strings.getByName(statusName) : null);
+}
+
 function clearStatusBar() {
-  setStatusBarPanelText("total-status-panel","");
-  setStatusBarPanelText("sets-status-panel","");
-  setStatusBarPanelText("keeping-status-panel","");
-  setStatusBarPanelText("main-status-panel","");
+  setNamedStatus("total-status-panel","");
+  setNamedStatus("sets-status-panel","");
+  setNamedStatus("keeping-status-panel","");
+  setNamedStatus("main-status-panel","");
 }
 
 function rebuildDuplicateSetsTree() {
@@ -361,9 +364,7 @@ function rebuildDuplicateSetsTree() {
   dupeSetsTreeChildren = document.createElement("treechildren");
   dupeSetsTreeChildren.setAttribute("id","dupeSetsTreeChildren");
 
-  setStatusBarPanelText("main-status-panel",
-    RemoveDupes.Strings.GetStringFromName("removedupes.status_panel.populating_list")
-  );
+  setNamedStatus('main-status-panel','status_panel.populating_list');
 
   numberToKeep = 0;
 
@@ -430,9 +431,7 @@ function resetCheckboxValues() {
   RemoveDupes.JSConsoleService.logStringMessage('dupeSetsTreeChildren = ' + dupeSetsTreeChildren);
 #endif
 
-  setStatusBarPanelText("main-status-panel",
-    RemoveDupes.Strings.GetStringFromName("removedupes.status_panel.updating_list")
-  );
+  setNamedStatus('main-status-panel','status_panel.updating_list');
 
   numberToKeep = 0;
 
@@ -460,13 +459,13 @@ function resetCheckboxValues() {
 
 function updateStatusBar() {
   setStatusBarPanelText("sets-status-panel",
-    RemoveDupes.Strings.GetStringFromName("removedupes.status_panel.number_of_sets") + " " + numberOfDupeSets
+        RemoveDupes.Strings.getByName('status_panel.number_of_sets') + " " + numberOfDupeSets
   );
   setStatusBarPanelText("total-status-panel",
-    RemoveDupes.Strings.GetStringFromName("removedupes.status_panel.total_number_of_dupes") + " " + totalNumberOfDupes
+        RemoveDupes.Strings.getByName('status_panel.total_number_of_dupes') + " " + totalNumberOfDupes
   );
   setStatusBarPanelText("keeping-status-panel", 
-    RemoveDupes.Strings.GetStringFromName("removedupes.status_panel.number_of_kept_dupes") + " " + numberToKeep
+        RemoveDupes.Strings.getByName('status_panel.number_of_kept_dupes') + " " + numberToKeep
   );
   setStatusBarPanelText("main-status-panel","");
 }
@@ -758,7 +757,10 @@ function onAccept() {
   var deletePermanently =
     (document.getElementById('action').getAttribute('value') == 'delete_permanently'); 
 
-  if (!uri && !deletePermanently) { throw("Unable to determine URI of folder to move duplicates into."); }
+  if (!uri && !deletePermanently) { 
+    RemoveDupes.namedAlert(window, 'no_folder_selected');
+    return false;
+  }
 
   var retVal = RemoveDupes.Removal.removeDuplicates(
     window,
