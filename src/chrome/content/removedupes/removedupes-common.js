@@ -9,16 +9,11 @@ if ("undefined" == typeof(messenger)) {
 
 var RemoveDupes = {};
 
-// TODO: Either import MailUtils where you need it, or switch this code
-// to native module import
+// TODO: Do we even need to do this? If so, in what TB versions?
 if ("undefined" == typeof(MailUtils)) {
   try {
     Components.utils.import("resource:///modules/MailUtils.js");
-  } catch(ex) {
-#ifdef DEBUG_GetMsgFolderFromUri
-      RemoveDupes.JSConsoleService.logStringMessage('Failed importing MailUtils.js: \n' + ex);
-#endif
-  }
+  } catch(ex) { }
 };
 
 try {
@@ -62,8 +57,41 @@ RemoveDupes.MessageStatusFlags = {
 // LABELS:         0x0E000000;
 };
 
+RemoveDupes.__defineGetter__("FolderLookupService", function() {
+  delete RemoveDupes.FolderLookupService;
+  return RemoveDupes.FolderLookupService =
+    Components.classes['@mozilla.org/mail/folder-lookup;1']
+              .getService(Components.interfaces.nsIFolderLookupService);
+  });
+
+// Note that with newer TB versions, we could replace the above service getter with MailServices.folderLookup,
+// after importing as follows:
+//
+//   const { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm");
+//
+// ... and the funny thing is, the folder-lookup service is pretty new anyway.
+
+
+
 RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
   let messageFolder = null;
+
+  try {
+    messageFolder = // MailServices.folderLookup.getFolderForURL(uri);
+      RemoveDupes.FolderLookupService.getFolderForURL(uri);
+  } catch(ex) { 
+#ifdef DEBUG_GetMsgFolderFromUri
+      RemoveDupes.JSConsoleService.logStringMessage(
+      'RemoveDupes.FolderLookupService.getFolderForURL(' + uri + ') failed:\n' + ex);
+#endif
+  }
+  if (messageFolder != null) { 
+#ifdef DEBUG_GetMsgFolderFromUri
+      RemoveDupes.JSConsoleService.logStringMessage('got folder from URI with MailServices.folderLookup.getFolderForURL(' + uri + ')');
+#endif
+    return messageFolder; 
+}
+
   if (typeof MailUtils != 'undefined' && MailUtils.getFolderForURI) {
     return MailUtils.getFolderForURI(uri, checkFolderAttributes);
   }
@@ -531,7 +559,7 @@ RemoveDupes.Removal = {
     }
 #ifdef DEBUG_removeDuplicates
     RemoveDupes.JSConsoleService.logStringMessage('Done. ' +
-      'any_deletions_performed ? ' + any_deletions_performed + '; '
+      'any_deletions_performed ? ' + any_deletions_performed + '; ' +
       'any_deletions_failed_or_aborted ? ' + any_deletions_performed);
 #endif
     if (any_deletions_performed && any_deletions_failed_or_aborted) {

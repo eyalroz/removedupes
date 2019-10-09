@@ -18,15 +18,26 @@
 
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         persist="width height screenX screenY sizemode"
-        onload="initDupeReviewDialog();"
         buttons="accept,cancel"
+        onload="initDupeReviewDialog();"
+#ifdef EVENT_HANDLERS_AS_ATTRIBUTES
         ondialogaccept="return onAccept();"
         ondialogcancel="onCancel();"
+#endif
         id="removeDuplicatesReviewDialog"
         title="&removedupes_dialog.dialog_title;">
 
+  <script type="application/javascript" src="chrome://global/content/globalOverlay.js"/>
+  <script type="application/javascript" src="chrome://messenger/content/customElements.js"/>
   <script type="application/javascript" src="chrome://messenger/content/widgetglue.js"/>
   <script type="application/javascript" src="chrome://removedupes/content/removedupes-dialog.js"/>
+
+#ifndef EVENT_HANDLERS_AS_ATTRIBUTES
+<script type="application/javascript">
+document.addEventListener("dialogaccept", function(event) { onAccept() || event.preventDefault(); } );
+document.addEventListener("dialogcancel", function(event) { onCancel(); } );
+</script>
+#endif
 
   <hbox flex="1">
     <vbox flex="2">
@@ -159,17 +170,18 @@
                    value="move"
                    label="&action.move.label;"
                    accesskey="&action.move.accesskey;"/>
-            <menulist id="actionTargetFolder" flex="1">
+            <menulist id="actionTargetFolder" class="folderMenuItem" flex="1">
 #ifdef XBL_FOLDER_PICKER_OR_REPLACEMENT
               <menupopup 
                    is="folder-menupopup"
                    id="actionTargetFolderPopup" 
                    class="menulist-menupopup"
-                   type="folder"
                    mode="filing"
+                   showRecent="true"
+                   recentLabel="Recent" 
                    showFileHereLabel="true"
-                   style="-moz-binding: url('chrome://messenger/content/folderWidgets.xml#folder-menupopup');"
-                   oncommand="onTargetFolderClick(event.target._folder);"/>
+                   oncommand="onTargetFolderClick(event.target._folder);"
+#expand            __FOLDER_PICKER_BINDING_STYLE__ />
 #endif
             </menulist>
           </hbox>
@@ -200,11 +212,4 @@
       </vbox>
     </hbox>
   </hbox>
-
-<!--  <statusbar id="status-bar">
-    <statusbarpanel class="statusbarpanel-progress">
-    <progressmeter id="pmStatus" mode="normal" value="0" class="progressmeter-statusbar"/>
-    </statusbarpanel>
-  </statusbar>-->
-
 </dialog>
