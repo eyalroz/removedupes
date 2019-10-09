@@ -113,6 +113,10 @@ RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
   return messageFolder;
 };
 
+RemoveDupes.namedAlert = function(appWindow, alertName) {
+  appWindow.alert(RemoveDupes.Strings.getByName(alertName));
+}
+
 
 //---------------------------------------------------------
 
@@ -146,9 +150,25 @@ RemoveDupes.__defineGetter__("UseSupportsArray", function() {
       return RemoveDupes.UseSupportsArray = false;
   }});
 
+#ifdef DEBUG
+  // used for rough profiling
+  RemoveDupes.StartTime,
+  RemoveDupes.EndTime,
+#endif
+
 // localized strings
-RemoveDupes.__defineGetter__("Strings", function() {
-  delete RemoveDupes.Strings;
+RemoveDupes.Strings = {
+#expand   prefix : '__SHORTNAME__.',
+  getByName: function(stringName) {
+    return this.Bundle.GetStringFromName(this.prefix + stringName);
+  },
+  format: function(stringName, argsToFormat) {
+    return this.Bundle.formatStringFromName(this.prefix + stringName, argsToFormat, argsToFormat.length);
+  }
+}
+
+RemoveDupes.Strings.__defineGetter__("Bundle", function() {
+  delete this.Bundle;
   var stringBundleService;
   try {
     // Thunderbird 63 or later
@@ -158,16 +178,9 @@ RemoveDupes.__defineGetter__("Strings", function() {
     stringBundleService = Components.classes["@mozilla.org/intl/stringbundle;1"]
       .getService(Components.interfaces.nsIStringBundleService);
   }
-  return RemoveDupes.Strings =
+  return this.Bundle =
       stringBundleService.createBundle("chrome://removedupes/locale/removedupes.properties");
-  });
-
-#ifdef DEBUG
-  // used for rough profiling
-  RemoveDupes.StartTime,
-  RemoveDupes.EndTime,
-#endif
-
+});
 
 //---------------------------------------------------------
 
@@ -529,8 +542,8 @@ RemoveDupes.Removal = {
       }
       else targetFolder = RemoveDupes.GetMsgFolderFromUri(targetFolderUri, true);
       if (!targetFolder) {
-        appWindow.alert(RemoveDupes.Strings.formatStringFromName(
-          'removedupes.no_such_folder', [targetFolderUri], 1));
+        // TODO: Make namedAlert perform formatting if it gets a non-null, non-empty third argument
+        appWindow.alert(RemoveDupes.Strings.format('no_such_folder', [targetFolderUri]));
         return false;
       }
     }
@@ -590,12 +603,9 @@ RemoveDupes.Removal = {
           var numMessagesToDelete = 
             (RemoveDupes.UseSupportsArray ?
              removalMessageHdrs.Count() : removalMessageHdrs.length);
-          var message = RemoveDupes.Strings.formatStringFromName(
-  	    'removedupes.confirm_permanent_deletion_from_folder',
-  	    [numMessagesToDelete ,sourceFolder.abbreviatedName], 2);
-
+          var message = RemoveDupes.Strings.format('confirm_permanent_deletion_from_folder', [numMessagesToDelete ,sourceFolder.abbreviatedName]);
           if (!appWindow.confirm(message)) {
-            appWindow.alert(RemoveDupes.Strings.GetStringFromName('removedupes.deletion_aborted'));
+            appWindow.alert(RemoveDupes.Strings.getByName('deletion_aborted'));
             return false;
           }
         }
@@ -609,7 +619,7 @@ RemoveDupes.Removal = {
           true // allow undo... will this be possible at all?
         );
       } catch(ex) {
-        appWindow.alert(RemoveDupes.Strings.GetStringFromName('removedupes.failed_to_erase'));
+        appWindow.alert(RemoveDupes.Strings.getByName('failed_to_erase'));
         throw(ex);
       }
       return true;
@@ -654,7 +664,7 @@ RemoveDupes.Removal = {
           true // allow undo... what does this mean exactly?
         );
       } catch(ex) {
-        appWindow.alert(RemoveDupes.Strings.formatStringFromName('removedupes.failed_to_move_to_folder', [targetFolder.URI], 1));
+        appWindow.alert(RemoveDupes.Strings.format('failed_to_move_to_folder', [targetFolder.URI]));
         throw(ex);
       }
       return true;

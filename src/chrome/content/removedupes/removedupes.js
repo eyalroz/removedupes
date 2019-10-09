@@ -20,6 +20,11 @@ RemoveDupes.__defineGetter__("ImapService", function() {
 
 RemoveDupes.MessengerOverlay = {
 
+  setNamedStatus: function(stringName) {
+    RemoveDupes.MessengerOverlay.statusTextField.label = 
+      (stringName ? RemoveDupes.Strings.getByName(stringName) : null);
+  },
+
   // These default criteria are used in the dupe search if the preferences
   // are not set for some reason
   // const
@@ -55,8 +60,7 @@ RemoveDupes.MessengerOverlay = {
     //document.getElementById('progress-panel').removeAttribute('collapsed'); 
     RemoveDupes.MessengerOverlay.statusTextField =
       document.getElementById('statusText');
-    RemoveDupes.MessengerOverlay.statusTextField.label =
-      RemoveDupes.Strings.GetStringFromName('removedupes.searching_for_dupes');
+    RemoveDupes.MessengerOverlay.setNamedStatus('searching_for_dupes');
 
     // we'll need this for some calls involving UrlListeners
 
@@ -148,8 +152,7 @@ RemoveDupes.MessengerOverlay = {
 
     if (searchData.folders.size == 0) {
       // all top folders were special folders and therefore skipped
-      alert(RemoveDupes.Strings.GetStringFromName(
-        'removedupes.not_searching_special_folders'));
+      RemoveDupes.namedAlert(window, 'not_searching_special_folders');
       RemoveDupes.MessengerOverlay.abortDupeSearch(searchData);
       return;
     }
@@ -173,10 +176,7 @@ RemoveDupes.MessengerOverlay = {
   abortDupeSearch : function(searchData,labelStringName) {
     window.removeEventListener("keypress", searchData.keyPressEventListener, true);
     delete searchData;
-    if (labelStringName)
-      RemoveDupes.MessengerOverlay.statusTextField.label =
-        RemoveDupes.Strings.GetStringFromName('removedupes.' + labelStringName);
-    else RemoveDupes.MessengerOverlay.statusTextField.label = null;
+    RemoveDupes.MessengerOverlay.setNamedStatus(labelStringName ? labelStringName : null);
   },
 
   // addSearchFolders - 
@@ -300,7 +300,7 @@ RemoveDupes.MessengerOverlay = {
     RemoveDupes.JSConsoleService.logStringMessage('in traverseSearchFolderSubfolders for folder ' + folder.abbreviatedName);
 #endif
 
-    RemoveDupes.MessengerOverlay.statusTextField.label = RemoveDupes.Strings.GetStringFromName('removedupes.searching_for_dupes');
+    RemoveDupes.MessengerOverlay.setNamedStatus('searching_for_dupes');
 
     // traverse the children
 
@@ -358,8 +358,7 @@ RemoveDupes.MessengerOverlay = {
        'in waitForFolderCollection\nsearchData.remainingFolders = ' + searchData.remainingFolders);
 #endif
 
-    RemoveDupes.MessengerOverlay.statusTextField.label =
-      RemoveDupes.Strings.GetStringFromName('removedupes.searching_for_dupes');
+    RemoveDupes.MessengerOverlay.setNamedStatus('searching_for_dupes');
 
     if (searchData.userAborted) {
       abortDupeSearch(searchData,'search_aborted');
@@ -452,21 +451,17 @@ RemoveDupes.MessengerOverlay = {
         // if the user wants a dialog to pop up for the dupes,
         // we can bother him/her with a message box for 'no dupes'
         RemoveDupes.MessengerOverlay.statusTextField.label = '';
-        alert(RemoveDupes.Strings.GetStringFromName(
-          "removedupes.no_duplicates_found"));
+        RemoveDupes.namedAlert(window, 'no_duplicates_found');
       }
       else {
         // if the user wanted silent removal, we'll be more quiet about telling
         // him/her there are no dupes
-        RemoveDupes.MessengerOverlay.statusTextField.label = 
-          RemoveDupes.Strings.GetStringFromName(
-            "removedupes.no_duplicates_found");
+        RemoveDupes.MessengerOverlay.setNamedStatus('no_duplicates_found');
       }
       delete(searchData);
     }
     else {
-      RemoveDupes.MessengerOverlay.statusTextField.label =
-        RemoveDupes.Strings.GetStringFromName("removedupes.search_complete");
+      RemoveDupes.MessengerOverlay.setNamedStatus('search_complete');
       RemoveDupes.MessengerOverlay.reviewAndRemoveDupes(searchData);
       //document.getElementById('progress-panel').setAttribute('collapsed', true); 
     }
@@ -734,7 +729,7 @@ RemoveDupes.MessengerOverlay = {
 #ifdef DEBUG
           RemoveDupes.JSConsoleService.logStringMessage('accessing messages failed for folder ' + folder.abbreviatedName + ' :\n' + ex);
 #else
-          dump(RemoveDupes.Strings.formatStringFromName('removedupes.failed_getting_messages', [folder.abbreviatedName], 1) + '\n');
+          dump(RemoveDupes.Strings.format('failed_getting_messages', [folder.abbreviatedName]) + '\n');
 #endif
         }
       }
@@ -791,8 +786,7 @@ RemoveDupes.MessengerOverlay = {
         if (currentTime - searchData.lastStatusBarReport > searchData.reportQuantum) {
           searchData.lastStatusBarReport = currentTime;
           RemoveDupes.MessengerOverlay.statusTextField.label =
-            RemoveDupes.Strings.formatStringFromName(
-            'removedupes.hashed_x_messages', [searchData.messagesHashed], 1);
+            RemoveDupes.Strings.format('hashed_x_messages', [searchData.messagesHashed]);
         }
         if (currentTime - searchData.lastYield > searchData.yieldQuantum) {
           searchData.lastYield = currentTime;
@@ -822,7 +816,9 @@ RemoveDupes.MessengerOverlay = {
     try {
       MsgService = messenger.messageServiceFromURI(msgURI);
     } catch (ex) {
-      alert('Error getting message service for message ' + msgURI + '\n: ' + ex);
+#ifdef DEBUG_messageBodyFromURI
+      RemoveDupes.JSConsoleService.logStringMessage('Error getting message service for message ' + msgURI + '\n: ' + ex);
+#endif
       return null;
     }
     var MsgStream =  Components.classes["@mozilla.org/network/sync-stream-listener;1"].createInstance();
@@ -833,7 +829,9 @@ RemoveDupes.MessengerOverlay = {
     try {
       MsgService .streamMessage(msgURI, MsgStream, msgWindow, null, false, null);
     } catch (ex) {
-      alert('Error getting message content:\n' + ex)
+#ifdef DEBUG_messageBodyFromURI
+      RemoveDupes.JSConsoleService.logStringMessage('Error getting message content for message ' + msgURI + ':\n' + ex);
+#endif
       return null;
     }
     ScriptInputStream.available();
@@ -870,23 +868,23 @@ RemoveDupes.MessengerOverlay = {
       switch (activity) {
         case 'bodies':
           RemoveDupes.MessengerOverlay.statusTextField.label =
-            RemoveDupes.Strings.formatStringFromName(
-              'removedupes.refinement_status_getting_bodies',
+            RemoveDupes.Strings.format(
+              'refinement_status_getting_bodies',
               [searchData.setsRefined,
                searchData.totalOriginalDupeSets,
                curr,
                setSize
-              ], 4);
+              ]);
           break;
         case 'subsets':
           RemoveDupes.MessengerOverlay.statusTextField.label =
-            RemoveDupes.Strings.formatStringFromName(
-              'removedupes.refinement_status_building_subsets',
+            RemoveDupes.Strings.format(
+              'refinement_status_building_subsets',
               [searchData.setsRefined,
                searchData.totalOriginalDupeSets,
                setSize-curr,
                setSize             
-              ], 4);
+              ]);
           break;
       }
     }
@@ -1141,7 +1139,7 @@ RemoveDupes.MessengerOverlay = {
               (folder.rootFolder == folder) ||
               (!folder.canRename && 
               (!(folder.flags & RemoveDupes.FolderFlags.Inbox)))) {
-            alert(RemoveDupes.Strings.GetStringFromName("removedupes.invalid_originals_folders"));
+            RemoveDupes.namedAlert(window, 'invalid_originals_folders');
             continue;
           }
         }
