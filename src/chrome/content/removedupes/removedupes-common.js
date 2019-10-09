@@ -319,9 +319,9 @@ RemoveDupes.Prefs = {
       return this.prefService.getCharPref(
         RemoveDupes.Prefs.preferencePrefix + prefName);
     } catch(ex) {
-      if (defaultValue != undefined)
+      if (defaultValue) {
         return defaultValue;
-
+      }
       throw(ex);
     }
   },
@@ -331,7 +331,7 @@ RemoveDupes.Prefs = {
       return this.prefService.getIntPref(
         RemoveDupes.Prefs.preferencePrefix + prefName);
     } catch(ex) {
-      if (defaultValue != undefined)
+      if (defaultValue)
         return defaultValue;
 
       throw(ex);
@@ -345,9 +345,9 @@ RemoveDupes.Prefs = {
                    RemoveDupes.Prefs.preferencePrefix +
                    prefName,Components.interfaces.nsIPrefLocalizedString).data;
     } catch(ex) {
-      if (defaultValue != undefined)
+      if (defaultValue) {
         return defaultValue;
-
+      }
       throw(ex);
     }
   },

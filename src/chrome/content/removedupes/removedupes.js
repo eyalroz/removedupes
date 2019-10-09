@@ -951,12 +951,14 @@ RemoveDupes.MessengerOverlay = {
 
       var subsetIndex = 0;
       while(dupeSet.length > 0) {
-        if (searchData.userAborted)
-            return;
-        if (!dupeSet[0].body) {
-            dupeSet.shift();
+        if (searchData.userAborted) { 
+          return; 
         }
-        var subsetLength = 1;
+        if (!dupeSet[0].body) { 
+          dupeSet.shift(); 
+          continue;
+        }
+        let subsetLength = 1;
         while( (subsetLength < dupeSet.length) &&
                  (dupeSet[subsetLength].body == dupeSet[0].body) ) {
             subsetLength++;
@@ -964,7 +966,7 @@ RemoveDupes.MessengerOverlay = {
         }
         if (subsetLength > 1) {
             dupeSet[0] = dupeSet[0].uri;
-            searchData.dupeSetsHashMap[hashValue + '|' + (i++)] = dupeSet.splice(0,subsetLength);
+            searchData.dupeSetsHashMap[hashValue + '|' + (subsetIndex++)] = dupeSet.splice(0,subsetLength);
         }
         else dupeSet.shift();
         RemoveDupes.MessengerOverlay.reportRefinementProgress(searchData, 'subsets', initialSetSize, dupeSet.length);
@@ -991,6 +993,11 @@ RemoveDupes.MessengerOverlay = {
 
     if (!searchData.useReviewDialog)
     {
+      let deletePermanently = 
+        (RemoveDupes.Prefs.getCharPref('default_action', 'move') == 'delete_permanently');
+      let targetFolder = deletePermanently ? 
+        null : 
+        RemoveDupes.Prefs.getCharPref('default_target_folder', RemoveDupes.Removal.getLocalFoldersTrashFolder().URI);
       // remove (move to trash or erase completely)
       // without user confirmation or review; we're keeping the first dupe
       // in every sequence of dupes and deleting the rest
@@ -998,9 +1005,9 @@ RemoveDupes.MessengerOverlay = {
         window,
         msgWindow,
         searchData.dupeSetsHashMap,
-        (RemoveDupes.Prefs.getCharPref('default_action', 'move') == 'delete_permanently'),
+        deletePermanently,
         RemoveDupes.Prefs.getBoolPref("confirm_permanent_deletion", true),
-        RemoveDupes.Prefs.getCharPref('default_target_folder', null),
+        targetFolder,
         false // the uri's have not been replaced with messageRecords
         );
     }
