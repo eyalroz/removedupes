@@ -1,6 +1,5 @@
 var rdModuleURI = "chrome://removedupes/content/removedupes-common.js";
-if (ChromeUtils && ChromeUtils.import) {
-  // Thunderbird 67 or later
+if (typeof(ChromeUtils) != "undefined") {
   var { RemoveDupes } = ChromeUtils.import(rdModuleURI);
 }
 else {
