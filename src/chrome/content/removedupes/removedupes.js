@@ -1,10 +1,11 @@
 var rdModuleURI = "chrome://removedupes/content/removedupes-common.js";
 if (typeof(ChromeUtils) != "undefined") {
-  var { RemoveDupes } = ChromeUtils.import(rdModuleURI);
+  if (ChromeUtils.import) {
+    var { RemoveDupes } = ChromeUtils.import(rdModuleURI);
+  }
+  else { Components.utils.import(rdModuleURI);}
 }
-else {
-  Components.utils.import(rdModuleURI);
-}
+else { Components.utils.import(rdModuleURI); }
 
 if ("undefined" == typeof(messenger)) {
   var messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
