@@ -8,6 +8,7 @@
 <?xml-stylesheet href="chrome://messenger/skin/dialogs.css" type="text/css"?>
 <?xml-stylesheet href="chrome://messenger/skin/folderMenus.css" type="text/css"?>
 <?xml-stylesheet href="chrome://removedupes/skin/removedupes-dialog.css" type="text/css"?>
+<?xml-stylesheet href="chrome://messenger/content/bindings.css" type="text/css"?>
 
 #ifndef XBL_FOLDER_PICKER_OR_REPLACEMENT
 
