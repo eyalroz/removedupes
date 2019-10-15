@@ -83,8 +83,9 @@ RemoveDupes.MessengerOverlay = {
     // for this coming search, not for subsequent searches
     RemoveDupes.MessengerOverlay.originalsFolders = null;
     RemoveDupes.MessengerOverlay.originalsFolderUris = null;
-    if (typeof gFolderTreeView != 'undefined')
-      gFolderTreeView._tree.invalidate();
+    if (typeof gFolderTreeView != 'undefined') {
+      if (gFolderTreeView) { gFolderTreeView._tree.invalidate(); }
+    }
     searchData.keyPressEventListener =
       function(ev) {RemoveDupes.MessengerOverlay.onKeyPress(ev,searchData);}
     window.addEventListener("keypress", searchData.keyPressEventListener, true);
