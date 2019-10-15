@@ -6,8 +6,8 @@ removedupes.jar:
 *   content/removedupes/removedupes-dialog.xul                    (chrome/content/removedupes/removedupes-dialog.xul)
 *   content/removedupes/removedupes-dialog.js                     (chrome/content/removedupes/removedupes-dialog.js)
 #else
-*   content/removedupes/removedupes-dialog.tb68.xul               (chrome/content/removedupes/removedupes-dialog.xul) -DXBL_FOLDER_PICKER_OR_REPLACEMENT -DSTATUSBARPANEL_ELEMENT_AND_CLASS="label class=\"statusbarpanel\"" -DSTATUSBAR_ELEMENT="hbox" -DSTATUSBAR_CLASS="class=\"statusbar\"" -DFOLDER_PICKER_BINDING_STYLE=""
-*   content/removedupes/removedupes-dialog.xul                    (chrome/content/removedupes/removedupes-dialog.xul) -DXBL_FOLDER_PICKER_OR_REPLACEMENT -DSTATUSBARPANEL_ELEMENT_AND_CLASS="statusbarpanel" -DSTATUSBAR_ELEMENT="statusbar"  -DFOLDER_PICKER_BINDING_STYLE="style=\"-moz-binding: url('chrome://messenger/content/folderWidgets.xml#folder-menupopup');\""
+*   content/removedupes/removedupes-dialog.tb68.xul               (chrome/content/removedupes/removedupes-dialog.xul) -DXBL_FOLDER_PICKER_OR_REPLACEMENT -DSTATUSBARPANEL_ELEMENT_AND_CLASS="label class=\"statusbarpanel\"" -DSTATUSBAR_CLASS="class=\"statusbar\"" -DFOLDER_PICKER_BINDING_STYLE=""
+*   content/removedupes/removedupes-dialog.xul                    (chrome/content/removedupes/removedupes-dialog.xul) -DXBL_FOLDER_PICKER_OR_REPLACEMENT -DSTATUSBARPANEL_ELEMENT_AND_CLASS="statusbarpanel" -DFOLDER_PICKER_BINDING_STYLE="style=\"-moz-binding: url('chrome://messenger/content/folderWidgets.xml#folder-menupopup');\""
 *   content/removedupes/removedupes-dialog.js                     (chrome/content/removedupes/removedupes-dialog.js) -DXBL_FOLDER_PICKER_OR_REPLACEMENT  
 #endif
 #ifdef MOZ_THUNDERBIRD
