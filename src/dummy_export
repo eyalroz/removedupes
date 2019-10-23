@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 #
 # Workaround for a mozdev cvs tagging bug, see
 # https://www.mozdev.org/bugs/show_bug.cgi?id=14797
@@ -8,13 +8,14 @@
 
 set -o errexit
 
-if [ -z $1 ]; then
-	echo "Enter CVS username"
+if (( $# != 1 )); then
+        echo "usage: $0 <CVS username>"
 	exit
 fi
 
 CVS_USERNAME=$1
-CVSROOT=":pserver:${CVS_USERNAME}@www.mozdev.org:/cvs"
+[[ $- == *i* ]] && echo -n "Enter CVS password for user ${CVS_USERNAME}: "
+CVSROOT=":pserver:${CVS_USERNAME}:${CVS_PASSWORD}@www.mozdev.org:/cvs"
 CVS_MODULE_NAME="removedupes"
 SRCDIR=`pwd`
 # the following are paths relative to the source dir ${SRCDIR}
