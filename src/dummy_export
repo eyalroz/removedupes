@@ -15,6 +15,7 @@ fi
 
 CVS_USERNAME=$1
 [[ $- == *i* ]] && echo -n "Enter CVS password for user ${CVS_USERNAME}: "
+read -s CVS_PASSWORD
 CVSROOT=":pserver:${CVS_USERNAME}:${CVS_PASSWORD}@www.mozdev.org:/cvs"
 CVS_MODULE_NAME="removedupes"
 SRCDIR=`pwd`
