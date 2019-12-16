@@ -1,3 +1,6 @@
+const Cc = Components.classes;
+const Ci = Components.interfaces;
+
 var rdModuleURI = "chrome://removedupes/content/removedupes-common.js";
 if (typeof(ChromeUtils) != "undefined") {
   if (ChromeUtils.import) {

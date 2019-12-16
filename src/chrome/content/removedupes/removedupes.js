@@ -1,3 +1,6 @@
+const Cc = Components.classes;
+const Ci = Components.interfaces;
+
 var rdModuleURI = "chrome://removedupes/content/removedupes-common.js";
 if (typeof(ChromeUtils) != "undefined") {
   if (ChromeUtils.import) {
@@ -13,10 +16,9 @@ if ("undefined" == typeof(messenger)) {
 
 RemoveDupes.__defineGetter__("ImapService", function() {
   delete RemoveDupes.ImapService;
-  return RemoveDupes.ImapService =
-    Components.classes['@mozilla.org/messenger/imapservice;1']
-              .getService(Components.interfaces.nsIImapService);
-  });
+  return RemoveDupes.ImapService = 
+    Cc['@mozilla.org/messenger/imapservice;1'].getService(Ci.nsIImapService);
+});
 
 RemoveDupes.MessengerOverlay = {
 
@@ -65,14 +67,12 @@ RemoveDupes.MessengerOverlay = {
     // we'll need this for some calls involving UrlListeners
 
     if (RemoveDupes.MessengerOverlay.eventTarget == null) {
-      if ("nsIThreadManager" in Components.interfaces) {
+      if ("nsIThreadManager" in Ci) {
          RemoveDupes.MessengerOverlay.eventTarget = 
-           Components.classes['@mozilla.org/thread-manager;1']
-                     .getService().currentThread;
+           Cc['@mozilla.org/thread-manager;1'].getService().currentThread;
       } else {
          var eventQueueService =
-           Components.classes['@mozilla.org/event-queue-service;1']
-                     .getService(Components.interfaces.nsIEventQueueService);
+           Cc['@mozilla.org/event-queue-service;1'].getService(Ci.nsIEventQueueService);
          RemoveDupes.MessengerOverlay.eventTarget = 
            eventQueueService.getSpecialEventQueue(
              eventQueueService.CURRENT_THREAD_EVENT_QUEUE);
@@ -251,7 +251,7 @@ RemoveDupes.MessengerOverlay = {
     // is this an IMAP folder?
 
     try {
-      var imapFolder = folder.QueryInterface(Components.interfaces.nsIMsgImapMailFolder);
+      var imapFolder = folder.QueryInterface(Ci.nsIMsgImapMailFolder);
       var listener = new RemoveDupes.UpdateFolderDoneListener(folder,searchData);
       var dummyUrl = new Object;
       RemoveDupes.ImapService.selectFolder(RemoveDupes.MessengerOverlay.eventTarget, folder, listener, msgWindow, dummyUrl);
@@ -266,7 +266,7 @@ RemoveDupes.MessengerOverlay = {
     // Is this a locally-stored folder with its DB out-of-date?
 
     try {
-      var localFolder = folder.QueryInterface(Components.interfaces.nsIMsgLocalMailFolder);
+      var localFolder = folder.QueryInterface(Ci.nsIMsgLocalMailFolder);
       try {
         var db = localFolder.getDatabaseWOReparse();
       } catch (ex) {
@@ -319,8 +319,7 @@ RemoveDupes.MessengerOverlay = {
       if (subFoldersIterator) {
         do {
           RemoveDupes.MessengerOverlay.addSearchFolders(
-          subFoldersIterator.currentItem().QueryInterface(
-            Components.interfaces.nsIMsgFolder),
+            subFoldersIterator.currentItem().QueryInterface(Ci.nsIMsgFolder),
             searchData);
           try {
             subFoldersIterator.next();
@@ -333,9 +332,8 @@ RemoveDupes.MessengerOverlay = {
         var subFoldersEnumerator = folder.subFolders;
         while (subFoldersEnumerator.hasMoreElements()) {
           RemoveDupes.MessengerOverlay.addSearchFolders(
-            subFoldersEnumerator.getNext().QueryInterface(
-            Components.interfaces.nsIMsgFolder),
-          searchData);
+            subFoldersEnumerator.getNext().QueryInterface(Ci.nsIMsgFolder),
+            searchData);
         }
       }
     }
@@ -687,7 +685,7 @@ RemoveDupes.MessengerOverlay = {
         allowNewDupeSets = (searchData.originalsFolders ? false : true);
         maybeNext = foldersIterator.next();
       }
-      var folder = maybeNext.value.QueryInterface(Components.interfaces.nsIMsgFolder);
+      var folder = maybeNext.value.QueryInterface(Ci.nsIMsgFolder);
 #ifdef DEBUG_populateDupeSetsHash
       if (i > 100) break;
 #endif
@@ -739,8 +737,7 @@ RemoveDupes.MessengerOverlay = {
              && (!searchData.limitNumberOfMessages 
                  || (searchData.messagesHashed < searchData.maxMessages)) ) {
         var messageHdr = 
-          folderMessageHdrsIterator.getNext()
-                 .QueryInterface(Components.interfaces.nsIMsgDBHdr);
+          folderMessageHdrsIterator.getNext().QueryInterface(Ci.nsIMsgDBHdr);
                  
         if (   (searchData.skipIMAPDeletedMessages) 
             && (messageHdr.flags & RemoveDupes.MessageStatusFlags['IMAP_DELETED'])) {
@@ -822,10 +819,10 @@ RemoveDupes.MessengerOverlay = {
 #endif
       return null;
     }
-    var MsgStream =  Components.classes["@mozilla.org/network/sync-stream-listener;1"].createInstance();
-    var consumer = MsgStream.QueryInterface(Components.interfaces.nsIInputStream);
-    var ScriptInput = Components.classes["@mozilla.org/scriptableinputstream;1"].createInstance();
-    var ScriptInputStream = ScriptInput.QueryInterface(Components.interfaces.nsIScriptableInputStream);
+    var MsgStream =  Cc["@mozilla.org/network/sync-stream-listener;1"].createInstance();
+    var consumer = MsgStream.QueryInterface(Ci.nsIInputStream);
+    var ScriptInput = Cc["@mozilla.org/scriptableinputstream;1"].createInstance();
+    var ScriptInputStream = ScriptInput.QueryInterface(Ci.nsIScriptableInputStream);
     ScriptInputStream.init(consumer);
     try {
       MsgService .streamMessage(msgURI, MsgStream, msgWindow, null, false, null);
@@ -1083,9 +1080,7 @@ RemoveDupes.MessengerOverlay = {
     gFolderTreeView.preRDGetCellProperties = gFolderTreeView.getCellProperties;
 
     if(RemoveDupes.App.versionIsAtMost("17.1")) {
-      var atomService =
-        Components.classes["@mozilla.org/atom-service;1"]
-                  .getService(Components.interfaces.nsIAtomService);
+      var atomService = Cc["@mozilla.org/atom-service;1"].getService(Ci.nsIAtomService);
       gFolderTreeView.getCellProperties = function newGcp(aRow, aCol, aProps) {
         gFolderTreeView.preRDGetCellProperties(aRow, aCol, aProps);
         var row = gFolderTreeView._rowMap[aRow];
@@ -1179,8 +1174,8 @@ RemoveDupes.UpdateFolderDoneListener = function (folder,searchData) {
 
 RemoveDupes.UpdateFolderDoneListener.prototype.QueryInterface =
   function(iid) {
-    if (iid.equals(Components.interfaces.nsIUrlListener) ||
-        iid.equals(Components.interfaces.nsISupports))
+    if (iid.equals(Ci.nsIUrlListener) ||
+        iid.equals(Ci.nsISupports))
       return this;
     throw Components.results.NS_ERROR_NO_INTERFACE;
   };

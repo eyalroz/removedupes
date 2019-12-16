@@ -1,3 +1,6 @@
+const Cc = Components.classes;
+const Ci = Components.interfaces;
+
 var rdModuleURI = "chrome://removedupes/content/removedupes-common.js";
 if (typeof(ChromeUtils) != "undefined") {
   if (ChromeUtils.import) {
@@ -6,9 +9,6 @@ if (typeof(ChromeUtils) != "undefined") {
   else { Components.utils.import(rdModuleURI);}
 }
 else { Components.utils.import(rdModuleURI); }
-
-const Cc = Components.classes;
-const Ci = Components.interfaces;
 
  var msgWindow; 
   // the 3-pane window which opened us
@@ -75,8 +75,7 @@ var DateTimeFormatter;
 if (RemoveDupes.App.versionIsAtLeast("56")) {
   // see https://wiki.mozilla.org/Thunderbird/Add-ons_Guide_57
   // for details regarding this change
-  var IntlService = Components.classes["@mozilla.org/mozintl;1"]
-              .getService(Components.interfaces.mozIMozIntl);
+  var IntlService = Cc["@mozilla.org/mozintl;1"].getService(Ci.mozIMozIntl);
   var formattingOptions = {
     year: 'numeric', month:  'numeric', day:    'numeric',
     hour: 'numeric', minute: 'numeric', second: 'numeric',
@@ -102,9 +101,7 @@ else
 {
   // Either we're in Seamonkey or with Thunderbird version before the 56.0 betas.
   // Note that after 52.x there weren't any release versions 53.x, 54.x or 55.x
-  DateService =
-    Components.classes["@mozilla.org/intl/scriptabledateformat;1"]
-              .getService(Components.interfaces.nsIScriptableDateFormat);
+  DateService = Cc["@mozilla.org/intl/scriptabledateformat;1"].getService(Ci.nsIScriptableDateFormat);
 }
 
 // DupeMessageRecord - a self-describing class;
@@ -677,11 +674,11 @@ function loadCurrentRowMessage() {
   
   var messageUri = dupeSetItem.uri;
   var folder = messenger.msgHdrFromURI(messageUri).folder;
-  //msgFolder = folder.QueryInterface(Components.interfaces.nsIMsgFolder);
+  //msgFolder = folder.QueryInterface(Ci.nsIMsgFolder);
   //msgWindow.RerootFolderForStandAlone(folder.uri);
   //msgWindow.RerootFolder(folder.uri, msgFolder, gCurrentLoadingFolderViewType, gCurrentLoadingFolderViewFlags, gCurrentLoadingFolderSortType, gCurrentLoadingFolderSortOrder);
 
-  msgWindow = msgWindow.QueryInterface(Components.interfaces.nsIMsgWindow);
+  msgWindow = msgWindow.QueryInterface(Ci.nsIMsgWindow);
   if (msgWindow.SelectFolder) {
     // it's an old-skool msgWindow, i.e. before the 2007-05-21 check-in
     // which changed the API
