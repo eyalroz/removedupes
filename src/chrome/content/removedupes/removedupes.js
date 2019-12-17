@@ -1010,17 +1010,13 @@ RemoveDupes.MessengerOverlay = {
         );
     }
     else {
-        
-      var dialogURI;
+      let dialogURI = "chrome://removedupes/content/removedupes-dialog.xul";
 #ifdef MOZ_THUNDERBIRD
       if (RemoveDupes.App.versionIsAtLeast("68")) {
         dialogURI = "chrome://removedupes/content/removedupes-dialog.tb68.xul";
       }
       else if (!RemoveDupes.App.versionIsAtLeast("3.0b1")) {
         dialogURI = "chrome://removedupes/content/removedupes-dialog.tb2.xul";
-      }
-      else {
-        dialogURI = "chrome://removedupes/content/removedupes-dialog.xul";
       }
 #endif
 
