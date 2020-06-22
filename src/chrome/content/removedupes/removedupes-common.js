@@ -113,10 +113,35 @@ RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
   return messageFolder;
 };
 
-RemoveDupes.namedAlert = function(appWindow, alertName) {
-  appWindow.alert(RemoveDupes.Strings.getByName(alertName));
+RemoveDupes.showNotification = function(appWindow, notificationName) {
+  let text = RemoveDupes.Strings.getByName(notificationName);
+  let title = RemoveDupes.Strings.getByName("title");
+  try { 
+    let alertsService =
+      Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
+    alertsService.showAlertNotification(
+      null, // no image
+      title,
+      text);
+  } catch(e) {
+    // Thunderbird probably doesn't support nsIAlertsService, let's try
+    // the old-flashied way - a model alert
+    appWindow.alert(title + ":\n" + text);
+  }
 }
 
+RemoveDupes.namedAlert = function(appWindow, alertName) {
+  let text = RemoveDupes.Strings.getByName(alertName);
+  let title = RemoveDupes.Strings.getByName("title");
+  try { 
+    let promptService = Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Ci.nsIPromptService)
+      .alert(appWindow, title, text);
+  } catch(e) {
+    // Thunderbird probably doesn't support nsIPromptService, let's try
+    // the old-fashioned way (which means no alert window title)
+    appWindow.alert(title + ":\n" + text);
+  }
+}
 
 //---------------------------------------------------------
 
