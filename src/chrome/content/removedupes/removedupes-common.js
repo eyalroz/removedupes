@@ -421,22 +421,25 @@ RemoveDupes.Prefs = {
 RemoveDupes.Removal = {
   
   getLocalFoldersTrashFolder : function() {
+    let result = null;
     try {
-      var accountManager =
+      let accountManager =
         Components.classes["@mozilla.org/messenger/account-manager;1"]
           .getService(Components.interfaces.nsIMsgAccountManager);
       var rootFolder = 
         accountManager.localFoldersServer.rootFolder;
-      return rootFolder.getFolderWithFlags(RemoveDupes.FolderFlags.Trash);
+      result = rootFolder.getFolderWithFlags(RemoveDupes.FolderFlags.Trash);
     } catch(ex) {
       // We did our best... let's just return _something_
 #ifdef DEBUG_getLocalFoldersTrashFolder
       RemoveDupes.JSConsoleService.logStringMessage(
       'couldn\'t get local trash folder: ' + ex);
 #endif
-      
+    }
+    if (!result || result == "") {
       return 'mailbox://nobody@Local%20Folders/Trash';
     }
+    return result;
   },
 
   // This function is called from removeDuplicateMessageas,
