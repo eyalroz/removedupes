@@ -87,7 +87,7 @@ cp defaults/preferences/${SHORTNAME}.js $BUILDDIR/defaults/preferences
 mkdir $BUILDDIR/chrome
 mv ${SHORTNAME}.jar $BUILDDIR/chrome/${SHORTNAME}.jar
 
-cp COPYING $BUILDDIR
+cp LICENSE $BUILDDIR
 
 case "$TARGET" in
     tbird)
@@ -99,7 +99,7 @@ case "$TARGET" in
         cp platform/Darwin/chrome.manifest $BUILDDIR/platform/Darwin/chrome.manifest
         cd $BUILDDIR
 	zip -r $XPINAME  \
-	  COPYING \
+	  LICENSE \
 	  chrome/${SHORTNAME}.jar \
 	  defaults/ \
 	  platform/Darwin/chrome.manifest \
@@ -112,7 +112,7 @@ case "$TARGET" in
         $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
         cd $BUILDDIR
 	zip -r $XPINAME  \
-	  COPYING \
+	  LICENSE \
 	  chrome/${SHORTNAME}.jar \
 	  defaults/ \
 	  install.rdf \
@@ -123,7 +123,7 @@ case "$TARGET" in
         $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.js > $BUILDDIR/install.js
         cd $BUILDDIR
 	zip -r $XPINAME  \
-	  COPYING \
+	  LICENSE \
 	  chrome/${SHORTNAME}.jar \
 	  defaults/ \
 	  install.rdf \
