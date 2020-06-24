@@ -1,6 +1,6 @@
 # removedupes: Remove duplicate messages<br>from Thunderbird mail folders
 
-<sub>([See it also on `addons.thunderbird.net`](https://addons.thunderbird.net/en-US/thunderbird/addon/remove-duplicate-messages-alte/))</sub>
+<sub>([See it also on `addons.thunderbird.net`](https://addons.thunderbird.net/thunderbird/addon/remove-duplicate-messages-alte/))</sub>
 
 
 So, you use the Thunderbird mail client, and...
