@@ -1,0 +1,23 @@
+syntax: glob
+
+# Temporary, cache, swap files
+\#\#* 
+*.swp
+*.bkp
+*~
+
+# Files which "ask" to be hidden
+.*
+unused/
+
+# Build & (old, no-longer-relevant) release artifacts
+build/*
+src/build/*
+downloads/*
+
+# Patching
+*.diff
+*.rej
+*.orig
+
+
