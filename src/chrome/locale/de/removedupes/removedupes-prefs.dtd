@@ -2,9 +2,9 @@
 <!ENTITY guide-url "http://not.yet.written/">
 <!ENTITY message_comparison.tab_title "Vergleich der Nachrichten">
 <!ENTITY message_comparison.criteria_box.label "Message elements used as comparison criteria">
-<!ENTITY message_comparison.skip_special_folders.label "Skip Special Folders (Sent, Drafts etc.)">
+<!ENTITY message_comparison.skip_special_folders.label "Überspringe spezielle Ordner (Gesendet, Entwürfe, etc.)">
 <!ENTITY message_comparison.skip_imap_deleted_messages.label "IMAP-Nachrichten überspringen, die als „Gelöscht” markiert sind">
-<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Compare addresses stripped and sorted">
+<!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Vergleiche Adressen gekürzt und sortiert">
 <!ENTITY message_comparison.tab_description "Nachrichtenelemente, die als Vergleichskriterium verwendet werden sollen:">
 <!ENTITY message_comparison.author.label "Absender ('Absender' Adresse)">
 <!ENTITY message_comparison.recipients.label "Empfänger">
@@ -13,7 +13,7 @@
 <!ENTITY message_comparison.message_id.label "Nachrichten-ID">
 <!ENTITY message_comparison.num_lines.label "Anzahl der Zeilen in der Nachricht">
 <!ENTITY message_comparison.send_time.label "Versandzeit">
-<!ENTITY message_comparison.size.label "Size">
+<!ENTITY message_comparison.size.label "Größe">
 <!ENTITY message_comparison.subject.label "Betreff">
 <!ENTITY message_comparison.folder.label "Ordner">
 <!ENTITY message_comparison.body.label "Nachrichtentext">
@@ -31,13 +31,13 @@
 <!ENTITY message_comparison.subject.access_key "B">
 <!ENTITY message_comparison.folder.access_key "O">
 <!ENTITY message_comparison.body.access_key "N">
-<!ENTITY message_comparison.time_comparison_resolution.description "Time Comparison Resolution:">
-<!ENTITY message_comparison.time_comparison_resolution.seconds.label "Seconds">
-<!ENTITY message_comparison.time_comparison_resolution.minutes.label "Minutes">
-<!ENTITY message_comparison.time_comparison_resolution.hours.label "Hours">
-<!ENTITY message_comparison.time_comparison_resolution.day.label "Day">
-<!ENTITY message_comparison.time_comparison_resolution.month.label "Month">
-<!ENTITY message_comparison.time_comparison_resolution.year.label "Year">
+<!ENTITY message_comparison.time_comparison_resolution.description "Einheit für Zeitvergleich">
+<!ENTITY message_comparison.time_comparison_resolution.seconds.label "Sekunden">
+<!ENTITY message_comparison.time_comparison_resolution.minutes.label "Minuten">
+<!ENTITY message_comparison.time_comparison_resolution.hours.label "Stunden">
+<!ENTITY message_comparison.time_comparison_resolution.day.label "Tage">
+<!ENTITY message_comparison.time_comparison_resolution.month.label "Monate">
+<!ENTITY message_comparison.time_comparison_resolution.year.label "Jahre">
 <!ENTITY general_settings.tab_title "Allgemeine Einstellungen">
 <!ENTITY general_settings.search_subfolders.label "Unterordner der ausgewählten Ordner durchsuchen">
 <!ENTITY general_settings.search_subfolders_first.label "Unterordner zuerst durchsuchen (nachgestelle Ordnung)">
