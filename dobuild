@@ -7,22 +7,19 @@ UUID="{a300a000-5e21-4ee0-a115-9ec8f4eaa92b}"
 
 TARGET="$1"
 case "$TARGET" in
-    suiterunner | sr | srunner)
-        TARGET=suiterunner
-#        PREPROCESSOR_PARAMS="-DMOZ_TOOLKIT_SEAMONKEY -DUSE_THREADS"
-        PREPROCESSOR_PARAMS="-DMOZ_TOOLKIT_SEAMONKEY"
-        ;;
-    tbird | tb | thunderbird)
-        TARGET=tbird
-#        PREPROCESSOR_PARAMS="-DMOZ_THUNDERBIRD -DUSE_THREADS"
-        PREPROCESSOR_PARAMS="-DMOZ_THUNDERBIRD"
-        ;;
-    suitelegacy | sl | sm1)
-        TARGET=suitelegacy
-#        PREPROCESSOR_PARAMS="-DMOZ_PRETOOLKIT_SEAMONKEY -DUSE_THREADS"
-        PREPROCESSOR_PARAMS="-DMOZ_PRETOOLKIT_SEAMONKEY"
-        ;;
-    *)
+	suiterunner | sr | srunner)
+		TARGET=suiterunner
+		PREPROCESSOR_PARAMS="-DMOZ_TOOLKIT_SEAMONKEY"
+		;;
+	tbird | tb | thunderbird)
+		TARGET=tbird
+		PREPROCESSOR_PARAMS="-DMOZ_THUNDERBIRD"
+		;;
+	suitelegacy | sl | sm1)
+		TARGET=suitelegacy
+		PREPROCESSOR_PARAMS="-DMOZ_PRETOOLKIT_SEAMONKEY"
+		;;
+	*)
 	echo "Please specify either thunderbird, suiterunner or suitelegacy."
 	exit 1
 	;;
@@ -31,7 +28,7 @@ esac
 # build betas by default
 
 if [ -z "$EXTENSION_RELEASE" ]; then
-    VERSION="${VERSION}b${BETA_SUBVERSION}"
+	VERSION="${VERSION}b${BETA_SUBVERSION}"
 fi
 
 shift 1
@@ -61,7 +58,6 @@ else
 fi
 
 PREPROCESSOR_PARAMS="$PREPROCESSOR_PARAMS -DVERSION=$VERSION -DUUID=$UUID -DSHORTNAME=$SHORTNAME"
-echo -e "Building the XPI with the following definitions:\n\n$PREPROCESSOR_PARAMS\n"
 BUILDDIR="build/$TARGET"
 XPINAME="${SHORTNAME}_${VERSION}_${TARGET}.xpi"
 LINKNAME="${SHORTNAME}_${TARGET}.xpi"
@@ -73,16 +69,14 @@ if [ ! -d build ] ; then mkdir build; fi
 if [ ! -d $BUILDDIR ] ; then mkdir $BUILDDIR; else rm -rf $BUILDDIR/*; fi
 
 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILDDIR/jar.mn
-$BUILDTOOLSDIR/make-jars.pl -v -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILDDIR/jar.mn || exit
-echo -e "\nJAR files ready\n"
+$BUILDTOOLSDIR/make-jars.pl -q -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILDDIR/jar.mn || exit
 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.rdf > $BUILDDIR/install.rdf # For pre-68 Thunderbird versions
 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS manifest.json > $BUILDDIR/manifest.json # For Thunderbird 68 and later
 rm -rf ${SHORTNAME}
 rm -rf ${SHORTNAME}-mac-skin
 rm -f installed-chrome.txt
 
-mkdir $BUILDDIR/defaults
-mkdir $BUILDDIR/defaults/preferences
+mkdir -p $BUILDDIR/defaults/preferences
 cp defaults/preferences/${SHORTNAME}.js $BUILDDIR/defaults/preferences
 mkdir $BUILDDIR/chrome
 mv ${SHORTNAME}.jar $BUILDDIR/chrome/${SHORTNAME}.jar
@@ -90,45 +84,42 @@ mv ${SHORTNAME}.jar $BUILDDIR/chrome/${SHORTNAME}.jar
 cp LICENSE $BUILDDIR
 
 case "$TARGET" in
-    tbird)
-        mkdir $BUILDDIR/platform/
-        mkdir $BUILDDIR/platform/Darwin
-        mkdir $BUILDDIR/platform/Darwin/chrome
-        mv ${SHORTNAME}-mac-skin.jar $BUILDDIR/platform/Darwin/chrome
-        $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
-        cp platform/Darwin/chrome.manifest $BUILDDIR/platform/Darwin/chrome.manifest
-        cd $BUILDDIR
-	zip -r $XPINAME  \
-	  LICENSE \
-	  chrome/${SHORTNAME}.jar \
-	  defaults/ \
-	  platform/Darwin/chrome.manifest \
-	  platform/Darwin/chrome/${SHORTNAME}-mac-skin.jar \
-	  install.rdf \
-	  manifest.json \
-	  chrome.manifest || exit
-        ;;
-    suiterunner)
-        $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
-        cd $BUILDDIR
-	zip -r $XPINAME  \
-	  LICENSE \
-	  chrome/${SHORTNAME}.jar \
-	  defaults/ \
-	  install.rdf \
-	  manifest.json \
-	  chrome.manifest || exit
-        ;;
-    suitelegacy)
-        $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.js > $BUILDDIR/install.js
-        cd $BUILDDIR
-	zip -r $XPINAME  \
-	  LICENSE \
-	  chrome/${SHORTNAME}.jar \
-	  defaults/ \
-	  install.rdf \
-	  install.js || exit
-        ;;
+	tbird)
+		mkdir -p $BUILDDIR/platform/Darwin/chrome
+		mv ${SHORTNAME}-mac-skin.jar $BUILDDIR/platform/Darwin/chrome
+		$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
+		cp platform/Darwin/chrome.manifest $BUILDDIR/platform/Darwin/chrome.manifest
+		cd $BUILDDIR
+	zip --quiet -r $XPINAME  \
+		LICENSE \
+		chrome/${SHORTNAME}.jar \
+		defaults/ \
+		platform/Darwin/chrome.manifest \
+		platform/Darwin/chrome/${SHORTNAME}-mac-skin.jar \
+		install.rdf \
+		manifest.json \
+		chrome.manifest || exit
+		;;
+	suiterunner)
+		$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
+		cd $BUILDDIR
+	zip --quiet -r $XPINAME  \
+		LICENSE \
+		chrome/${SHORTNAME}.jar \
+		defaults/ \
+		install.rdf \
+		manifest.json \
+		chrome.manifest || exit
+		;;
+	suitelegacy)
+		$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.js > $BUILDDIR/install.js
+		cd $BUILDDIR
+	zip --quiet -r $XPINAME  \
+		LICENSE \
+		chrome/${SHORTNAME}.jar \
+		defaults/ \
+		install.rdf \
+		install.js || exit
+		;;
 esac
 ln $XPINAME $LINKNAME
-echo -e "\nXPI ready\n"
