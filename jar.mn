@@ -91,6 +91,7 @@ removedupes.jar:
     content/removedupes.png                           (chrome/content/removedupes.png)
 #endif
 
+
 #ifdef MOZ_THUNDERBIRD
 removedupes-mac-skin.jar:
     skin/classic/removedupes-dialog.css               (platform/Darwin/chrome/skin/classic/removedupes-dialog-tbird.css)

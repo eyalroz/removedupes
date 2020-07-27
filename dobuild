@@ -1,26 +1,23 @@
 #!/bin/bash
 
 SHORTNAME="removedupes"
-VERSION="0.4.2"
+VERSION="0.5"
 BETA_SUBVERSION="1"
 UUID="{a300a000-5e21-4ee0-a115-9ec8f4eaa92b}"
 
 TARGET="$1"
 case "$TARGET" in
-	suiterunner | sr | srunner)
-		TARGET=suiterunner
-		PREPROCESSOR_PARAMS="-DMOZ_TOOLKIT_SEAMONKEY"
-		;;
+#	suiterunner | sr | srunner)
+#		TARGET=suiterunner
+#		PREPROCESSOR_PARAMS="-DMOZ_TOOLKIT_SEAMONKEY"
+#		;;
 	tbird | tb | thunderbird)
 		TARGET=tbird
 		PREPROCESSOR_PARAMS="-DMOZ_THUNDERBIRD"
 		;;
-#	suitelegacy | sl | sm1)
-#		TARGET=suitelegacy
-#		PREPROCESSOR_PARAMS="-DMOZ_PRETOOLKIT_SEAMONKEY"
-#		;;
 	*)
-	echo "Please specify either \"thunderbird\" or \"suiterunner\"."
+	echo "Only \"thunderbird\" is currently supported as a target application."
+#	echo "Please specify either \"thunderbird\" or \"suiterunner\"."
 	exit 1
 	;;
 esac
@@ -70,7 +67,6 @@ if [ ! -d $BUILDDIR ] ; then mkdir $BUILDDIR; else rm -rf $BUILDDIR/*; fi
 
 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILDDIR/jar.mn
 $BUILDTOOLSDIR/make-jars.pl -q -f flat -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILDDIR/jar.mn || exit
-$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.rdf > $BUILDDIR/install.rdf # For pre-68 Thunderbird versions
 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS manifest.json > $BUILDDIR/manifest.json # For Thunderbird 68 and later
 mkdir -p $BUILDDIR/defaults/preferences
 cp defaults/preferences/${SHORTNAME}.js $BUILDDIR/defaults/preferences
@@ -91,30 +87,8 @@ case "$TARGET" in
 		defaults/ \
 		platform/Darwin/chrome.manifest \
 		platform/Darwin/chrome/ \
-		install.rdf \
 		manifest.json \
 		chrome.manifest || exit
 		;;
-	suiterunner)
-		$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
-		cd $BUILDDIR
-	zip --quiet -r $XPINAME  \
-		LICENSE \
-		chrome/${SHORTNAME} \
-		defaults/ \
-		install.rdf \
-		manifest.json \
-		chrome.manifest || exit
-#        ;;
-#    suitelegacy)
-#        $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS install.js > $BUILDDIR/install.js
-#        cd $BUILDDIR
-#	zip --quiet -r $XPINAME  \
-#		LICENSE \
-#		chrome/${SHORTNAME}.jar \
-#		defaults/ \
-#		install.rdf \
-#		install.js || exit
-#        ;;
 esac
 ln $XPINAME $LINKNAME
