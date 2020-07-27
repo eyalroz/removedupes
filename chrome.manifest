@@ -28,34 +28,34 @@
 #
 # **** END LICENSE BLOCK ****
 
-content removedupes chrome/content/removedupes/
+content removedupes chrome/content/
 overlay chrome://messenger/content/mailWindowOverlay.xul chrome://removedupes/content/removedupes-mailWindowOverlay.xul appversion<65.0a1
 overlay chrome://messenger/content/messenger.xul chrome://removedupes/content/removedupes-mailWindowOverlay.xul appversion>=65.0a1
 style chrome://removedupes/content/removedupes-dialog.tb68.xul chrome://removedupes/skin/style.css appversion>=68.0
 style chrome://removedupes/content/removedupes-dialog.xul chrome://removedupes/skin/style.css
-skin removedupes classic/1.0 chrome/skin/classic/removedupes/
-locale removedupes en-US chrome/locale/en-US/removedupes/
-locale removedupes de chrome/locale/de/removedupes/
-locale removedupes it chrome/locale/it/removedupes/
-locale removedupes ja chrome/locale/ja/removedupes/
-locale removedupes ja-JP-mac chrome/locale/ja/removedupes/
-locale removedupes zh-TW chrome/locale/zh-TW/removedupes/
-locale removedupes zh-CN chrome/locale/zh-CN/removedupes/
-locale removedupes sk-SK chrome/locale/sk-SK/removedupes/
-locale removedupes pt-PT chrome/locale/pt-PT/removedupes/
-locale removedupes pt-BR chrome/locale/pt-BR/removedupes/
-locale removedupes nl chrome/locale/nl/removedupes/
-locale removedupes fr chrome/locale/fr/removedupes/
-locale removedupes pl chrome/locale/pl/removedupes/
-locale removedupes he-IL chrome/locale/he-IL/removedupes/
-locale removedupes ru-RU chrome/locale/ru-RU/removedupes/
-locale removedupes da chrome/locale/da/removedupes/
-locale removedupes cs-CZ chrome/locale/cs-CZ/removedupes/
-locale removedupes es-AR chrome/locale/es-AR/removedupes/
-locale removedupes es-ES chrome/locale/es-ES/removedupes/
-locale removedupes is-IS chrome/locale/is-IS/removedupes/
-locale removedupes sv-SE chrome/locale/sv-SE/removedupes/
-locale removedupes sl-SI chrome/locale/sl-SI/removedupes/
+skin removedupes classic/1.0 chrome/skin/classic/
+locale removedupes en-US chrome/locale/en-US/
+locale removedupes de chrome/locale/de/
+locale removedupes it chrome/locale/it/
+locale removedupes ja chrome/locale/ja/
+locale removedupes ja-JP-mac chrome/locale/ja/
+locale removedupes zh-TW chrome/locale/zh-TW/
+locale removedupes zh-CN chrome/locale/zh-CN/
+locale removedupes sk-SK chrome/locale/sk-SK/
+locale removedupes pt-PT chrome/locale/pt-PT/
+locale removedupes pt-BR chrome/locale/pt-BR/
+locale removedupes nl chrome/locale/nl/
+locale removedupes fr chrome/locale/fr/
+locale removedupes pl chrome/locale/pl/
+locale removedupes he-IL chrome/locale/he-IL/
+locale removedupes ru-RU chrome/locale/ru-RU/
+locale removedupes da chrome/locale/da/
+locale removedupes cs-CZ chrome/locale/cs-CZ/
+locale removedupes es-AR chrome/locale/es-AR/
+locale removedupes es-ES chrome/locale/es-ES/
+locale removedupes is-IS chrome/locale/is-IS/
+locale removedupes sv-SE chrome/locale/sv-SE/
+locale removedupes sl-SI chrome/locale/sl-SI/
 #ifndef MOZ_PRETOOLKIT_SEAMONKEY
 style chrome://global/content/customizeToolbar.xul chrome://removedupes/skin/removedupes-button.css appversion<59.0a1
 style chrome://messenger/content/customizeToolbar.xul chrome://removedupes/skin/removedupes-button.css appversion>=59.0a1
