@@ -2,26 +2,23 @@
 	"manifest_version": 2,
 	"applications": {
 		"gecko": {
-#expand                 "id": "__UUID__",
-                        "strict_min_version": "65.0a1"
+#expand             "id": "__UUID__",
+                    "strict_min_version": "65.0a1",
+			"strict_max_version": "78.*"
 		}
 	},
 	"author": "Eyal Rozenberg",
 	"name": "Remove Duplicate Messages (Alternate)",
 	"description": "Searches mail folders for duplicate messages and lets the user remove them",
-    "icons": {
-         "32": "content/removedupes.png"
-     },
+	"icons": {
+		"32": "chrome/content/removedupes.png"
+		},
+	"options_ui": {
+		"page": "chrome/content/options.html"
+	}
 #expand		"version": "__VERSION__",
 #ifdef VERSION_NAME
 #expand		"version_name": "__VERSION_NAME__",
 #endif
-        "legacy" : {
-                "type" : "xul",
-                "options" : {
-                        "page" : "chrome://removedupes/content/removedupes-prefs.tb68.xul",
-                        "open_in_tab": false
-                }
-        }
 }
 
