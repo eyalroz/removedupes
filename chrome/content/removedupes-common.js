@@ -394,13 +394,13 @@ RemoveDupes.Prefs = {
 
   setAppStringPref: function(appPrefName, str) {
 #ifdef MOZ_THUNDERBIRD
-      if (BiDiMailUI.App.versionIsAtLeast("58.0b1")) {
-        BiDiMailUI.Prefs.prefService.setStringPref(appPrefName, str);
+      if (RemoveDupes.App.versionIsAtLeast("58.0b1")) {
+        RemoveDupes.Prefs.prefService.setStringPref(appPrefName, str);
       }
       else
 #endif
       {     
-        BiDiMailUI.Prefs.prefService.setComplexValue(
+        RemoveDupes.Prefs.prefService.setComplexValue(
           appPrefName, Components.interfaces.nsISupportsString, str);
       }
   },
