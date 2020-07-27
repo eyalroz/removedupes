@@ -7,7 +7,7 @@
 <?xml-stylesheet href="chrome://messenger/skin/messenger.css" type="text/css"?>
 <?xml-stylesheet href="chrome://messenger/skin/dialogs.css" type="text/css"?>
 <?xml-stylesheet href="chrome://messenger/skin/folderMenus.css" type="text/css"?>
-<?xml-stylesheet href="chrome://removedupes/skin/removedupes-dialog.css" type="text/css"?>
+<?xml-stylesheet href="chrome://removedupes/content/skin/classic/removedupes-dialog.css" type="text/css"?>
 <?xml-stylesheet href="chrome://messenger/content/bindings.css" type="text/css"?>
 
 <!DOCTYPE dialog SYSTEM "chrome://removedupes/locale/removedupes.dtd">
@@ -16,10 +16,6 @@
         persist="width height screenX screenY sizemode"
         buttons="accept,cancel"
         onload="initDupeReviewDialog();"
-#ifdef EVENT_HANDLERS_AS_ATTRIBUTES
-        ondialogaccept="return onAccept();"
-        ondialogcancel="onCancel();"
-#endif
         id="removeDuplicatesReviewDialog"
         title="&removedupes_dialog.dialog_title;">
 
@@ -27,13 +23,6 @@
   <script type="application/javascript" src="chrome://messenger/content/customElements.js"/>
   <script type="application/javascript" src="chrome://messenger/content/widgetglue.js"/>
   <script type="application/javascript" src="chrome://removedupes/content/removedupes-dialog.js"/>
-
-#ifndef EVENT_HANDLERS_AS_ATTRIBUTES
-<script type="application/javascript">
-document.addEventListener("dialogaccept", function(event) { onAccept() || event.preventDefault(); } );
-document.addEventListener("dialogcancel", function(event) { onCancel(); } );
-</script>
-#endif
 
   <hbox flex="1">
     <vbox flex="2">
