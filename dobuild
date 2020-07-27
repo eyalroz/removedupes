@@ -66,29 +66,31 @@ if [ ! -d build ] ; then mkdir build; fi
 if [ ! -d $BUILDDIR ] ; then mkdir $BUILDDIR; else rm -rf $BUILDDIR/*; fi
 
 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILDDIR/jar.mn
+# Our invocation of make-jars.pl doesn't literally make JAR files, it only preprocesses and copies.
 $BUILDTOOLSDIR/make-jars.pl -q -f flat -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILDDIR/jar.mn || exit
-$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS manifest.json > $BUILDDIR/manifest.json # For Thunderbird 68 and later
+$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS manifest.json > $BUILDDIR/manifest.json
 mkdir -p $BUILDDIR/defaults/preferences
 cp defaults/preferences/${SHORTNAME}.js $BUILDDIR/defaults/preferences
+mkdir -p $BUILDDIR/api/WindowListener
+cp background.js $BUILDDIR/background.js
+cp api/WindowListener/schema.json $BUILDDIR/api/WindowListener
+cp api/WindowListener/implementation.js $BUILDDIR/api/WindowListener
+
 mv ${SHORTNAME} $BUILDDIR/chrome
 
 cp LICENSE $BUILDDIR
 
 case "$TARGET" in
 	tbird)
-		mkdir -p $BUILDDIR/platform/Darwin/chrome
-		mv ${SHORTNAME}-mac-skin $BUILDDIR/platform/Darwin/chrome/
-		$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS chrome.manifest > $BUILDDIR/chrome.manifest
-		cp platform/Darwin/chrome.manifest $BUILDDIR/platform/Darwin/chrome.manifest
-		cd $BUILDDIR
+	cd $BUILDDIR
 	zip --quiet -r $XPINAME  \
 		LICENSE \
 		chrome/ \
 		defaults/ \
-		platform/Darwin/chrome.manifest \
-		platform/Darwin/chrome/ \
+		api/ \
 		manifest.json \
-		chrome.manifest || exit
+		background.js \
+		|| exit
 		;;
 esac
 ln $XPINAME $LINKNAME

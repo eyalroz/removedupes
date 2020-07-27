@@ -1,14 +1,4 @@
-const Cc = Components.classes;
-const Ci = Components.interfaces;
-
-var rdModuleURI = "chrome://removedupes/content/removedupes-common.js";
-if (typeof(ChromeUtils) != "undefined") {
-  if (ChromeUtils.import) {
-    var { RemoveDupes } = ChromeUtils.import(rdModuleURI);
-  }
-  else { Components.utils.import(rdModuleURI);}
-}
-else { Components.utils.import(rdModuleURI); }
+var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
 
 if ("undefined" == typeof(messenger)) {
   var messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
@@ -1011,12 +1001,6 @@ RemoveDupes.MessengerOverlay = {
     }
     else {
       let dialogURI = "chrome://removedupes/content/removedupes-dialog.xul";
-      if (RemoveDupes.App.versionIsAtLeast("68")) {
-        dialogURI = "chrome://removedupes/content/removedupes-dialog.tb68.xul";
-      }
-      else if (!RemoveDupes.App.versionIsAtLeast("3.0b1")) {
-        dialogURI = "chrome://removedupes/content/removedupes-dialog.tb2.xul";
-      }
 
 #ifdef DEBUG_reviewAndRemove
       RemoveDupes.JSConsoleService.logStringMessage("Using review dialog at " + dialogURI);
@@ -1093,7 +1077,6 @@ RemoveDupes.MessengerOverlay = {
         return properties;
       };
     }
-#endif
   },
 
   setOriginalsFolders : function() {
@@ -1147,8 +1130,7 @@ RemoveDupes.MessengerOverlay = {
     // in that case somehow...
   }
 
-
-}
+} // RemoveDupes.MessengerOverlay
 
 
 //---------------------------------------------------

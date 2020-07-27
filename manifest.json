@@ -2,8 +2,8 @@
 	"manifest_version": 2,
 	"applications": {
 		"gecko": {
-#expand             "id": "__UUID__",
-                    "strict_min_version": "65.0a1",
+#expand			"id": "__UUID__",
+			"strict_min_version": "68.0",
 			"strict_max_version": "78.*"
 		}
 	},
@@ -11,14 +11,27 @@
 	"name": "Remove Duplicate Messages (Alternate)",
 	"description": "Searches mail folders for duplicate messages and lets the user remove them",
 	"icons": {
-		"32": "chrome/content/removedupes.png"
-		},
-	"options_ui": {
-		"page": "chrome/content/options.html"
-	}
+		"32": "chrome/content/removedupes.png",
+		"16": "chrome/content/removedupes-button-16x16.png"
+	},
 #expand		"version": "__VERSION__",
 #ifdef VERSION_NAME
-#expand		"version_name": "__VERSION_NAME__",
+#expand	"version_name": "__VERSION_NAME__",
 #endif
+	"experiment_apis": {
+		"WindowListener": {
+			"schema": "api/WindowListener/schema.json",
+			"parent": {
+				"scopes": ["addon_parent"],
+				"paths": [["WindowListener"]],
+				"script": "api/WindowListener/implementation.js"
+			}
+		}
+	},
+	"background": {
+        "scripts": [
+            "background.js"
+        ]
+    }
 }
 

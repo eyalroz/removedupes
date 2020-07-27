@@ -1,6 +1,8 @@
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 
+var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
+
 var rdModuleURI = "chrome://removedupes/content/removedupes-common.js";
 if (typeof(ChromeUtils) != "undefined") {
   if (ChromeUtils.import) {
@@ -147,10 +149,42 @@ function flagsToString(flags) {
   return str.replace(' | ','');
 }
 
+function loadCSS(cssFile) {
+  let ns = window.document.documentElement.lookupNamespaceURI("html");
+  let element = window.document.createElementNS(ns, "link");
+  element.setAttribute("rel", "stylesheet");
+  element.setAttribute("href", cssFile);
+}
+
+/*function loadCSS(cssURI) {
+    var head = document.getElementsByTagName("head")[0];
+    if (!head) {
+      throw "Couldn't opbtain DOM Document head element loading some CSS!"
+    }    
+    var styleSheetLink = domDocument.createElement("link");
+    styleSheetLink.rel  = "stylesheet";
+    styleSheetLink.type = "text/css";
+    styleSheetLink.href = cssURI;
+    head.appendChild(styleSheetLink);
+}*/
+
 function initDupeReviewDialog() {
 #ifdef DEBUG_initDupeReviewDialog
     RemoveDupes.JSConsoleService.logStringMessage('in initDupeReviewDialog()');
 #endif
+
+  // Since we no longer have per-platform-skin support, we set this attribute
+  // on our root element, so that, in our stylesheet, we can contextualize using
+  // this attribute, e.g.
+  //
+  //   dialog[platform="Darwin"] someElement {
+  //     background-color: red;
+  //   }
+  //
+  document.documentElement.setAttribute("platform",Services.appinfo.os);
+
+  document.addEventListener("dialogaccept", function(event) { onAccept() || event.preventDefault(); } );
+  document.addEventListener("dialogcancel", function(event) { onCancel(); } );
 
 #ifdef DEBUG_profile
   RemoveDupes.startTime = (new Date()).getTime();
@@ -387,7 +421,7 @@ function rebuildDuplicateSetsTree() {
     //         \--treeitem (for N+1'th dupe set; not expanded here)
 
     var dupeSetTreeChildrenInner  = document.createElement("treechildren");
-
+    
     for (let i=0; i < dupeSet.length; i++) {
       if (dupeSet[i].toKeep) numberToKeep++;
       var dupeInSetRow = createMessageTreeRow(dupeSet[i]);
