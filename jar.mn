@@ -2,13 +2,9 @@ removedupes.jar:
 *   content/removedupes.js                            (chrome/content/removedupes.js)
 *   content/removedupes-common.js                     (chrome/content/removedupes-common.js)
 *   content/removedupes-prefs.js                      (chrome/content/removedupes-prefs.js)
-*   content/removedupes-dialog.tb68.xul               (chrome/content/removedupes-dialog.xul) -DXBL_FOLDER_PICKER_OR_REPLACEMENT -DSTATUSBARPANEL_ELEMENT_AND_CLASS="label class=\"statusbarpanel\"" -DFOLDER_PICKER_BINDING_STYLE=""
-*   content/removedupes-dialog.xul                    (chrome/content/removedupes-dialog.xul) -DXBL_FOLDER_PICKER_OR_REPLACEMENT -DSTATUSBARPANEL_ELEMENT_AND_CLASS="statusbarpanel" -DFOLDER_PICKER_BINDING_STYLE="style=\"-moz-binding: url('chrome://messenger/content/folderWidgets.xml#folder-menupopup');\""
-*   content/removedupes-dialog.js                     (chrome/content/removedupes-dialog.js) -DXBL_FOLDER_PICKER_OR_REPLACEMENT  
-#ifdef MOZ_THUNDERBIRD
-*   content/removedupes-dialog.tb2.xul                (chrome/content/removedupes-dialog.xul)
-*   content/removedupes-dialog.tb2.js                 (chrome/content/removedupes-dialog.js)
-*   content/removedupes-prefs.tb68.xul                (chrome/content/removedupes-prefs.xul) -DPREFWINDOW_ELEMENT="dialog" -DPREFPANE_ELEMENT="vbox"  -DCAPTION_START="<hbox class=\"groupbox-title\"><label class=\"header\">" -DCAPTION_END="</label></hbox>" -DUSE_TB68_SCRIPTS
+*   content/removedupes-dialog.xul                    (chrome/content/removedupes-dialog.xul)
+*   content/removedupes-dialog.js                     (chrome/content/removedupes-dialog.js)
+*   content/removedupes-prefs.xul                     (chrome/content/removedupes-prefs.xul) -DPREFWINDOW_ELEMENT="dialog" -DPREFPANE_ELEMENT="vbox"  -DCAPTION_START="<hbox class=\"groupbox-title\"><label class=\"header\">" -DCAPTION_END="</label></hbox>" -DUSE_TB68_SCRIPTS
     content/removedupes-set-preference-types.js       (chrome/content/removedupes-set-preference-types.js)
 #endif
 *   content/removedupes-mailWindowOverlay.xul         (chrome/content/removedupes-mailWindowOverlay.xul)
@@ -90,7 +86,9 @@ removedupes.jar:
 #ifdef MOZ_TOOLKIT_SEAMONKEY
     content/removedupes.png                           (chrome/content/removedupes.png)
 #endif
-
+#ifdef MOZ_PRETOOLKIT_SEAMONKEY
+*   content/removedupes-preftree.xul                  (chrome/content/removedupes-preftree.xul)
+#endif
 
 #ifdef MOZ_THUNDERBIRD
 removedupes-mac-skin.jar:
