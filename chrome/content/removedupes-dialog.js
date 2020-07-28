@@ -69,7 +69,6 @@ const  flagsColumnIndex       = 11;
 
 var DateService;
 var DateTimeFormatter;
-#ifdef MOZ_THUNDERBIRD
 if (RemoveDupes.App.versionIsAtLeast("56")) {
   // see https://wiki.mozilla.org/Thunderbird/Add-ons_Guide_57
   // for details regarding this change
@@ -95,7 +94,6 @@ if (RemoveDupes.App.versionIsAtLeast("56")) {
   }
 }
 else
-#endif
 {
   // Either we're in Seamonkey or with Thunderbird version before the 56.0 betas.
   // Note that after 52.x there weren't any release versions 53.x, 54.x or 55.x

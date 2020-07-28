@@ -4,125 +4,26 @@
 <?xml-stylesheet href="chrome://messenger/skin/preferences/preferences.css"?>
 <?xml-stylesheet href="chrome://messenger/skin/messenger.css" type="text/css"?>
 
-#ifdef MOZ_PRETOOLKIT_SEAMONKEY
-<!DOCTYPE prefwindow [
-  <!ENTITY % removedupesprefDTD SYSTEM "chrome://removedupes/locale/removedupes-prefs.dtd">
-  %removedupesprefDTD;
-]>
-#else
 <!DOCTYPE page SYSTEM "chrome://removedupes/locale/removedupes-prefs.dtd">
-#endif
 
-#ifndef MOZ_PRETOOLKIT_SEAMONKEY
-#expand	<__PREFWINDOW_ELEMENT__ xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
             id="removeDupesPrefsDialogTitle"
             title="&prefs_dialog_title;"
             dlgbuttons="accept,cancel">
-#expand	  <__PREFPANE_ELEMENT__ id="removeDupesPrefPane"
+  <vbox id="removeDupesPrefPane"
             helpURI="&guide-url;"
             onpaneload="RemoveDupes.PrefPane.init();">
-#else
-<page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-      xmlns:html="http://www.w3.org/1999/xhtml"
-      onload="parent.initPanel(panel);"
-      onunload="gBDMPrefPane.onunload();"
-      headertitle="&removedupes-preftree-page-title;">
 
-#endif
-
-#ifdef HAVE_PREFERENCE_ELEMENTS
-    <preferences id="extensions.removedupes.refs">
-      <preference id="extensions.removedupes.comparison_criteria.author"
-                  name="extensions.removedupes.comparison_criteria.author"
-                  type="bool"/>
-      <preference id="extensions.removedupes.comparison_criteria.recipients"
-                  name="extensions.removedupes.comparison_criteria.recipients"
-                  type="bool"/>
-      <preference id="extensions.removedupes.comparison_criteria.cc_list"
-                  name="extensions.removedupes.comparison_criteria.cc_list"
-                  type="bool"/>
-      <preference id="extensions.removedupes.comparison_criteria.flags"
-                  name="extensions.removedupes.comparison_criteria.flags"
-                  type="bool"/>
-      <preference id="extensions.removedupes.comparison_criteria.message_id"
-                  name="extensions.removedupes.comparison_criteria.message_id"
-                  type="bool"/>
-      <preference id="extensions.removedupes.comparison_criteria.num_lines"
-                  name="extensions.removedupes.comparison_criteria.num_lines"
-                  type="bool"/>
-      <preference id="extensions.removedupes.comparison_criteria.send_time"
-                  name="extensions.removedupes.comparison_criteria.send_time"
-                  type="bool"/>
-      <preference id="extensions.removedupes.comparison_criteria.size"
-                  name="extensions.removedupes.comparison_criteria.size"
-                  type="bool"/>
-      <preference id="extensions.removedupes.comparison_criteria.subject"
-                  name="extensions.removedupes.comparison_criteria.subject"
-                  type="bool"/>
-      <preference id="extensions.removedupes.comparison_criteria.folder"
-                  name="extensions.removedupes.comparison_criteria.folder"
-                  type="bool"/>
-      <preference id="extensions.removedupes.comparison_criteria.body"
-                  name="extensions.removedupes.comparison_criteria.body"
-                  type="bool"/>
-      <preference id="extensions.removedupes.compare_stripped_and_sorted_addresses"
-                  name="extensions.removedupes.compare_stripped_and_sorted_addresses"
-                  type="bool"/>
-      <preference id="extensions.removedupes.search_subfolders"
-                  name="extensions.removedupes.search_subfolders"
-                  type="bool"/>
-      <preference id="extensions.removedupes.skip_special_folders"
-                  name="extensions.removedupes.skip_special_folders"
-                  type="bool"/>
-      <preference id="extensions.removedupes.skip_imap_deleted_messages"
-                  name="extensions.removedupes.skip_imap_deleted_messages"
-                  type="bool"/>
-      <preference id="extensions.removedupes.use_dialog_before_removal"
-                  name="extensions.removedupes.use_dialog_before_removal"
-                  type="bool"/>
-      <preference id="extensions.removedupes.default_action"
-                  name="extensions.removedupes.default_action"
-                  type="string"/>
-      <preference id="extensions.removedupes.time_comparison_resolution"
-                  name="extensions.removedupes.time_comparison_resolution"
-                  type="string"/>
-    </preferences>
-#endif
     <script type="application/javascript" src="chrome://removedupes/content/removedupes-prefs.js"/>
-#ifdef USE_TB68_SCRIPTS
     <script type="application/javascript" src="chrome://global/content/preferencesBindings.js" />
     <script type="application/javascript" src="chrome://removedupes/content/removedupes-set-preference-types.js" />
-#endif
-
-#ifdef MOZ_PRETOOLKIT_SEAMONKEY
-    <script type="application/javascript">
-      var panel = "chrome://removedupes/content/removedupes-prefs.xul";
-      var _elementIDs = ["removedupes.search_subfolders",
-                         "removedupes.compare_stripped_and_sorted_addresses",
-                         "removedupes.skip_special_folders",
-                         "removedupes.skip_imap_deleted_messages",
-                         "removedupes.use_dialog_before_removal",
-                         "removedupes.default_action",
-                         "removedupes.time_comparison_resolution",
-                         "removedupes.comparison_criteria.author",
-                         "removedupes.comparison_criteria.recipients",
-                         "removedupes.comparison_criteria.cc_list",
-                         "removedupes.comparison_criteria.message_id",
-                         "removedupes.comparison_criteria.num_lines",
-                         "removedupes.comparison_criteria.send_time",
-                         "removedupes.comparison_criteria.size",
-                         "removedupes.comparison_criteria.subject",
-                         "removedupes.comparison_criteria.folder",
-                         "removedupes.comparison_criteria.body"];
-    </script>
-#endif
 
     <tabbox id="prefsTabBox" flex="1" persist="selectedIndex">
 
       <tabs id="prefsTabs">
-        <tab id="general_settings_tab" 
+        <tab id="general_settings_tab"
              label="&general_settings.tab_title;" />
-        <tab id="message_comparison_tab" 
+        <tab id="message_comparison_tab"
              label="&message_comparison.tab_title;" />
       </tabs>
 
@@ -155,12 +56,12 @@
               autostretch="never"/>
             <spacer/>
             <groupbox>
-#expand	              __CAPTION_START__&general_settings.default_action.description;__CAPTION_END__
+              <hbox class="groupbox-title"><label class="header">&general_settings.default_action.description; </label></hbox>
               <radiogroup preference="extensions.removedupes.default_action"
                 prefstring="extensions.removedupes.default_action"
                 id="extensions.removedupes.default_action">
-                <radio value="move" 
-                  label="&general_settings.default_action.move.label;" 
+                <radio value="move"
+                  label="&general_settings.default_action.move.label;"
                   accesskey="&general_settings.default_action.move.accesskey;"/>
                 <!-- add here: folder picker! -->
                 <radio value="delete_permanently"
@@ -180,7 +81,7 @@
               accesskey="&message_comparison.compare_stripped_and_sorted_addresses.access_key;"
               autostretch="never"/>
             <groupbox>
-#expand	              __CAPTION_START__&message_comparison.criteria_box.label;__CAPTION_END__
+              <hbox class="groupbox-title"><label class="header">&message_comparison.criteria_box.label; </label></hbox>
               <vbox flex="1">
                 <checkbox preference="extensions.removedupes.comparison_criteria.author"
                   prefstring="extensions.removedupes.comparison_criteria.author"
@@ -256,17 +157,17 @@
                 prefstring="extensions.removedupes.time_comparison_resolution"
                 id="extensions.removedupes.time_comparison_resolution">
                 <menupopup>
-                <menuitem value="seconds" 
+                <menuitem value="seconds"
                  label="&message_comparison.time_comparison_resolution.seconds.label;"/>
-                <menuitem value="minutes" 
+                <menuitem value="minutes"
                  label="&message_comparison.time_comparison_resolution.minutes.label;"/>
-                <menuitem value="hours" 
+                <menuitem value="hours"
                  label="&message_comparison.time_comparison_resolution.hours.label;"/>
-                <menuitem value="day" 
+                <menuitem value="day"
                  label="&message_comparison.time_comparison_resolution.day.label;"/>
-                <menuitem value="month" 
+                <menuitem value="month"
                  label="&message_comparison.time_comparison_resolution.month.label;"/>
-                <menuitem value="year" 
+                <menuitem value="year"
                  label="&message_comparison.time_comparison_resolution.year.label;"/>
                 </menupopup>
               </menulist>
@@ -275,18 +176,6 @@
         </tabpanel>
       </tabpanels>
     </tabbox>
-#ifdef MOZ_THUNDERBIRD
-  <!-- workaround for a Thunderbird 3 prefpane layout issue:
-       the prefpane does not expand to contain lowest part of the tabbox,
-       so it's cut out by the Ok & Cancel buttons; we're inserting dummy
-       elements -->
-    <label value=" "/>
-    <label value=" "/>
-#endif
-#ifndef MOZ_PRETOOLKIT_SEAMONKEY
-#expand	  </__PREFPANE_ELEMENT__>
-#expand	</__PREFWINDOW_ELEMENT__>
-#else
+  </vbox>
+</dialog>
 
-</page>
-#endif

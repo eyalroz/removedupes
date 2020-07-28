@@ -393,12 +393,10 @@ RemoveDupes.Prefs = {
   },
 
   setAppStringPref: function(appPrefName, str) {
-#ifdef MOZ_THUNDERBIRD
       if (RemoveDupes.App.versionIsAtLeast("58.0b1")) {
         RemoveDupes.Prefs.prefService.setStringPref(appPrefName, str);
       }
       else
-#endif
       {     
         RemoveDupes.Prefs.prefService.setComplexValue(
           appPrefName, Components.interfaces.nsISupportsString, str);

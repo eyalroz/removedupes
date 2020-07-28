@@ -1011,14 +1011,12 @@ RemoveDupes.MessengerOverlay = {
     }
     else {
       let dialogURI = "chrome://removedupes/content/removedupes-dialog.xul";
-#ifdef MOZ_THUNDERBIRD
       if (RemoveDupes.App.versionIsAtLeast("68")) {
         dialogURI = "chrome://removedupes/content/removedupes-dialog.tb68.xul";
       }
       else if (!RemoveDupes.App.versionIsAtLeast("3.0b1")) {
         dialogURI = "chrome://removedupes/content/removedupes-dialog.tb2.xul";
       }
-#endif
 
 #ifdef DEBUG_reviewAndRemove
       RemoveDupes.JSConsoleService.logStringMessage("Using review dialog at " + dialogURI);
@@ -1066,10 +1064,6 @@ RemoveDupes.MessengerOverlay = {
   // folder or not.
 
   replaceGetCellProperties : function () {
-
-#ifndef MOZ_THUNDERBIRD
-    return;
-#else
 
     if (typeof gFolderTreeView == 'undefined')
       return;
