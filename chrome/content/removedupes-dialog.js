@@ -42,14 +42,12 @@ var numberToKeep;
 var selectedRow = -1;
 
 
-#ifdef XBL_FOLDER_PICKER_OR_REPLACEMENT
 var dupeMoveTargetFolder;
   // workaround for Mozilla bug 473009 -
   // the new folder picker DOESN'T EXPOSE ITS F***ING selected folder!
   // ... and thank you very much David Ascher & TB devs for checking in
   // a folder picker without the most basic folder picker functionality,
   // forcing me to write a workaround
-#endif
 
 // indices of columns in dupe tree rows
 // consts
@@ -733,11 +731,7 @@ function onCancel() {
 function onAccept() {
   var uri = null;
   try {
-#ifdef XBL_FOLDER_PICKER_OR_REPLACEMENT
     var uri = dupeMoveTargetFolder.URI;
-#else
-    var uri = document.getElementById('actionTargetFolder').getAttribute('uri');
-#endif
   } catch(ex) { }
 
 #ifdef DEBUG_onAccept
@@ -867,15 +861,9 @@ function initializeFolderPicker() {
   RemoveDupes.JSConsoleService.logStringMessage('setting folder picker to uri:\n' + uri);
 #endif
 
-#ifdef XBL_FOLDER_PICKER_OR_REPLACEMENT
   try {
     document.getElementById('actionTargetFolderPopup').selectFolder(msgFolder);
   } catch(ex) { }
-#else
-  // TODO: perhaps we don't need this when also calling SetFolderPicker ?
-  MsgFolderPickerOnLoad('actionTargetFolder');
-  SetFolderPicker(uri, 'actionTargetFolder');
-#endif
   dupeMoveTargetFolder = msgFolder;
 }
 
@@ -957,7 +945,6 @@ function sortDupeSetsByField(field) {
   }
 }
 
-#ifdef XBL_FOLDER_PICKER_OR_REPLACEMENT
 function onTargetFolderClick(targetFolder) {
   dupeMoveTargetFolder = targetFolder;
 #ifdef DEBUG_onTargetFolderClick
@@ -965,5 +952,4 @@ function onTargetFolderClick(targetFolder) {
 #endif
   document.getElementById('actionTargetFolderPopup').selectFolder(targetFolder);
 }
-#endif
 
