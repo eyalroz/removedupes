@@ -5,10 +5,6 @@
 %removedupesDTD;
 ]>
 
-#ifdef MOZ_PRETOOLKIT_SEAMONKEY
-<?xml-stylesheet href="chrome://removedupes/skin/removedupes-messenger.css" type="text/css"?>
-#endif
-
 <overlay id="removedupesOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
   <script type="application/javascript" src="chrome://removedupes/content/removedupes.js"/>

@@ -9,26 +9,14 @@
   %removedupesprefDTD;
 ]>
 
-#ifdef MOZ_PRETOOLKIT_SEAMONKEY
-<?xml-stylesheet href="chrome://removedupes/skin/removedupes-button.css" type="text/css"?>
-#endif
-
 <overlay id="removedupesOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-#ifdef MOZ_PRETOOLKIT_SEAMONKEY
-  <hbox id="toolbar_button_box">
-#else
   <toolbarpalette id="MailToolbarPalette">
-#endif
-
     <toolbarbutton id="removedupes-button"
                    oncommand="RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages();"
                    label="&removeduplicates-button.label;"
                    tooltiptext="&removeduplicates-button.tip;"
                    type="menu-button"
-#ifdef MOZ_PRETOOLKIT_SEAMONKEY
-                   insertafter="button-stop"
-#endif
                    class="toolbarbutton-1 chromeclass-toolbar-additional custombutton">
       <menupopup onpopupshowing="RemoveDupes.MessengerOverlay.criteriaPopupMenuInit()">
         <label value="&removedupes.criteria_menu.label;" style="font-weight: bold"/>
@@ -79,10 +67,5 @@
                   oncommand="RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion(event,'body')"/>
       </menupopup>
     </toolbarbutton>
-#ifdef MOZ_PRETOOLKIT_SEAMONKEY
-  </hbox>
-#else
   </toolbarpalette>
-#endif
-
 </overlay>

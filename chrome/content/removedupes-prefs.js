@@ -12,28 +12,10 @@ else { Components.utils.import(rdModuleURI); }
 
 RemoveDupes.PrefPane = {
 
-#ifndef MOZ_THUNDERBIRD
-#expand  _extVersion: "__VERSION__",
-#endif
-
   init: function() {
-#ifdef MOZ_THUNDERBIRD
     window.addEventListener("dialoghelp", this.openGuide, true);
-#else
-    // expose the extension version
-    var header = top.document.getElementById("header");
-    if (header)
-      header.setAttribute("description", this._extVersion);
-
-#ifdef DEBUG
-    //parent.hPrefWindow
-    //      .registerOKCallbackFunc(myCallbackFunction);
-#endif
-
-#endif
   },
 
-#ifdef MOZ_THUNDERBIRD
   openGuide: function(aEvent) {
     try {
       // Open the user guide in the default browser.
@@ -55,13 +37,5 @@ RemoveDupes.PrefPane = {
     aEvent.preventDefault();
     aEvent.stopPropagation();
   }
-#else
-  onunload: function() {
-    // clean up the header description
-    var header = top.document.getElementById("header");
-    if (header)
-      header.removeAttribute("description");
-  }
-#endif
 
 };

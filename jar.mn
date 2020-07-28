@@ -4,9 +4,8 @@ removedupes.jar:
 *   content/removedupes-prefs.js                      (chrome/content/removedupes-prefs.js)
 *   content/removedupes-dialog.xul                    (chrome/content/removedupes-dialog.xul)
 *   content/removedupes-dialog.js                     (chrome/content/removedupes-dialog.js)
-*   content/removedupes-prefs.xul                     (chrome/content/removedupes-prefs.xul) -DPREFWINDOW_ELEMENT="dialog" -DPREFPANE_ELEMENT="vbox"  -DCAPTION_START="<hbox class=\"groupbox-title\"><label class=\"header\">" -DCAPTION_END="</label></hbox>" -DUSE_TB68_SCRIPTS
+*   content/removedupes-prefs.xul                     (chrome/content/removedupes-prefs.xul)
     content/removedupes-set-preference-types.js       (chrome/content/removedupes-set-preference-types.js)
-#endif
 *   content/removedupes-mailWindowOverlay.xul         (chrome/content/removedupes-mailWindowOverlay.xul)
     locale/en-US/removedupes.dtd                      (chrome/locale/en-US/removedupes.dtd)
     locale/en-US/removedupes-prefs.dtd                (chrome/locale/en-US/removedupes-prefs.dtd)
@@ -71,26 +70,13 @@ removedupes.jar:
     locale/sl-SI/removedupes.dtd                      (chrome/locale/sl-SI/removedupes.dtd)
     locale/sl-SI/removedupes-prefs.dtd                (chrome/locale/sl-SI/removedupes-prefs.dtd)
     locale/sl-SI/removedupes.properties               (chrome/locale/sl-SI/removedupes.properties)
-*   content/removedupes-prefs.xul                     (chrome/content/removedupes-prefs.xul)  -DPREFWINDOW_ELEMENT="prefwindow" -DPREFPANE_ELEMENT="prefpane" -DHAVE_PREFERENCE_ELEMENTS -DCAPTION_START="<caption label=\""  -DCAPTION_END="\"/>"
 *   content/removedupes-button.xul                    (chrome/content/removedupes-button.xul)
 *   skin/classic/removedupes-messenger.css            (chrome/skin/classic/removedupes-messenger.css)
 *   skin/classic/removedupes-button.css               (chrome/skin/classic/removedupes-button.css)
 *   skin/classic/removedupes-dialog.css               (chrome/skin/classic/removedupes-dialog.css)
-#ifdef MOZ_THUNDERBIRD
     content/removedupes-button-16x16.png              (chrome/content/removedupes-button-16x16.png)
     content/removedupes-button-24x24.png              (chrome/content/removedupes-button-24x24.png)
     content/removedupes.png                           (chrome/content/removedupes.png)
-#else
-    content/removedupes-button-29x30.png              (chrome/content/removedupes-button-29x30.png)
-#endif
-#ifdef MOZ_TOOLKIT_SEAMONKEY
-    content/removedupes.png                           (chrome/content/removedupes.png)
-#endif
-#ifdef MOZ_PRETOOLKIT_SEAMONKEY
-*   content/removedupes-preftree.xul                  (chrome/content/removedupes-preftree.xul)
-#endif
 
-#ifdef MOZ_THUNDERBIRD
 removedupes-mac-skin.jar:
     skin/classic/removedupes-dialog.css               (platform/Darwin/chrome/skin/classic/removedupes-dialog-tbird.css)
-#endif
