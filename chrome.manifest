@@ -31,8 +31,6 @@
 content removedupes chrome/content/
 overlay chrome://messenger/content/mailWindowOverlay.xul chrome://removedupes/content/removedupes-mailWindowOverlay.xul appversion<65.0a1
 overlay chrome://messenger/content/messenger.xul chrome://removedupes/content/removedupes-mailWindowOverlay.xul appversion>=65.0a1
-style chrome://removedupes/content/removedupes-dialog.tb68.xul chrome://removedupes/skin/style.css appversion>=68.0
-style chrome://removedupes/content/removedupes-dialog.xul chrome://removedupes/skin/style.css
 skin removedupes classic/1.0 chrome/skin/classic/
 locale removedupes en-US chrome/locale/en-US/
 locale removedupes de chrome/locale/de/
