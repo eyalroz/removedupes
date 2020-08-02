@@ -69,38 +69,12 @@ const  flagsColumnIndex       = 11;
 // state variables for dupe set sorting (see onClickColumn() )
 
 
-var DateService;
-var DateTimeFormatter;
-if (RemoveDupes.App.versionIsAtLeast("56")) {
-  // see https://wiki.mozilla.org/Thunderbird/Add-ons_Guide_57
-  // for details regarding this change
-  var IntlService = Cc["@mozilla.org/mozintl;1"].getService(Ci.mozIMozIntl);
-  var formattingOptions = {
-    year: 'numeric', month:  'numeric', day:    'numeric',
-    hour: 'numeric', minute: 'numeric', second: 'numeric',
-    timeZoneName: 'short'
-  };
-
-  if (RemoveDupes.App.versionIsAtLeast("59.0b2")) {
-    DateTimeFormatter = new IntlService.DateTimeFormat(undefined, formattingOptions);
-  }
-  else {
-    try {
-      // Suppored versions here: 56.0b4, 57.0b2, 58.0b3
-      DateTimeFormatter = IntlService.createDateTimeFormat(undefined, formattingOptions);
-    }
-    catch(ex) {
-      // we should probably never get here, but just in case...
-      DateTimeFormatter = IntlService.DateTimeFormat(undefined, formattingOptions);
-    }
-  }
-}
-else
-{
-  // Either we're in Seamonkey or with Thunderbird version before the 56.0 betas.
-  // Note that after 52.x there weren't any release versions 53.x, 54.x or 55.x
-  DateService = Cc["@mozilla.org/intl/scriptabledateformat;1"].getService(Ci.nsIScriptableDateFormat);
-}
+var formattingOptions = {
+  year: 'numeric', month:  'numeric', day:    'numeric',
+  hour: 'numeric', minute: 'numeric', second: 'numeric',
+  timeZoneName: 'short'
+};
+var DateTimeFormatter = new Services.intl.DateTimeFormat(undefined, formattingOptions);
 
 // DupeMessageRecord - a self-describing class;
 // each dupe message in each dupe set will have a record built
@@ -540,27 +514,7 @@ function formatSendTime(sendTimeInSeconds) {
   console.log('date.getMinutes() = ' + date.getMinutes());
 #endif
 
-  var formattedDate;
-  if (DateTimeFormatter) {
-     // We'll be using this for Thunderbird >= 56 (or 57?)
-     // (when the older formatting service was removed)
-     formattedDate = DateTimeFormatter.format(date);
-  }
-  else {
-    // with older Thunderbird versions, we format the data directly with
-    // the global service, rather than a custom formatter.
-    formattedDate = DateService.FormatDateTime(
-      "", // use application locale
-      DateService.dateFormatShort,
-      DateService.timeFormatSeconds,
-      date.getFullYear(),
-      date.getMonth()+1,
-      date.getDate(),
-      date.getHours(),
-      date.getMinutes(),
-      date.getSeconds() );
-  }
-  return formattedDate;
+  return DateTimeFormatter.format(date);
 }
 
 // onTreeKeyPress -
@@ -600,8 +554,7 @@ function getFocusedDupeTreeItem() {
 
 function onClickTree(ev) {
 
-  dupeSetTreeBoxObject =
-    RemoveDupes.App.versionIsAtLeast("61") ? dupeSetTree : dupeSetTree.treeBoxObject;
+  dupeSetTreeBoxObject = dupeSetTree;
 
 
 #ifdef DEBUG_onClickTree
