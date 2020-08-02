@@ -45,8 +45,7 @@ RemoveDupes.MessengerOverlay = {
 
   searchAndRemoveDuplicateMessages : function() {
 #ifdef DEBUG_searchAndRemoveDuplicateMessages
-    RemoveDupes.JSConsoleService.logStringMessage(
-      'searchAndRemoveDuplicateMessages()');
+    console.log('searchAndRemoveDuplicateMessages()');
 #endif
 
     //document.getElementById('progress-panel').removeAttribute('collapsed');
@@ -89,13 +88,12 @@ RemoveDupes.MessengerOverlay = {
          ev.keyCode == KeyEvent.DOM_VK_BACK_SPACE) &&
         !ev.shiftKey && !ev.altKey && !ev.ctrlKey && !ev.metaKey) {
 #ifdef DEBUG_onKeyPress
-      RemoveDupes.JSConsoleService.logStringMessage("Esc Esc");
+      console.log("Esc Esc");
 #endif
       searchData.userAborted = true;
     }
 #ifdef DEBUG_onKeyPress
-    RemoveDupes.JSConsoleService.logStringMessage(
-      "got other keycode: " + ev.keyCode + " | " + String.fromCharCode(ev.keyCode));
+    console.log("got other keycode: " + ev.keyCode + " | " + String.fromCharCode(ev.keyCode));
 #endif
   },
 
@@ -117,14 +115,13 @@ RemoveDupes.MessengerOverlay = {
       if (searchData.skipSpecialFolders) {
         if (!folder.canRename && (folder.rootFolder != folder) ) {
 #ifdef DEBUG_beginSearchForDuplicateMessages
-          RemoveDupes.JSConsoleService.logStringMessage(
-            'special folder ' + folder.abbreviatedName);
+          console.log('special folder ' + folder.abbreviatedName);
 #endif
           // one of the top folders is a special folders; if it's not
           // the Inbox (which we do search), skip it
           if (!(folder.flags & RemoveDupes.FolderFlags.Inbox)) {
 #ifdef DEBUG_beginSearchForDuplicateMessages
-            RemoveDupes.JSConsoleService.logStringMessage(
+            console.log(
               'skipping special folder ' + folder.abbreviatedName +
               'due to ' + folder.flags + ' & ' +
               RemoveDupes.FolderFlags.Inbox + ' = ' +
@@ -135,8 +132,7 @@ RemoveDupes.MessengerOverlay = {
         }
       }
 #ifdef DEBUG_beginSearchForDuplicateMessages
-      RemoveDupes.JSConsoleService.logStringMessage(
-        'addSearchFolders for ' + folder.abbreviatedName);
+      console.log('addSearchFolders for ' + folder.abbreviatedName);
 #endif
       RemoveDupes.MessengerOverlay.addSearchFolders(folder,searchData);
     }
@@ -150,7 +146,7 @@ RemoveDupes.MessengerOverlay = {
 
     delete searchData.topFolders;
 #ifdef DEBUG_collectMessages
-     RemoveDupes.JSConsoleService.logStringMessage(
+     console.log(
        'done with RemoveDupes.MessengerOverlay.addSearchFolders()' +
        'calls\nsearchData.remainingFolders = ' + searchData.remainingFolders);
 #endif
@@ -180,7 +176,7 @@ RemoveDupes.MessengerOverlay = {
 
   addSearchFolders : function(folder, searchData) {
 #ifdef DEBUG_addSearchFolders
-    RemoveDupes.JSConsoleService.logStringMessage('addSearchFolders for folder ' + folder.abbreviatedName +
+    console.log('addSearchFolders for folder ' + folder.abbreviatedName +
      '\nrootFolder = ' + folder.rootFolder + ((folder.rootFolder == folder) ? ' - self!' : ' - not self!') +
      '\ncanFileMessages = ' + folder.canFileMessages +
      '\nfolder.canRename = ' + folder.canRename
@@ -194,14 +190,14 @@ RemoveDupes.MessengerOverlay = {
           return;
         }
 #ifdef DEBUG_addSearchFolders
-        RemoveDupes.JSConsoleService.logStringMessage('special folder ' + folder.abbreviatedName + ' is allowed');
+        console.log('special folder ' + folder.abbreviatedName + ' is allowed');
 #endif
       }
     }
     if (folder.flags & RemoveDupes.FolderFlags.Virtual) {
       // it's a virtual search folder, skip it
 #ifdef DEBUG_addSearchFolders
-      RemoveDupes.JSConsoleService.logStringMessage('skipping virtual search folder ' + folder.abbreviatedName);
+      console.log('skipping virtual search folder ' + folder.abbreviatedName);
 #endif
       return;
     }
@@ -219,23 +215,23 @@ RemoveDupes.MessengerOverlay = {
       if (searchData.originalsFolderUris) {
         if (!searchData.originalsFolderUris.has(folder.URI)) {
 #ifdef DEBUG_addSearchFolders
-          RemoveDupes.JSConsoleService.logStringMessage('pushing non-originals folder ' + folder.abbreviatedName);
+          console.log('pushing non-originals folder ' + folder.abbreviatedName);
 #endif
           searchData.folders.add(folder);
         }
 #ifdef DEBUG_addSearchFolders
-        else RemoveDupes.JSConsoleService.logStringMessage('not pushing folder ' + folder.abbreviatedName + ' - it\'s an originals folder');
+        else console.log('not pushing folder ' + folder.abbreviatedName + ' - it\'s an originals folder');
 #endif
       }
       else {
 #ifdef DEBUG_addSearchFolders
-        RemoveDupes.JSConsoleService.logStringMessage('pushing folder ' + folder.abbreviatedName);
+        console.log('pushing folder ' + folder.abbreviatedName);
 #endif
         searchData.folders.add(folder);
       }
     }
 #ifdef DEBUG_addSearchFolders
-    else RemoveDupes.JSConsoleService.logStringMessage('not pushing folder ' + folder.abbreviatedName + ' - since it has no root folder or can\'t file messages');
+    else console.log('not pushing folder ' + folder.abbreviatedName + ' - since it has no root folder or can\'t file messages');
 #endif
 
     // is this an IMAP folder?
@@ -247,7 +243,7 @@ RemoveDupes.MessengerOverlay = {
       RemoveDupes.ImapService.selectFolder(RemoveDupes.MessengerOverlay.eventTarget, folder, listener, msgWindow, dummyUrl);
       // no traversal of children - the listener will take care of that in due time
 #ifdef DEBUG_addSearchFolders
-      RemoveDupes.JSConsoleService.logStringMessage('returning from addSearchFolders for folder ' + folder.abbreviatedName + ':\ntriggered IMAP folder update');
+      console.log('returning from addSearchFolders for folder ' + folder.abbreviatedName + ':\ntriggered IMAP folder update');
 #endif
       return;
 
@@ -264,7 +260,7 @@ RemoveDupes.MessengerOverlay = {
         folder.parseFolder(msgWindow, listener);
         // no traversal of children - the listener will take care of that in due time
 #ifdef DEBUG_addSearchFolders
-        RemoveDupes.JSConsoleService.logStringMessage('returning from addSearchFolders for folder ' + folder.abbreviatedName + ':\ntriggered local folder db update');
+        console.log('returning from addSearchFolders for folder ' + folder.abbreviatedName + ':\ntriggered local folder db update');
 #endif
         return;
       }
@@ -277,7 +273,7 @@ RemoveDupes.MessengerOverlay = {
     RemoveDupes.MessengerOverlay.traverseSearchFolderSubfolders(folder,searchData);
 
 #ifdef DEBUG_addSearchFolders
-    RemoveDupes.JSConsoleService.logStringMessage('returning from addSearchFolders for folder ' + folder.abbreviatedName + ':\nperformed traversal');
+    console.log('returning from addSearchFolders for folder ' + folder.abbreviatedName + ':\nperformed traversal');
 #endif
   },
 
@@ -288,7 +284,7 @@ RemoveDupes.MessengerOverlay = {
 
   traverseSearchFolderSubfolders : function(folder,searchData) {
 #ifdef DEBUG_traverseSearchFolderSubfolders
-    RemoveDupes.JSConsoleService.logStringMessage('in traverseSearchFolderSubfolders for folder ' + folder.abbreviatedName);
+    console.log('in traverseSearchFolderSubfolders for folder ' + folder.abbreviatedName);
 #endif
 
     RemoveDupes.MessengerOverlay.setNamedStatus('searching_for_dupes');
@@ -331,8 +327,7 @@ RemoveDupes.MessengerOverlay = {
     searchData.remainingFolders--;
 
 #ifdef DEBUG_traverseSearchFolderSubfolders
-    RemoveDupes.JSConsoleService.logStringMessage(
-      'returning from traverseSearchFolderSubfolders for folder ' + folder.abbreviatedName);
+    console.log('returning from traverseSearchFolderSubfolders for folder ' + folder.abbreviatedName);
 #endif
   },
 
@@ -343,8 +338,7 @@ RemoveDupes.MessengerOverlay = {
 
   waitForFolderCollection : function(searchData) {
 #ifdef DEBUG_waitForFolderCollection
-     RemoveDupes.JSConsoleService.logStringMessage(
-       'in waitForFolderCollection\nsearchData.remainingFolders = ' + searchData.remainingFolders);
+     console.log('in waitForFolderCollection\nsearchData.remainingFolders = ' + searchData.remainingFolders);
 #endif
 
     RemoveDupes.MessengerOverlay.setNamedStatus('searching_for_dupes');
@@ -386,8 +380,7 @@ RemoveDupes.MessengerOverlay = {
     }
 
 #ifdef DEBUG_collectMessages
-     RemoveDupes.JSConsoleService.logStringMessage(
-       'in continueSearchForDuplicateMessages');
+     console.log('in continueSearchForDuplicateMessages');
 #endif
     searchData.generator =
       RemoveDupes.MessengerOverlay.populateDupeSetsHash(searchData);
@@ -417,8 +410,7 @@ RemoveDupes.MessengerOverlay = {
         return;
       }
 #ifdef DEBUG_processMessagesInCollectedFoldersPhase2
-    RemoveDupes.JSConsoleService.logStringMessage(
-      'populateDupeSetsHash execution complete');
+    console.log('populateDupeSetsHash execution complete');
 #endif
       delete searchData.generator;
     }
@@ -484,7 +476,7 @@ RemoveDupes.MessengerOverlay = {
       "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?'","gi");
     const gEncodedWordRegExp = RegExp("=\?.*\?=","g");
 #ifdef DEBUG_stripAndSortAddresses
-    RemoveDupes.JSConsoleService.logStringMessage('stripAndSortAddresses(' + headerString +  ')');
+    console.log('stripAndSortAddresses(' + headerString +  ')');
 #endif
     if ((headerString == null) || (headerString == ""))
       return headerString;
@@ -607,8 +599,7 @@ RemoveDupes.MessengerOverlay = {
 
   populateDupeSetsHash : function*(searchData) {
 #ifdef DEBUG_populateDupeSetsHash
-     RemoveDupes.JSConsoleService.logStringMessage(
-       'in populateDupeSetsHash()');
+     console.log('in populateDupeSetsHash()');
 #endif
 
     // messageUriHashmap  will be filled with URIs for _all_ messages;
@@ -619,12 +610,11 @@ RemoveDupes.MessengerOverlay = {
 
 #ifdef DEBUG_populateDupeSetsHash
      if (searchData.originalsFolders) {
-       RemoveDupes.JSConsoleService.logStringMessage('number of search folders: ' +
+       console.log('number of search folders: ' +
          searchData.originalsFolders.size + ' originals + ' +
          searchData.folders.size + ' others' );
      }
-     else RemoveDupes.JSConsoleService.logStringMessage(
-       'Before iteration. Number of search folders: ' + searchData.folders.size);
+     else console.log('Before iteration. Number of search folders: ' + searchData.folders.size);
 #endif
 
     // This next bit of code is super-ugly, because I need the yield'ing to happen from
@@ -654,13 +644,13 @@ RemoveDupes.MessengerOverlay = {
     }
     var maybeNext = foldersIterator.next();
 #ifdef DEBUG_populateDupeSetsHash
-    RemoveDupes.JSConsoleService.logStringMessage('next()ed!');
+    console.log('next()ed!');
 #endif
 
     while (!maybeNext.done || !doneWithOriginals) {
 
 #ifdef DEBUG_populateDupeSetsHash
-      RemoveDupes.JSConsoleService.logStringMessage('At iteration ' + i + '.');
+      console.log('At iteration ' + i + '.');
 #endif
 
       if (maybeNext.done) {
@@ -682,13 +672,12 @@ RemoveDupes.MessengerOverlay = {
       if (!folder) {
 
 #ifdef DEBUG_populateDupeSetsHash
-      RemoveDupes.JSConsoleService.logStringMessage(
-          'populateDupeSetsHash got a supposed-folter to traverse which isn\'t a folder: ' + maybeNext.value);
+      console.log('populateDupeSetsHash got a supposed-folter to traverse which isn\'t a folder: ' + maybeNext.value);
 #endif
         break;
       }
 #ifdef DEBUG_populateDupeSetsHash
-      RemoveDupes.JSConsoleService.logStringMessage(
+      console.log(
           'populateDupeSetsHash for folder ' + folder.abbreviatedName + '\n' +
           (allowNewDupeSets ? '' : 'not') + 'allowing new URIs');
 #endif
@@ -696,7 +685,7 @@ RemoveDupes.MessengerOverlay = {
         // shouldn't get here - these should have been filtered out already
         maybeNext = foldersIterator.next();
 #ifdef DEBUG_populateDupeSetsHash
-    RemoveDupes.JSConsoleService.logStringMessage('next()ed!');
+    console.log('next()ed!');
 #endif
         continue;
       }
@@ -704,19 +693,19 @@ RemoveDupes.MessengerOverlay = {
       var folderMessageHdrsIterator;
       try {
 #ifdef DEBUG_populateDupeSetsHash
-        RemoveDupes.JSConsoleService.logStringMessage('trying getMessages(msgWindows) for folder ' + folder.abbreviatedName);
+        console.log('trying getMessages(msgWindows) for folder ' + folder.abbreviatedName);
 #endif
         folderMessageHdrsIterator =
           folder.getMessages(msgWindow);
       } catch(ex) {
         try {
 #ifdef DEBUG_populateDupeSetsHash
-          RemoveDupes.JSConsoleService.logStringMessage('trying getMessages() for folder ' + folder.abbreviatedName);
+          console.log('trying getMessages() for folder ' + folder.abbreviatedName);
 #endif
           folderMessageHdrsIterator = folder.messages;
         } catch(ex) {
 #ifdef DEBUG
-          RemoveDupes.JSConsoleService.logStringMessage('accessing messages failed for folder ' + folder.abbreviatedName + ' :\n' + ex);
+          console.log('accessing messages failed for folder ' + folder.abbreviatedName + ' :\n' + ex);
 #else
           dump(RemoveDupes.Strings.format('failed_getting_messages', [folder.abbreviatedName]) + '\n');
 #endif
@@ -742,14 +731,14 @@ RemoveDupes.MessengerOverlay = {
         if (messageHash in messageUriHashmap) {
           if (messageHash in searchData.dupeSetsHashMap) {
 #ifdef DEBUG_populateDupeSetsHash
-            RemoveDupes.JSConsoleService.logStringMessage('RemoveDupes.MessengerOverlay.sillyHash\n' + messageHash + '\nis a third-or-later dupe');
+            console.log('RemoveDupes.MessengerOverlay.sillyHash\n' + messageHash + '\nis a third-or-later dupe');
 #endif
             // just add the current message's URI, no need to copy anything
             searchData.dupeSetsHashMap[messageHash].push(uri);
           }
           else {
 #ifdef DEBUG_populateDupeSetsHash
-            RemoveDupes.JSConsoleService.logStringMessage('RemoveDupes.MessengerOverlay.sillyHash\n' + messageHash + '\nis a second dupe');
+            console.log('RemoveDupes.MessengerOverlay.sillyHash\n' + messageHash + '\nis a second dupe');
 #endif
             // the URI in messageUriHashmap[messageHash] has not been copied to
             // the dupes hash since until now we did not know it was a dupe;
@@ -762,7 +751,7 @@ RemoveDupes.MessengerOverlay = {
         }
         else {
 #ifdef DEBUG_populateDupeSetsHash
-          RemoveDupes.JSConsoleService.logStringMessage('RemoveDupes.MessengerOverlay.sillyHash\n' + messageHash + '\nis not a dupe (or a first dupe)');
+          console.log('RemoveDupes.MessengerOverlay.sillyHash\n' + messageHash + '\nis not a dupe (or a first dupe)');
 #endif
           if (allowNewDupeSets) {
             messageUriHashmap[messageHash] = uri;
@@ -786,7 +775,7 @@ RemoveDupes.MessengerOverlay = {
 #endif
       maybeNext = foldersIterator.next();
 #ifdef DEBUG_populateDupeSetsHash
-      RemoveDupes.JSConsoleService.logStringMessage('next()ed!');
+      console.log('next()ed!');
 #endif
     }
   },
@@ -798,14 +787,14 @@ RemoveDupes.MessengerOverlay = {
   messageBodyFromURI : function(msgURI) {
     var msgContent = "";
 #ifdef DEBUG_messageBodyFromURI
-     RemoveDupes.JSConsoleService.logStringMessage('in messageBodyFromURI(' + msgURI + ')');
+     console.log('in messageBodyFromURI(' + msgURI + ')');
 #endif
     var MsgService;
     try {
       MsgService = messenger.messageServiceFromURI(msgURI);
     } catch (ex) {
 #ifdef DEBUG_messageBodyFromURI
-      RemoveDupes.JSConsoleService.logStringMessage('Error getting message service for message ' + msgURI + '\n: ' + ex);
+      console.log('Error getting message service for message ' + msgURI + '\n: ' + ex);
 #endif
       return null;
     }
@@ -818,7 +807,7 @@ RemoveDupes.MessengerOverlay = {
       MsgService .streamMessage(msgURI, MsgStream, msgWindow, null, false, null);
     } catch (ex) {
 #ifdef DEBUG_messageBodyFromURI
-      RemoveDupes.JSConsoleService.logStringMessage('Error getting message content for message ' + msgURI + ':\n' + ex);
+      console.log('Error getting message content for message ' + msgURI + ':\n' + ex);
 #endif
       return null;
     }
@@ -834,15 +823,15 @@ RemoveDupes.MessengerOverlay = {
     var endOfHeaders = /\r?\n\r?\n/;
     if (endOfHeaders.test(msgContent)) {
 #ifdef DEBUG_messageBodyFromURI
-    //RemoveDupes.JSConsoleService.logStringMessage('msgContent =\n\n' + msgContent);
-    //RemoveDupes.JSConsoleService.logStringMessage('msgContent =\n\n' + string2hexWithNewLines(msgContent));
-    RemoveDupes.JSConsoleService.logStringMessage('RegExp.rightContext =\n\n' + RegExp.rightContext);
+    //console.log('msgContent =\n\n' + msgContent);
+    //console.log('msgContent =\n\n' + string2hexWithNewLines(msgContent));
+    console.log('RegExp.rightContext =\n\n' + RegExp.rightContext);
 #endif
       // return everything after the end-of-headers
       return RegExp.rightContext;
     }
 #ifdef DEBUG_messageBodyFromURI
-    RemoveDupes.JSConsoleService.logStringMessage('Can\'t match /\\r?\\n\\r?\\n/');
+    console.log('Can\'t match /\\r?\\n\\r?\\n/');
 #endif
     return null;
   },
@@ -899,7 +888,7 @@ RemoveDupes.MessengerOverlay = {
     for (let hashValue in searchData.dupeSetsHashMap) {
       var dupeSet = searchData.dupeSetsHashMap[hashValue];
 #ifdef DEBUG_refineDupeSets
-      RemoveDupes.JSConsoleService.logStringMessage('refining for dupeSetsHashMap value ' + hashValue + '\nset has ' + dupeSet.length + ' elements initially');
+      console.log('refining for dupeSetsHashMap value ' + hashValue + '\nset has ' + dupeSet.length + ' elements initially');
 #endif
 
       // get the message bodies
@@ -918,7 +907,7 @@ RemoveDupes.MessengerOverlay = {
       }
 
 #ifdef DEBUG_refineDupeSets
-      RemoveDupes.JSConsoleService.logStringMessage('got the bodies');
+      console.log('got the bodies');
 #endif
 
       // sort the bodies
@@ -929,7 +918,7 @@ RemoveDupes.MessengerOverlay = {
         } );
 
 #ifdef DEBUG_refineDupeSets
-      RemoveDupes.JSConsoleService.logStringMessage('done sorting');
+      console.log('done sorting');
 #endif
 
       if (searchData.userAborted)
@@ -971,7 +960,7 @@ RemoveDupes.MessengerOverlay = {
 
   reviewAndRemoveDupes : function(searchData) {
 #ifdef DEBUG_reviewAndRemove
-    RemoveDupes.JSConsoleService.logStringMessage('in reviewAndRemoveDupes');
+    console.log('in reviewAndRemoveDupes');
 #endif
 
     if (searchData.userAborted) {
@@ -1003,7 +992,7 @@ RemoveDupes.MessengerOverlay = {
       let dialogURI = "chrome://removedupes/content/removedupes-dialog.xul";
 
 #ifdef DEBUG_reviewAndRemove
-      RemoveDupes.JSConsoleService.logStringMessage("Using review dialog at " + dialogURI);
+      console.log("Using review dialog at " + dialogURI);
 #endif
 
       // open up a dialog in which the user sees all dupes we've found,
@@ -1155,14 +1144,14 @@ RemoveDupes.UpdateFolderDoneListener.prototype.QueryInterface =
 RemoveDupes.UpdateFolderDoneListener.prototype.OnStartRunningUrl =
   function(url) {
 #ifdef DEBUG_UpdateFolderDoneListener
-   RemoveDupes.JSConsoleService.logStringMessage('OnStartRunningUrl for folder ' + this.folder.abbreviatedName);
+   console.log('OnStartRunningUrl for folder ' + this.folder.abbreviatedName);
 #endif
   }
 
 RemoveDupes.UpdateFolderDoneListener.prototype.OnStopRunningUrl =
   function(url, exitCode) {
 #ifdef DEBUG_UpdateFolderDoneListener
-   RemoveDupes.JSConsoleService.logStringMessage('OnStopRunningUrl for folder ' + this.folder.abbreviatedName);
+   console.log('OnStopRunningUrl for folder ' + this.folder.abbreviatedName);
 #endif
     // TODO: Perhaps we should actually check the exist code...
     // for now we'll just assume the folder update wen't ok,
@@ -1195,7 +1184,7 @@ RemoveDupes.DupeSearchData = function ()
     this.useCriteria['num_lines'] || this.useCriteria['body'];
 
 #ifdef DEBUG_DupeSearchParameters
-  RemoveDupes.JSConsoleService.logStringMessage('USE criteria: '
+  console.log('USE criteria: '
     + (this.useCriteria['message_id'] ? 'message-ID ' : '')
     + (this.useCriteria['send_time'] ? 'send-time ' : '')
     + (this.useCriteria['size'] ? 'size ' : '')
@@ -1208,7 +1197,7 @@ RemoveDupes.DupeSearchData = function ()
     + (this.useCriteria['flags'] ? 'Flags ' : '')
     + (this.useCriteria['body']? 'body ' : '')
     );
-  RemoveDupes.JSConsoleService.logStringMessage('DON\'T USE criteria: '
+  console.log('DON\'T USE criteria: '
     + (!this.useCriteria['message_id'] ? 'message-ID ' : '')
     + (!this.useCriteria['send_time'] ? 'send-time ' : '')
     + (!this.useCriteria['size'] ? 'size ' : '')
@@ -1274,14 +1263,12 @@ RemoveDupes.DupeSearchData = function ()
   this.limitNumberOfMessages =
     RemoveDupes.Prefs.getBoolPref("limit_number_of_processed_messages", false);
 #ifdef DEBUG_DupeSearchParameters
-     RemoveDupes.JSConsoleService.logStringMessage(
-      'this.limitNumberOfMessages ' + this.limitNumberOfMessages);
+     console.log('this.limitNumberOfMessages ' + this.limitNumberOfMessages);
 #endif
   this.maxMessages =
     RemoveDupes.Prefs.getIntPref("processed_messages_limit", 10000);
 #ifdef DEBUG_DupeSearchParameters
-     RemoveDupes.JSConsoleService.logStringMessage(
-      'this.maxMessages ' + this.maxMessages);
+     console.log('this.maxMessages ' + this.maxMessages);
 #endif
 
   // timing is used to decide when to make the next status

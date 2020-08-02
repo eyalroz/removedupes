@@ -149,28 +149,9 @@ function flagsToString(flags) {
   return str.replace(' | ','');
 }
 
-function loadCSS(cssFile) {
-  let ns = window.document.documentElement.lookupNamespaceURI("html");
-  let element = window.document.createElementNS(ns, "link");
-  element.setAttribute("rel", "stylesheet");
-  element.setAttribute("href", cssFile);
-}
-
-/*function loadCSS(cssURI) {
-    var head = document.getElementsByTagName("head")[0];
-    if (!head) {
-      throw "Couldn't opbtain DOM Document head element loading some CSS!"
-    }    
-    var styleSheetLink = domDocument.createElement("link");
-    styleSheetLink.rel  = "stylesheet";
-    styleSheetLink.type = "text/css";
-    styleSheetLink.href = cssURI;
-    head.appendChild(styleSheetLink);
-}*/
-
 function initDupeReviewDialog() {
 #ifdef DEBUG_initDupeReviewDialog
-    RemoveDupes.JSConsoleService.logStringMessage('in initDupeReviewDialog()');
+    console.log('in initDupeReviewDialog()');
 #endif
 
   // Since we no longer have per-platform-skin support, we set this attribute
@@ -226,8 +207,7 @@ function initDupeReviewDialog() {
 
   for (let criterion in useCriteria) {
 #ifdef DEBUG_initDupeReviewDialog
-    RemoveDupes.JSConsoleService.logStringMessage(
-      'criterion = ' + criterion);
+    console.log('criterion = ' + criterion);
 #endif
   if (useCriteria[criterion] &&
       (criterion != 'body'))
@@ -251,8 +231,7 @@ function initDupeReviewDialog() {
       }
       totalNumberOfDupes++;
 #ifdef DEBUG_initDupeReviewDialog
-      RemoveDupes.JSConsoleService.logStringMessage(
-        'dupe ' + i + ' for hash value ' + hashValue + ':\n' + dupeSet[i].uri);
+      console.log('dupe ' + i + ' for hash value ' + hashValue + ':\n' + dupeSet[i].uri);
 #endif
 
     }
@@ -264,9 +243,7 @@ function initDupeReviewDialog() {
   }
 #ifdef DEBUG_profile
   RemoveDupes.endTime = (new Date()).getTime();
-  RemoveDupes.JSConsoleService.logStringMessage(
-    'dupe sets hash decoration time = ' +
-    (RemoveDupes.endTime-RemoveDupes.startTime) + ' ms');
+  console.log('dupe sets hash decoration time = ' + (RemoveDupes.endTime-RemoveDupes.startTime) + ' ms');
   RemoveDupes.startTime = (new Date()).getTime();
 #endif
 
@@ -276,7 +253,7 @@ function initDupeReviewDialog() {
 function initializeDuplicateSetsTree() {
 
 #ifdef DEBUG_initializeDuplicateSetsTree
-  RemoveDupes.JSConsoleService.logStringMessage('dupeSetTree = ' + dupeSetTree);
+  console.log('dupeSetTree = ' + dupeSetTree);
 #endif
   dupeSetTree.currentItem = null;
 
@@ -295,7 +272,7 @@ function initializeDuplicateSetsTree() {
   rebuildDuplicateSetsTree();
 #ifdef DEBUG_profile
   RemoveDupes.endTime = (new Date()).getTime();
-  RemoveDupes.JSConsoleService.logStringMessage('initial rebuildDuplicateSetsTree time = ' + (RemoveDupes.endTime-RemoveDupes.startTime) + ' ms');
+  console.log('initial rebuildDuplicateSetsTree time = ' + (RemoveDupes.endTime-RemoveDupes.startTime) + ' ms');
   RemoveDupes.startTime = (new Date()).getTime();
 #endif
 }
@@ -375,14 +352,14 @@ function clearStatusBar() {
 
 function rebuildDuplicateSetsTree() {
 #ifdef DEBUG_rebuildDuplicateSetsTree
-      RemoveDupes.JSConsoleService.logStringMessage('in rebuildDuplicateSetsTree');
+      console.log('in rebuildDuplicateSetsTree');
 #endif
 
   clearStatusBar();
 
   var dupeSetsTreeChildren = document.getElementById("dupeSetsTreeChildren");
 #ifdef DEBUG_rebuildDuplicateSetsTree
-  RemoveDupes.JSConsoleService.logStringMessage('dupeSetsTreeChildren = ' + dupeSetsTreeChildren);
+  console.log('dupeSetsTreeChildren = ' + dupeSetsTreeChildren);
 #endif
   if (dupeSetsTreeChildren) {
     dupeSetTree.removeChild(dupeSetsTreeChildren);
@@ -448,14 +425,14 @@ function rebuildDuplicateSetsTree() {
 
 function resetCheckboxValues() {
 #ifdef DEBUG_resetCheckboxValues
-      RemoveDupes.JSConsoleService.logStringMessage('in resetCheckboxValues');
+      console.log('in resetCheckboxValues');
 #endif
 
   clearStatusBar();
 
   var dupeSetsTreeChildren = document.getElementById("dupeSetsTreeChildren");
 #ifdef DEBUG_resetCheckboxValues
-  RemoveDupes.JSConsoleService.logStringMessage('dupeSetsTreeChildren = ' + dupeSetsTreeChildren);
+  console.log('dupeSetsTreeChildren = ' + dupeSetsTreeChildren);
 #endif
 
   setNamedStatus('main-status-panel','status_panel.updating_list');
@@ -504,7 +481,7 @@ function updateStatusBar() {
 
 function createMessageTreeRow(messageRecord) {
 #ifdef DEBUG_createMessageTreeRow
-  RemoveDupes.JSConsoleService.logStringMessage('makeNewRow');
+  console.log('makeNewRow');
 #endif
 
   var row = messageRowTemplate.cloneNode(true);
@@ -540,7 +517,7 @@ function createMessageTreeRow(messageRecord) {
   row.childNodes.item(flagsColumnIndex)
      .setAttribute("label", messageRecord.flags);
 #ifdef DEBUG_createMessageTreeRow
-  RemoveDupes.JSConsoleService.logStringMessage('messageRecord.lineCount = ' + messageRecord.lineCount);
+  console.log('messageRecord.lineCount = ' + messageRecord.lineCount);
 #endif
 
   return row;
@@ -554,13 +531,13 @@ function formatSendTime(sendTimeInSeconds) {
     // the Date() constructor expects miliseconds
 
 #ifdef DEBUG_formatSendTime
-  RemoveDupes.JSConsoleService.logStringMessage('sendTimeInSeconds = ' + sendTimeInSeconds);
-  RemoveDupes.JSConsoleService.logStringMessage('date = ' + date);
-  RemoveDupes.JSConsoleService.logStringMessage('date.getFullYear() = ' + date.getFullYear());
-  RemoveDupes.JSConsoleService.logStringMessage('date.getMonth()+1 = ' + date.getMonth()+1);
-  RemoveDupes.JSConsoleService.logStringMessage('date.getDate() = ' + date.getDate());
-  RemoveDupes.JSConsoleService.logStringMessage('date.getHours() = ' + date.getHours());
-  RemoveDupes.JSConsoleService.logStringMessage('date.getMinutes() = ' + date.getMinutes());
+  console.log('sendTimeInSeconds = ' + sendTimeInSeconds);
+  console.log('date = ' + date);
+  console.log('date.getFullYear() = ' + date.getFullYear());
+  console.log('date.getMonth()+1 = ' + date.getMonth()+1);
+  console.log('date.getDate() = ' + date.getDate());
+  console.log('date.getHours() = ' + date.getHours());
+  console.log('date.getMinutes() = ' + date.getMinutes());
 #endif
 
   var formattedDate;
@@ -591,7 +568,7 @@ function formatSendTime(sendTimeInSeconds) {
 
 function onTreeKeyPress(ev) {
 #ifdef DEBUG_onTreeKeyPress
-  RemoveDupes.JSConsoleService.logStringMessage('onTreeKeyPress, keycode is ' + ev.keyCode);
+  console.log('onTreeKeyPress, keycode is ' + ev.keyCode);
 #endif
   if (ev.keyCode == KeyEvent.DOM_VK_SPACE) {
     toggleDeletionForCurrentRow();
@@ -600,11 +577,11 @@ function onTreeKeyPress(ev) {
 
 function onTreeKeyUp(ev) {
 #ifdef DEBUG_onTreeKeyUp
-  RemoveDupes.JSConsoleService.logStringMessage('onTreeKeyUp, keycode is ' + ev.keyCode);
+  console.log('onTreeKeyUp, keycode is ' + ev.keyCode);
 #endif
 
 #ifdef DEBUG_onTreeKeyPress
-  RemoveDupes.JSConsoleService.logStringMessage('selectedRow was ' + selectedRow + ', will now be ' + dupeSetTree.currentIndex);
+  console.log('selectedRow was ' + selectedRow + ', will now be ' + dupeSetTree.currentIndex);
 #endif
   if (selectedRow != dupeSetTree.currentIndex) {
     loadCurrentRowMessage();
@@ -628,7 +605,7 @@ function onClickTree(ev) {
 
 
 #ifdef DEBUG_onClickTree
-  RemoveDupes.JSConsoleService.logStringMessage('in onClickTree()\nclick point = ' + ev.clientX + ':' + ev.clientY);
+  console.log('in onClickTree()\nclick point = ' + ev.clientX + ':' + ev.clientY);
 #endif
 
   var row = null;
@@ -652,7 +629,7 @@ function onClickTree(ev) {
      ) {
     // this isn't a valid cell we can use, or it's in one of the [+]/[-] rows
 #ifdef DEBUG_onClickTree
-    RemoveDupes.JSConsoleService.logStringMessage('not a valid cell, doing nothing');
+    console.log('not a valid cell, doing nothing');
 #endif
     return;
   }
@@ -663,7 +640,7 @@ function onClickTree(ev) {
   }
 
 #ifdef DEBUG_onTreeKeyPress
-  RemoveDupes.JSConsoleService.logStringMessage('selectedRow was ' + selectedRow + ', will now be ' + dupeSetTree.currentIndex);
+  console.log('selectedRow was ' + selectedRow + ', will now be ' + dupeSetTree.currentIndex);
 #endif
   selectedRow = dupeSetTree.currentIndex;
   loadCurrentRowMessage();
@@ -674,7 +651,7 @@ function onClickTree(ev) {
 
 function loadCurrentRowMessage() {
 #ifdef DEBUG_loadCurrentRowMessage
-  RemoveDupes.JSConsoleService.logStringMessage('in loadCurrentRowMessage()\ngTree.currentIndex = ' + dupeSetTree.currentIndex);
+  console.log('in loadCurrentRowMessage()\ngTree.currentIndex = ' + dupeSetTree.currentIndex);
 #endif
   // when we click somewhere in the tree, the focused element should be an inner 'treeitem'
   var focusedTreeItem = getFocusedDupeTreeItem()
@@ -682,22 +659,22 @@ function loadCurrentRowMessage() {
   var dupeSetTreeItem = focusedTreeItem.parentNode.parentNode;
 #ifdef DEBUG_loadCurrentRowMessage
   var node = dupeSetTreeItem;
-  RemoveDupes.JSConsoleService.logStringMessage('dupeSetTreeItem: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+  console.log('dupeSetTreeItem: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
   var node = dupeSetTreeItem.parentNode;
-  RemoveDupes.JSConsoleService.logStringMessage('dupeSetTreeItem.parentNode: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+  console.log('dupeSetTreeItem.parentNode: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
   var node = dupeSetTreeItem.parentNode.parentNode;
-  RemoveDupes.JSConsoleService.logStringMessage('dupeSetTreeItem.parentNode.parentNode: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
+  console.log('dupeSetTreeItem.parentNode.parentNode: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
 #endif
   var dupeSetHashValue = dupeSetTreeItem.getAttribute('commonHashValue');
 #ifdef DEBUG_loadCurrentRowMessage
-  RemoveDupes.JSConsoleService.logStringMessage('dupeSetHashValue = ' + dupeSetHashValue);
+  console.log('dupeSetHashValue = ' + dupeSetHashValue);
 #endif
   var dupeSetItem;
   try {
     dupeSetItem = dupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
   } catch(ex) {
 #ifdef DEBUG_loadCurrentRowMessage
-  RemoveDupes.JSConsoleService.logStringMessage('Error retrieving dupe set item ' + messageIndexInDupeSet + ' in dupe set with hash ' + dupeSetHashValue);
+  console.log('Error retrieving dupe set item ' + messageIndexInDupeSet + ' in dupe set with hash ' + dupeSetHashValue);
 #endif
     return;
   }
@@ -723,7 +700,7 @@ function loadCurrentRowMessage() {
 
 function toggleDeletionForCurrentRow() {
 #ifdef DEBUG_toggleDeletionForCurrentRow
-  RemoveDupes.JSConsoleService.logStringMessage('in toggleDeletionForCurrentRow()\ngTree.currentIndex = ' + dupeSetTree.currentIndex);
+  console.log('in toggleDeletionForCurrentRow()\ngTree.currentIndex = ' + dupeSetTree.currentIndex);
 #endif
   var focusedTreeItem = getFocusedDupeTreeItem();
 
@@ -752,7 +729,7 @@ function toggleDeletionForCurrentRow() {
 
 function onCancel() {
 #ifdef DEBUG_onCancel
-  RemoveDupes.JSConsoleService.logStringMessage('in onCancel()');
+  console.log('in onCancel()');
 #endif
   dupeSetsHashMap = null;
 }
@@ -767,12 +744,12 @@ function onAccept() {
   } catch(ex) { }
 
 #ifdef DEBUG_onAccept
-  RemoveDupes.JSConsoleService.logStringMessage('target folder uri (if we\'re moving) is ' + uri);
+  console.log('target folder uri (if we\'re moving) is ' + uri);
 #endif
 
   if (totalNumberOfDupes == numberToKeep) {
 #ifdef DEBUG_onAccept
-    RemoveDupes.JSConsoleService.logStringMessage('No deletions will be performed as all message are to bR kept.');
+    console.log('No deletions will be performed as all message are to bR kept.');
 #endif
     return false;
   }
@@ -795,19 +772,19 @@ function onAccept() {
     true // the uri's have been replaced with messageRecords
     );
 #ifdef DEBUG_onAccept
-    RemoveDupes.JSConsoleService.logStringMessage('got retVal ' + retVal + ' in onAccept()');
+    console.log('got retVal ' + retVal + ' in onAccept()');
 #endif
   if (!deletePermanently && (uri != null) && (uri != "")) {
     try {
       RemoveDupes.Prefs.setCharPref('default_target_folder', uri);
     } catch(ex) {
 #ifdef DEBUG_onAccept
-      RemoveDupes.JSConsoleService.logStringMessage('preference setting exception:\n' + ex);
+      console.log('preference setting exception:\n' + ex);
 #endif
     }
   }
 #ifdef DEBUG_onAccept
-  RemoveDupes.JSConsoleService.logStringMessage('onAccept() got retVal: ' + retVal);
+  console.log('onAccept() got retVal: ' + retVal);
 #endif
   if (retVal == false) {
     // This means we've not deleted/moved _anything_, so the dialog is still usable
@@ -882,7 +859,7 @@ function initializeFolderPicker() {
   if (!msgFolder) {
 #ifdef DEBUG_initializeFolderPicker
     for (let prop in RemoveDupes.Removal) {
-      RemoveDupes.JSConsoleService.logStringMessage(prop);
+      console.log(prop);
     }
 #endif
     uri = RemoveDupes.Removal.getLocalFoldersTrashFolder().URI;
@@ -890,7 +867,7 @@ function initializeFolderPicker() {
   }
 
 #ifdef DEBUG_initializeFolderPicker
-  RemoveDupes.JSConsoleService.logStringMessage('setting folder picker to uri:\n' + uri);
+  console.log('setting folder picker to uri:\n' + uri);
 #endif
 
   try {
@@ -906,14 +883,14 @@ function initializeFolderPicker() {
 
 function onClickColumn(ev) {
 #ifdef DEBUG_onClickColumn
-  RemoveDupes.JSConsoleService.logStringMessage('in onClickColumn()');
+  console.log('in onClickColumn()');
 #endif
   ev.stopPropagation();
 
   var field = ev.target.getAttribute('fieldName');
 
 #ifdef DEBUG_onClickColumn
-  RemoveDupes.JSConsoleService.logStringMessage('field = ' + field + '\ngTree.getAttribute(\'sortColumn\') = ' + dupeSetTree.getAttribute('sortColumn') );
+  console.log('field = ' + field + '\ngTree.getAttribute(\'sortColumn\') = ' + dupeSetTree.getAttribute('sortColumn') );
 #endif
 
   if (!field)
@@ -921,7 +898,7 @@ function onClickColumn(ev) {
 
   if (dupeSetTree.getAttribute('sortColumn') == ev.target.id) {
 #ifdef DEBUG_onClickColumn
-    RemoveDupes.JSConsoleService.logStringMessage('reclick ; dupeSetTree.getAttribute(\'sortDirection\') = ' + dupeSetTree.getAttribute('sortDirection'));
+    console.log('reclick ; dupeSetTree.getAttribute(\'sortDirection\') = ' + dupeSetTree.getAttribute('sortDirection'));
 #endif
     // re-clicking the current sort indicator means flipping the sort order
     dupeSetTree.setAttribute('sortDirection',
@@ -930,14 +907,14 @@ function onClickColumn(ev) {
   else {
     if (dupeSetTree.getAttribute('sortColumn')) {
 #ifdef DEBUG_onClickColumn
-      RemoveDupes.JSConsoleService.logStringMessage('clearing old sort column');
+      console.log('clearing old sort column');
 #endif
       document.getElementById(dupeSetTree.getAttribute('sortColumn')).removeAttribute('class');
       document.getElementById(dupeSetTree.getAttribute('sortColumn')).removeAttribute('sortDirection');
     }
     dupeSetTree.setAttribute('sortColumn', ev.target.id);
 #ifdef DEBUG_onClickColumn
-    RemoveDupes.JSConsoleService.logStringMessage('set dupeSetTree.getAttribute(\'sortColumn\') to' + dupeSetTree.getAttribute('sortColumn'));
+    console.log('set dupeSetTree.getAttribute(\'sortColumn\') to' + dupeSetTree.getAttribute('sortColumn'));
 #endif
     dupeSetTree.setAttribute('sortDirection', 'ascending');
   }
@@ -945,7 +922,7 @@ function onClickColumn(ev) {
   sortDupeSetsByField(field);
 
 #ifdef DEBUG_onClickColumn
-  RemoveDupes.JSConsoleService.logStringMessage('setting attrs on new sort column' + ev.target + "\nto class and " + dupeSetTree.getAttribute('sortDirection'));
+  console.log('setting attrs on new sort column' + ev.target + "\nto class and " + dupeSetTree.getAttribute('sortDirection'));
 #endif
   ev.target.setAttribute('class','sortDirectionIndicator');
   ev.target.setAttribute('sortDirection',dupeSetTree.getAttribute('sortDirection'));
@@ -980,7 +957,7 @@ function sortDupeSetsByField(field) {
 function onTargetFolderClick(targetFolder) {
   dupeMoveTargetFolder = targetFolder;
 #ifdef DEBUG_onTargetFolderClick
-  RemoveDupes.JSConsoleService.logStringMessage('in onTargetFolderClick()\ntarget = ' + targetFolder.abbreviatedName);
+  console.log('in onTargetFolderClick()\ntarget = ' + targetFolder.abbreviatedName);
 #endif
   document.getElementById('actionTargetFolderPopup').selectFolder(targetFolder);
 }
