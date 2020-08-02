@@ -10,13 +10,13 @@ if (typeof(ChromeUtils) != "undefined") {
 }
 else { Components.utils.import(rdModuleURI); }
 
- var msgWindow; 
+var msgWindow;
   // the 3-pane window which opened us
 var messenger;
   // msgWindow's messenger
-var dbView; 
+var dbView;
   // the 3-pane window's message db view
-var dupeSetsHashMap; 
+var dupeSetsHashMap;
   // the sets of duplicate messages we're reviewing for deletion
 var originalsFolderUris;
   // A set of the URIs of the folders containing the original
@@ -44,7 +44,7 @@ var selectedRow = -1;
 
 #ifdef XBL_FOLDER_PICKER_OR_REPLACEMENT
 var dupeMoveTargetFolder;
-  // workaround for Mozilla bug 473009 - 
+  // workaround for Mozilla bug 473009 -
   // the new folder picker DOESN'T EXPOSE ITS F***ING selected folder!
   // ... and thank you very much David Ascher & TB devs for checking in
   // a folder picker without the most basic folder picker functionality,
@@ -53,7 +53,7 @@ var dupeMoveTargetFolder;
 
 // indices of columns in dupe tree rows
 // consts
- 
+
 const  toKeepColumnIndex      = 1;
 const  authorColumnIndex      = 2;
 const  recipientsColumnIndex  = 3;
@@ -108,12 +108,12 @@ else
 // each dupe message in each dupe set will have a record built
 var DupeMessageRecord = function(messageUri) {
   var messageHdr  = messenger.msgHdrFromURI(messageUri);
-  
+
   this.uri          = messageUri;
   this.folder_name  = messageHdr.folder.abbreviatedName;
   this.folderUri    = messageHdr.folder.URI;
-  this.message_id   = 
-   ((   allowMD5IDSubstitutes 
+  this.message_id   =
+   ((   allowMD5IDSubstitutes
      || messageHdr.messageId.substr(0,4) != 'md5:') ?
     messageHdr.messageId : '');
   this.send_time    = messageHdr.dateInSeconds;
@@ -135,11 +135,11 @@ var DupeMessageRecord = function(messageUri) {
   }
   this.cc_list      = messageHdr.ccList;
   //this.flags      = "0x" + num2hex(messageHdr.flags);
-  this.flags        = 
+  this.flags        =
     flagsToString(messageHdr.flags);
   this.num_lines    = messageHdr.lineCount;
   // by default, we're deleting dupes, but see also below
-  this.toKeep       = false; 
+  this.toKeep       = false;
 }
 
 function flagsToString(flags) {
@@ -215,7 +215,7 @@ function initDupeReviewDialog() {
     for (let i=0; i < dupeSet.length; i++) {
       dupeSet[i] = new DupeMessageRecord(dupeSet[i]);
       if (originalsFolderUris) {
-        // if we have pre-set originals folders, the default is to 
+        // if we have pre-set originals folders, the default is to
         // keep all of messages in them and remove their dupes elsewhere
         dupeSet[i].toKeep = originalsFolderUris.has(dupeSet[i].folderUri);
       }
@@ -461,7 +461,7 @@ function updateStatusBar() {
   setStatusBarPanelText("total-status-panel",
         RemoveDupes.Strings.getByName('status_panel.total_number_of_dupes') + " " + totalNumberOfDupes
   );
-  setStatusBarPanelText("keeping-status-panel", 
+  setStatusBarPanelText("keeping-status-panel",
         RemoveDupes.Strings.getByName('status_panel.number_of_kept_dupes') + " " + numberToKeep
   );
   setStatusBarPanelText("main-status-panel","");
@@ -482,19 +482,19 @@ function createMessageTreeRow(messageRecord) {
 
   // recall we set the child nodes order in createMessageRowTemplate()
 
-  // first there's the dummy cell we don't touch  
-  // this next line allows us to use the css to choose whether to 
+  // first there's the dummy cell we don't touch
+  // this next line allows us to use the css to choose whether to
   // use a [ ] image or a [v] image
   row.childNodes.item(toKeepColumnIndex)
      .setAttribute("properties", (messageRecord.toKeep ? "keep" : "delete") );
   // the author and subject should be decoded from the
   // proper charset and transfer encoding
   row.childNodes.item(authorColumnIndex)
-     .setAttribute("label", messageRecord.author); 
+     .setAttribute("label", messageRecord.author);
   row.childNodes.item(recipientsColumnIndex)
-     .setAttribute("label", messageRecord.recipients); 
+     .setAttribute("label", messageRecord.recipients);
   row.childNodes.item(ccListColumnIndex)
-     .setAttribute("label", messageRecord.cc_list); 
+     .setAttribute("label", messageRecord.cc_list);
   row.childNodes.item(subjectColumnIndex)
      .setAttribute("label", messageRecord.subject);
   row.childNodes.item(folderNameColumnIndex)
@@ -535,7 +535,7 @@ function formatSendTime(sendTimeInSeconds) {
 
   var formattedDate;
   if (DateTimeFormatter) {
-     // We'll be using this for Thunderbird >= 56 (or 57?) 
+     // We'll be using this for Thunderbird >= 56 (or 57?)
      // (when the older formatting service was removed)
      formattedDate = DateTimeFormatter.format(date);
   }
@@ -545,12 +545,12 @@ function formatSendTime(sendTimeInSeconds) {
     formattedDate = DateService.FormatDateTime(
       "", // use application locale
       DateService.dateFormatShort,
-      DateService.timeFormatSeconds, 
+      DateService.timeFormatSeconds,
       date.getFullYear(),
-      date.getMonth()+1, 
+      date.getMonth()+1,
       date.getDate(),
       date.getHours(),
-      date.getMinutes(), 
+      date.getMinutes(),
       date.getSeconds() );
   }
   return formattedDate;
@@ -572,7 +572,7 @@ function onTreeKeyUp(ev) {
 #ifdef DEBUG_onTreeKeyUp
   RemoveDupes.JSConsoleService.logStringMessage('onTreeKeyUp, keycode is ' + ev.keyCode);
 #endif
- 
+
 #ifdef DEBUG_onTreeKeyPress
   RemoveDupes.JSConsoleService.logStringMessage('selectedRow was ' + selectedRow + ', will now be ' + dupeSetTree.currentIndex);
 #endif
@@ -593,7 +593,7 @@ function getFocusedDupeTreeItem() {
 
 function onClickTree(ev) {
 
-  dupeSetTreeBoxObject = 
+  dupeSetTreeBoxObject =
     RemoveDupes.App.versionIsAtLeast("61") ? dupeSetTree : dupeSetTree.treeBoxObject;
 
 
@@ -617,8 +617,8 @@ function onClickTree(ev) {
 
   if (   !col
       || !row
-      || !col.index 
-      || !getFocusedDupeTreeItem().hasAttribute('indexInDupeSet') 
+      || !col.index
+      || !getFocusedDupeTreeItem().hasAttribute('indexInDupeSet')
      ) {
     // this isn't a valid cell we can use, or it's in one of the [+]/[-] rows
 #ifdef DEBUG_onClickTree
@@ -671,7 +671,7 @@ function loadCurrentRowMessage() {
 #endif
     return;
   }
-  
+
   var messageUri = dupeSetItem.uri;
   var folder = messenger.msgHdrFromURI(messageUri).folder;
   //msgFolder = folder.QueryInterface(Ci.nsIMsgFolder);
@@ -707,11 +707,11 @@ function toggleDeletionForCurrentRow() {
 
   if (dupeSetItem.toKeep) {
     dupeSetItem.toKeep = false;
-    numberToKeep--;  
+    numberToKeep--;
   }
   else {
     dupeSetItem.toKeep = true;
-    numberToKeep++;  
+    numberToKeep++;
   }
   focusedRow = focusedTreeItem.firstChild;
   focusedRow.childNodes.item(toKeepColumnIndex).setAttribute(
@@ -752,9 +752,9 @@ function onAccept() {
   }
 
   var deletePermanently =
-    (document.getElementById('action').getAttribute('value') == 'delete_permanently'); 
+    (document.getElementById('action').getAttribute('value') == 'delete_permanently');
 
-  if (!uri && !deletePermanently) { 
+  if (!uri && !deletePermanently) {
     RemoveDupes.namedAlert(window, 'no_folder_selected');
     return false;
   }
@@ -774,7 +774,7 @@ function onAccept() {
   if (!deletePermanently && (uri != null) && (uri != "")) {
     try {
       RemoveDupes.Prefs.setCharPref('default_target_folder', uri);
-    } catch(ex) { 
+    } catch(ex) {
 #ifdef DEBUG_onAccept
       RemoveDupes.JSConsoleService.logStringMessage('preference setting exception:\n' + ex);
 #endif

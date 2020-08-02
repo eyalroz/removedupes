@@ -16,14 +16,14 @@ if ("undefined" == typeof(messenger)) {
 
 RemoveDupes.__defineGetter__("ImapService", function() {
   delete RemoveDupes.ImapService;
-  return RemoveDupes.ImapService = 
+  return RemoveDupes.ImapService =
     Cc['@mozilla.org/messenger/imapservice;1'].getService(Ci.nsIImapService);
 });
 
 RemoveDupes.MessengerOverlay = {
 
   setNamedStatus: function(stringName) {
-    RemoveDupes.MessengerOverlay.statusTextField.label = 
+    RemoveDupes.MessengerOverlay.statusTextField.label =
       (stringName ? RemoveDupes.Strings.getByName(stringName) : null);
   },
 
@@ -50,7 +50,7 @@ RemoveDupes.MessengerOverlay = {
   originalsFolders : null,
   originalsFolderUris : null,
 
-  // searchAndRemoveDuplicateMessages - 
+  // searchAndRemoveDuplicateMessages -
   // Called from the UI to trigger a new dupe search
 
   searchAndRemoveDuplicateMessages : function() {
@@ -59,7 +59,7 @@ RemoveDupes.MessengerOverlay = {
       'searchAndRemoveDuplicateMessages()');
 #endif
 
-    //document.getElementById('progress-panel').removeAttribute('collapsed'); 
+    //document.getElementById('progress-panel').removeAttribute('collapsed');
     RemoveDupes.MessengerOverlay.statusTextField =
       document.getElementById('statusText');
     RemoveDupes.MessengerOverlay.setNamedStatus('searching_for_dupes');
@@ -68,12 +68,12 @@ RemoveDupes.MessengerOverlay = {
 
     if (RemoveDupes.MessengerOverlay.eventTarget == null) {
       if ("nsIThreadManager" in Ci) {
-         RemoveDupes.MessengerOverlay.eventTarget = 
+         RemoveDupes.MessengerOverlay.eventTarget =
            Cc['@mozilla.org/thread-manager;1'].getService().currentThread;
       } else {
          var eventQueueService =
            Cc['@mozilla.org/event-queue-service;1'].getService(Ci.nsIEventQueueService);
-         RemoveDupes.MessengerOverlay.eventTarget = 
+         RemoveDupes.MessengerOverlay.eventTarget =
            eventQueueService.getSpecialEventQueue(
              eventQueueService.CURRENT_THREAD_EVENT_QUEUE);
       }
@@ -135,9 +135,9 @@ RemoveDupes.MessengerOverlay = {
           if (!(folder.flags & RemoveDupes.FolderFlags.Inbox)) {
 #ifdef DEBUG_beginSearchForDuplicateMessages
             RemoveDupes.JSConsoleService.logStringMessage(
-              'skipping special folder ' + folder.abbreviatedName + 
+              'skipping special folder ' + folder.abbreviatedName +
               'due to ' + folder.flags + ' & ' +
-              RemoveDupes.FolderFlags.Inbox + ' = ' + 
+              RemoveDupes.FolderFlags.Inbox + ' = ' +
               (folder.flags & RemoveDupes.FolderFlags.Inbox));
 #endif
            continue;
@@ -180,7 +180,7 @@ RemoveDupes.MessengerOverlay = {
     RemoveDupes.MessengerOverlay.setNamedStatus(labelStringName ? labelStringName : null);
   },
 
-  // addSearchFolders - 
+  // addSearchFolders -
   // supposed to recursively traverse the subfolders of a
   // given folder, marking them for inclusion in the dupe search;
   // however, it can't really do this in the straightforward way, as for
@@ -291,7 +291,7 @@ RemoveDupes.MessengerOverlay = {
 #endif
   },
 
-  // traverseSearchFolderSubfolders - 
+  // traverseSearchFolderSubfolders -
   // Completes the work of addSearchFolder by traversing a
   // folder's children once it's 'ready'; it is called asynchronously
   // for IMAP folders
@@ -364,7 +364,7 @@ RemoveDupes.MessengerOverlay = {
       return;
     }
 
-    // ... but it might still be the case that we haven't finished 
+    // ... but it might still be the case that we haven't finished
     // traversingfolders and collecting their subfolders for the dupe
     // search, so we may have to wait some more
 
@@ -375,15 +375,15 @@ RemoveDupes.MessengerOverlay = {
     RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase1(searchData);
   },
 
-  // processMessagesInCollectedFoldersPhase1 - 
+  // processMessagesInCollectedFoldersPhase1 -
   // Called after we've collected all of the folders
   // we need to process messages in. The processing of messages has
   // two phases - first, all messages are hashed into a possible-dupe-sets
   // hash, then the sets of messages with the same hash values are
   // refined using more costly comparisons than the hashing itself.
-  // The processing can take a long time; to allow the UI to remain 
+  // The processing can take a long time; to allow the UI to remain
   // responsive and the user to be able to abort the dupe search, we
-  // perform the first phase using a generator and a separate function 
+  // perform the first phase using a generator and a separate function
   // which occasionally yields
 
   processMessagesInCollectedFoldersPhase1 : function(searchData) {
@@ -406,8 +406,8 @@ RemoveDupes.MessengerOverlay = {
       10, searchData);
   },
 
-  // processMessagesInCollectedFoldersPhase2 - 
-  // A wrapper for the  'Phase2' function waits for the first phase to complete, 
+  // processMessagesInCollectedFoldersPhase2 -
+  // A wrapper for the  'Phase2' function waits for the first phase to complete,
   // calling itself with a timeout otherwise; after performing the second phase,
   // it calls the post-search reviewAndRemoveDupes function (as we're working
   // asynchronously)
@@ -462,11 +462,11 @@ RemoveDupes.MessengerOverlay = {
     else {
       RemoveDupes.MessengerOverlay.setNamedStatus('search_complete');
       RemoveDupes.MessengerOverlay.reviewAndRemoveDupes(searchData);
-      //document.getElementById('progress-panel').setAttribute('collapsed', true); 
+      //document.getElementById('progress-panel').setAttribute('collapsed', true);
     }
   },
 
-  // stripAndSortAddreses - 
+  // stripAndSortAddreses -
   // Takes a MIME header field (hopefully, decoded for appropriate charset
   // and transfer encoding), strips out the email addresses in it, and
   // returns them, sorted, in a string
@@ -476,7 +476,7 @@ RemoveDupes.MessengerOverlay = {
   //
   // https://www.mozdev.org/bugs/show_bug.cgi?id=23963
   // https://www.mozdev.org/bugs/show_bug.cgi?id=23964
-  // 
+  //
 
   stripAndSortAddresses : function(headerString) {
     const gEmailRegExp = RegExp(
@@ -484,7 +484,7 @@ RemoveDupes.MessengerOverlay = {
       // means we're not interested in remembering the matching for these
       // sections specificlaly
       //
-      // disallowed email address beginning with an apostrophy (') to 
+      // disallowed email address beginning with an apostrophy (') to
       // better handle single-quoted addresses such as
       // 'my.addr@somewhere.com'
       "(?:\b|^)[a-z0-9!#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
@@ -505,7 +505,7 @@ RemoveDupes.MessengerOverlay = {
     var matches;
     matches = headerString.match(gEmailRegExp);
     if (!matches) {
-      // let's try looking for addresses within single quotes, 
+      // let's try looking for addresses within single quotes,
       // and clip the quotes
       matches = headerString.match(gSingleQuotedEmailRegExp);
       // again, if we can't get any addresses, let's stay with the
@@ -518,7 +518,7 @@ RemoveDupes.MessengerOverlay = {
     return matches.sort();
   },
 
-  // sillyHash - 
+  // sillyHash -
   // Calculates the hash used for the first-phase separation of non-dupe
   // messages; it relies on the non-expensive comparison criteria
 
@@ -526,8 +526,8 @@ RemoveDupes.MessengerOverlay = {
     // Notes:
     // 1. There could theoretically be two messages which should not
     //    have the same hash, but do have it, if the subject includes the
-    //    string |6xX$\WG-C?| or the author includes the string 
-    //    '|^#=)A?mUi5|' ; this is however highly unlikely... about as 
+    //    string |6xX$\WG-C?| or the author includes the string
+    //    '|^#=)A?mUi5|' ; this is however highly unlikely... about as
     //    unlikely as collisions of a hash function, except that we haven't
     //    randomized; still, if a malicious user sent you e-mail with these
     //    strings in the author or subject fields, you probably don't care
@@ -581,25 +581,25 @@ RemoveDupes.MessengerOverlay = {
         // field being mixed up with other fields in the hash, i.e. in case the subject
         // ends with something like "|55"
     if (searchData.useCriteria['author'])
-      retVal += 
+      retVal +=
         (searchData.compareStrippedAndSortedAddresses ?
          RemoveDupes.MessengerOverlay
                     .stripAndSortAddresses(messageHdr.mime2DecodedAuthor) :
          messageHdr.author)
         + '|^#=)A?mUi5|';
     if (searchData.useCriteria['recipients'])
-      retVal += 
+      retVal +=
         (searchData.compareStrippedAndSortedAddresses ?
          RemoveDupes.MessengerOverlay
                    .stripAndSortAddresses(messageHdr.mime2DecodedRecipients) :
          messageHdr.recipients)
         + '|Ei4iXn=Iv*|';
-    // note: 
+    // note:
     // We're stripping here the non-MIME-transfer-encoding-decoded CC list!
     // It might not work but we don't have immediate access to the decoded
     // version...
     if (searchData.useCriteria['cc_list'])
-      retVal += 
+      retVal +=
         (searchData.compareStrippedAndSortedAddresses ?
          RemoveDupes.MessengerOverlay
                     .stripAndSortAddresses(messageHdr.ccList) :
@@ -637,7 +637,7 @@ RemoveDupes.MessengerOverlay = {
        'Before iteration. Number of search folders: ' + searchData.folders.size);
 #endif
 
-    // This next bit of code is super-ugly, because I need the yield'ing to happen from 
+    // This next bit of code is super-ugly, because I need the yield'ing to happen from
     // this function - can't yield from a function you're calling; isn't life great?
     // isn't lack of threading fun?
     //
@@ -673,7 +673,7 @@ RemoveDupes.MessengerOverlay = {
       RemoveDupes.JSConsoleService.logStringMessage('At iteration ' + i + '.');
 #endif
 
-      if (maybeNext.done) { 
+      if (maybeNext.done) {
         // ... we continued looping since !doneWithOriginals . Now
         // let's move on to iterating the search folders.
         doneWithOriginals = true;
@@ -733,13 +733,13 @@ RemoveDupes.MessengerOverlay = {
         }
       }
 
-      while (   folderMessageHdrsIterator.hasMoreElements() 
-             && (!searchData.limitNumberOfMessages 
+      while (   folderMessageHdrsIterator.hasMoreElements()
+             && (!searchData.limitNumberOfMessages
                  || (searchData.messagesHashed < searchData.maxMessages)) ) {
-        var messageHdr = 
+        var messageHdr =
           folderMessageHdrsIterator.getNext().QueryInterface(Ci.nsIMsgDBHdr);
-                 
-        if (   (searchData.skipIMAPDeletedMessages) 
+
+        if (   (searchData.skipIMAPDeletedMessages)
             && (messageHdr.flags & RemoveDupes.MessageStatusFlags['IMAP_DELETED'])) {
           // TODO: Consider checking the time elapsed & possibly yielding, even when
           //  iterating IMAP-deleted messages
@@ -756,7 +756,7 @@ RemoveDupes.MessengerOverlay = {
 #endif
             // just add the current message's URI, no need to copy anything
             searchData.dupeSetsHashMap[messageHash].push(uri);
-          } 
+          }
           else {
 #ifdef DEBUG_populateDupeSetsHash
             RemoveDupes.JSConsoleService.logStringMessage('RemoveDupes.MessengerOverlay.sillyHash\n' + messageHash + '\nis a second dupe');
@@ -765,11 +765,11 @@ RemoveDupes.MessengerOverlay = {
             // the dupes hash since until now we did not know it was a dupe;
             // copy it together with our current message's URI
             // TODO: use [blah, blah] as the array constructor
-            searchData.dupeSetsHashMap[messageHash] = 
+            searchData.dupeSetsHashMap[messageHash] =
               new Array(messageUriHashmap[messageHash], uri);
             searchData.totalOriginalDupeSets++;
           }
-        } 
+        }
         else {
 #ifdef DEBUG_populateDupeSetsHash
           RemoveDupes.JSConsoleService.logStringMessage('RemoveDupes.MessengerOverlay.sillyHash\n' + messageHash + '\nis not a dupe (or a first dupe)');
@@ -780,7 +780,7 @@ RemoveDupes.MessengerOverlay = {
         }
 
         searchData.messagesHashed++;
-        var currentTime = (new Date()).getTime();    
+        var currentTime = (new Date()).getTime();
         if (currentTime - searchData.lastStatusBarReport > searchData.reportQuantum) {
           searchData.lastStatusBarReport = currentTime;
           RemoveDupes.MessengerOverlay.statusTextField.label =
@@ -838,8 +838,8 @@ RemoveDupes.MessengerOverlay = {
     }
 
     // the message headers end on the first empty line, and lines are delimited
-    // by \n's or \r\n's ; of course, this is a very lame hack, since if the 
-    // message has multiple MIME parts we're still getting the headers of all 
+    // by \n's or \r\n's ; of course, this is a very lame hack, since if the
+    // message has multiple MIME parts we're still getting the headers of all
     // the sub-parts, and not taking into any account the multipart delimiters
     var endOfHeaders = /\r?\n\r?\n/;
     if (endOfHeaders.test(msgContent)) {
@@ -881,7 +881,7 @@ RemoveDupes.MessengerOverlay = {
               [searchData.setsRefined,
                searchData.totalOriginalDupeSets,
                setSize-curr,
-               setSize             
+               setSize
               ]);
           break;
       }
@@ -919,7 +919,7 @@ RemoveDupes.MessengerOverlay = {
       for (let i=0; i < dupeSet.length; i++) {
         var dupeUri = dupeSet[i];
         dupeSet[i] = {
-          uri: dupeUri, 
+          uri: dupeUri,
           body: RemoveDupes.MessengerOverlay.messageBodyFromURI(dupeUri)
         }
         if (searchData.userAborted)
@@ -949,11 +949,11 @@ RemoveDupes.MessengerOverlay = {
 
       var subsetIndex = 0;
       while(dupeSet.length > 0) {
-        if (searchData.userAborted) { 
-          return; 
+        if (searchData.userAborted) {
+          return;
         }
-        if (!dupeSet[0].body) { 
-          dupeSet.shift(); 
+        if (!dupeSet[0].body) {
+          dupeSet.shift();
           continue;
         }
         let subsetLength = 1;
@@ -974,8 +974,8 @@ RemoveDupes.MessengerOverlay = {
       searchData.setsRefined++;
     }
   },
-  
-  // reviewAndRemoveDupes - 
+
+  // reviewAndRemoveDupes -
   // This function either moves the dupes, erases them completely,
   // or fires the review dialog for the user to decide what to do
 
@@ -991,10 +991,10 @@ RemoveDupes.MessengerOverlay = {
 
     if (!searchData.useReviewDialog)
     {
-      let deletePermanently = 
+      let deletePermanently =
         (RemoveDupes.Prefs.getCharPref('default_action', 'move') == 'delete_permanently');
-      let targetFolder = deletePermanently ? 
-        null : 
+      let targetFolder = deletePermanently ?
+        null :
         RemoveDupes.Prefs.getCharPref('default_target_folder', RemoveDupes.Removal.getLocalFoldersTrashFolder().URI);
       // remove (move to trash or erase completely)
       // without user confirmation or review; we're keeping the first dupe
@@ -1042,8 +1042,8 @@ RemoveDupes.MessengerOverlay = {
   },
 
   toggleDupeSearchCriterion : function(ev,criterion) {
-    var useCriterion = 
-      !RemoveDupes.Prefs.getBoolPref("comparison_criteria." + criterion, 
+    var useCriterion =
+      !RemoveDupes.Prefs.getBoolPref("comparison_criteria." + criterion,
         RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults[criterion]);
     RemoveDupes.Prefs.setBoolPref("comparison_criteria." + criterion, useCriterion);
     document.getElementById('removedupesCriterionMenuItem_' + criterion).setAttribute("checked", useCriterion ? "true" : "false");
@@ -1054,7 +1054,7 @@ RemoveDupes.MessengerOverlay = {
     for (let criterion in RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults) {
       document.getElementById('removedupesCriterionMenuItem_' + criterion)
               .setAttribute("checked",
-                (RemoveDupes.Prefs.getBoolPref("comparison_criteria." + criterion, 
+                (RemoveDupes.Prefs.getBoolPref("comparison_criteria." + criterion,
                   RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults[criterion]) ? "true" : "false"));
     }
   },
@@ -1071,7 +1071,7 @@ RemoveDupes.MessengerOverlay = {
     return;
 #else
 
-    if (typeof gFolderTreeView == 'undefined') 
+    if (typeof gFolderTreeView == 'undefined')
       return;
     gFolderTreeView.preRDGetCellProperties = gFolderTreeView.getCellProperties;
 
@@ -1122,7 +1122,7 @@ RemoveDupes.MessengerOverlay = {
     var numSelectedFolders = 0;
     RemoveDupes.MessengerOverlay.originalsFolders = new Set;
     RemoveDupes.MessengerOverlay.originalsFolderUris = new Set;
-    var skipSpecialFolders = 
+    var skipSpecialFolders =
       RemoveDupes.Prefs.getBoolPref('skip_special_folders','true');
     for (let i = 0; i < rangeCount; i++) {
       let startIndex = {};
@@ -1136,7 +1136,7 @@ RemoveDupes.MessengerOverlay = {
         if (skipSpecialFolders) {
           if (!folder.canFileMessages ||
               (folder.rootFolder == folder) ||
-              (!folder.canRename && 
+              (!folder.canRename &&
               (!(folder.flags & RemoveDupes.FolderFlags.Inbox)))) {
             RemoveDupes.namedAlert(window, 'invalid_originals_folders');
             continue;
@@ -1175,15 +1175,15 @@ RemoveDupes.UpdateFolderDoneListener.prototype.QueryInterface =
       return this;
     throw Components.results.NS_ERROR_NO_INTERFACE;
   };
-  
-RemoveDupes.UpdateFolderDoneListener.prototype.OnStartRunningUrl = 
+
+RemoveDupes.UpdateFolderDoneListener.prototype.OnStartRunningUrl =
   function(url) {
 #ifdef DEBUG_UpdateFolderDoneListener
    RemoveDupes.JSConsoleService.logStringMessage('OnStartRunningUrl for folder ' + this.folder.abbreviatedName);
 #endif
   }
-  
-RemoveDupes.UpdateFolderDoneListener.prototype.OnStopRunningUrl = 
+
+RemoveDupes.UpdateFolderDoneListener.prototype.OnStopRunningUrl =
   function(url, exitCode) {
 #ifdef DEBUG_UpdateFolderDoneListener
    RemoveDupes.JSConsoleService.logStringMessage('OnStopRunningUrl for folder ' + this.folder.abbreviatedName);
@@ -1201,49 +1201,49 @@ RemoveDupes.UpdateFolderDoneListener.prototype.OnStopRunningUrl =
 //---------------------------------------------------
 RemoveDupes.DupeSearchData = function ()
 {
-  this.searchSubfolders = 
-    RemoveDupes.Prefs.getBoolPref("search_subfolders"); 
+  this.searchSubfolders =
+    RemoveDupes.Prefs.getBoolPref("search_subfolders");
 
   this.useCriteria = new Object;
   // which information will we use for comparing messages?
   for (let criterion in RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults) {
-    this.useCriteria[criterion] = 
-     RemoveDupes.Prefs.getBoolPref("comparison_criteria." + criterion, 
+    this.useCriteria[criterion] =
+     RemoveDupes.Prefs.getBoolPref("comparison_criteria." + criterion,
                 RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults[criterion]);
   }
 
   // an optimization: if we're comparing bodies, there shouldn't be any harm
   // in comparing by number of lines first
-  
+
   this.useCriteria['num_lines'] =
     this.useCriteria['num_lines'] || this.useCriteria['body'];
 
 #ifdef DEBUG_DupeSearchParameters
   RemoveDupes.JSConsoleService.logStringMessage('USE criteria: '
-    + (this.useCriteria['message_id'] ? 'message-ID ' : '') 
-    + (this.useCriteria['send_time'] ? 'send-time ' : '') 
-    + (this.useCriteria['size'] ? 'size ' : '') 
-    + (this.useCriteria['folder'] ? 'folder ' : '') 
-    + (this.useCriteria['subject'] ? 'subject ' : '') 
-    + (this.useCriteria['author'] ? 'author ' : '') 
-    + (this.useCriteria['num_lines'] ? 'line-count ' : '') 
-    + (this.useCriteria['recipients'] ? 'recipients ' : '') 
-    + (this.useCriteria['cc_list'] ? 'CC-list ' : '') 
-    + (this.useCriteria['flags'] ? 'Flags ' : '') 
-    + (this.useCriteria['body']? 'body ' : '') 
+    + (this.useCriteria['message_id'] ? 'message-ID ' : '')
+    + (this.useCriteria['send_time'] ? 'send-time ' : '')
+    + (this.useCriteria['size'] ? 'size ' : '')
+    + (this.useCriteria['folder'] ? 'folder ' : '')
+    + (this.useCriteria['subject'] ? 'subject ' : '')
+    + (this.useCriteria['author'] ? 'author ' : '')
+    + (this.useCriteria['num_lines'] ? 'line-count ' : '')
+    + (this.useCriteria['recipients'] ? 'recipients ' : '')
+    + (this.useCriteria['cc_list'] ? 'CC-list ' : '')
+    + (this.useCriteria['flags'] ? 'Flags ' : '')
+    + (this.useCriteria['body']? 'body ' : '')
     );
   RemoveDupes.JSConsoleService.logStringMessage('DON\'T USE criteria: '
-    + (!this.useCriteria['message_id'] ? 'message-ID ' : '') 
-    + (!this.useCriteria['send_time'] ? 'send-time ' : '') 
-    + (!this.useCriteria['size'] ? 'size ' : '') 
-    + (!this.useCriteria['folder'] ? 'folder ' : '') 
-    + (!this.useCriteria['subject'] ? 'subject ' : '') 
-    + (!this.useCriteria['author'] ? 'author ' : '') 
-    + (!this.useCriteria['num_lines'] ? 'line-count ' : '') 
-    + (!this.useCriteria['recipients'] ? 'recipients ' : '') 
-    + (!this.useCriteria['cc_list'] ? 'CC-list ' : '') 
-    + (!this.useCriteria['flags'] ? 'Flags ' : '') 
-    + (!this.useCriteria['body']? 'body ' : '') 
+    + (!this.useCriteria['message_id'] ? 'message-ID ' : '')
+    + (!this.useCriteria['send_time'] ? 'send-time ' : '')
+    + (!this.useCriteria['size'] ? 'size ' : '')
+    + (!this.useCriteria['folder'] ? 'folder ' : '')
+    + (!this.useCriteria['subject'] ? 'subject ' : '')
+    + (!this.useCriteria['author'] ? 'author ' : '')
+    + (!this.useCriteria['num_lines'] ? 'line-count ' : '')
+    + (!this.useCriteria['recipients'] ? 'recipients ' : '')
+    + (!this.useCriteria['cc_list'] ? 'CC-list ' : '')
+    + (!this.useCriteria['flags'] ? 'Flags ' : '')
+    + (!this.useCriteria['body']? 'body ' : '')
     );
 #endif
 
@@ -1252,36 +1252,35 @@ RemoveDupes.DupeSearchData = function ()
   // two copies of the same message reportedly get different MD5s
   // sometimes; plus, it's not _really_ the message ID
 
-  this.allowMD5IDSubstitutes = 
+  this.allowMD5IDSubstitutes =
     RemoveDupes.Prefs.getBoolPref("allow_md5_id_substitute",false);
 
-  // When comparing fields with address (recipients and CC list), 
+  // When comparing fields with address (recipients and CC list),
   // do we compare the fields in the way and order they appear in
   // the field, or do we canonicalize the fields by taking the
   // addresses only and sorting them?
 
-  this.compareStrippedAndSortedAddresses = 
+  this.compareStrippedAndSortedAddresses =
     RemoveDupes.Prefs.getBoolPref("compare_stripped_and_sorted_addresses", false);
 
-  this.timeComparisonResolution = 
+  this.timeComparisonResolution =
     RemoveDupes.Prefs.getCharPref("time_comparison_resolution", "seconds");
-  this.compareTimeNumerically = 
+  this.compareTimeNumerically =
     (this.timeComparisonResolution == "seconds");
 
 
   // which of the special folders (inbox, sent, etc.) will we be willing
   // to search in for duplicates?
 
-  this.skipSpecialFolders = 
+  this.skipSpecialFolders =
     RemoveDupes.Prefs.getBoolPref("skip_special_folders", true);
 
-  this.skipIMAPDeletedMessages = 
+  this.skipIMAPDeletedMessages =
     RemoveDupes.Prefs.getBoolPref("skip_imap_deleted_messages", true);
-  
-  
-  this.useReviewDialog = 
+
+  this.useReviewDialog =
     RemoveDupes.Prefs.getBoolPref("use_dialog_before_removal", true);
-    
+
   // we might have to trigger non-blocking IMAP folder updates;
   // each trigger will increase this, each folder update completing
   // will decrease this
@@ -1296,19 +1295,19 @@ RemoveDupes.DupeSearchData = function ()
   this.totalOriginalDupeSets = 0;
 
   // maximum number of messages to process
-  this.limitNumberOfMessages = 
+  this.limitNumberOfMessages =
     RemoveDupes.Prefs.getBoolPref("limit_number_of_processed_messages", false);
 #ifdef DEBUG_DupeSearchParameters
      RemoveDupes.JSConsoleService.logStringMessage(
       'this.limitNumberOfMessages ' + this.limitNumberOfMessages);
 #endif
-  this.maxMessages = 
+  this.maxMessages =
     RemoveDupes.Prefs.getIntPref("processed_messages_limit", 10000);
 #ifdef DEBUG_DupeSearchParameters
      RemoveDupes.JSConsoleService.logStringMessage(
       'this.maxMessages ' + this.maxMessages);
 #endif
-  
+
   // timing is used to decide when to make the next status
   // bar progress report and for yielding for processing UI events
   // (values here are in miliseconds)
