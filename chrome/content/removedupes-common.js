@@ -3,6 +3,9 @@ var EXPORTED_SYMBOLS = ["RemoveDupes"];
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 
+var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
+var { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm");
+
 if ("undefined" == typeof(messenger)) {
   var messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
 }
@@ -64,13 +67,6 @@ RemoveDupes.__defineGetter__("FolderLookupService", function() {
               .getService(Components.interfaces.nsIFolderLookupService);
   });
 
-// Note that with newer TB versions, we could replace the above service getter with MailServices.folderLookup,
-// after importing as follows:
-//
-//   const { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm");
-//
-// ... and the funny thing is, the folder-lookup service is pretty new anyway.
-
 
 
 RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
@@ -131,14 +127,7 @@ RemoveDupes.showNotification = function(appWindow, notificationName) {
 RemoveDupes.namedAlert = function(appWindow, alertName) {
   let text = RemoveDupes.Strings.getByName(alertName);
   let title = RemoveDupes.Strings.getByName("title");
-  try { 
-    let promptService = Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Ci.nsIPromptService)
-      .alert(appWindow, title, text);
-  } catch(e) {
-    // Thunderbird probably doesn't support nsIPromptService, let's try
-    // the old-fashioned way (which means no alert window title)
-    appWindow.alert(title + ":\n" + text);
-  }
+  Services.prompt.alert(appWindow, title, text);
 }
 
 //---------------------------------------------------------
@@ -146,23 +135,6 @@ RemoveDupes.namedAlert = function(appWindow, alertName) {
 // Extension-Global Variables
 // --------------------------
 
-
-// nsISupportsArray was replaced with nsIArray; see Mozilla bug 435290
-RemoveDupes.__defineGetter__("UseSupportsArray", function() {
-  delete RemoveDupes.UseSupportsArray;
-  // nsIMsgCopyService no longer accepts nsISupportsArray's in recent versions;
-  // I don't know how better to check that other than using the interface's UUID
-  switch (Components.interfaces.nsIMsgCopyService.number) {
-    case "{4010d881-6c83-4f8d-9332-d44564cee14a}":
-    case "{f0ee3821-e382-43de-9b71-bd9a4a594fcb}":
-    case "{c9255b88-5e0f-4614-8fdc-ebb97a0f333e}":
-    case "{bce41600-28df-11d3-abf7-00805f8ac968}":
-      return RemoveDupes.UseSupportsArray = true;
-      break;
-    default:
-      // should be {f21e428b-73c5-4607-993b-d37325b33722} or later
-      return RemoveDupes.UseSupportsArray = false;
-  }});
 
 #ifdef DEBUG
   // used for rough profiling
@@ -183,17 +155,8 @@ RemoveDupes.Strings = {
 
 RemoveDupes.Strings.__defineGetter__("Bundle", function() {
   delete this.Bundle;
-  var stringBundleService;
-  try {
-    // Thunderbird 63 or later
-    stringBundleService = Services.strings;
-  } catch(ex) {
-    // Thunderbird 62 or earlier
-    stringBundleService = Components.classes["@mozilla.org/intl/stringbundle;1"]
-      .getService(Components.interfaces.nsIStringBundleService);
-  }
   return this.Bundle =
-      stringBundleService.createBundle("chrome://removedupes/locale/removedupes.properties");
+      Services.strings.createBundle("chrome://removedupes/locale/removedupes.properties");
 });
 
 //---------------------------------------------------------
@@ -262,26 +225,7 @@ RemoveDupes.App = {
 
   // returns true if the app version is equal-or-higher to minVersion, false otherwise;
   ensureVersion : function(versionThreshold, checkMinimum) {
-    var version;  
-    // Dropping support for super-old versions in this check,
-    // since addons.mozilla.org complains about it; plus,
-    // we have other code which breaks that support anyway.
-    // if ("@mozilla.org/xre/app-info;1" in Components.classes ) {
-      version = 
-        Components.classes["@mozilla.org/xre/app-info;1"]
-                  .getService(Components.interfaces.nsIXULAppInfo).version;  
-    //}
-    // else {
-    //   version =
-    //      Components.classes["@mozilla.org/preferences-service;1"]
-    //               .getService(Components.interfaces.nsIPrefBranch)
-    //               .getCharPref("extensions.lastAppVersion");  
-    // }
-    var versionChecker =
-      Components.classes["@mozilla.org/xpcom/version-comparator;1"]
-                .getService(Components.interfaces.nsIVersionComparator);  
-    
-    var versionCheckResult = versionChecker.compare( version, versionThreshold );
+    var versionCheckResult = Services.vc.compare(Services.appinfo.version, versionThreshold);
     return (   (checkMinimum  && (versionCheckResult >= 0))
             || (!checkMinimum && (versionCheckResult <= 0)));
   },
@@ -382,14 +326,7 @@ RemoveDupes.Prefs = {
   },
 
   setAppStringPref: function(appPrefName, str) {
-      if (RemoveDupes.App.versionIsAtLeast("58.0b1")) {
-        RemoveDupes.Prefs.prefService.setStringPref(appPrefName, str);
-      }
-      else
-      {     
-        RemoveDupes.Prefs.prefService.setComplexValue(
-          appPrefName, Components.interfaces.nsISupportsString, str);
-      }
+    RemoveDupes.Prefs.prefService.setStringPref(appPrefName, str);
   },
   
   setLocalizedStringPref: function (prefName, val) {
@@ -468,22 +405,14 @@ RemoveDupes.Removal = {
               folderDupesInfo.previousFolderUri = previousFolderUri;
               previousFolderUri = messageRecord.folderUri;
               folderDupesInfo.removalHeaders =
-                (RemoveDupes.UseSupportsArray ?
-                // nsISupportsArray replaced with nsIArray by Mozilla bug 435290
-                Components.classes["@mozilla.org/supports-array;1"]
-                          .createInstance(Components.interfaces.nsISupportsArray) :
                 Components.classes["@mozilla.org/array;1"]
-                          .createInstance(Components.interfaces.nsIMutableArray) );
+                          .createInstance(Components.interfaces.nsIMutableArray);
 
               dupesByFolderHashMap[messageRecord.folderUri] = folderDupesInfo;
             }
             // TODO: make sure using a weak reference is the right thing here
-            if (RemoveDupes.UseSupportsArray)
-              dupesByFolderHashMap[messageRecord.folderUri].removalHeaders.
-                AppendElement(messageHeader);
-            else 
-              dupesByFolderHashMap[messageRecord.folderUri].removalHeaders.
-                appendElement(messageHeader,false);
+            dupesByFolderHashMap[messageRecord.folderUri].removalHeaders
+              .appendElement(messageHeader,false);
           }
         }
       }
@@ -500,19 +429,12 @@ RemoveDupes.Removal = {
             folderDupesInfo.previousFolderUri = previousFolderUri;
             previousFolderUri = folderUri;
             folderDupesInfo.removalHeaders =
-             (RemoveDupes.UseSupportsArray ?
-                Components.classes["@mozilla.org/supports-array;1"]
-                          .createInstance(Components.interfaces.nsISupportsArray) :
                 Components.classes["@mozilla.org/array;1"]
-                          .createInstance(Components.interfaces.nsIMutableArray) );
+                          .createInstance(Components.interfaces.nsIMutableArray);
             dupesByFolderHashMap[folderUri] = folderDupesInfo;
           }
-          if (RemoveDupes.UseSupportsArray)
-            dupesByFolderHashMap[folderUri].removalHeaders.
-              AppendElement(messageHeader);
-          else 
-            dupesByFolderHashMap[folderUri].removalHeaders.
-              appendElement(messageHeader,false);
+          dupesByFolderHashMap[folderUri].removalHeaders.
+            appendElement(messageHeader,false);
         }
       }
     }
@@ -613,9 +535,7 @@ RemoveDupes.Removal = {
     if (deletePermanently) {
       try {
         if (confirmPermanentDeletion) {
-          var numMessagesToDelete = 
-            (RemoveDupes.UseSupportsArray ?
-             removalMessageHdrs.Count() : removalMessageHdrs.length);
+          var numMessagesToDelete = removalMessageHdrs.length;
           var message = RemoveDupes.Strings.format('confirm_permanent_deletion_from_folder', [numMessagesToDelete ,sourceFolder.abbreviatedName]);
           if (!appWindow.confirm(message)) {
             appWindow.alert(RemoveDupes.Strings.getByName('deletion_aborted'));
@@ -641,13 +561,12 @@ RemoveDupes.Removal = {
       try {
 #ifdef DEBUG_removeDuplicates
     console.log(
-      'using supports? ' + 
-      (RemoveDupes.UseSupportsArray ? 'yes' : 'no') + '\n' +
-      'equals 4010d881-6c83-4f8d-9332-d44564cee14a? ' +
+      'using supports? no\n' +
+      'nsIMsgCopyService equals 4010d881-6c83-4f8d-9332-d44564cee14a? ' +
       (Components.interfaces.nsIMsgCopyService.equals(
        Components.ID("{4010d881-6c83-4f8d-9332-d44564cee14a}")) ?
        'yes' : 'no') + '\n' +
-      'equals f0ee3821-e382-43de-9b71-bd9a4a594fcb? ' +
+      'nsIMsgCopyService equals f0ee3821-e382-43de-9b71-bd9a4a594fcb? ' +
       (Components.interfaces.nsIMsgCopyService.equals(
        Components.ID("{f0ee3821-e382-43de-9b71-bd9a4a594fcb}")) ?
        'yes' : 'no') + '\n' +
@@ -655,14 +574,10 @@ RemoveDupes.Removal = {
         Components.interfaces.nsIMsgCopyService.number + '\n' +
       'targetFolder URI = ' + targetFolder.URI + '\n' +
       'sourceFolder URI = ' + sourceFolder.URI + '\n' +
-      'removalMessageHdrs has ' +
-      (RemoveDupes.UseSupportsArray ?
-       removalMessageHdrs.Count() : removalMessageHdrs.length) +
+      'removalMessageHdrs has ' + removalMessageHdrs.length +
       ' elements, first element is\n' +
-      (RemoveDupes.UseSupportsArray ? 
-       removalMessageHdrs.GetElementAt(0) :
-       removalMessageHdrs.queryElementAt(
-         0,Components.interfaces.nsISupports)));
+      removalMessageHdrs.queryElementAt(0,Components.interfaces.nsISupports)
+    );
 #endif
        var copyService =
          Components.classes["@mozilla.org/messenger/messagecopyservice;1"]
