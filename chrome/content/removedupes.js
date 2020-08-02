@@ -1104,10 +1104,10 @@ RemoveDupes.MessengerOverlay = {
 
   setOriginalsFolders : function() {
     if (typeof gFolderTreeView == 'undefined') {
-      var GetSelectedMsgFolders = GetSelectedMsgFolders();
+      var selectedMsgFolders = GetSelectedMsgFolders();
       RemoveDupes.MessengerOverlay.originalsFolders = new Set;
       RemoveDupes.MessengerOverlay.originalsFolderUris = new Set;
-      for (let i = 0; i < GetSelectedMsgFolders.length; i++) {
+      for (let i = 0; i < selectedMsgFolders.length; i++) {
         RemoveDupes.MessengerOverlay.originalsFolders.add(RemoveDupes.MessengerOverlay.originalsFolders[i]);
         RemoveDupes.MessengerOverlay.originalsFolderUris.add(RemoveDupes.MessengerOverlay.originalsFolders[i].URI);
       }
