@@ -81,13 +81,12 @@ RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
       RemoveDupes.FolderLookupService.getFolderForURL(uri);
   } catch(ex) { 
 #ifdef DEBUG_GetMsgFolderFromUri
-      RemoveDupes.JSConsoleService.logStringMessage(
-      'RemoveDupes.FolderLookupService.getFolderForURL(' + uri + ') failed:\n' + ex);
+      console.log('RemoveDupes.FolderLookupService.getFolderForURL(' + uri + ') failed:\n' + ex);
 #endif
   }
   if (messageFolder != null) { 
 #ifdef DEBUG_GetMsgFolderFromUri
-      RemoveDupes.JSConsoleService.logStringMessage('got folder from URI with MailServices.folderLookup.getFolderForURL(' + uri + ')');
+      console.log('got folder from URI with MailServices.folderLookup.getFolderForURL(' + uri + ')');
 #endif
     return messageFolder; 
 }
@@ -106,8 +105,7 @@ RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
   }
   catch (ex)  {
 #ifdef DEBUG_GetMsgFolderFromUri
-      RemoveDupes.JSConsoleService.logStringMessage(
-      'Failed obtaining a message folder object using the folder URI ' + uri + ' :\n' + ex);
+      console.log('Failed obtaining a message folder object using the folder URI ' + uri + ' :\n' + ex);
 #endif
   }
   return messageFolder;
@@ -148,15 +146,6 @@ RemoveDupes.namedAlert = function(appWindow, alertName) {
 // Extension-Global Variables
 // --------------------------
 
-#ifdef DEBUG
-// The following enables logging messages to the javascript console:
-RemoveDupes.__defineGetter__("JSConsoleService", function() {
-  delete RemoveDupes.JSConsoleService;
-  return RemoveDupes.JSConsoleService =
-    Components.classes['@mozilla.org/consoleservice;1']
-              .getService(Components.interfaces.nsIConsoleService);
-  });
-#endif
 
 // nsISupportsArray was replaced with nsIArray; see Mozilla bug 435290
 RemoveDupes.__defineGetter__("UseSupportsArray", function() {
@@ -430,8 +419,7 @@ RemoveDupes.Removal = {
     } catch(ex) {
       // We did our best... let's just return _something_
 #ifdef DEBUG_getLocalFoldersTrashFolder
-      RemoveDupes.JSConsoleService.logStringMessage(
-      'couldn\'t get local trash folder: ' + ex);
+      console.log('couldn\'t get local trash folder: ' + ex);
 #endif
     }
     if (!result || result == "") {
@@ -457,7 +445,7 @@ RemoveDupes.Removal = {
     for (let hashValue in dupeSetsHashMap) {
       var dupeSet = dupeSetsHashMap[hashValue];
 #ifdef DEBUG_removeDuplicates
-      RemoveDupes.JSConsoleService.logStringMessage('hash value ' +
+      console.log('hash value ' +
         hashValue + '\nnumber of dupes: ' + dupeSet.length);
 #endif
       if (haveMessageRecords) {
@@ -465,13 +453,13 @@ RemoveDupes.Removal = {
           var messageRecord = dupeSet[i];
           if (!messageRecord.toKeep) {
 #ifdef DEBUG_removeDuplicates
-            RemoveDupes.JSConsoleService.logStringMessage('processing URI ' +
+            console.log('processing URI ' +
               messageRecord.uri);
 #endif
             messageHeader = messenger.msgHdrFromURI(messageRecord.uri);
 #ifdef DEBUG_removeDuplicates
             if (!messageHeader)
-              RemoveDupes.JSConsoleService.logStringMessage('header is null for ' +
+              console.log('header is null for ' +
               messageRecord.uri);
 #endif
             if (!(messageRecord.folderUri in dupesByFolderHashMap)) {
@@ -502,8 +490,7 @@ RemoveDupes.Removal = {
       else {
         for (let i = 1; i < dupeSet.length; i++) {
 #ifdef DEBUG_removeDuplicates
-          RemoveDupes.JSConsoleService.logStringMessage(
-            'processing URI ' + dupeSet[i]);
+          console.log('processing URI ' + dupeSet[i]);
 #endif
           messageHeader = messenger.msgHdrFromURI(dupeSet[i]);
           var folderUri = messageHeader.folder.URI;
@@ -556,7 +543,7 @@ RemoveDupes.Removal = {
     // and set a window-global variable of its own
 
 #ifdef DEBUG_removeDuplicates
-    RemoveDupes.JSConsoleService.logStringMessage(
+    console.log(
       'in removeDuplicates\ntargetFolderUri = ' + targetFolderUri +
       '\ndeletePermanently = ' + deletePermanently);
 #endif
@@ -574,7 +561,7 @@ RemoveDupes.Removal = {
       }
     }
 #ifdef DEBUG_removeDuplicates
-    RemoveDupes.JSConsoleService.logStringMessage('trgetFolder: ' + targetFolder);
+    console.log('trgetFolder: ' + targetFolder);
 #endif
 
     var dupesByFolderHashMap =
@@ -597,7 +584,7 @@ RemoveDupes.Removal = {
       any_deletions_performed = any_deletions_performed || (!!retVal);
     }
 #ifdef DEBUG_removeDuplicates
-    RemoveDupes.JSConsoleService.logStringMessage('Done. ' +
+    console.log('Done. ' +
       'any_deletions_performed ? ' + any_deletions_performed + '; ' +
       'any_deletions_failed_or_aborted ? ' + any_deletions_performed);
 #endif
@@ -653,7 +640,7 @@ RemoveDupes.Removal = {
     else {
       try {
 #ifdef DEBUG_removeDuplicates
-    RemoveDupes.JSConsoleService.logStringMessage(
+    console.log(
       'using supports? ' + 
       (RemoveDupes.UseSupportsArray ? 'yes' : 'no') + '\n' +
       'equals 4010d881-6c83-4f8d-9332-d44564cee14a? ' +
