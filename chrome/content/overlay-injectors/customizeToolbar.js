@@ -1,6 +1,6 @@
 // called on window load or on add-on activation while window is already open
 function onLoad(activatedWhileWindowOpen) {
-  injectCSS("chrome://removedupes/content/skin/classic/removedupes-button.css");
+  WL.injectCSS("chrome://removedupes/content/skin/classic/removedupes-button.css");
 }
 
 // called on window unload or on add-on deactivation while window is still open
