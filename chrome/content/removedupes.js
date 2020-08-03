@@ -989,7 +989,8 @@ RemoveDupes.MessengerOverlay = {
         );
     }
     else {
-      let dialogURI = "chrome://removedupes/content/removedupes-dialog.xul";
+      let xulSuffix = (RemoveDupes.App.versionIsAtLeast("69.0") ? "xhtml" : "xul");
+      let dialogURI = "chrome://removedupes/content/removedupes-dialog." + xulSuffix;
 
 #ifdef DEBUG_reviewAndRemove
       console.log("Using review dialog at " + dialogURI);
