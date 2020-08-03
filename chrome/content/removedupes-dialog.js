@@ -262,34 +262,34 @@ function createMessageRowTemplate() {
   // criteria or not (or maybe display them in the top treerow
   // rather than in the unfolded rows)
 
-  var dummyCell         = document.createElement("treecell");
+  var dummyCell         = document.createXULElement("treecell");
    // the dummy column stores no information but shows the [+] box
    // for expansion and the lines to the expanded rows
-  var keepIndicatorCell = document.createElement("treecell");
+  var keepIndicatorCell = document.createXULElement("treecell");
   keepIndicatorCell.setAttribute("id", "keepIndicatorCell");
   //keepIndicatorCell.setAttribute("src", "chrome://messenger/skin/icons/notchecked.gif");
-  var authorCell        = document.createElement("treecell");
+  var authorCell        = document.createXULElement("treecell");
   authorCell.setAttribute("id", "authorCell");
-  var recipientsCell    = document.createElement("treecell");
+  var recipientsCell    = document.createXULElement("treecell");
   recipientsCell.setAttribute("id", "recipientsCell");
-  var ccListCell    = document.createElement("treecell");
+  var ccListCell    = document.createXULElement("treecell");
   ccListCell.setAttribute("id", "ccListCell");
-  var subjectCell       = document.createElement("treecell");
+  var subjectCell       = document.createXULElement("treecell");
   subjectCell.setAttribute("id", "subjectCell");
-  var folderCell        = document.createElement("treecell");
+  var folderCell        = document.createXULElement("treecell");
   folderCell.setAttribute("id", "folderCell");
-  var sendTimeCell      = document.createElement("treecell");
+  var sendTimeCell      = document.createXULElement("treecell");
   sendTimeCell.setAttribute("id", "sendTimeCell");
-  var sizeCell      = document.createElement("treecell");
+  var sizeCell      = document.createXULElement("treecell");
   sizeCell.setAttribute("id", "sizeCell");
-  var lineCountCell     = document.createElement("treecell");
+  var lineCountCell     = document.createXULElement("treecell");
   lineCountCell.setAttribute("id", "lineCountCell");
-  var messageIdCell     = document.createElement("treecell");
+  var messageIdCell     = document.createXULElement("treecell");
   messageIdCell.setAttribute("id", "messageIdCell");
-  var flagsCell         = document.createElement("treecell");
+  var flagsCell         = document.createXULElement("treecell");
   flagsCell.setAttribute("id", "messageIdCell");
 
-  messageRowTemplate = document.createElement("treerow");
+  messageRowTemplate = document.createXULElement("treerow");
   messageRowTemplate.appendChild(dummyCell);
   messageRowTemplate.appendChild(keepIndicatorCell);
   messageRowTemplate.appendChild(authorCell);
@@ -339,7 +339,7 @@ function rebuildDuplicateSetsTree() {
     dupeSetTree.removeChild(dupeSetsTreeChildren);
   }
 
-  dupeSetsTreeChildren = document.createElement("treechildren");
+  dupeSetsTreeChildren = document.createXULElement("treechildren");
   dupeSetsTreeChildren.setAttribute("id","dupeSetsTreeChildren");
 
   setNamedStatus('main-status-panel','status_panel.populating_list');
@@ -371,12 +371,12 @@ function rebuildDuplicateSetsTree() {
     //         |            \---treeitem (for M+1'th message in Nth set; not expanded here)
     //         \--treeitem (for N+1'th dupe set; not expanded here)
 
-    var dupeSetTreeChildrenInner  = document.createElement("treechildren");
+    var dupeSetTreeChildrenInner  = document.createXULElement("treechildren");
     
     for (let i=0; i < dupeSet.length; i++) {
       if (dupeSet[i].toKeep) numberToKeep++;
       var dupeInSetRow = createMessageTreeRow(dupeSet[i]);
-      var dupeInSetTreeItem = document.createElement("treeitem");
+      var dupeInSetTreeItem = document.createXULElement("treeitem");
       dupeInSetTreeItem.setAttribute('indexInDupeSet', i);
       // TODO: does anyone know a simple way of getting the index of a treeitem within
       // its parent's childNodes?
@@ -384,7 +384,7 @@ function rebuildDuplicateSetsTree() {
       dupeSetTreeChildrenInner.appendChild(dupeInSetTreeItem);
     }
 
-    var dupeSetTreeItem  = document.createElement("treeitem");
+    var dupeSetTreeItem  = document.createXULElement("treeitem");
     dupeSetTreeItem.setAttribute('commonHashValue',hashValue);
     dupeSetTreeItem.appendChild(dupeSetTreeChildrenInner);
     dupeSetTreeItem.setAttribute("container", true);
