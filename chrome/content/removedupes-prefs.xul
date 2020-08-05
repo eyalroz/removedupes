@@ -41,6 +41,9 @@
       <preference id="extensions.removedupes.comparison_criteria.cc_list"
                   name="extensions.removedupes.comparison_criteria.cc_list"
                   type="bool"/>
+      <preference id="extensions.removedupes.comparison_criteria.flags"
+                  name="extensions.removedupes.comparison_criteria.flags"
+                  type="bool"/>
       <preference id="extensions.removedupes.comparison_criteria.message_id"
                   name="extensions.removedupes.comparison_criteria.message_id"
                   type="bool"/>
@@ -196,6 +199,12 @@
                   id="extensions.removedupes.comparison_criteria.cc_list"
                   label="&message_comparison.cc_list.label;"
                   accesskey="&message_comparison.cc_list.access_key;"
+                  autostretch="never"/>
+                <checkbox preference="extensions.removedupes.comparison_criteria.flags"
+                  prefstring="extensions.removedupes.comparison_criteria.flags"
+                  id="extensions.removedupes.comparison_criteria.flags"
+                  label="&message_comparison.flags.label;"
+                  accesskey="&message_comparison.flags.access_key;"
                   autostretch="never"/>
                 <checkbox preference="extensions.removedupes.comparison_criteria.message_id"
                    prefstring="extensions.removedupes.comparison_criteria.message_id"
