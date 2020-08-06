@@ -15,10 +15,10 @@ case "$TARGET" in
 		TARGET=tbird
 		PREPROCESSOR_PARAMS="-DMOZ_THUNDERBIRD"
 		;;
-	suitelegacy | sl | sm1)
-		TARGET=suitelegacy
-		PREPROCESSOR_PARAMS="-DMOZ_PRETOOLKIT_SEAMONKEY"
-		;;
+#	suitelegacy | sl | sm1)
+#		TARGET=suitelegacy
+#		PREPROCESSOR_PARAMS="-DMOZ_PRETOOLKIT_SEAMONKEY"
+#		;;
 	*)
 	echo "Please specify either thunderbird, suiterunner or suitelegacy."
 	exit 1

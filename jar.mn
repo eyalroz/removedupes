@@ -2,14 +2,9 @@ removedupes.jar:
 *   content/removedupes/removedupes.js                            (chrome/content/removedupes/removedupes.js)
 *   content/removedupes/removedupes-common.js                     (chrome/content/removedupes/removedupes-common.js)
 *   content/removedupes/removedupes-prefs.js                      (chrome/content/removedupes/removedupes-prefs.js)
-#ifdef MOZ_PRETOOLKIT_SEAMONKEY
-*   content/removedupes/removedupes-dialog.xul                    (chrome/content/removedupes/removedupes-dialog.xul)
-*   content/removedupes/removedupes-dialog.js                     (chrome/content/removedupes/removedupes-dialog.js)
-#else
 *   content/removedupes/removedupes-dialog.tb68.xul               (chrome/content/removedupes/removedupes-dialog.xul) -DXBL_FOLDER_PICKER_OR_REPLACEMENT -DSTATUSBARPANEL_ELEMENT_AND_CLASS="label class=\"statusbarpanel\"" -DFOLDER_PICKER_BINDING_STYLE=""
 *   content/removedupes/removedupes-dialog.xul                    (chrome/content/removedupes/removedupes-dialog.xul) -DXBL_FOLDER_PICKER_OR_REPLACEMENT -DSTATUSBARPANEL_ELEMENT_AND_CLASS="statusbarpanel" -DFOLDER_PICKER_BINDING_STYLE="style=\"-moz-binding: url('chrome://messenger/content/folderWidgets.xml#folder-menupopup');\""
 *   content/removedupes/removedupes-dialog.js                     (chrome/content/removedupes/removedupes-dialog.js) -DXBL_FOLDER_PICKER_OR_REPLACEMENT  
-#endif
 #ifdef MOZ_THUNDERBIRD
 *   content/removedupes/removedupes-dialog.tb2.xul                (chrome/content/removedupes/removedupes-dialog.xul)
 *   content/removedupes/removedupes-dialog.tb2.js                 (chrome/content/removedupes/removedupes-dialog.js)
@@ -94,31 +89,6 @@ removedupes.jar:
 #endif
 #ifdef MOZ_TOOLKIT_SEAMONKEY
     content/removedupes/removedupes.png                           (chrome/content/removedupes/removedupes.png)
-#endif
-#ifdef MOZ_PRETOOLKIT_SEAMONKEY
-*   content/removedupes/removedupes-preftree.xul                  (chrome/content/removedupes/removedupes-preftree.xul)
-*   content/removedupes/contents.rdf                              (chrome/content/removedupes/contents.rdf)
-    skin/classic/removedupes/contents.rdf                         (chrome/skin/classic/removedupes/contents.rdf)
-    locale/en-US/removedupes/contents.rdf                         (chrome/locale/en-US/removedupes/contents.rdf)
-    locale/zh-TW/removedupes/contents.rdf                         (chrome/locale/zh-TW/removedupes/contents.rdf)
-    locale/de/removedupes/contents.rdf                            (chrome/locale/de/removedupes/contents.rdf)
-    locale/pl/removedupes/contents.rdf                            (chrome/locale/pl/removedupes/contents.rdf)
-    locale/fr/removedupes/contents.rdf                            (chrome/locale/fr/removedupes/contents.rdf)
-    locale/ja/removedupes/contents.rdf                            (chrome/locale/ja/removedupes/contents.rdf)
-    locale/it/removedupes/contents.rdf                         (chrome/locale/it/removedupes/contents.rdf)
-    locale/nl/removedupes/contents.rdf                            (chrome/locale/nl/removedupes/contents.rdf)
-    locale/sk-SK/removedupes/contents.rdf                         (chrome/locale/sk-SK/removedupes/contents.rdf)
-    locale/pt-PT/removedupes/contents.rdf                         (chrome/locale/pt-PT/removedupes/contents.rdf)
-    locale/pt-BR/removedupes/contents.rdf                         (chrome/locale/pt-BR/removedupes/contents.rdf)
-    locale/he-IL/removedupes/contents.rdf                         (chrome/locale/he-IL/removedupes/contents.rdf)
-    locale/ru-RU/removedupes/contents.rdf                         (chrome/locale/ru-RU/removedupes/contents.rdf)
-    locale/da/removedupes/contents.rdf                            (chrome/locale/da/removedupes/contents.rdf)
-    locale/cs-CZ/removedupes/contents.rdf                         (chrome/locale/cs-CZ/removedupes/contents.rdf)
-    locale/is-IS/removedupes/contents.rdf                         (chrome/locale/is-IS/removedupes/contents.rdf)
-    locale/sv-SE/removedupes/contents.rdf                         (chrome/locale/sv-SE/removedupes/contents.rdf)
-    locale/es-ES/removedupes/contents.rdf                         (chrome/locale/es-ES/removedupes/contents.rdf)
-    locale/es-AR/removedupes/contents.rdf                         (chrome/locale/es-AR/removedupes/contents.rdf)
-    locale/sl-SI/removedupes/contents.rdf                         (chrome/locale/sl-SI/removedupes/contents.rdf)
 #endif
 
 #ifdef MOZ_THUNDERBIRD
