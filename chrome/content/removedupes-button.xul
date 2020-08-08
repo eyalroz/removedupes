@@ -17,7 +17,8 @@
                    label="&removeduplicates-button.label;"
                    tooltiptext="&removeduplicates-button.tip;"
                    type="menu-button"
-                   class="toolbarbutton-1 chromeclass-toolbar-additional custombutton">
+                   is="toolbarbutton-menu-button"
+                   class="box-inherit toolbarbutton-menubutton-button toolbarbutton-1 chromeclass-toolbar-additional custombutton">
       <menupopup onpopupshowing="RemoveDupes.MessengerOverlay.criteriaPopupMenuInit()">
         <label value="&removedupes.criteria_menu.label;" style="font-weight: bold"/>
         <menuseparator />

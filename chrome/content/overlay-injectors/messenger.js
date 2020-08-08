@@ -12,6 +12,7 @@ function injectToolbarButton() {
                      label="&removeduplicates-button.label;"
                      tooltiptext="&removeduplicates-button.tip;"
                      type="menu-button"
+					 is="toolbarbutton-menu-button"
                      insertafter="qfb-show-filter-bar"
                      removable="true"
                      class="toolbarbutton-1 chromeclass-toolbar-additional custombutton">
