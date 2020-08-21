@@ -2,6 +2,25 @@
  * This file is provided by the addon-developer-support repository at
  * https://github.com/thundernest/addon-developer-support
  *
+ * Version: 1.20
+ * - fix long delay before customize window opens
+ * - fix non working removal of palette items
+ *
+ * Version: 1.19
+ * - add support for ToolbarPalette
+ *
+ * Version: 1.18
+ * - execute shutdown script also during global app shutdown (fixed)
+ *
+ * Version: 1.17
+ * - execute shutdown script also during global app shutdown
+ *
+ * Version: 1.16
+ * - support for persist
+ *
+ * Version: 1.15
+ * - make (undocumented) startup() async
+ *
  * Version: 1.14
  * - support resource urls
  *
@@ -54,14 +73,13 @@ var WindowListener = class extends ExtensionCommon.ExtensionAPI {
     this.pathToOptionsPage = null;
     this.chromeHandle = null;
     this.chromeData = null;
+    this.resourceData = null;    
     this.openWindows = [];
 
     const aomStartup = Cc["@mozilla.org/addons/addon-manager-startup;1"].getService(Ci.amIAddonManagerStartup);
     const resProto = Cc["@mozilla.org/network/protocol;1?name=resource"].getService(Ci.nsISubstitutingProtocolHandler);
 
     let self = this;
-
-    this.counts = 0;
 
     return {
       WindowListener: {
@@ -166,7 +184,7 @@ var WindowListener = class extends ExtensionCommon.ExtensionAPI {
             : context.extension.rootURI.resolve(aPath);
         },
 
-        startListening() {
+        async startListening() {
           // async sleep function using Promise
           async function sleep(delay) {
             let timer =  Components.classes["@mozilla.org/timer;1"].createInstance(Components.interfaces.nsITimer);
@@ -183,6 +201,32 @@ var WindowListener = class extends ExtensionCommon.ExtensionAPI {
           if (!self.isBackgroundContext)
             throw new Error("The WindowListener API may only be called from the background page.");
 
+          // load the registered startup script, if one has been registered
+          // (mail3:pane may not have been fully loaded yet)
+          if (self.pathToStartupScript) {
+            let startupJS = {};
+            startupJS.WL = {}
+            startupJS.WL.extension = self.extension;
+            startupJS.WL.messenger = Array.from(self.extension.views).find(
+              view => view.viewType === "background").xulBrowser.contentWindow
+              .wrappedJSObject.browser;
+            try {
+              if (self.pathToStartupScript) {
+                Services.scriptloader.loadSubScript(self.pathToStartupScript, startupJS, "UTF-8");
+                // delay startup until startup has been finished
+                console.log("Waiting for async startup() in <" + self.pathToStartupScript + "> to finish.");
+                if (startupJS.startup) {
+                  await startupJS.startup();
+                  console.log("startup() in <" + self.pathToStartupScript + "> finished");
+                } else {
+                  console.log("No startup() in <" + self.pathToStartupScript + "> found.");
+                }
+              }
+            } catch (e) {
+              Components.utils.reportError(e)
+            }
+          }
+                  
           let urls = Object.keys(self.registeredWindows);
           if (urls.length > 0) {
             // Before registering the window listener, check which windows are already open
@@ -197,7 +241,7 @@ var WindowListener = class extends ExtensionCommon.ExtensionAPI {
               // windows, so we can do special actions when the main
               // messenger window is opened.
               //chromeURLs: Object.keys(self.registeredWindows),
-              onLoadWindow(window) {
+              async onLoadWindow(window) {
                 // Create add-on scope
                 window[self.uniqueRandomID] = {};
 
@@ -235,23 +279,6 @@ var WindowListener = class extends ExtensionCommon.ExtensionAPI {
                         `<menuitem class="menuitem-iconic" id="${id}" image="${icon}" label="${name}" />`);
                       element_addonPrefs.appendChild(entry);
                       window.document.getElementById(id).addEventListener("command", function() {window.openDialog(self.pathToOptionsPage, "AddonOptions")});
-                    } catch (e) {
-                      Components.utils.reportError(e)
-                    }
-                  }
-
-                  // load the registered startup script, if one has been registered
-                  // (only for the initial main window)
-                  if (self.counts == 0 && self.pathToStartupScript) {
-                    self.counts++;
-                    let startupJS = {};
-                    startupJS.WL = {}
-                    startupJS.WL.extension = self.extension;
-                    startupJS.WL.messenger = Array.from(self.extension.views).find(
-                      view => view.viewType === "background").xulBrowser.contentWindow
-                      .wrappedJSObject.browser;
-                    try {
-                      if (self.pathToStartupScript) Services.scriptloader.loadSubScript(self.pathToStartupScript, startupJS, "UTF-8");
                     } catch (e) {
                       Components.utils.reportError(e)
                     }
@@ -330,14 +357,26 @@ var WindowListener = class extends ExtensionCommon.ExtensionAPI {
           window[this.uniqueRandomID].window = window;
           window[this.uniqueRandomID].document = window.document;
 
+          // Keep track of toolbarpalettes we are injecting into
+          window[this.uniqueRandomID]._toolbarpalettes = {};
+          
           //Create WLDATA object
           window[this.uniqueRandomID].WL = {};
           window[this.uniqueRandomID].WL.scopeName = this.uniqueRandomID;
 
           // Add helper function to inject CSS to WLDATA object
           window[this.uniqueRandomID].WL.injectCSS = function (cssFile) {
-            let ns = window.document.documentElement.lookupNamespaceURI("html");
-            let element = window.document.createElementNS(ns, "link");
+            let element;
+            let v = parseInt(Services.appinfo.version.split(".").shift());
+            
+            // using createElementNS in TB78 delays the insert process and hides any security violation errors
+            if (v > 68) {
+              element = window.document.createElement("link");
+            } else {
+              let ns = window.document.documentElement.lookupNamespaceURI("html");
+              element = window.document.createElementNS(ns, "link");
+            }
+            
             element.setAttribute("wlapi_autoinjected", uniqueRandomID);
             element.setAttribute("rel", "stylesheet");
             element.setAttribute("href", cssFile);
@@ -346,6 +385,8 @@ var WindowListener = class extends ExtensionCommon.ExtensionAPI {
 
           // Add helper function to inject XUL to WLDATA object
           window[this.uniqueRandomID].WL.injectElements = function (xulString, dtdFiles = [], debug = false) {
+            let toolbarsToResolve = [];
+
             function checkElements(stringOfIDs) {
               let arrayOfIDs = stringOfIDs.split(",").map(e => e.trim());
               for (let id of arrayOfIDs) {
@@ -357,10 +398,24 @@ var WindowListener = class extends ExtensionCommon.ExtensionAPI {
               return null;
             }
 
+
             function injectChildren(elements, container) {
               if (debug) console.log(elements);
 
               for (let i = 0; i < elements.length; i++) {
+                // take care of persists
+                const uri = window.document.documentURI;
+                for (const persistentNode of elements[i].querySelectorAll("[persist]")) {
+                  for (const persistentAttribute of persistentNode.getAttribute("persist").trim().split(" ")) {
+                    if (Services.xulStore.hasValue(uri, persistentNode.id, persistentAttribute)) {
+                      persistentNode.setAttribute(
+                        persistentAttribute,
+                        Services.xulStore.getValue(uri, persistentNode.id, persistentAttribute)
+                      );
+                    }
+                  }
+                }
+                
                 if (elements[i].hasAttribute("insertafter") && checkElements(elements[i].getAttribute("insertafter"))) {
                   let insertAfterElement = checkElements(elements[i].getAttribute("insertafter"));
 
@@ -392,14 +447,20 @@ var WindowListener = class extends ExtensionCommon.ExtensionAPI {
                   let boxes = [...window.document.getElementsByTagName("toolbox")];
                   let box = boxes.find(box => box.palette && box.palette.id === elements[i].id);
                   let palette = box ? box.palette : null;
-
+            
                   if (!palette) {
-                    if (debug) console.log(`The palette for ${elements[i].id} could not be found, deferring injection`);
+                    if (debug) console.log(`The palette for ${elements[i].id} could not be found, deferring to later`);
                     continue;
                   }
-
+            
                   if (debug) console.log(`The toolbox for ${elements[i].id} is ${box.id}`);
-
+            
+                  toolbarsToResolve.push(...box.querySelectorAll("toolbar"));
+                  toolbarsToResolve.push(...window.document.querySelectorAll(`toolbar[toolboxid="${box.id}"]`));
+                  for (let child of elements[i].children) {
+                    child.setAttribute("wlapi_autoinjected", uniqueRandomID);
+                  }
+                  window[uniqueRandomID]._toolbarpalettes[palette.id] = palette;
                   injectChildren(Array.from(elements[i].children), palette);
                 } else {
                   // append element to the current container
@@ -412,6 +473,19 @@ var WindowListener = class extends ExtensionCommon.ExtensionAPI {
 
             if (debug) console.log ("Injecting into root document:");
             injectChildren(Array.from(window.MozXULElement.parseXULToFragment(xulString, dtdFiles).children), window.document.documentElement);
+
+            for (let bar of toolbarsToResolve) {
+              let currentset = Services.xulStore.getValue(
+                window.location,
+                bar.id,
+                "currentset"
+              );
+              if (currentset) {
+                bar.currentSet = currentset;
+              } else if (bar.getAttribute("defaultset")) {
+                bar.currentSet = bar.getAttribute("defaultset");
+              }
+            }
           }
 
           // Add extension object to WLDATA object
@@ -457,6 +531,15 @@ var WindowListener = class extends ExtensionCommon.ExtensionAPI {
         for (let element of elements) {
           element.remove();
         }
+        
+        // Remove all autoinjected toolbarpalette items
+        for (const palette of Object.values(window[this.uniqueRandomID]._toolbarpalettes)) {
+          let elements = Array.from(palette.querySelectorAll('[wlapi_autoinjected="' + this.uniqueRandomID + '"]'));
+          for (let element of elements) {
+            element.remove();
+          }
+        }
+        
       }
 
       // Remove add-on scope, if it exists
@@ -467,10 +550,6 @@ var WindowListener = class extends ExtensionCommon.ExtensionAPI {
 
 
   onShutdown(isAppShutdown) {
-    // temporary installed addons always return isAppShutdown = false
-    if (isAppShutdown)
-      return;
-
     // Unload from all still open windows
     let urls = Object.keys(this.registeredWindows);
     if (urls.length > 0) {
@@ -491,9 +570,8 @@ var WindowListener = class extends ExtensionCommon.ExtensionAPI {
           }
         }
 
-        // if we reach this point, it is NOT app shutdown, but only addon shutdown
-        // -> isAddonShutdown = true
-        this._unloadFromWindow(window, true);
+        // if it is app shutdown, it is not just an add-on deactivation
+        this._unloadFromWindow(window, !isAppShutdown);
       }
       // Stop listening for new windows.
       ExtensionSupport.unregisterWindowListener("injectListener_" + this.uniqueRandomID);
