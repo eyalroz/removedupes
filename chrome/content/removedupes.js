@@ -147,7 +147,7 @@ RemoveDupes.MessengerOverlay = {
     delete searchData.topFolders;
 #ifdef DEBUG_collectMessages
      console.log(
-       'done with RemoveDupes.MessengerOverlay.addSearchFolders()' +
+       'done with RemoveDupes.MessengerOverlay.addSearchFolders() ' +
        'calls\nsearchData.remainingFolders = ' + searchData.remainingFolders);
 #endif
 
@@ -502,9 +502,15 @@ RemoveDupes.MessengerOverlay = {
 
   // sillyHash -
   // Calculates the hash used for the first-phase separation of non-dupe
-  // messages; it relies on the non-expensive comparison criteria
+  // messages; it relies on the non-expensive comparison criteria.
+  //
+  // Note: If a field is to be used in building the has, and is not a
+  // typically-optional field (like CC list), but is missing from
+  // the message - we either return null (in which case the message is to be
+  // ignored and not classified as a dupe of anything), or assume all elements
+  // with the missing field are the same w.r.t. this field.
 
-  sillyHash : function(searchData,messageHdr,folder) {
+  sillyHash : function(searchData, messageHdr, folder) {
     // Notes:
     // 1. There could theoretically be two messages which should not
     //    have the same hash, but do have it, if the subject includes the
@@ -520,9 +526,15 @@ RemoveDupes.MessengerOverlay = {
 
     var retVal = '';
     if (searchData.useCriteria['message_id']) {
-      var messageId =
-        ((searchData.allowMD5IDSubstitutes || messageHdr.messageId.substr(0,4) != 'md5:') ?
-        messageHdr.messageId : '');
+      let messageId = messageHdr.messageId;
+      if (messageHdr.messageId.substr(0,4) == 'md5:' && !searchData.allowMD5IDSubstitutes) {
+        // Note: We are making a (generally invalid) assumption that actual message headers don't
+        // begin with 'md5:'.
+        if (searchData.assumeEachMissingValueIsUnique) {
+          return null;
+        }
+        messageId = 'md5:(scrubbed)Ui*r8Ou@Eex=ae6O';
+      }
       // some mail servers add newlines and spaces before or after message IDs
       retVal += messageId.replace(/(\n|^)\s+|\s+$/,"") + '|';
     }
@@ -553,44 +565,58 @@ RemoveDupes.MessengerOverlay = {
         }
       }
     }
-    if (searchData.useCriteria['size'])
+    if (searchData.useCriteria['size']) {
       retVal += messageHdr.messageSize + '|';
-    if (searchData.useCriteria['folder'])
+    }
+    if (searchData.useCriteria['folder']) {
       retVal += folder.URI + '|';
-    if (searchData.useCriteria['subject'])
+    }
+    if (searchData.useCriteria['subject']) {
+      if (messageHdr.subject == null && searchData.assumeEachMissingValueIsUnique) {
+        return null;
+      }
       retVal += messageHdr.subject + '|6xX$\WG-C?|';
         // the extra 'junk string' is intended to reduce the chance of getting the subject
         // field being mixed up with other fields in the hash, i.e. in case the subject
         // ends with something like "|55"
-    if (searchData.useCriteria['author'])
+    }
+    if (searchData.useCriteria['author']) {
+      if (messageHdr.author == null && searchData.assumeEachMissingValueIsUnique) {
+        return null;
+      }
       retVal +=
         (searchData.compareStrippedAndSortedAddresses ?
          RemoveDupes.MessengerOverlay
                     .stripAndSortAddresses(messageHdr.mime2DecodedAuthor) :
          messageHdr.author)
         + '|^#=)A?mUi5|';
-    if (searchData.useCriteria['recipients'])
+    }
+    if (searchData.useCriteria['recipients']) {
       retVal +=
         (searchData.compareStrippedAndSortedAddresses ?
          RemoveDupes.MessengerOverlay
                    .stripAndSortAddresses(messageHdr.mime2DecodedRecipients) :
          messageHdr.recipients)
         + '|Ei4iXn=Iv*|';
+    }
     // note:
     // We're stripping here the non-MIME-transfer-encoding-decoded CC list!
     // It might not work but we don't have immediate access to the decoded
     // version...
-    if (searchData.useCriteria['cc_list'])
+    if (searchData.useCriteria['cc_list']) {
       retVal +=
         (searchData.compareStrippedAndSortedAddresses ?
          RemoveDupes.MessengerOverlay
                     .stripAndSortAddresses(messageHdr.ccList) :
          messageHdr.ccList)
         + '|w7Exh\' s%k|';
-    if (searchData.useCriteria['num_lines'])
+    }
+    if (searchData.useCriteria['num_lines']) {
       retVal += messageHdr.lineCount + '|';
-    if (searchData.useCriteria['flags'])
+    }
+    if (searchData.useCriteria['flags']) {
       retVal += messageHdr.flags;
+    }
     return retVal;
   },
 
@@ -726,6 +752,12 @@ RemoveDupes.MessengerOverlay = {
         }
 
         var messageHash = RemoveDupes.MessengerOverlay.sillyHash(searchData,messageHdr,folder);
+        if (messageHash == null) {
+#ifdef DEBUG_populateDupeSetsHash
+          console.log('null hash - skipping the message');
+#endif
+          continue; // something about the message made us not be willing to compare it against other messages
+        }
         var uri = folder.getUriForMsg(messageHdr);
 
         if (messageHash in messageUriHashmap) {
@@ -1220,6 +1252,36 @@ RemoveDupes.DupeSearchData = function ()
 
   this.allowMD5IDSubstitutes =
     RemoveDupes.Prefs.getBoolPref("allow_md5_id_substitute",false);
+
+  // Sometimes, a criterion or field we're using as a comparison
+  // criteria is missing. In these cases, we have the following options:
+  //
+  // 1. Be cautious, and assume the field does actually have some value
+  //    and we just don't have access to it; in which case, we need to
+  //    assume that value is distinct from all other messages - hence
+  //    the message with the missing header cannot be considered a
+  //    duplicate of any other message.
+  // 2. Treat "missing" as a single distinct value, so that messages
+  //    with this field missing can match each other as dupes, but
+  //    cannot be considered dupes of any message which does have a
+  //    value for this field. A missing field will not be the same as
+  //    an empty field!
+  // 3. Equate the missing field with an empty value; similar to the
+  //    previous option, but such messages can be considered dupes
+  //    of messages with an empty value for
+  // 4. Assume the message can match _any_ message on ths missing field.
+  //    This is the "anti-conservative" assumption.
+  //
+  // Since we tend to err on the conservative side, we will offer options
+  // 1 and 2 only. A boolean option controls this choice.
+  //
+  // Note that if an MD5 is used instead of a field (e.g. the subject),
+  // and is indeed present, we don't even consider that a case of a
+  // missing header for purpose of the above choice.
+
+  this.assumeEachMissingValueIsUnique =
+    RemoveDupes.Prefs.getBoolPref("assume_each_missing_value_is_unique", true);
+
 
   // When comparing fields with address (recipients and CC list),
   // do we compare the fields in the way and order they appear in
