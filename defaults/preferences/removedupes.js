@@ -8,6 +8,7 @@ pref("extensions.removedupes.compare_stripped_and_sorted_addresses", false);
 // possible values are: seconds, minutes, hours, day, month, year
 pref("extensions.removedupes.time_comparison_resolution", "seconds");
 pref("extensions.removedupes.allow_md5_id_substitute", false);
+pref("extensions.removedupes.assume_each_missing_value_is_unique", true);
 
 pref("extensions.removedupes.comparison_criteria.message_id", true);
 pref("extensions.removedupes.comparison_criteria.send_time", true);
