@@ -68,13 +68,13 @@ if [ ! -d $BUILDDIR ] ; then mkdir $BUILDDIR; else rm -rf $BUILDDIR/*; fi
 $BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILDDIR/jar.mn
 # Our invocation of make-jars.pl doesn't literally make JAR files, it only preprocesses and copies.
 $BUILDTOOLSDIR/make-jars.pl -q -f flat -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILDDIR/jar.mn || exit
-$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS manifest.json > $BUILDDIR/manifest.json
+$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS src/manifest.json > $BUILDDIR/manifest.json
 mkdir -p $BUILDDIR/defaults/preferences
-cp defaults/preferences/${SHORTNAME}.js $BUILDDIR/defaults/preferences
+cp src/defaults/preferences/${SHORTNAME}.js $BUILDDIR/defaults/preferences
 mkdir -p $BUILDDIR/api/WindowListener
-cp background.js $BUILDDIR/background.js
-cp api/WindowListener/schema.json $BUILDDIR/api/WindowListener
-cp api/WindowListener/implementation.js $BUILDDIR/api/WindowListener
+cp src/background.js $BUILDDIR/background.js
+cp src/api/WindowListener/schema.json $BUILDDIR/api/WindowListener
+cp src/api/WindowListener/implementation.js $BUILDDIR/api/WindowListener
 
 mv ${SHORTNAME} $BUILDDIR/chrome
 
