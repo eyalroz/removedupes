@@ -1,4 +1,4 @@
-<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.title "Remove Duplicate Messages">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Duplicaten verwijderen…">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Originelen instellen voor zoeken naar duplicaten">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "P">

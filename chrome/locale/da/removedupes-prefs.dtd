@@ -1,4 +1,4 @@
-<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - Indstillinger">
+<!ENTITY prefs_dialog_title "Remove Duplicate Messages - Indstillinger">
 <!ENTITY guide-url "http://not.yet.written/">
 <!ENTITY message_comparison.tab_title "Sammenligning af meddelelser">
 <!ENTITY message_comparison.criteria_box.label "Elementer anvendt som sammenligningskriterier">
@@ -51,4 +51,4 @@
 <!ENTITY general_settings.search_subfolders.access_key "S">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "E">
 <!ENTITY removedupes-preftree-label "Fjern dubletter">
-<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages">

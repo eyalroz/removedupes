@@ -1,4 +1,4 @@
-<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.title "Remove Duplicate Messages">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Ta bort duplikat...">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Ange originalmeddelandemapp(ar) för nästa duplikatsökning">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "T">

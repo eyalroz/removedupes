@@ -1,4 +1,4 @@
-<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - Настройки">
+<!ENTITY prefs_dialog_title "Remove Duplicate Messages - Настройки">
 <!ENTITY guide-url "http://not.yet.written/">
 <!ENTITY message_comparison.tab_title "Сравнение сообщений">
 <!ENTITY message_comparison.criteria_box.label "Message elements used as comparison criteria">
@@ -51,4 +51,4 @@
 <!ENTITY general_settings.search_subfolders.access_key "s">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "с">
 <!ENTITY removedupes-preftree-label "Удалить дубликаты">
-<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages">

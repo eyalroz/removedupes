@@ -1,4 +1,4 @@
-<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.title "Remove Duplicate Messages">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Usuń duplikaty...">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Oznacz wiadomości jako oryginalne do późniejszego wyszukiwania duplikatów">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "U">

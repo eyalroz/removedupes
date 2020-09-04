@@ -1,4 +1,4 @@
-<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - 设置">
+<!ENTITY prefs_dialog_title "Remove Duplicate Messages - 设置">
 <!ENTITY guide-url "http://not.yet.written/">
 <!ENTITY message_comparison.tab_title "消息比较">
 <!ENTITY message_comparison.criteria_box.label "用作比较条件的消息元素">
@@ -51,4 +51,4 @@
 <!ENTITY general_settings.search_subfolders.access_key "s">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "c">
 <!ENTITY removedupes-preftree-label "删除重复消息">
-<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages">

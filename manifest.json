@@ -8,7 +8,7 @@
 		}
 	},
 	"author": "Eyal Rozenberg",
-	"name": "Remove Duplicate Messages (Alternate)",
+	"name": "Remove Duplicate Messages",
 	"description": "Searches mail folders for duplicate messages and lets the user remove them",
 	"icons": {
 		"32": "chrome/content/removedupes.png",

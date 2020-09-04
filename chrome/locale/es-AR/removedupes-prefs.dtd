@@ -1,4 +1,4 @@
-<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - Configuración">
+<!ENTITY prefs_dialog_title "Remove Duplicate Messages - Configuración">
 <!ENTITY guide-url "http://no.escrito.aun/">
 <!ENTITY message_comparison.tab_title "Comparación de mensajes">
 <!ENTITY message_comparison.criteria_box.label "Elementos de los mensajes usados como criterios de comparación">
@@ -51,4 +51,4 @@
 <!ENTITY general_settings.search_subfolders.access_key "B">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "C">
 <!ENTITY removedupes-preftree-label "Quitar duplicados">
-<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages">
