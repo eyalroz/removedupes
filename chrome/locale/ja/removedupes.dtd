@@ -1,4 +1,4 @@
-<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.title "Remove Duplicate Messages">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "重複メッセージの削除...">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "重複メッセージ検索用の設定">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">

@@ -1,4 +1,4 @@
-<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - Nastavitve">
+<!ENTITY prefs_dialog_title "Remove Duplicate Messages - Nastavitve">
 <!ENTITY guide-url "http://not.yet.written/">
 <!ENTITY message_comparison.tab_title "Primerjava sporočil">
 <!ENTITY message_comparison.criteria_box.label "Elementi sporočil, ki naj se uporabijo kot merilo za primerjavo">
@@ -51,4 +51,4 @@
 <!ENTITY general_settings.search_subfolders.access_key "š">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "e">
 <!ENTITY removedupes-preftree-label "Odstrani podvojena sporočila">
-<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages">

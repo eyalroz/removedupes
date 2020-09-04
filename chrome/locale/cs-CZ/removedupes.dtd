@@ -1,4 +1,4 @@
-<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.title "Remove Duplicate Messages">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Odstranění duplicitních zpráv...">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Nastavte původní složku pro další vyhledávání duplicitních zpráv">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "O">

@@ -1,4 +1,4 @@
-<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) – Nastavenie">
+<!ENTITY prefs_dialog_title "Remove Duplicate Messages – Nastavenie">
 <!ENTITY guide-url "http://not.yet.written/">
 <!ENTITY message_comparison.tab_title "Porovnávanie správ">
 <!ENTITY message_comparison.criteria_box.label "Časť správy použitá ako kritérium porovnávania">
@@ -51,4 +51,4 @@
 <!ENTITY general_settings.search_subfolders.access_key "h">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "z">
 <!ENTITY removedupes-preftree-label "Odstrániť duplicity">
-<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages">

@@ -1,4 +1,4 @@
-<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.title "Remove Duplicate Messages">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "הסר כפולים...">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "קבע תיקיות הודעות מקור לצורך חיפוש הכפולים הבא">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "כ">

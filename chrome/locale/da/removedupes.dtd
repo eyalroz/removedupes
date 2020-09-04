@@ -1,4 +1,4 @@
-<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.title "Remove Duplicate Messages">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Fjern dubletter…">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Vælg mapper for næste søgning efter dubletter">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "F">

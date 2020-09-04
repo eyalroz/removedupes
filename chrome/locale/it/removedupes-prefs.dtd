@@ -1,4 +1,4 @@
-<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - Opzioni">
+<!ENTITY prefs_dialog_title "Remove Duplicate Messages - Opzioni">
 <!ENTITY guide-url "http://">
 <!ENTITY message_comparison.tab_title "Confronto dei messaggi">
 <!ENTITY message_comparison.criteria_box.label "Elementi del messaggio da utilizzare come termine di paragone.">
@@ -51,4 +51,4 @@
 <!ENTITY general_settings.search_subfolders.access_key "C">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "R">
 <!ENTITY removedupes-preftree-label "Rimuovi duplicati">
-<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages">

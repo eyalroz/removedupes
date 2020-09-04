@@ -1,4 +1,4 @@
-<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.title "Remove Duplicate Messages">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "移除重複的郵件...">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "設定下次重複搜尋的原始資料夾">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "P">

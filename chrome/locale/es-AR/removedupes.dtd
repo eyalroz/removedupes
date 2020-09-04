@@ -1,4 +1,4 @@
-<!ENTITY removedupes.title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes.title "Remove Duplicate Messages">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Quitar duplicados...">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Establecer carpeta/s de mensajes para la próxima búsqueda de duplicados">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "P">

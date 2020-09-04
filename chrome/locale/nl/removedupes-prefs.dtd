@@ -1,4 +1,4 @@
-<!ENTITY prefs_dialog_title "Remove Duplicate Messages (Alternate) - Instellingen">
+<!ENTITY prefs_dialog_title "Remove Duplicate Messages - Instellingen">
 <!ENTITY guide-url "http://nog.niet.geschreven/">
 <!ENTITY message_comparison.tab_title "Berichtvergelijking">
 <!ENTITY message_comparison.criteria_box.label "Berichtelementen die als vergelijkingscriteria worden gebruikt">
@@ -51,4 +51,4 @@
 <!ENTITY general_settings.search_subfolders.access_key "s">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "b">
 <!ENTITY removedupes-preftree-label "Duplicaten verwijderen">
-<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages (Alternate)">
+<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages">
