@@ -1,14 +1,7 @@
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 
-var rdModuleURI = "chrome://removedupes/content/removedupes-common.js";
-if (typeof(ChromeUtils) != "undefined") {
-  if (ChromeUtils.import) {
-    var { RemoveDupes } = ChromeUtils.import(rdModuleURI);
-  }
-  else { Components.utils.import(rdModuleURI);}
-}
-else { Components.utils.import(rdModuleURI); }
+var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
 
 RemoveDupes.PrefPane = {
 
