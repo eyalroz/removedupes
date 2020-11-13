@@ -5,7 +5,7 @@
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "o">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "P">
-<!ENTITY removedupes_dialog.dialog_title "删除重复消息">
+<!ENTITY removedupes_dialog.dialog_title "Duplicate message review">
 <!ENTITY removedupes_dialog.id "消息 ID">
 <!ENTITY removedupes_dialog.keep_label "保留每组重复中的：">
 <!ENTITY removedupes_dialog.subject "主题">

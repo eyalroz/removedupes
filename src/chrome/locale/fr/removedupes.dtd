@@ -5,7 +5,7 @@
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "o">
 <!ENTITY key-removedupes.modifiers "Accel,Maj">
 <!ENTITY key-removedupes.keycode "d">
-<!ENTITY removedupes_dialog.dialog_title "Suppression des messages en double…">
+<!ENTITY removedupes_dialog.dialog_title "Duplicate message review">
 <!ENTITY removedupes_dialog.id "Identifiant du message">
 <!ENTITY removedupes_dialog.keep_label "Dans chaque lot de copies, conserver :">
 <!ENTITY removedupes_dialog.subject "Sujet">

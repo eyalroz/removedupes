@@ -5,7 +5,7 @@
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "o">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "У">
-<!ENTITY removedupes_dialog.dialog_title "Удаление одинаковых сообщений">
+<!ENTITY removedupes_dialog.dialog_title "Duplicate message review">
 <!ENTITY removedupes_dialog.id "ID сообщения">
 <!ENTITY removedupes_dialog.keep_label "В каждом наборе дубликатов, сохранять:">
 <!ENTITY removedupes_dialog.subject "Тема">

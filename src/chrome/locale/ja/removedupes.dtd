@@ -5,7 +5,7 @@
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "o">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "p">
-<!ENTITY removedupes_dialog.dialog_title "重複メッセージの削除">
+<!ENTITY removedupes_dialog.dialog_title "Duplicate message review">
 <!ENTITY removedupes_dialog.id "Message ID">
 <!ENTITY removedupes_dialog.keep_label "重複ツリー内の保持選択：">
 <!ENTITY removedupes_dialog.subject "件名">

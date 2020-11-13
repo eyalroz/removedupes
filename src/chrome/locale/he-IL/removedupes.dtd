@@ -1,11 +1,11 @@
-<!ENTITY removedupes.title "Remove Duplicate Messages">
+<!ENTITY removedupes.title "Remove duplicate messages">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "הסר כפולים...">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "קבע תיקיות הודעות מקור לצורך חיפוש הכפולים הבא">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "כ">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "מ">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "כ">
-<!ENTITY removedupes_dialog.dialog_title "מחיקת הודעות כפולות">
+<!ENTITY removedupes_dialog.dialog_title "בחינת הודעות כפולות">
 <!ENTITY removedupes_dialog.id "מזהה הודעה">
 <!ENTITY removedupes_dialog.keep_label "בכל קבוצת כפולים, שמור את:">
 <!ENTITY removedupes_dialog.subject "נושא">

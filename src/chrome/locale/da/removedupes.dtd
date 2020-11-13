@@ -5,7 +5,7 @@
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "V">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "P">
-<!ENTITY removedupes_dialog.dialog_title "Sletning af dubletter">
+<!ENTITY removedupes_dialog.dialog_title "Duplicate message review">
 <!ENTITY removedupes_dialog.id "Meddelelses-ID">
 <!ENTITY removedupes_dialog.keep_label "I hvert sæt dubletter, behold:">
 <!ENTITY removedupes_dialog.subject "Emne">

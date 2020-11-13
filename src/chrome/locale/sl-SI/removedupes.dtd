@@ -5,7 +5,7 @@
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "N">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "O">
-<!ENTITY removedupes_dialog.dialog_title "Izbris podvojenih sporočil">
+<!ENTITY removedupes_dialog.dialog_title "Duplicate message review">
 <!ENTITY removedupes_dialog.id "ID sporočila">
 <!ENTITY removedupes_dialog.keep_label "V vsakem nizu podvojenih sporočil ohrani:">
 <!ENTITY removedupes_dialog.subject "Zadeva">

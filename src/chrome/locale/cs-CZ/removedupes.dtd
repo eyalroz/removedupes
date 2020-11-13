@@ -5,7 +5,7 @@
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "p">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "O">
-<!ENTITY removedupes_dialog.dialog_title "Mazání duplicitních zpráv">
+<!ENTITY removedupes_dialog.dialog_title "Duplicate message review">
 <!ENTITY removedupes_dialog.id "ID zprávy">
 <!ENTITY removedupes_dialog.keep_label "V každé sadě duplicit ponechat:">
 <!ENTITY removedupes_dialog.subject "Předmět">

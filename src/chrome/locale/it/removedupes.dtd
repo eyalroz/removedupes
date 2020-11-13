@@ -5,7 +5,7 @@
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "O">
 <!ENTITY key-removedupes.modifiers "accel, Maiusc">
 <!ENTITY key-removedupes.keycode "P">
-<!ENTITY removedupes_dialog.dialog_title "Cancellazione dei messaggi duplicati">
+<!ENTITY removedupes_dialog.dialog_title "Duplicate message review">
 <!ENTITY removedupes_dialog.id "ID del messaggio">
 <!ENTITY removedupes_dialog.keep_label "In ciascun gruppo di duplicati, conserva:">
 <!ENTITY removedupes_dialog.subject "Oggetto">

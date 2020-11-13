@@ -5,7 +5,7 @@
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "o">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "P">
-<!ENTITY removedupes_dialog.dialog_title "Eyðing margtekinna tölvupóstskeyta">
+<!ENTITY removedupes_dialog.dialog_title "Duplicate message review">
 <!ENTITY removedupes_dialog.id "Auðkenni skeytis ID">
 <!ENTITY removedupes_dialog.keep_label "Í hverju afritasetti, halda eftir:">
 <!ENTITY removedupes_dialog.subject "Efni">

@@ -5,7 +5,7 @@
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "o">
 <!ENTITY key-removedupes.modifiers "kortkommando,skift">
 <!ENTITY key-removedupes.keycode "T">
-<!ENTITY removedupes_dialog.dialog_title "Borttagning av meddelandeduplikat">
+<!ENTITY removedupes_dialog.dialog_title "Duplicate message review">
 <!ENTITY removedupes_dialog.id "Meddelande-ID">
 <!ENTITY removedupes_dialog.keep_label "I varje duplikatgrupp, behåll:">
 <!ENTITY removedupes_dialog.subject "Ämne">

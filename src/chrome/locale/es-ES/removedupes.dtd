@@ -5,7 +5,7 @@
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "m">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "P">
-<!ENTITY removedupes_dialog.dialog_title "Borrar mensajes duplicados">
+<!ENTITY removedupes_dialog.dialog_title "Duplicate message review">
 <!ENTITY removedupes_dialog.id "Identificación del mensaje">
 <!ENTITY removedupes_dialog.keep_label "Por cada conjunto de mensajes duplicados, conservar:">
 <!ENTITY removedupes_dialog.subject "Asunto">

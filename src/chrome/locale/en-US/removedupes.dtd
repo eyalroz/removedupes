@@ -5,7 +5,7 @@
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "o">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "p">
-<!ENTITY removedupes_dialog.dialog_title "Duplicate Messages Deletion">
+<!ENTITY removedupes_dialog.dialog_title "Duplicate message review">
 <!ENTITY removedupes_dialog.id "Message ID">
 <!ENTITY removedupes_dialog.keep_label "In every set of dupes, keep:">
 <!ENTITY removedupes_dialog.subject "Subject">
