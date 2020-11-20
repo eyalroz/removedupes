@@ -469,12 +469,12 @@ RemoveDupes.MessengerOverlay = {
       // disallowed email address beginning with an apostrophy (') to
       // better handle single-quoted addresses such as
       // 'my.addr@somewhere.com'
-      "(?:\b|^)[a-z0-9!#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
-      "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\b|$)","gi");
+      "(?:\\b|^)[a-z0-9!#$%&*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
+      "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\\b|$)","gi");
     const gSingleQuotedEmailRegExp = RegExp(
-      "(?:\b|^)'[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
-      "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?'","gi");
-    const gEncodedWordRegExp = RegExp("=\?.*\?=","g");
+      "(?:\\b|^)'[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
+      "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?'","gi");
+    const gEncodedWordRegExp = RegExp("=\\?.*\\?=","g");
 #ifdef DEBUG_stripAndSortAddresses
     console.log('stripAndSortAddresses(' + headerString +  ')');
 #endif
@@ -485,6 +485,9 @@ RemoveDupes.MessengerOverlay = {
     if (gEncodedWordRegExp.test(headerString))
       return headerString;
     var matches;
+#ifdef DEBUG_stripAndSortAddresses
+    console.log('headerString.match(gEmailRegExp) with gEmailRegExp = ' + gEmailRegExp);
+#endif
     matches = headerString.match(gEmailRegExp);
     if (!matches) {
       // let's try looking for addresses within single quotes,
