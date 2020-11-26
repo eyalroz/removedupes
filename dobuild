@@ -1,96 +1,157 @@
 #!/bin/bash
 
 SHORTNAME="removedupes"
-VERSION="0.5"
-BETA_SUBVERSION="4"
+TARGET="tbird" # We used to support multiple targets, but no longer
 UUID="{a300a000-5e21-4ee0-a115-9ec8f4eaa92b}"
+PREPROCESSOR_PARAMS=" -DUUID=$UUID -DSHORTNAME=$SHORTNAME"
+PREPROCESSOR_PARAMS+=" -DMOZ_THUNDERBIRD"
 
-TARGET="$1"
-case "$TARGET" in
-#	suiterunner | sr | srunner)
-#		TARGET=suiterunner
-#		PREPROCESSOR_PARAMS="-DMOZ_TOOLKIT_SEAMONKEY"
-#		;;
-	tbird | tb | thunderbird)
-		TARGET=tbird
-		PREPROCESSOR_PARAMS="-DMOZ_THUNDERBIRD"
-		;;
-	*)
-	echo "Only \"thunderbird\" is currently supported as a target application."
-#	echo "Please specify either \"thunderbird\" or \"suiterunner\"."
+function die {
+	local error_message="$1"
+	echo -e >&2 "$error_message"
 	exit 1
-	;;
-esac
+}
 
-# build betas by default
+function usage {
+	echo "Usage: $(basename) [OPTIONS...] [PREPROCESSOR DEFINITIONS...]"
+	echo "Build script for the $SHORTNAME extension."
+	echo ""
+	echo "Options:"
+	echo "    -v | --version [VERSION]     The version to build"
+	echo "    -b | --build-type [TYPE]     Specify the build type: beta, release-candidate, or release"
+	echo "    -s | --subversion [VERSION]  Specify the subversion number for beta or rc builds (default: 1)"
+	echo "    -h | --help                  This message"
+	echo ""
+	exit
+}
 
-if [ -z "$EXTENSION_RELEASE" ]; then
-	VERSION="${VERSION}b${BETA_SUBVERSION}"
+declare -a POSITIONAL
+while (( $# > 0 )); do
+	option="$1"
+	shift
+	case $option in
+		-h | --help)
+			usage
+			;;
+		-v | --ver | --version)
+			VERSION="$1"
+			shift
+			;;
+		-b | --build-type)
+			BUILD_TYPE="$1"
+			shift
+			;;
+		--beta)
+			BUILD_TYPE=beta
+			;;
+		--release)
+			BUILD_TYPE=release
+			;;
+		--release-candidate|--rc)
+			BUILD_TYPE=rc
+			;;
+		--sub-version-number|--sub-version|--sver|--sub|--sv|-s)
+			SUB_VERSION="$1"
+			shift
+			;;
+		-*)
+			die "Unsupported option \"$option\""
+			;;
+		*)
+			POSITIONAL+=("$option")
+			;;
+	esac
+done
+
+set -- "${POSITIONAL[@]}" # restore positional parameters
+
+if [[ -z "$VERSION" ]]; then
+	if [[ -n "${BIDIMAILUI_VERSION}" ]]; then
+		VERSION="${BIDIMAILUI_VERSION}"
+	elif [[ -r ".version" ]]; then
+		VERSION="$(cat .version)"
+	fi
+	[[ -n "$VERSION" ]] || die "No version specified"
 fi
 
-shift 1
+SUB_VERSION="${SUB_VERSION:-1}"
 
-# all arguments after the target app are #define 'd in the XUL preprocessor,
+case "$(echo $BUILD_TYPE | tr [A-Z] [a-z])" in
+	release )
+		;;
+	beta | b | "" )
+		VERSION="${VERSION}b${SUB_VERSION}"
+		PREPROCESSOR_PARAMS+=" -DIS_BETA_BUILD"
+		;;
+	rc | release-candidate | release_candidate)
+		VERSION="${VERSION}rc${SUB_VERSION}"
+		;;
+	*)
+		die "Invalid build type $BUILD_TYPE"
+		;;
+esac
+
+PREPROCESSOR_PARAMS+=" -DVERSION=$VERSION"
+
+# all positional arguments after the target app are #define 'd in the XUL preprocessor,
 # with a DEBUG_ prefix; so if you want to, say, have debugging code specific
 # to the function myFancyFunc(), write it like so:
 #
-#   #ifdef DEBUG_myFancyFunc 
+#   #ifdef DEBUG_myFancyFunc
 #     debugging code etc. etc.
 #   #endif
-# 
+#
 # then invoke
 #
-#   dobuild tbird myFancyFunc
+#   dobuild myFancyFunc
 #
 # to have your debugging code enabled
 
-if [ -n "$1" ]; then
+if [ $# -ne 0 ]; then
 	PREPROCESSOR_PARAMS+=" -DDEBUG"
-	while [ -n "$1" ]; do
-		PREPROCESSOR_PARAMS="$PREPROCESSOR_PARAMS -DDEBUG_$1"
-		shift 1
+	for def in "$@"; do
+		PREPROCESSOR_PARAMS="$PREPROCESSOR_PARAMS -DDEBUG_$def"
 	done
 else
 	PREPROCESSOR_PARAMS+=" --no-line-comments"
 fi
 
-PREPROCESSOR_PARAMS="$PREPROCESSOR_PARAMS -DVERSION=$VERSION -DUUID=$UUID -DSHORTNAME=$SHORTNAME"
-BUILDDIR="build/$TARGET"
-XPINAME="${SHORTNAME}_${VERSION}_${TARGET}.xpi"
-LINKNAME="${SHORTNAME}_${TARGET}.xpi"
-BUILDTOOLSDIR="buildtools"
-export PERL5LIB="`pwd`/$BUILDTOOLSDIR"
+BUILD_DIR="build/$TARGET"
+XPI_NAME="${SHORTNAME}_${VERSION}_${TARGET}.xpi"
+LINK_NAME="${SHORTNAME}_${TARGET}.xpi"
+BUILD_TOOLS_DIR="buildtools"
+export PERL5LIB="`pwd`/$BUILD_TOOLS_DIR"
 
-# TODO: split builddir by /'s and try to create everything along the path
-if [ ! -d build ] ; then mkdir build; fi
-if [ ! -d $BUILDDIR ] ; then mkdir $BUILDDIR; else rm -rf $BUILDDIR/*; fi
+if [[ ! -d "$BUILD_DIR" ]]; then
+	mkdir -p "$BUILD_DIR"
+else
+	rm -r "$BUILD_DIR"/*
+fi
 
-$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILDDIR/jar.mn
+$BUILD_TOOLS_DIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILD_DIR/jar.mn
 # Our invocation of make-jars.pl doesn't literally make JAR files, it only preprocesses and copies.
-$BUILDTOOLSDIR/make-jars.pl -q -f flat -z zip -p "$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILDDIR/jar.mn || exit
-$BUILDTOOLSDIR/preprocessor.pl $PREPROCESSOR_PARAMS src/manifest.json > $BUILDDIR/manifest.json
-mkdir -p $BUILDDIR/defaults/preferences
-cp src/defaults/preferences/${SHORTNAME}.js $BUILDDIR/defaults/preferences
-mkdir -p $BUILDDIR/api/WindowListener
-cp src/background.js $BUILDDIR/background.js
-cp src/api/WindowListener/schema.json $BUILDDIR/api/WindowListener
-cp src/api/WindowListener/implementation.js $BUILDDIR/api/WindowListener
+$BUILD_TOOLS_DIR/make-jars.pl -q -f flat -z zip -p "$BUILD_TOOLS_DIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILD_DIR/jar.mn || exit
+$BUILD_TOOLS_DIR/preprocessor.pl $PREPROCESSOR_PARAMS src/manifest.json > $BUILD_DIR/manifest.json
+rm -f installed-chrome.txt
 
-mv ${SHORTNAME} $BUILDDIR/chrome
+mkdir -p $BUILD_DIR/defaults/preferences
+cp src/defaults/preferences/${SHORTNAME}.js $BUILD_DIR/defaults/preferences
+mv ${SHORTNAME} $BUILD_DIR/chrome
 
-cp LICENSE $BUILDDIR
+cp src/background.js $BUILD_DIR/background.js
+mkdir -p $BUILD_DIR/api/WindowListener
+cp src/api/WindowListener/schema.json $BUILD_DIR/api/WindowListener
+cp src/api/WindowListener/implementation.js $BUILD_DIR/api/WindowListener
 
-case "$TARGET" in
-	tbird)
-	cd $BUILDDIR
-	zip --quiet -r $XPINAME  \
-		LICENSE \
-		chrome/ \
-		defaults/ \
-		api/ \
-		manifest.json \
-		background.js \
-		|| exit
-		;;
-esac
-ln $XPINAME $LINKNAME
+cp LICENSE $BUILD_DIR
+
+cd $BUILD_DIR
+zip --quiet -r $XPI_NAME  \
+	chrome \
+	defaults/ \
+	api \
+	background.js \
+	LICENSE \
+	manifest.json || exit
+
+ln $XPI_NAME $LINK_NAME
