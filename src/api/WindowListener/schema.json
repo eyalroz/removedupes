@@ -1,6 +1,6 @@
 [
   {
-    "namespace": "WindowListener",
+    "namespace": "WindowListener",    
     "functions": [
       {
         "name": "registerDefaultPrefs",
@@ -39,6 +39,23 @@
               }
             },
             "description": "Array of manifest url definitions (content, locale, resource)"
+          }
+        ]
+      },
+      {
+        "name": "waitForMasterPassword",
+        "type": "function",
+        "async": true,
+        "parameters": []
+      },
+      {
+        "name": "openOptionsDialog",
+        "type": "function",
+        "parameters": [
+          {
+            "name": "windowId",
+            "type": "integer",
+            "description": "Id of the window the dialog should be opened from."
           }
         ]
       },
