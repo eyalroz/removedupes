@@ -406,15 +406,12 @@ RemoveDupes.Removal = {
               folderDupesInfo.folder = messageHeader.folder;
               folderDupesInfo.previousFolderUri = previousFolderUri;
               previousFolderUri = messageRecord.folderUri;
-              folderDupesInfo.removalHeaders =
-                Components.classes["@mozilla.org/array;1"]
-                          .createInstance(Components.interfaces.nsIMutableArray);
+              folderDupesInfo.removalHeaders = new Array;
 
               dupesByFolderHashMap[messageRecord.folderUri] = folderDupesInfo;
             }
             // TODO: make sure using a weak reference is the right thing here
-            dupesByFolderHashMap[messageRecord.folderUri].removalHeaders
-              .appendElement(messageHeader,false);
+            dupesByFolderHashMap[messageRecord.folderUri].removalHeaders.push(messageHeader);
           }
         }
       }
@@ -430,13 +427,10 @@ RemoveDupes.Removal = {
             folderDupesInfo.folder = messageHeader.folder;
             folderDupesInfo.previousFolderUri = previousFolderUri;
             previousFolderUri = folderUri;
-            folderDupesInfo.removalHeaders =
-                Components.classes["@mozilla.org/array;1"]
-                          .createInstance(Components.interfaces.nsIMutableArray);
+            folderDupesInfo.removalHeaders = new Array;
             dupesByFolderHashMap[folderUri] = folderDupesInfo;
           }
-          dupesByFolderHashMap[folderUri].removalHeaders.
-            appendElement(messageHeader,false);
+          dupesByFolderHashMap[folderUri].removalHeaders.push(messageHeader);
         }
       }
     }
