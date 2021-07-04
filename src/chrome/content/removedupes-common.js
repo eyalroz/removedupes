@@ -380,6 +380,8 @@ RemoveDupes.Removal = {
     var dupesByFolderHashMap = new Object;
     var messageHeader;
     var previousFolderUri = null;
+    let usePlainArrayForremovalHeaders = RemoveDupes.App.versionIsAtLeast("79.0");
+    let arrayAppendFunctionName = usePlainArrayForremovalHeaders ? 'push' : 'appendElement';
 
     for (let hashValue in dupeSetsHashMap) {
       var dupeSet = dupeSetsHashMap[hashValue];
@@ -406,15 +408,15 @@ RemoveDupes.Removal = {
               folderDupesInfo.folder = messageHeader.folder;
               folderDupesInfo.previousFolderUri = previousFolderUri;
               previousFolderUri = messageRecord.folderUri;
-              folderDupesInfo.removalHeaders =
+              folderDupesInfo.removalHeaders = usePlainArrayForremovalHeaders ?
+                new Array :
                 Components.classes["@mozilla.org/array;1"]
                           .createInstance(Components.interfaces.nsIMutableArray);
 
               dupesByFolderHashMap[messageRecord.folderUri] = folderDupesInfo;
             }
             // TODO: make sure using a weak reference is the right thing here
-            dupesByFolderHashMap[messageRecord.folderUri].removalHeaders
-              .appendElement(messageHeader,false);
+            dupesByFolderHashMap[messageRecord.folderUri].removalHeaders[arrayAppendFunctionName](messageHeader);
           }
         }
       }
@@ -430,13 +432,12 @@ RemoveDupes.Removal = {
             folderDupesInfo.folder = messageHeader.folder;
             folderDupesInfo.previousFolderUri = previousFolderUri;
             previousFolderUri = folderUri;
-            folderDupesInfo.removalHeaders =
-                Components.classes["@mozilla.org/array;1"]
-                          .createInstance(Components.interfaces.nsIMutableArray);
+            folderDupesInfo.removalHeaders = usePlainArrayForremovalHeaders ?
+                new Array :
+                Components.classes["@mozilla.org/array;1"];
             dupesByFolderHashMap[folderUri] = folderDupesInfo;
           }
-          dupesByFolderHashMap[folderUri].removalHeaders.
-            appendElement(messageHeader,false);
+          dupesByFolderHashMap[folderUri].removalHeaders[arrayAppendFunctionName](messageHeader);
         }
       }
     }
