@@ -289,37 +289,22 @@ RemoveDupes.MessengerOverlay = {
 
     RemoveDupes.MessengerOverlay.setNamedStatus('searching_for_dupes');
 
-    // traverse the children
-
     if (searchData.searchSubfolders && folder.hasSubFolders) {
-      // the GetSubFolders() function was removed in bugzilla.mozilla.org bug 420614;
-      // so we have here both its use for older builds and the workaround created
-      // by the patch for that bug
-      var subFoldersIterator = null;
-      try {
-        subFoldersIterator = folder.GetSubFolders();
-      }
-      catch(ex) {
-        subFoldersIterator = folder.subFoldersObsolete;
-      }
-      if (subFoldersIterator) {
-        do {
+      // traverse the children
+      var subFolders = folder.subFolders;
+      if ('hasMoreElements' in subFolders) {
+        RemoveDupes.namedAlert(window, 'here');
+        // subFolders is an nsISimpleEnumerator (pre-TB-86; see bug 1682941)
+        while (subFolders.hasMoreElements()) {
           RemoveDupes.MessengerOverlay.addSearchFolders(
-            subFoldersIterator.currentItem().QueryInterface(Ci.nsIMsgFolder),
+            subFolders.getNext().QueryInterface(Ci.nsIMsgFolder),
             searchData);
-          try {
-            subFoldersIterator.next();
-          } catch (ex) {
-            break;
-          }
-        } while(true);
+        }
       }
       else {
-        var subFoldersEnumerator = folder.subFolders;
-        while (subFoldersEnumerator.hasMoreElements()) {
-          RemoveDupes.MessengerOverlay.addSearchFolders(
-            subFoldersEnumerator.getNext().QueryInterface(Ci.nsIMsgFolder),
-            searchData);
+        // subFolders is an nsIArray; this is what we expect in TB 86 and later
+        for (let subFolder of subFolders) {
+          RemoveDupes.MessengerOverlay.addSearchFolders(subFolder, searchData);
         }
       }
     }
