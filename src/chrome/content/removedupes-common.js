@@ -562,38 +562,20 @@ RemoveDupes.Removal = {
     }
     else {
       try {
-#ifdef DEBUG_removeDuplicates
-    console.log(
-      'using supports? no\n' +
-      'nsIMsgCopyService equals 4010d881-6c83-4f8d-9332-d44564cee14a? ' +
-      (Components.interfaces.nsIMsgCopyService.equals(
-       Components.ID("{4010d881-6c83-4f8d-9332-d44564cee14a}")) ?
-       'yes' : 'no') + '\n' +
-      'nsIMsgCopyService equals f0ee3821-e382-43de-9b71-bd9a4a594fcb? ' +
-      (Components.interfaces.nsIMsgCopyService.equals(
-       Components.ID("{f0ee3821-e382-43de-9b71-bd9a4a594fcb}")) ?
-       'yes' : 'no') + '\n' +
-      'gCopyService uuid = ' + 
-        Components.interfaces.nsIMsgCopyService.number + '\n' +
-      'targetFolder URI = ' + targetFolder.URI + '\n' +
-      'sourceFolder URI = ' + sourceFolder.URI + '\n' +
-      'removalMessageHdrs has ' + removalMessageHdrs.length +
-      ' elements, first element is\n' +
-      removalMessageHdrs.queryElementAt(0,Components.interfaces.nsISupports)
-    );
-#endif
-       var copyService =
-         Components.classes["@mozilla.org/messenger/messagecopyservice;1"]
-           .getService(Components.interfaces.nsIMsgCopyService);
-       copyService.CopyMessages(
-          sourceFolder,
-          removalMessageHdrs,
-          targetFolder,
-          true, // moving, not copying
-          null, // no listener
-          msgWindow,
-          true // allow undo... what does this mean exactly?
-        );
+        let copyService =
+          Components.classes["@mozilla.org/messenger/messagecopyservice;1"]
+            .getService(Components.interfaces.nsIMsgCopyService);
+		// The copy function name dropped the inital capital sometime between TB 78 and TB 91
+		let copyFunctionName =  ('copyMessages' in copyService) ? 'copyMessages' : 'CopyMessages';
+        copyService[copyFunctionName](
+            sourceFolder,
+            removalMessageHdrs,
+            targetFolder,
+            true, // moving, not copying
+            null, // no listener
+            msgWindow,
+            true // allow undo
+          )
       } catch(ex) {
         appWindow.alert(RemoveDupes.Strings.format('failed_to_move_to_folder', [targetFolder.URI]));
         throw(ex);
