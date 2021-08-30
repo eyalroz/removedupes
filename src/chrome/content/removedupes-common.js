@@ -164,26 +164,6 @@ RemoveDupes.Strings.__defineGetter__("Bundle", function() {
 
 //---------------------------------------------------------
 
-// General-purpose Javascript stuff
-
-#ifdef DEBUG
-RemoveDupes.JS = {
-  string2hex : function(str, withNewLines = false) {
-    var res = "";
-    for (let i = 0; i < str.length-1; i++) {
-      res += str.charCodeAt(i).toString(16) + " ";
-      if (withNewLines && str.charCodeAt(i) == 10)
-        res += '\n';
-    }
-    if (str.length > 0)
-      res += str.charCodeAt(str.length-1).toString(16);
-    return res;
-  }
-}
-#endif
-
-//---------------------------------------------------------
-
 RemoveDupes.App = {
 
   getBuildID : function () {
