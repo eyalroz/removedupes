@@ -990,10 +990,10 @@ RemoveDupes.MessengerOverlay = {
     if (!searchData.useReviewDialog)
     {
       let deletePermanently =
-        (RemoveDupes.Prefs.getCharPref('default_action', 'move') == 'delete_permanently');
+        (RemoveDupes.Prefs.get('default_action', 'move') == 'delete_permanently');
       let targetFolder = deletePermanently ?
         null :
-        RemoveDupes.Prefs.getCharPref('default_target_folder', RemoveDupes.Removal.getLocalFoldersTrashFolder().URI);
+        RemoveDupes.Prefs.get('default_target_folder', RemoveDupes.Removal.getLocalFoldersTrashFolder().URI);
       // remove (move to trash or erase completely)
       // without user confirmation or review; we're keeping the first dupe
       // in every sequence of dupes and deleting the rest
@@ -1002,7 +1002,7 @@ RemoveDupes.MessengerOverlay = {
         msgWindow,
         searchData.dupeSetsHashMap,
         deletePermanently,
-        RemoveDupes.Prefs.getBoolPref("confirm_permanent_deletion", true),
+        RemoveDupes.Prefs.get("confirm_permanent_deletion", true),
         targetFolder,
         false // the uri's have not been replaced with messageRecords
         );
@@ -1034,9 +1034,9 @@ RemoveDupes.MessengerOverlay = {
 
   toggleDupeSearchCriterion : function(ev,criterion) {
     var useCriterion =
-      !RemoveDupes.Prefs.getBoolPref("comparison_criteria." + criterion,
+      !RemoveDupes.Prefs.get("comparison_criteria." + criterion,
         RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults[criterion]);
-    RemoveDupes.Prefs.setBoolPref("comparison_criteria." + criterion, useCriterion);
+    RemoveDupes.Prefs.set("comparison_criteria." + criterion, useCriterion);
     document.getElementById('removedupesCriterionMenuItem_' + criterion).setAttribute("checked", useCriterion ? "true" : "false");
     ev.stopPropagation();
   },
@@ -1045,7 +1045,7 @@ RemoveDupes.MessengerOverlay = {
     for (let criterion in RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults) {
       document.getElementById('removedupesCriterionMenuItem_' + criterion)
               .setAttribute("checked",
-                (RemoveDupes.Prefs.getBoolPref("comparison_criteria." + criterion,
+                (RemoveDupes.Prefs.get("comparison_criteria." + criterion,
                   RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults[criterion]) ? "true" : "false"));
     }
   },
@@ -1109,7 +1109,7 @@ RemoveDupes.MessengerOverlay = {
     RemoveDupes.MessengerOverlay.originalsFolders = new Set;
     RemoveDupes.MessengerOverlay.originalsFolderUris = new Set;
     var skipSpecialFolders =
-      RemoveDupes.Prefs.getBoolPref('skip_special_folders','true');
+      RemoveDupes.Prefs.get('skip_special_folders','true');
     for (let i = 0; i < rangeCount; i++) {
       let startIndex = {};
       let endIndex = {};
@@ -1187,13 +1187,13 @@ RemoveDupes.UpdateFolderDoneListener.prototype.OnStopRunningUrl =
 RemoveDupes.DupeSearchData = function ()
 {
   this.searchSubfolders =
-    RemoveDupes.Prefs.getBoolPref("search_subfolders");
+    RemoveDupes.Prefs.get("search_subfolders");
 
   this.useCriteria = new Object;
   // which information will we use for comparing messages?
   for (let criterion in RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults) {
     this.useCriteria[criterion] =
-     RemoveDupes.Prefs.getBoolPref("comparison_criteria." + criterion,
+     RemoveDupes.Prefs.get("comparison_criteria." + criterion,
                 RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults[criterion]);
   }
 
@@ -1238,7 +1238,7 @@ RemoveDupes.DupeSearchData = function ()
   // sometimes; plus, it's not _really_ the message ID
 
   this.allowMD5IDSubstitutes =
-    RemoveDupes.Prefs.getBoolPref("allow_md5_id_substitute",false);
+    RemoveDupes.Prefs.get("allow_md5_id_substitute",false);
 
   // Sometimes, a criterion or field we're using as a comparison
   // criteria is missing. In these cases, we have the following options:
@@ -1267,7 +1267,7 @@ RemoveDupes.DupeSearchData = function ()
   // missing header for purpose of the above choice.
 
   this.assumeEachMissingValueIsUnique =
-    RemoveDupes.Prefs.getBoolPref("assume_each_missing_value_is_unique", true);
+    RemoveDupes.Prefs.get("assume_each_missing_value_is_unique", true);
 
 
   // When comparing fields with address (recipients and CC list),
@@ -1276,10 +1276,10 @@ RemoveDupes.DupeSearchData = function ()
   // addresses only and sorting them?
 
   this.compareStrippedAndSortedAddresses =
-    RemoveDupes.Prefs.getBoolPref("compare_stripped_and_sorted_addresses", false);
+    RemoveDupes.Prefs.get("compare_stripped_and_sorted_addresses", false);
 
   this.timeComparisonResolution =
-    RemoveDupes.Prefs.getCharPref("time_comparison_resolution", "seconds");
+    RemoveDupes.Prefs.get("time_comparison_resolution", "seconds");
   this.compareTimeNumerically =
     (this.timeComparisonResolution == "seconds");
 
@@ -1288,13 +1288,13 @@ RemoveDupes.DupeSearchData = function ()
   // to search in for duplicates?
 
   this.skipSpecialFolders =
-    RemoveDupes.Prefs.getBoolPref("skip_special_folders", true);
+    RemoveDupes.Prefs.get("skip_special_folders", true);
 
   this.skipIMAPDeletedMessages =
-    RemoveDupes.Prefs.getBoolPref("skip_imap_deleted_messages", true);
+    RemoveDupes.Prefs.get("skip_imap_deleted_messages", true);
 
   this.useReviewDialog =
-    RemoveDupes.Prefs.getBoolPref("use_dialog_before_removal", true);
+    RemoveDupes.Prefs.get("use_dialog_before_removal", true);
 
   // we might have to trigger non-blocking IMAP folder updates;
   // each trigger will increase this, each folder update completing
@@ -1311,12 +1311,12 @@ RemoveDupes.DupeSearchData = function ()
 
   // maximum number of messages to process
   this.limitNumberOfMessages =
-    RemoveDupes.Prefs.getBoolPref("limit_number_of_processed_messages", false);
+    RemoveDupes.Prefs.get("limit_number_of_processed_messages", false);
 #ifdef DEBUG_DupeSearchParameters
      console.log('this.limitNumberOfMessages ' + this.limitNumberOfMessages);
 #endif
   this.maxMessages =
-    RemoveDupes.Prefs.getIntPref("processed_messages_limit", 10000);
+    RemoveDupes.Prefs.get("processed_messages_limit", 10000);
 #ifdef DEBUG_DupeSearchParameters
      console.log('this.maxMessages ' + this.maxMessages);
 #endif
@@ -1326,9 +1326,9 @@ RemoveDupes.DupeSearchData = function ()
   // (values here are in miliseconds)
   this.lastStatusBarReport = this.lastYield = (new Date()).getTime();
   this.yieldQuantum =
-    RemoveDupes.Prefs.getIntPref("yield_quantum", 200);
+    RemoveDupes.Prefs.get("yield_quantum", 200);
   this.reportQuantum =
-    RemoveDupes.Prefs.getIntPref("status_report_quantum", 1500);
+    RemoveDupes.Prefs.get("status_report_quantum", 1500);
 
   if (RemoveDupes.MessengerOverlay.originalsFolders) {
     this.originalsFolderUris = RemoveDupes.MessengerOverlay.originalsFolderUris;

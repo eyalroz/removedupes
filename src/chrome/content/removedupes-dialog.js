@@ -163,10 +163,8 @@ function initDupeReviewDialog() {
   document.getElementById('keepPresetOriginalButton')
 	  .setAttribute('hidden',(!originalsFolderUris));
   initializeFolderPicker();
-  document.getElementById('action').value =
-    RemoveDupes.Prefs.getCharPref('default_action', 'move');
-  confirmPermanentDeletion =
-    RemoveDupes.Prefs.getBoolPref("confirm_permanent_deletion", true);
+  document.getElementById('action').value = RemoveDupes.Prefs.get('default_action', 'move');
+  confirmPermanentDeletion = RemoveDupes.Prefs.get("confirm_permanent_deletion", true);
   dupeSetTree = document.getElementById("dupeSetsTree");
 
   // indicate which columns were used in the search
@@ -721,7 +719,7 @@ function onAccept() {
 #endif
   if (!deletePermanently && (uri != null) && (uri != "")) {
     try {
-      RemoveDupes.Prefs.setCharPref('default_target_folder', uri);
+      RemoveDupes.Prefs.set('default_target_folder', uri);
     } catch(ex) {
 #ifdef DEBUG_onAccept
       console.log('preference setting exception:\n' + ex);
@@ -797,7 +795,7 @@ function initializeFolderPicker() {
   // We might not have a pref for the default folder,
   // or the folder URIs may have changed for some reason
   try {
-    uri = RemoveDupes.Prefs.getCharPref('default_target_folder', null);
+    uri = RemoveDupes.Prefs.get('default_target_folder', null);
     msgFolder = RemoveDupes.GetMsgFolderFromUri(uri, false);
   } catch(ex) { }
 

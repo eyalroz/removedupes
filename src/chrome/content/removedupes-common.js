@@ -5,6 +5,7 @@ const Ci = Components.interfaces;
 
 var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 var { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm");
+var { Preferences } = ChromeUtils.import("resource://gre/modules/Preferences.jsm");
 
 if ("undefined" == typeof(messenger)) {
   var messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
@@ -246,101 +247,10 @@ RemoveDupes.App = {
 // Preferences
 // -----------
 
-RemoveDupes.Prefs = {
-
-  // const
-  preferencePrefix : "extensions.removedupes.",
-
-  _prefService: null,
-
-  get prefService()
-  {
-    if (!this._prefService) 
-      this._prefService =
-        Components.classes["@mozilla.org/preferences-service;1"]
-                  .getService(Components.interfaces.nsIPrefBranch);
-    return this._prefService;
-  },
-
-  getBoolPref: function(prefName, defaultValue) {
-    try {
-      return this.prefService.getBoolPref(
-        RemoveDupes.Prefs.preferencePrefix + prefName);
-    } catch(ex) {
-      if (defaultValue != undefined)
-        return defaultValue;
-
-      throw(ex);
-    }
-  },
-
-  getCharPref: function(prefName, defaultValue) {
-    try {
-      return this.prefService.getCharPref(
-        RemoveDupes.Prefs.preferencePrefix + prefName);
-    } catch(ex) {
-      if (defaultValue) {
-        return defaultValue;
-      }
-      throw(ex);
-    }
-  },
-
-  getIntPref: function(prefName, defaultValue) {
-    try {
-      return this.prefService.getIntPref(
-        RemoveDupes.Prefs.preferencePrefix + prefName);
-    } catch(ex) {
-      if (defaultValue)
-        return defaultValue;
-
-      throw(ex);
-    }
-  },
-
-  getLocalizedStringPref: function(prefName, defaultValue) {
-    try {
-      return this.prefService
-                 .getComplexValue(
-                   RemoveDupes.Prefs.preferencePrefix +
-                   prefName,Components.interfaces.nsIPrefLocalizedString).data;
-    } catch(ex) {
-      if (defaultValue) {
-        return defaultValue;
-      }
-      throw(ex);
-    }
-  },
-
-  setBoolPref: function(prefName, val) {
-    this.prefService.setBoolPref(
-      RemoveDupes.Prefs.preferencePrefix + prefName, val);
-  },
-
-  setCharPref: function(prefName, val) {
-    this.prefService.setCharPref(
-      RemoveDupes.Prefs.preferencePrefix + prefName, val);
-  },
-
-  setIntPref: function(prefName, val) {
-    this.prefService.setIntPref(
-      RemoveDupes.Prefs.preferencePrefix + prefName, val);
-  },
-
-  setAppStringPref: function(appPrefName, str) {
-    RemoveDupes.Prefs.prefService.setStringPref(appPrefName, str);
-  },
-  
-  setLocalizedStringPref: function (prefName, val) {
-    var pls = 
-      Components.classes["@mozilla.org/pref-localizedstring;1"]
-                .createInstance(Components.interfaces.nsIPrefLocalizedString);
-    pls.data = val;
-    setAppStringPref(RemoveDupes.Prefs.preferencePrefix +
-          prefName, pls);
-  }
-
-}
+RemoveDupes.__defineGetter__("Prefs", function() {
+    delete RemoveDupes.Prefs;
+    return RemoveDupes.Prefs = new Preferences("extensions.removedupes.");
+});
 
 //---------------------------------------------------------
 
