@@ -44,9 +44,9 @@
 <!ENTITY general_settings.use_dialog_before_removal.label "עבור על תוצאות החיפוש לפני המחיקה">
 <!ENTITY general_settings.default_action.description "הפעולה לביצוע כברירת-המחדל על הודעות כפולות:">
 <!ENTITY general_settings.default_action.delete_permanently.label "מחק לצמיתות">
-<!ENTITY general_settings.default_action.move.label "העבר לאשפה">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.label "העבר לאשפה">
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "צ">
-<!ENTITY general_settings.default_action.move.accesskey "ע">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.accesskey "ע">
 <!ENTITY general_settings.search_subfolders_first.access_key "ק">
 <!ENTITY general_settings.search_subfolders.access_key "ת">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "ב">

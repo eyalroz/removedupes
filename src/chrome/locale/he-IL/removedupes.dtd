@@ -29,8 +29,10 @@
 <!ENTITY removedupes_dialog.action_label "פעולה:">
 <!ENTITY action.delete_permanently.label "מחק לצמיתות">
 <!ENTITY action.delete_permanently.accesskey "צ">
-<!ENTITY action.move.label "העבר ל:">
-<!ENTITY action.move.accesskey "ע">
+<!ENTITY action.move_to_common_account_trash.label "העבר לתיקיית האשפה של החשבון">
+<!ENTITY action.move_to_common_account_trash.accesskey "ש">
+<!ENTITY action.move_to_chosen_folder.label "העבר ל:">
+<!ENTITY action.move_to_chosen_folder.accesskey "ע">
 <!ENTITY removeduplicates-button.label "הסר כפולים">
 <!ENTITY removeduplicates-button.tip "הסר הודעות כפולות...">
 <!ENTITY removedupes.criteria_menu.label "קריטריונים להשוואה:">

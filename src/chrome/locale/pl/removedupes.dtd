@@ -29,8 +29,8 @@
 <!ENTITY removedupes_dialog.action_label "Działanie:">
 <!ENTITY action.delete_permanently.label "Usuń na zawsze">
 <!ENTITY action.delete_permanently.accesskey "U">
-<!ENTITY action.move.label "Przenieś do:">
-<!ENTITY action.move.accesskey "P">
+<!ENTITY action.move_to_chosen_folder.label "Przenieś do:">
+<!ENTITY action.move_to_chosen_folder.accesskey "P">
 <!ENTITY removeduplicates-button.label "Usuń duplikaty">
 <!ENTITY removeduplicates-button.tip "Usuń duplikaty wiadomości...">
 <!ENTITY removedupes.criteria_menu.label "Kryteria porównawcze:">

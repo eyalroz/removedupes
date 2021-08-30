@@ -29,8 +29,8 @@
 <!ENTITY removedupes_dialog.action_label "Akce:">
 <!ENTITY action.delete_permanently.label "Trvale odstranit">
 <!ENTITY action.delete_permanently.accesskey "T">
-<!ENTITY action.move.label "Přesunout do:">
-<!ENTITY action.move.accesskey "P">
+<!ENTITY action.move_to_chosen_folder.label "Přesunout do:">
+<!ENTITY action.move_to_chosen_folder.accesskey "P">
 <!ENTITY removeduplicates-button.label "Odstranit duplicitní">
 <!ENTITY removeduplicates-button.tip "Odstranit duplicitní zprávy...">
 <!ENTITY removedupes.criteria_menu.label "Kriteria srovnávání:">

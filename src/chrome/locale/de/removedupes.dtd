@@ -29,8 +29,8 @@
 <!ENTITY removedupes_dialog.action_label "Aktion:">
 <!ENTITY action.delete_permanently.label "Vollständiges löschen (nicht in den Papierkorb verschieben)">
 <!ENTITY action.delete_permanently.accesskey "v">
-<!ENTITY action.move.label "Verschieben nach:">
-<!ENTITY action.move.accesskey "V">
+<!ENTITY action.move_to_chosen_folder.label "Verschieben nach:">
+<!ENTITY action.move_to_chosen_folder.accesskey "V">
 <!ENTITY removeduplicates-button.label "Duplikate löschen">
 <!ENTITY removeduplicates-button.tip "Doppelte Nachrichten entfernen...">
 <!ENTITY removedupes.criteria_menu.label "Vergleichskriterium:">

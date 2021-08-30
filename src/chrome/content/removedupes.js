@@ -1,6 +1,7 @@
 var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
-var { ObjectUtils } = ChromeUtils.import("resource://gre/modules/ObjectUtils.jsm");
-
+if ("undefined" == typeof(ObjectUtils)) {
+  var { ObjectUtils } = ChromeUtils.import("resource://gre/modules/ObjectUtils.jsm");
+}
 if ("undefined" == typeof(messenger)) {
   var messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
 }

@@ -44,9 +44,9 @@
 <!ENTITY general_settings.use_dialog_before_removal.label "Granska sökresultat före borttagning">
 <!ENTITY general_settings.default_action.description "Standardåtgärd för meddelandeduplikat:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Ta bort permanent">
-<!ENTITY general_settings.default_action.move.label "Flytta till Papperskorgen">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.label "Flytta till Papperskorgen">
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "T">
-<!ENTITY general_settings.default_action.move.accesskey "F">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.accesskey "F">
 <!ENTITY general_settings.search_subfolders_first.access_key "u">
 <!ENTITY general_settings.search_subfolders.access_key "m">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "G">

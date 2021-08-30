@@ -44,9 +44,9 @@
 <!ENTITY general_settings.use_dialog_before_removal.label "Przejrzyj wyniki wyszukiwania przed usunięciem ich">
 <!ENTITY general_settings.default_action.description "Domyślna operacja dla duplikatów wiadomości:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Trwale usuń">
-<!ENTITY general_settings.default_action.move.label "Przenieś do kosza">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.label "Przenieś do kosza">
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "U">
-<!ENTITY general_settings.default_action.move.accesskey "k">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.accesskey "k">
 <!ENTITY general_settings.search_subfolders_first.access_key "P">
 <!ENTITY general_settings.search_subfolders.access_key "s">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "w">

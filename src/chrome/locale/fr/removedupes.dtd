@@ -29,8 +29,8 @@
 <!ENTITY removedupes_dialog.action_label "Action :">
 <!ENTITY action.delete_permanently.label "Supprimer définitivement">
 <!ENTITY action.delete_permanently.accesskey "d">
-<!ENTITY action.move.label "Déplacer vers :">
-<!ENTITY action.move.accesskey "D">
+<!ENTITY action.move_to_chosen_folder.label "Déplacer vers :">
+<!ENTITY action.move_to_chosen_folder.accesskey "D">
 <!ENTITY removeduplicates-button.label "Enlever les doublons">
 <!ENTITY removeduplicates-button.tip "Enlever des messages en double…">
 <!ENTITY removedupes.criteria_menu.label "Critères de comparaison :">

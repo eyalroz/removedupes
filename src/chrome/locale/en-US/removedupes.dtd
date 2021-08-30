@@ -29,8 +29,10 @@
 <!ENTITY removedupes_dialog.action_label "Action:">
 <!ENTITY action.delete_permanently.label "Delete permanently">
 <!ENTITY action.delete_permanently.accesskey "p">
-<!ENTITY action.move.label "Move to:">
-<!ENTITY action.move.accesskey "m">
+<!ENTITY action.move_to_common_account_trash.label "Move to account trash folder">
+<!ENTITY action.move_to_common_account_trash.accesskey "r">
+<!ENTITY action.move_to_chosen_folder.label "Move to:">
+<!ENTITY action.move_to_chosen_folder.accesskey "m">
 <!ENTITY removeduplicates-button.label "Remove Dupes">
 <!ENTITY removeduplicates-button.tip "Remove Duplicate Messages...">
 <!ENTITY removedupes.criteria_menu.label "Comparison Criteria:">

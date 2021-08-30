@@ -3,6 +3,7 @@ const Ci = Components.interfaces;
 
 var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
+var { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm");
 
 var msgWindow;
   // the 3-pane window which opened us
@@ -21,6 +22,8 @@ var useCriteria;
   // the comparison criteria used in the search
 var confirmPermanentDeletion;
   // confirm permanent deletions again, after Ok'ing on the dialog?
+var commonRootFolder;
+  // Root folder of the account in which all duplicate message are located... if one exists.
 
 // used to refer to chrome elements
 var dupeSetTree;
@@ -76,6 +79,8 @@ var DupeMessageRecord = function(messageUri) {
   this.uri          = messageUri;
   this.folder_name  = messageHdr.folder.abbreviatedName;
   this.folderUri    = messageHdr.folder.URI;
+  this.rootFolder   = messageHdr.folder.server.rootFolder;
+	// Used for checking whether all messages are from the same account
   this.message_id   =
    ((   allowMD5IDSubstitutes
      || messageHdr.messageId.substr(0,4) != 'md5:') ?
@@ -133,10 +138,6 @@ function initDupeReviewDialog() {
   document.addEventListener("dialogaccept", function(event) { onAccept() || event.preventDefault(); } );
   document.addEventListener("dialogcancel", function(event) { onCancel(); } );
 
-#ifdef DEBUG_profile
-  RemoveDupes.startTime = (new Date()).getTime();
-#endif
-
   // TODO: If we're only using some of the fields for comparison,
   // our messageRecords currently have 'null' instead of actual values
   // so either we make the columns go away, or we show the non-compared
@@ -163,7 +164,7 @@ function initDupeReviewDialog() {
   document.getElementById('keepPresetOriginalButton')
 	  .setAttribute('hidden',(!originalsFolderUris));
   initializeFolderPicker();
-  document.getElementById('action').value = RemoveDupes.Prefs.get('default_action', 'move');
+  document.getElementById('action').value = RemoveDupes.Prefs.get('default_action', 'move_to_chosen_folder');
   confirmPermanentDeletion = RemoveDupes.Prefs.get("confirm_permanent_deletion", true);
   dupeSetTree = document.getElementById("dupeSetsTree");
 
@@ -183,11 +184,22 @@ function initDupeReviewDialog() {
   // will now have arrays of DupeMessageRecord's, which contain much more
   // information (rather than having to repeatedly retrieve it)
 
+  let dupesKnownNotToHaveCommonAccount= false;
+
   for (let hashValue in dupeSetsHashMap) {
     numberOfDupeSets++;
     var dupeSet = dupeSetsHashMap[hashValue];
     for (let i=0; i < dupeSet.length; i++) {
-      dupeSet[i] = new DupeMessageRecord(dupeSet[i]);
+      let dmr = new DupeMessageRecord(dupeSet[i]);
+      if (! dupesKnownNotToHaveCommonAccount) {
+        if (!commonRootFolder) {
+			commonRootFolder = dmr.rootFolder;
+		}
+        else {
+			dupesKnownNotToHaveCommonAccount = ! (commonRootFolder == dmr.rootFolder);
+		}
+      }
+      dupeSet[i] = dmr;
       if (originalsFolderUris) {
         // if we have pre-set originals folders, the default is to
         // keep all of messages in them and remove their dupes elsewhere
@@ -205,12 +217,11 @@ function initDupeReviewDialog() {
       dupeSet[0].toKeep = true;
     }
   }
-#ifdef DEBUG_profile
-  RemoveDupes.endTime = (new Date()).getTime();
-  console.log('dupe sets hash decoration time = ' + (RemoveDupes.endTime-RemoveDupes.startTime) + ' ms');
-  RemoveDupes.startTime = (new Date()).getTime();
-#endif
-
+  if (! dupesKnownNotToHaveCommonAccount) {
+    document.getElementById('action').value = 'move_to_account_trash';
+    document.getElementById('move_to_common_account_trash_action').hidden = false;
+    document.getElementById('move_to_common_account_trash_action').disabled = false;
+  }
   initializeDuplicateSetsTree();
 }
 
@@ -234,11 +245,6 @@ function initializeDuplicateSetsTree() {
   }
 
   rebuildDuplicateSetsTree();
-#ifdef DEBUG_profile
-  RemoveDupes.endTime = (new Date()).getTime();
-  console.log('initial rebuildDuplicateSetsTree time = ' + (RemoveDupes.endTime-RemoveDupes.startTime) + ' ms');
-  RemoveDupes.startTime = (new Date()).getTime();
-#endif
 }
 
 // createMessageRowTemplate -
@@ -362,7 +368,7 @@ function rebuildDuplicateSetsTree() {
     //         \--treeitem (for N+1'th dupe set; not expanded here)
 
     var dupeSetTreeChildrenInner  = document.createXULElement("treechildren");
-    
+
     for (let i=0; i < dupeSet.length; i++) {
       if (dupeSet[i].toKeep) numberToKeep++;
       var dupeInSetRow = createMessageTreeRow(dupeSet[i]);
@@ -681,29 +687,33 @@ function onCancel() {
 // were deleted and no deletion failed, or false
 // otherwise.
 function onAccept() {
-  var uri = null;
-  try {
-    var uri = dupeMoveTargetFolder.URI;
-  } catch(ex) { }
+  if (totalNumberOfDupes == numberToKeep) { return false; }
 
-#ifdef DEBUG_onAccept
-  console.log('target folder uri (if we\'re moving) is ' + uri);
-#endif
-
-  if (totalNumberOfDupes == numberToKeep) {
-#ifdef DEBUG_onAccept
-    console.log('No deletions will be performed as all message are to bR kept.');
-#endif
+  let action = document.getElementById('action').getAttribute('value');
+  let deletePermanently = false;
+  switch (action) {
+  case 'delete_permanently':
+    deletePermanently = true; break;
+  case 'move_to_chosen_folder':
+	console.log("move to chosen folder");
+    if (!dupeMoveTargetFolder) {
+      RemoveDupes.namedAlert(window, 'no_folder_selected');
+    }
+    moveTargetFolderUri = dupeMoveTargetFolder.URI;
+  case 'move_to_account_trash':
+    if (!commonRootFolder) {
+      // This shouldn't happen, but let's be on the safe side:
+      RemoveDupes.namedAlert(window, 'no_common_account');
+      RemoveDupes.namedAlert(window, 'Duplicate messages don\'t all share the same account.');
+      return false;
+    }
+    moveTargetFolderUri = commonRootFolder.getFolderWithFlags(RemoveDupes.FolderFlags.Trash).URI;
+    break;
+  default:
+	alert("no such action " + action);
     return false;
   }
 
-  var deletePermanently =
-    (document.getElementById('action').getAttribute('value') == 'delete_permanently');
-
-  if (!uri && !deletePermanently) {
-    RemoveDupes.namedAlert(window, 'no_folder_selected');
-    return false;
-  }
 
   var retVal = RemoveDupes.Removal.removeDuplicates(
     window,
@@ -711,27 +721,12 @@ function onAccept() {
     dupeSetsHashMap,
     deletePermanently,
     confirmPermanentDeletion,
-    uri,
-    true // the uri's have been replaced with messageRecords
+    moveTargetFolderUri,
+    true // the URI's have been replaced with messageRecords
     );
-#ifdef DEBUG_onAccept
-    console.log('got retVal ' + retVal + ' in onAccept()');
-#endif
-  if (!deletePermanently && (uri != null) && (uri != "")) {
-    try {
-      RemoveDupes.Prefs.set('default_target_folder', uri);
-    } catch(ex) {
-#ifdef DEBUG_onAccept
-      console.log('preference setting exception:\n' + ex);
-#endif
-    }
-  }
-#ifdef DEBUG_onAccept
-  console.log('onAccept() got retVal: ' + retVal);
-#endif
-  if (retVal == false) {
-    // This means we've not deleted/moved _anything_, so the dialog is still usable
-    return false;
+  if (retVal == false) { return false; }
+  if (action='move_to_chosen_folder' && (moveTargetFolderUri.length > 0)) {
+    RemoveDupes.Prefs.set('default_target_folder', moveTargetFolderUri);
   }
   // If we've gotten here, either the deletion was succesful, or it
   // was partially successful, and at any rate - the dialog's contents are

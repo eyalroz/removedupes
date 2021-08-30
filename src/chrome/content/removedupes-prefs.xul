@@ -61,8 +61,8 @@
                 prefstring="extensions.removedupes.default_action"
                 id="extensions.removedupes.default_action">
                 <radio value="move"
-                  label="&general_settings.default_action.move.label;"
-                  accesskey="&general_settings.default_action.move.accesskey;"/>
+                  label="&general_settings.default_action.move_to_chosen_folder.label;"
+                  accesskey="&general_settings.default_action.move_to_chosen_folder.accesskey;"/>
                 <!-- add here: folder picker! -->
                 <radio value="delete_permanently"
                   label="&general_settings.default_action.delete_permanently.label;"

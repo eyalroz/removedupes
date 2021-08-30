@@ -44,9 +44,9 @@
 <!ENTITY general_settings.use_dialog_before_removal.label "Mostra riepilogo della ricerca prima della cancellazione">
 <!ENTITY general_settings.default_action.description "Azione predefinita per i messaggi duplicati:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Cancella definitivamente">
-<!ENTITY general_settings.default_action.move.label "Sposta nel cestino">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.label "Sposta nel cestino">
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "D">
-<!ENTITY general_settings.default_action.move.accesskey "S">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.accesskey "S">
 <!ENTITY general_settings.search_subfolders_first.access_key "O">
 <!ENTITY general_settings.search_subfolders.access_key "C">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "R">

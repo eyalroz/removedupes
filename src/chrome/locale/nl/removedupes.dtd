@@ -29,8 +29,8 @@
 <!ENTITY removedupes_dialog.action_label "Actie:">
 <!ENTITY action.delete_permanently.label "Permanent verwijderen">
 <!ENTITY action.delete_permanently.accesskey "P">
-<!ENTITY action.move.label "Verplaatsen naar:">
-<!ENTITY action.move.accesskey "V">
+<!ENTITY action.move_to_chosen_folder.label "Verplaatsen naar:">
+<!ENTITY action.move_to_chosen_folder.accesskey "V">
 <!ENTITY removeduplicates-button.label "Duplicaten verwijderen">
 <!ENTITY removeduplicates-button.tip "Dubbele berichten verwijderen…">
 <!ENTITY removedupes.criteria_menu.label "Vergelijkingscriteria:">

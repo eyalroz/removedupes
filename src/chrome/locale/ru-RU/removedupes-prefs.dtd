@@ -44,9 +44,9 @@
 <!ENTITY general_settings.use_dialog_before_removal.label "Пересмотреть результаты поиска перед удалением">
 <!ENTITY general_settings.default_action.description "Действия по умолчанию для удаляемых сообщений:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Удалять">
-<!ENTITY general_settings.default_action.move.label "Перемещать в Удаленные">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.label "Перемещать в Удаленные">
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "У">
-<!ENTITY general_settings.default_action.move.accesskey "П">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.accesskey "П">
 <!ENTITY general_settings.search_subfolders_first.access_key "и">
 <!ENTITY general_settings.search_subfolders.access_key "s">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "с">

@@ -44,9 +44,9 @@
 <!ENTITY general_settings.use_dialog_before_removal.label "Efterse søgeresultater før sletning">
 <!ENTITY general_settings.default_action.description "Standardhandling for dubletter:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Slet permanent">
-<!ENTITY general_settings.default_action.move.label "Flyt til papirkurv">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.label "Flyt til papirkurv">
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "r">
-<!ENTITY general_settings.default_action.move.accesskey "y">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.accesskey "y">
 <!ENTITY general_settings.search_subfolders_first.access_key "S">
 <!ENTITY general_settings.search_subfolders.access_key "S">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "E">

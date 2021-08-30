@@ -44,9 +44,9 @@
 <!ENTITY general_settings.use_dialog_before_removal.label "Před smazáním zkontrolovat výsledky">
 <!ENTITY general_settings.default_action.description "Implicitní akce pro duplicitní zprávy:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Trvale odstranit">
-<!ENTITY general_settings.default_action.move.label "Přesunout do koše">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.label "Přesunout do koše">
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "T">
-<!ENTITY general_settings.default_action.move.accesskey "K">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.accesskey "K">
 <!ENTITY general_settings.search_subfolders_first.access_key "p">
 <!ENTITY general_settings.search_subfolders.access_key "s">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "c">

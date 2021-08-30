@@ -44,9 +44,9 @@
 <!ENTITY general_settings.use_dialog_before_removal.label "Pred izbrisom preglej rezultate iskanja">
 <!ENTITY general_settings.default_action.description "Privzeto dejanje za podvojena sporočila:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Trajno izbriši">
-<!ENTITY general_settings.default_action.move.label "Premakni v Koš">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.label "Premakni v Koš">
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "T">
-<!ENTITY general_settings.default_action.move.accesskey "P">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.accesskey "P">
 <!ENTITY general_settings.search_subfolders_first.access_key "n">
 <!ENTITY general_settings.search_subfolders.access_key "š">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "e">

@@ -29,8 +29,8 @@
 <!ENTITY removedupes_dialog.action_label "Åtgärd:">
 <!ENTITY action.delete_permanently.label "Ta bort permanent">
 <!ENTITY action.delete_permanently.accesskey "p">
-<!ENTITY action.move.label "Flytta till:">
-<!ENTITY action.move.accesskey "F">
+<!ENTITY action.move_to_chosen_folder.label "Flytta till:">
+<!ENTITY action.move_to_chosen_folder.accesskey "F">
 <!ENTITY removeduplicates-button.label "Ta bort">
 <!ENTITY removeduplicates-button.tip "Ta bort meddelandeduplikat...">
 <!ENTITY removedupes.criteria_menu.label "Jämförelsekriterier:">

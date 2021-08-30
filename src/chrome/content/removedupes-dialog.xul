@@ -145,28 +145,36 @@
       <spacer height="10"/>
       <groupbox>
         <caption label="&removedupes_dialog.action_label;"/>
-        <radiogroup id="action">
+        <radiogroup id="action" value="move_to_chosen_folder">
           <hbox>
+            <radio id="move_to_common_account_trash_action"
+                   hidden="true"
+                   disabled="true"
+                   value="move_to_account_trash"
+                   label="&action.move_to_common_account_trash.label;"
+                   accesskey="&action.move_to_common_account_trash.accesskey;"/>
+				<!-- <hbox> -->
+             <radio id="move_to_chosen_folder_action"
+                    value="move_to_chosen_folder"
+                    label="&action.move_to_chosen_folder.label;"
+                    accesskey="&action.move_to_chosen_folder.accesskey;"/>
+             <menulist id="actionTargetFolder" class="folderMenuItem">
+               <menupopup 
+                    is="folder-menupopup"
+                    id="actionTargetFolderPopup" 
+                    class="menulist-menupopup"
+                    mode="filing"
+                    showRecent="true"
+                    recentLabel="Recent" 
+                    showFileHereLabel="true"
+                    oncommand="onTargetFolderClick(event.target._folder);"
+               />
+              </menulist>
+			  <!--		  </hbox> -->
             <radio id="delete_permanently_action"
                    value="delete_permanently"
                    label="&action.delete_permanently.label;"
                    accesskey="&action.delete_permanently.accesskey;"/>
-            <radio id="move_to_folder_action"
-                   value="move"
-                   label="&action.move.label;"
-                   accesskey="&action.move.accesskey;"/>
-            <menulist id="actionTargetFolder" class="folderMenuItem" flex="1">
-              <menupopup 
-                   is="folder-menupopup"
-                   id="actionTargetFolderPopup" 
-                   class="menulist-menupopup"
-                   mode="filing"
-                   showRecent="true"
-                   recentLabel="Recent" 
-                   showFileHereLabel="true"
-                   oncommand="onTargetFolderClick(event.target._folder);"
-              />
-            </menulist>
           </hbox>
         </radiogroup>
         </groupbox>

@@ -44,9 +44,9 @@
 <!ENTITY general_settings.use_dialog_before_removal.label "Rever os resultados de procura antes de eliminar">
 <!ENTITY general_settings.default_action.description "Acção pré-definida para mensagens duplicadas:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Apagar permanentemente">
-<!ENTITY general_settings.default_action.move.label "Mover para o Lixo">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.label "Mover para o Lixo">
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "p">
-<!ENTITY general_settings.default_action.move.accesskey "M">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.accesskey "M">
 <!ENTITY general_settings.search_subfolders_first.access_key "v">
 <!ENTITY general_settings.search_subfolders.access_key "s">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "c">

@@ -44,9 +44,9 @@
 <!ENTITY general_settings.use_dialog_before_removal.label "Prezrieť výsledky vyhľadávania pred odstránením">
 <!ENTITY general_settings.default_action.description "Predvolené rozhodnutie pre duplicitné správy:">
 <!ENTITY general_settings.default_action.delete_permanently.label "Natrvalo odstrániť">
-<!ENTITY general_settings.default_action.move.label "Presunúť do Odpadkového koša">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.label "Presunúť do Odpadkového koša">
 <!ENTITY general_settings.default_action.delete_permanently.accesskey "N">
-<!ENTITY general_settings.default_action.move.accesskey "u">
+<!ENTITY general_settings.default_action.move_to_chosen_folder.accesskey "u">
 <!ENTITY general_settings.search_subfolders_first.access_key "j">
 <!ENTITY general_settings.search_subfolders.access_key "h">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "z">
