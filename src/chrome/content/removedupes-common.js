@@ -166,41 +166,21 @@ RemoveDupes.Strings.__defineGetter__("Bundle", function() {
 
 // General-purpose Javascript stuff
 
-RemoveDupes.JS = {
-
 #ifdef DEBUG
-  hD : "0123456789ABCDEF",
-  // decimal to hexadecimal representation
-  d2h : function(d) {
-   var h = this.hD.substr(d&15,1);
-    while(d>15) {d>>=4;h=hD.substr(d&15,1)+h;}
-    return h;
-  },
-
-  string2hex : function(str) {
+RemoveDupes.JS = {
+  string2hex : function(str, withNewLines = false) {
     var res = "";
     for (let i = 0; i < str.length-1; i++) {
-      res += this.d2h(str.charCodeAt(i)) + " ";  
-    }
-    if (str.length > 0)
-      res += this.d2h(str.charCodeAt(str.length-1));  
-    return res;
-  },
-
-  string2hexWithNewLines : function (str) {
-    var res = "";
-    for (let i = 0; i < str.length-1; i++) {
-      res += this.d2h(str.charCodeAt(i)) + " ";  
-      if (str.charCodeAt(i) == 10)
+      res += str.charCodeAt(i).toString(16) + " ";
+      if (withNewLines && str.charCodeAt(i) == 10)
         res += '\n';
     }
     if (str.length > 0)
-      res += this.d2h(str.charCodeAt(str.length-1));  
+      res += str.charCodeAt(str.length-1).toString(16);
     return res;
-  },
-
-#endif
+  }
 }
+#endif
 
 //---------------------------------------------------------
 

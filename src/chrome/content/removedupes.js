@@ -844,7 +844,7 @@ RemoveDupes.MessengerOverlay = {
     if (endOfHeaders.test(msgContent)) {
 #ifdef DEBUG_messageBodyFromURI
     //console.log('msgContent =\n\n' + msgContent);
-    //console.log('msgContent =\n\n' + string2hexWithNewLines(msgContent));
+    //console.log('msgContent =\n\n' + string2hex(msgContent, true));
     console.log('RegExp.rightContext =\n\n' + RegExp.rightContext);
 #endif
       // return everything after the end-of-headers
