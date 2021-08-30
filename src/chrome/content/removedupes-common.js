@@ -168,19 +168,6 @@ RemoveDupes.Strings.__defineGetter__("Bundle", function() {
 
 RemoveDupes.JS = {
 
-  // A way to tell if an object is empty or not
-  isEmpty: function(obj) {
-    var i;
-    if (typeof obj === 'object' || typeof obj === 'function') {
-      for (let i in obj) {
-        if (obj.hasOwnProperty(i)) {
-          return false;
-        }
-      }
-    }
-    return true;
-  },
-
 #ifdef DEBUG
   hD : "0123456789ABCDEF",
   // decimal to hexadecimal representation

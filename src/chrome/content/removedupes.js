@@ -1,4 +1,5 @@
 var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
+var { ObjectUtils } = ChromeUtils.import("resource://gre/modules/ObjectUtils.jsm");
 
 if ("undefined" == typeof(messenger)) {
   var messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
@@ -410,7 +411,7 @@ RemoveDupes.MessengerOverlay = {
       return;
     }
 
-    if (RemoveDupes.JS.isEmpty(searchData.dupeSetsHashMap)) {
+    if (ObjectUtils.isEmpty(searchData.dupeSetsHashMap)) {
       if (searchData.useReviewDialog) {
         // if the user wants a dialog to pop up for the dupes,
         // we can bother him/her with a message box for 'no dupes'
