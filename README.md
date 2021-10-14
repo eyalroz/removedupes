@@ -58,5 +58,5 @@ Read the [FAQ section of the wiki](https://github.com/eyalroz/removedupes/wiki/F
 
 ### I have a specific bug, issue, question or feature request
 
-Please search the [issues page](https://github.com/eyalroz/removedupes/issues) of this repository, to check if it's already been reported. If not, file a new issue. If you'd like to tell me (the author) something about the extension and/or the state of Thunderbird in general - you can [write me](mailto:eyalroz@technion.ac.il).
+Please search the [issues page](https://github.com/eyalroz/removedupes/issues) of this repository, to check if it's already been reported. If not, file a new issue. If you'd like to tell me (the author) something about the extension and/or the state of Thunderbird in general - you can [write me](mailto:eyalroz1@gmx.com).
 
