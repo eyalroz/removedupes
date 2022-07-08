@@ -727,7 +727,7 @@ RemoveDupes.MessengerOverlay = {
         continue;
       }
 
-      while (   folderMessageHdrsIterator.hasMoreElements()
+      while (folderMessageHdrsIterator.hasMoreElements()
              && (!searchData.limitNumberOfMessages
                  || (searchData.messagesHashed < searchData.maxMessages)) ) {
         var messageHdr =

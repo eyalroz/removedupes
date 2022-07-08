@@ -68,7 +68,7 @@
           <splitter class="tree-splitter"/>
           <treecol id="cc_listColumn"
                    fieldName="cc_list"
-                   label="&removedupes_dialog.cc_list;" 
+                   label="&removedupes_dialog.cc_list;"
                    hidden="true"
                    flex="5"
                    persist="width hidden class sortDirection"
@@ -77,7 +77,7 @@
           <splitter class="tree-splitter"/>
           <treecol id="subjectColumn"
                    fieldName="subject"
-                   label="&removedupes_dialog.subject;" 
+                   label="&removedupes_dialog.subject;"
                    flex="5"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
@@ -85,7 +85,7 @@
           <splitter class="tree-splitter"/>
           <treecol id="folderColumn"
                    fieldName="folder"
-                   label="&removedupes_dialog.folder;" 
+                   label="&removedupes_dialog.folder;"
                    flex="2"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
@@ -109,14 +109,14 @@
           <splitter class="tree-splitter"/>
           <treecol id="num_linesColumn"
                    fieldName="num_lines"
-                   label="&removedupes_dialog.line_count;" 
+                   label="&removedupes_dialog.line_count;"
                    flex="2"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
           <treecol id="message_idColumn"
                    fieldName="message_id"
-                   label="&removedupes_dialog.id;" 
+                   label="&removedupes_dialog.id;"
                    hidden="true"
                    flex="2"
                    persist="width hidden class sortDirection"
@@ -124,7 +124,7 @@
                    closemenu="none"/>
           <treecol id="flagsColumn"
                    fieldName="flags"
-                   label="&removedupes_dialog.flags;" 
+                   label="&removedupes_dialog.flags;"
                    hidden="true"
                    flex="2"
                    persist="width hidden class sortDirection"
@@ -154,23 +154,22 @@
                    value="move_to_common_account_trash"
                    label="&action.move_to_common_account_trash.label;"
                    accesskey="&action.move_to_common_account_trash.accesskey;"/>
-             <radio id="move_to_chosen_folder_action"
-                    selected="false"
-                    value="move_to_chosen_folder"
-                    label="&action.move_to_chosen_folder.label;"
-                    accesskey="&action.move_to_chosen_folder.accesskey;"/>
-             <menulist id="actionTargetFolder" class="folderMenuItem">
-               <menupopup 
-                    is="folder-menupopup"
-                    id="actionTargetFolderPopup" 
-                    class="menulist-menupopup"
-                    mode="filing"
-                    showRecent="true"
-                    recentLabel="Recent" 
-                    showFileHereLabel="true"
-                    oncommand="onTargetFolderClick(event.target._folder);"
-               />
-              </menulist>
+            <radio id="move_to_chosen_folder_action"
+                   selected="false"
+                   value="move_to_chosen_folder"
+                   label="&action.move_to_chosen_folder.label;"
+                   accesskey="&action.move_to_chosen_folder.accesskey;"/>
+            <menulist id="actionTargetFolder" class="folderMenuItem">
+              <menupopup
+                   is="folder-menupopup"
+                   id="actionTargetFolderPopup"
+                   class="menulist-menupopup"
+                   mode="filing"
+                   showRecent="true"
+                   recentLabel="Recent"
+                   showFileHereLabel="true"
+                   oncommand="onTargetFolderClick(event.target._folder);" />
+            </menulist>
             <radio id="delete_permanently_action"
                    selected="false"
                    value="delete_permanently"
@@ -191,14 +190,14 @@
         <button id="keepFirstButton"
                 label="&removedupes_dialog.keep_first.label;"
                 oncommand="markKeepOneInEveryDupeSet(true);"/>
-        <button id="keepLastButton" 
-                label="&removedupes_dialog.keep_last.label;" 
+        <button id="keepLastButton"
+                label="&removedupes_dialog.keep_last.label;"
                 oncommand="markKeepOneInEveryDupeSet(false);"/>
-        <button id="keepAllButton" 
-                label="&removedupes_dialog.keep_all.label;" 
+        <button id="keepAllButton"
+                label="&removedupes_dialog.keep_all.label;"
                 oncommand="markNoDupesForDeletion();"/>
-        <button id="keepNoneButton" 
-                label="&removedupes_dialog.keep_none.label;" 
+        <button id="keepNoneButton"
+                label="&removedupes_dialog.keep_none.label;"
                 oncommand="markAllDupesForDeletion();"/>
         <spacer flex="1"/>
       </vbox>

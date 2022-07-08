@@ -184,7 +184,7 @@ function initDupeReviewDialog() {
   // will now have arrays of DupeMessageRecord's, which contain much more
   // information (rather than having to repeatedly retrieve it)
 
-  let dupesKnownNotToHaveCommonAccount= false;
+  let dupesKnownNotToHaveCommonAccount = false;
 
   for (let hashValue in dupeSetsHashMap) {
     numberOfDupeSets++;
