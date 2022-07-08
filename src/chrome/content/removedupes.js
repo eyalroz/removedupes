@@ -991,7 +991,7 @@ RemoveDupes.MessengerOverlay = {
     if (!searchData.useReviewDialog)
     {
       let deletePermanently =
-        (RemoveDupes.Prefs.get('default_action', 'move') == 'delete_permanently');
+        (RemoveDupes.Prefs.get('default_action', null) == 'delete_permanently');
       let targetFolder = deletePermanently ?
         null :
         RemoveDupes.Prefs.get('default_target_folder', RemoveDupes.Removal.getLocalFoldersTrashFolder().URI);

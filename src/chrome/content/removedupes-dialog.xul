@@ -145,16 +145,17 @@
       <spacer height="10"/>
       <groupbox>
         <caption label="&removedupes_dialog.action_label;"/>
-        <radiogroup id="action" value="move_to_chosen_folder">
+        <radiogroup id="action">
           <hbox>
             <radio id="move_to_common_account_trash_action"
+                   selected="false"
                    hidden="true"
                    disabled="true"
-                   value="move_to_account_trash"
+                   value="move_to_common_account_trash"
                    label="&action.move_to_common_account_trash.label;"
                    accesskey="&action.move_to_common_account_trash.accesskey;"/>
-				<!-- <hbox> -->
              <radio id="move_to_chosen_folder_action"
+                    selected="false"
                     value="move_to_chosen_folder"
                     label="&action.move_to_chosen_folder.label;"
                     accesskey="&action.move_to_chosen_folder.accesskey;"/>
@@ -170,8 +171,8 @@
                     oncommand="onTargetFolderClick(event.target._folder);"
                />
               </menulist>
-			  <!--		  </hbox> -->
             <radio id="delete_permanently_action"
+                   selected="false"
                    value="delete_permanently"
                    label="&action.delete_permanently.label;"
                    accesskey="&action.delete_permanently.accesskey;"/>

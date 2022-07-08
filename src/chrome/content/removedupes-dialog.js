@@ -164,7 +164,7 @@ function initDupeReviewDialog() {
   document.getElementById('keepPresetOriginalButton')
 	  .setAttribute('hidden',(!originalsFolderUris));
   initializeFolderPicker();
-  document.getElementById('action').value = RemoveDupes.Prefs.get('default_action', 'move_to_chosen_folder');
+  document.getElementById('action').value = RemoveDupes.Prefs.get('default_action', null);
   confirmPermanentDeletion = RemoveDupes.Prefs.get("confirm_permanent_deletion", true);
   dupeSetTree = document.getElementById("dupeSetsTree");
 
@@ -218,9 +218,13 @@ function initDupeReviewDialog() {
     }
   }
   if (! dupesKnownNotToHaveCommonAccount) {
-    document.getElementById('action').value = 'move_to_account_trash';
-    document.getElementById('move_to_common_account_trash_action').hidden = false;
-    document.getElementById('move_to_common_account_trash_action').disabled = false;
+#ifdef DEBUG_initDupeReviewDialog
+    console.log('dupes have common account');
+#endif
+    document.getElementById('action').value = 'move_to_common_account_trash';
+    let move_to_common_trash_element =  document.getElementById('move_to_common_account_trash_action');
+    move_to_common_trash_element.hidden = false;
+    move_to_common_trash_element.disabled = false;
   }
   initializeDuplicateSetsTree();
 }
@@ -700,7 +704,7 @@ function onAccept() {
       RemoveDupes.namedAlert(window, 'no_folder_selected');
     }
     moveTargetFolderUri = dupeMoveTargetFolder.URI;
-  case 'move_to_account_trash':
+  case 'move_to_common_account_trash':
     if (!commonRootFolder) {
       // This shouldn't happen, but let's be on the safe side:
       RemoveDupes.namedAlert(window, 'no_common_account');
