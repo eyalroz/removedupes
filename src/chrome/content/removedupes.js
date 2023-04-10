@@ -700,24 +700,29 @@ RemoveDupes.MessengerOverlay = {
 
       var folderMessageHdrsIterator;
       try {
-#ifdef DEBUG_populateDupeSetsHash
-        console.log('trying getMessages(msgWindows) for folder ' + folder.abbreviatedName);
-#endif
-        folderMessageHdrsIterator =
-          folder.getMessages(msgWindow);
+          folderMessageHdrsIterator = folder.messages;
       } catch(ex) {
         try {
-#ifdef DEBUG_populateDupeSetsHash
-          console.log('trying getMessages() for folder ' + folder.abbreviatedName);
-#endif
-          folderMessageHdrsIterator = folder.messages;
+          folderMessageHdrsIterator = folder.getMessages(msgWindow);
         } catch(ex) {
-#ifdef DEBUG
-          console.log('accessing messages failed for folder ' + folder.abbreviatedName + ' :\n' + ex);
-#else
-          dump(RemoveDupes.Strings.format('failed_getting_messages', [folder.abbreviatedName]) + '\n');
-#endif
+          console.error('Failed obtaining the messages iterator for folder ${folder.name}');
+          console.error(RemoveDupes.Strings.format('failed_getting_messages', [folder.name]) + '\n');
+          dump(RemoveDupes.Strings.format('failed_getting_messages', [folder.name]) + '\n');
         }
+      }
+
+      if (! folderMessageHdrsIterator) {
+        console.error('The messages iterator for folder ${folder.name} is null');
+        console.error(RemoveDupes.Strings.format('failed_getting_messages', [folder.name]) + '\n');
+        dump(RemoveDupes.Strings.format('failed_getting_messages', [folder.name]) + '\n');
+#ifdef DEBUG_populateDupeSetsHash
+        i++;
+#endif
+        maybeNext = foldersIterator.next();
+#ifdef DEBUG_populateDupeSetsHash
+        console.log('next()ed!');
+#endif
+        continue;
       }
 
       while (   folderMessageHdrsIterator.hasMoreElements()
