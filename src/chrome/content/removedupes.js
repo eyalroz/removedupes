@@ -102,8 +102,7 @@ RemoveDupes.MessengerOverlay = {
 
     if (searchData.topFolders.length == 0) {
       // no folders selected; we shouldn't get here
-      RemoveDupes.MessengerOverlay.abortDupeSearch(
-        searchData,'no_folders_selected');
+      RemoveDupes.MessengerOverlay.abortDupeSearch(searchData,'no_folders_selected');
       return;
     }
 
@@ -579,10 +578,8 @@ RemoveDupes.MessengerOverlay = {
         + '|^#=)A?mUi5|';
     }
     if (searchData.useCriteria['recipients']) {
-      retVal +=
-        (searchData.compareStrippedAndSortedAddresses ?
-         RemoveDupes.MessengerOverlay
-                   .stripAndSortAddresses(messageHdr.mime2DecodedRecipients) :
+      retVal += (searchData.compareStrippedAndSortedAddresses ?
+         RemoveDupes.MessengerOverlay.stripAndSortAddresses(messageHdr.mime2DecodedRecipients) :
          messageHdr.recipients)
         + '|Ei4iXn=Iv*|';
     }
@@ -591,10 +588,8 @@ RemoveDupes.MessengerOverlay = {
     // It might not work but we don't have immediate access to the decoded
     // version...
     if (searchData.useCriteria['cc_list']) {
-      retVal +=
-        (searchData.compareStrippedAndSortedAddresses ?
-         RemoveDupes.MessengerOverlay
-                    .stripAndSortAddresses(messageHdr.ccList) :
+      retVal += (searchData.compareStrippedAndSortedAddresses ?
+         RemoveDupes.MessengerOverlay.stripAndSortAddresses(messageHdr.ccList) :
          messageHdr.ccList)
         + '|w7Exh\' s%k|';
     }
