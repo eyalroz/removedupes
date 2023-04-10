@@ -2,15 +2,12 @@ var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedup
 if ("undefined" == typeof(ObjectUtils)) {
   var { ObjectUtils } = ChromeUtils.import("resource://gre/modules/ObjectUtils.jsm");
 }
+if ("undefined" == typeof(ImapService)) {
+  var { ImapService } = ChromeUtils.import("resource://gre/modules/ImapService.jsm");
+}
 if ("undefined" == typeof(messenger)) {
   var messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
 }
-
-RemoveDupes.__defineGetter__("ImapService", function() {
-  delete RemoveDupes.ImapService;
-  return RemoveDupes.ImapService =
-    Cc['@mozilla.org/messenger/imapservice;1'].getService(Ci.nsIImapService);
-});
 
 RemoveDupes.MessengerOverlay = {
 
@@ -37,7 +34,6 @@ RemoveDupes.MessengerOverlay = {
   },
 
   // see searchAndRemoveDuplicateMessages
-  EventTarget : null,
   StatusTextField : null,
   originalsFolders : null,
   originalsFolderUris : null,
@@ -56,19 +52,6 @@ RemoveDupes.MessengerOverlay = {
     RemoveDupes.MessengerOverlay.setNamedStatus('searching_for_dupes');
 
     // we'll need this for some calls involving UrlListeners
-
-    if (RemoveDupes.MessengerOverlay.eventTarget == null) {
-      if ("nsIThreadManager" in Ci) {
-         RemoveDupes.MessengerOverlay.eventTarget =
-           Cc['@mozilla.org/thread-manager;1'].getService().currentThread;
-      } else {
-         var eventQueueService =
-           Cc['@mozilla.org/event-queue-service;1'].getService(Ci.nsIEventQueueService);
-         RemoveDupes.MessengerOverlay.eventTarget =
-           eventQueueService.getSpecialEventQueue(
-             eventQueueService.CURRENT_THREAD_EVENT_QUEUE);
-      }
-    }
 
     var searchData = new RemoveDupes.DupeSearchData();
     // the marked 'originals folders' are only used as such
@@ -240,14 +223,12 @@ RemoveDupes.MessengerOverlay = {
     try {
       var imapFolder = folder.QueryInterface(Ci.nsIMsgImapMailFolder);
       var listener = new RemoveDupes.UpdateFolderDoneListener(folder,searchData);
-      var dummyUrl = new Object;
-      RemoveDupes.ImapService.selectFolder(RemoveDupes.MessengerOverlay.eventTarget, folder, listener, msgWindow, dummyUrl);
+      ImapService.liteSelectFolder(folder, listener, msgWindow);
       // no traversal of children - the listener will take care of that in due time
 #ifdef DEBUG_addSearchFolders
       console.log('returning from addSearchFolders for folder ' + folder.abbreviatedName + ':\ntriggered IMAP folder update');
 #endif
       return;
-
     } catch (ex) {}
 
     // Is this a locally-stored folder with its DB out-of-date?
