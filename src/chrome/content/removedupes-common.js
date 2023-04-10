@@ -6,19 +6,13 @@ const Ci = Components.interfaces;
 var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 var { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm");
 var { Preferences } = ChromeUtils.import("resource://gre/modules/Preferences.jsm");
+var { MailUtils } = ChromeUtils.import("resource:///modules/MailUtils.jsm");
 
 if ("undefined" == typeof(messenger)) {
   var messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
 }
 
 var RemoveDupes = {};
-
-// TODO: Do we even need to do this? If so, in what TB versions?
-if ("undefined" == typeof(MailUtils)) {
-  try {
-    Components.utils.import("resource:///modules/MailUtils.js");
-  } catch(ex) { }
-};
 
 try {
   // for some reason this is no longer defined recent Seamonkey trunk versions
