@@ -13,7 +13,7 @@
 <!ENTITY message_comparison.message_id.label "מזהה הודעה">
 <!ENTITY message_comparison.num_lines.label "מספר שורות בהודעה">
 <!ENTITY message_comparison.send_time.label "זמן משלוח">
-<!ENTITY message_comparison.size.label "גודל">
+<!ENTITY message_comparison.size.label "גודל (כותרות וגוף)">
 <!ENTITY message_comparison.subject.label "נושא">
 <!ENTITY message_comparison.folder.label "תיקיה">
 <!ENTITY message_comparison.body.label "גוף ההודעה">

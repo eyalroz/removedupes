@@ -13,7 +13,7 @@
 <!ENTITY message_comparison.message_id.label "郵件 ID">
 <!ENTITY message_comparison.num_lines.label "郵件行數">
 <!ENTITY message_comparison.send_time.label "傳送時間">
-<!ENTITY message_comparison.size.label "大小">
+<!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
 <!ENTITY message_comparison.subject.label "主旨">
 <!ENTITY message_comparison.folder.label "資料夾">
 <!ENTITY message_comparison.body.label "內文">

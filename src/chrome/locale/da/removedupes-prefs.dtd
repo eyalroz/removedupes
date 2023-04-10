@@ -13,7 +13,7 @@
 <!ENTITY message_comparison.message_id.label "Meddelelses-ID">
 <!ENTITY message_comparison.num_lines.label "Antal linjer i meddelelse">
 <!ENTITY message_comparison.send_time.label "Dato">
-<!ENTITY message_comparison.size.label "Størrelse">
+<!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
 <!ENTITY message_comparison.subject.label "Emne">
 <!ENTITY message_comparison.folder.label "Mappe">
 <!ENTITY message_comparison.body.label "Meddelelsestekst">

@@ -18,7 +18,7 @@
 <!ENTITY removedupes_dialog.line_count "行数">
 <!ENTITY removedupes_dialog.date "日期">
 <!ENTITY removedupes_dialog.send_time "发送时间">
-<!ENTITY removedupes_dialog.size "大小">
+<!ENTITY removedupes_dialog.size "Size (Headers &amp; Body)">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "预设原始文件夹">
 <!ENTITY removedupes_dialog.keep_first.label "第一个副本">
 <!ENTITY removedupes_dialog.keep_last.label "最后一个副本">

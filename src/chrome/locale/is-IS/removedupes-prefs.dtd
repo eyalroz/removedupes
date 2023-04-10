@@ -13,7 +13,7 @@
 <!ENTITY message_comparison.message_id.label "Auðkenni skeytis - ID">
 <!ENTITY message_comparison.num_lines.label "Fjöldi lína í skeyti">
 <!ENTITY message_comparison.send_time.label "Sendingartími">
-<!ENTITY message_comparison.size.label "Stærð">
+<!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
 <!ENTITY message_comparison.subject.label "Efnislína">
 <!ENTITY message_comparison.folder.label "Mappa">
 <!ENTITY message_comparison.body.label "Meginefni">

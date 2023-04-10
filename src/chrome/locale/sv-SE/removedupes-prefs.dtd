@@ -13,7 +13,7 @@
 <!ENTITY message_comparison.message_id.label "Meddelande-ID">
 <!ENTITY message_comparison.num_lines.label "Antal rader i meddelandet">
 <!ENTITY message_comparison.send_time.label "Tidpunkt för sändning ('Datum')">
-<!ENTITY message_comparison.size.label "Storlek">
+<!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
 <!ENTITY message_comparison.subject.label "Ämne">
 <!ENTITY message_comparison.folder.label "Mapp">
 <!ENTITY message_comparison.body.label "Brödtext">

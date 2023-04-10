@@ -18,7 +18,7 @@
 <!ENTITY removedupes_dialog.line_count "本文行数">
 <!ENTITY removedupes_dialog.date "日時">
 <!ENTITY removedupes_dialog.send_time "送信日時">
-<!ENTITY removedupes_dialog.size "サイズ">
+<!ENTITY removedupes_dialog.size "Size (Headers &amp; Body)">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "オリジナルのセット">
 <!ENTITY removedupes_dialog.keep_first.label "上段のメッセージのみ保持">
 <!ENTITY removedupes_dialog.keep_last.label "下段のメッセージのみ保持">

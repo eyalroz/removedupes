@@ -13,7 +13,7 @@
 <!ENTITY message_comparison.message_id.label "ID sporočila">
 <!ENTITY message_comparison.num_lines.label "Število vrstic sporočila">
 <!ENTITY message_comparison.send_time.label "Čas pošiljanja">
-<!ENTITY message_comparison.size.label "Velikost">
+<!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
 <!ENTITY message_comparison.subject.label "Zadeva">
 <!ENTITY message_comparison.folder.label "Mapa">
 <!ENTITY message_comparison.body.label "Telo">

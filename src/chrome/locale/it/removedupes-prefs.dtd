@@ -13,7 +13,7 @@
 <!ENTITY message_comparison.message_id.label "ID del messaggio">
 <!ENTITY message_comparison.num_lines.label "Numero di righe nel messaggio">
 <!ENTITY message_comparison.send_time.label "Ora di invio">
-<!ENTITY message_comparison.size.label "Dimensione">
+<!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
 <!ENTITY message_comparison.subject.label "Oggetto">
 <!ENTITY message_comparison.folder.label "Cartella">
 <!ENTITY message_comparison.body.label "Corpo">

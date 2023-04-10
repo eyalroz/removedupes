@@ -18,7 +18,7 @@
 <!ENTITY removedupes_dialog.line_count "# lína">
 <!ENTITY removedupes_dialog.date "Dagsetning">
 <!ENTITY removedupes_dialog.send_time "Sendingartími">
-<!ENTITY removedupes_dialog.size "Stærð">
+<!ENTITY removedupes_dialog.size "Size (Headers &amp; Body)">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "Forstilla upprunalegt">
 <!ENTITY removedupes_dialog.keep_first.label "Fyrsta afrit">
 <!ENTITY removedupes_dialog.keep_last.label "Síðasta afrit">

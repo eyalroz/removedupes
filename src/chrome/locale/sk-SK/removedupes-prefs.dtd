@@ -13,7 +13,7 @@
 <!ENTITY message_comparison.message_id.label "ID správy">
 <!ENTITY message_comparison.num_lines.label "Počet riadkov v správe">
 <!ENTITY message_comparison.send_time.label "Čas odoslania">
-<!ENTITY message_comparison.size.label "Veľkosť">
+<!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
 <!ENTITY message_comparison.subject.label "Predmet">
 <!ENTITY message_comparison.folder.label "Priečinok">
 <!ENTITY message_comparison.body.label "Telo správy">

@@ -18,7 +18,7 @@
 <!ENTITY removedupes_dialog.line_count "# Řádky">
 <!ENTITY removedupes_dialog.date "Datum">
 <!ENTITY removedupes_dialog.send_time "Čas">
-<!ENTITY removedupes_dialog.size "Velikost">
+<!ENTITY removedupes_dialog.size "Size (Headers &amp; Body)">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "Nastavit původní">
 <!ENTITY removedupes_dialog.keep_first.label "První kopie">
 <!ENTITY removedupes_dialog.keep_last.label "Poslední kopie">

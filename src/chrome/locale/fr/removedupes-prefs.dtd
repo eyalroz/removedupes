@@ -13,7 +13,7 @@
 <!ENTITY message_comparison.message_id.label "Identifiant du message">
 <!ENTITY message_comparison.num_lines.label "Nombre de lignes du message">
 <!ENTITY message_comparison.send_time.label "Date d'envoi">
-<!ENTITY message_comparison.size.label "Taille">
+<!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
 <!ENTITY message_comparison.subject.label "Sujet">
 <!ENTITY message_comparison.folder.label "Dossier">
 <!ENTITY message_comparison.body.label "Contenu">

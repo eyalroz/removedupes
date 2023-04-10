@@ -18,7 +18,7 @@
 <!ENTITY removedupes_dialog.line_count "# Lines">
 <!ENTITY removedupes_dialog.date "Date">
 <!ENTITY removedupes_dialog.send_time "Send Time">
-<!ENTITY removedupes_dialog.size "Size">
+<!ENTITY removedupes_dialog.size "Size (Headers &amp; Body)">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "Preset Originals">
 <!ENTITY removedupes_dialog.keep_first.label "First copy">
 <!ENTITY removedupes_dialog.keep_last.label "Last copy">
