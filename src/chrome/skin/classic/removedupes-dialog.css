@@ -2,6 +2,7 @@
 treechildren::-moz-tree-cell(keep) {
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gYZEhY5aTa3XQAAAJZJREFUOMvV0jEOQVEQRuEvUSlFvF5iC5YgdiGWwTLYhVgEEYl4GqHSSixAVBSeZnrv3orpJplz/kxm+LdqYo91rmCOCscceIA3Xuinwi1cI32Sk74IeItGKjwO+IFeKtzFPQSjb8MrlCiib2AT8LJOWhnD55BMo7+hXUdQBFzhgmecbZiycwenkFSY5ZyswAG7eN0frw+91iN6CA2PcQAAAABJRU5ErkJggg==) no-repeat;
   background-position: center center;
+  background-repeat: no-repeat;
 }
 
 treechildren::-moz-tree-cell(delete) {
@@ -9,13 +10,11 @@ treechildren::-moz-tree-cell(delete) {
 }
 
 dialog[platform="Darwin"] treechildren::-moz-tree-cell(keep) {
-  background: url("chrome://messenger/skin/icons/check.png") no-repeat;
-  background-position: center center;
+  background-image: "chrome://global/skin/icons/check.svg";
 }
 
 dialog[platform="Darwin"] treechildren::-moz-tree-cell(delete) {
-  background: url("chrome://messenger/skin/icons/dot.png") no-repeat;
-  background-position: center center;
+  background-image: "chrome://messenger/skin/icons/unread-dot.svg";
 }
 
 treecol[comparisonCriterion] {
