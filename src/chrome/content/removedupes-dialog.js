@@ -704,6 +704,7 @@ function onAccept() {
       RemoveDupes.namedAlert(window, 'no_folder_selected');
     }
     moveTargetFolderUri = dupeMoveTargetFolder.URI;
+    break;
   case 'move_to_common_account_trash':
     if (!commonRootFolder) {
       // This shouldn't happen, but let's be on the safe side:
