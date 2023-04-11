@@ -702,6 +702,7 @@ function onAccept() {
 	console.log("move to chosen folder");
     if (!dupeMoveTargetFolder) {
       RemoveDupes.namedAlert(window, 'no_folder_selected');
+      return false;
     }
     moveTargetFolderUri = dupeMoveTargetFolder.URI;
     break;
