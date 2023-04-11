@@ -695,6 +695,7 @@ function onAccept() {
 
   let action = document.getElementById('action').getAttribute('value');
   let deletePermanently = false;
+  let moveTargetFolderUri = null;
   switch (action) {
   case 'delete_permanently':
     deletePermanently = true;
