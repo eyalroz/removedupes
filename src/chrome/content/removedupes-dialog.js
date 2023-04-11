@@ -697,9 +697,9 @@ function onAccept() {
   let deletePermanently = false;
   switch (action) {
   case 'delete_permanently':
-    deletePermanently = true; break;
+    deletePermanently = true;
+    break;
   case 'move_to_chosen_folder':
-	console.log("move to chosen folder");
     if (!dupeMoveTargetFolder) {
       RemoveDupes.namedAlert(window, 'no_folder_selected');
       return false;
@@ -710,16 +710,14 @@ function onAccept() {
     if (!commonRootFolder) {
       // This shouldn't happen, but let's be on the safe side:
       RemoveDupes.namedAlert(window, 'no_common_account');
-      RemoveDupes.namedAlert(window, 'Duplicate messages don\'t all share the same account.');
       return false;
     }
     moveTargetFolderUri = commonRootFolder.getFolderWithFlags(RemoveDupes.FolderFlags.Trash).URI;
     break;
   default:
-	alert("no such action " + action);
+    alert("No such action '" + action + "'");
     return false;
   }
-
 
   var retVal = RemoveDupes.Removal.removeDuplicates(
     window,
