@@ -31,8 +31,6 @@
 <!ENTITY action.delete_permanently.accesskey "p">
 <!ENTITY action.move_to_common_account_trash.label "Move to account trash folder">
 <!ENTITY action.move_to_common_account_trash.accesskey "r">
-<!ENTITY action.move_to_common_account_trash.label "Move to account trash folder">
-<!ENTITY action.move_to_common_account_trash.accesskey "r">
 <!ENTITY action.move_to_chosen_folder.label "Move to:">
 <!ENTITY action.move_to_chosen_folder.accesskey "m">
 <!ENTITY removeduplicates-button.label "Remove Dupes">
