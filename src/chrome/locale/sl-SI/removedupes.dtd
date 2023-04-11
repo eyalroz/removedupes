@@ -29,6 +29,8 @@
 <!ENTITY removedupes_dialog.action_label "Dejanje:">
 <!ENTITY action.delete_permanently.label "Trajno izbriši">
 <!ENTITY action.delete_permanently.accesskey "T">
+<!ENTITY action.move_to_common_account_trash.label "Move to account trash folder">
+<!ENTITY action.move_to_common_account_trash.accesskey "r">
 <!ENTITY action.move_to_chosen_folder.label "Premakni v:">
 <!ENTITY action.move_to_chosen_folder.accesskey "P">
 <!ENTITY removeduplicates-button.label "Odstrani podvojena sporočila">

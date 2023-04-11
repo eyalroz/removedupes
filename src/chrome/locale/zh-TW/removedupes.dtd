@@ -29,6 +29,8 @@
 <!ENTITY removedupes_dialog.action_label "動作:">
 <!ENTITY action.delete_permanently.label "永久刪除">
 <!ENTITY action.delete_permanently.accesskey "p">
+<!ENTITY action.move_to_common_account_trash.label "Move to account trash folder">
+<!ENTITY action.move_to_common_account_trash.accesskey "r">
 <!ENTITY action.move_to_chosen_folder.label "移至:">
 <!ENTITY action.move_to_chosen_folder.accesskey "m">
 <!ENTITY removeduplicates-button.label "移除重複">

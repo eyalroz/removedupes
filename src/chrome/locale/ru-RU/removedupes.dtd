@@ -29,6 +29,8 @@
 <!ENTITY removedupes_dialog.action_label "Действие:">
 <!ENTITY action.delete_permanently.label "Удалять">
 <!ENTITY action.delete_permanently.accesskey "У">
+<!ENTITY action.move_to_common_account_trash.label "Move to account trash folder">
+<!ENTITY action.move_to_common_account_trash.accesskey "r">
 <!ENTITY action.move_to_chosen_folder.label "Перемещать в:">
 <!ENTITY action.move_to_chosen_folder.accesskey "П">
 <!ENTITY removeduplicates-button.label "Удалить дубликаты">

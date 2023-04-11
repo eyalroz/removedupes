@@ -29,6 +29,8 @@
 <!ENTITY removedupes_dialog.action_label "Handling:">
 <!ENTITY action.delete_permanently.label "Slet permanent">
 <!ENTITY action.delete_permanently.accesskey "p">
+<!ENTITY action.move_to_common_account_trash.label "Move to account trash folder">
+<!ENTITY action.move_to_common_account_trash.accesskey "r">
 <!ENTITY action.move_to_chosen_folder.label "Flyt til:">
 <!ENTITY action.move_to_chosen_folder.accesskey "F">
 <!ENTITY removeduplicates-button.label "Fjern dubletter">

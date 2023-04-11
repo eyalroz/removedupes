@@ -29,6 +29,8 @@
 <!ENTITY removedupes_dialog.action_label "Postup">
 <!ENTITY action.delete_permanently.label "Natrvalo odstrániť">
 <!ENTITY action.delete_permanently.accesskey "N">
+<!ENTITY action.move_to_common_account_trash.label "Move to account trash folder">
+<!ENTITY action.move_to_common_account_trash.accesskey "r">
 <!ENTITY action.move_to_chosen_folder.label "Presunúť do:">
 <!ENTITY action.move_to_chosen_folder.accesskey "P">
 <!ENTITY removeduplicates-button.label "Odstrániť duplicity">

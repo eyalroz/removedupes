@@ -29,6 +29,8 @@
 <!ENTITY removedupes_dialog.action_label "Aðgerð:">
 <!ENTITY action.delete_permanently.label "Eyða endanlega">
 <!ENTITY action.delete_permanently.accesskey "n">
+<!ENTITY action.move_to_common_account_trash.label "Move to account trash folder">
+<!ENTITY action.move_to_common_account_trash.accesskey "r">
 <!ENTITY action.move_to_chosen_folder.label "Færa í:">
 <!ENTITY action.move_to_chosen_folder.accesskey "f">
 <!ENTITY removeduplicates-button.label "Fjarlægja afrit">

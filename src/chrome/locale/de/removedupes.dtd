@@ -29,6 +29,8 @@
 <!ENTITY removedupes_dialog.action_label "Aktion:">
 <!ENTITY action.delete_permanently.label "Vollständiges löschen (nicht in den Papierkorb verschieben)">
 <!ENTITY action.delete_permanently.accesskey "v">
+<!ENTITY action.move_to_common_account_trash.label "Move to account trash folder">
+<!ENTITY action.move_to_common_account_trash.accesskey "r">
 <!ENTITY action.move_to_chosen_folder.label "Verschieben nach:">
 <!ENTITY action.move_to_chosen_folder.accesskey "V">
 <!ENTITY removeduplicates-button.label "Duplikate löschen">

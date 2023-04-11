@@ -29,6 +29,8 @@
 <!ENTITY removedupes_dialog.action_label "Azione:">
 <!ENTITY action.delete_permanently.label "Elimina definitivamente">
 <!ENTITY action.delete_permanently.accesskey "d">
+<!ENTITY action.move_to_common_account_trash.label "Move to account trash folder">
+<!ENTITY action.move_to_common_account_trash.accesskey "r">
 <!ENTITY action.move_to_chosen_folder.label "Sposta in:">
 <!ENTITY action.move_to_chosen_folder.accesskey "s">
 <!ENTITY removeduplicates-button.label "Rimuovi duplicati">
