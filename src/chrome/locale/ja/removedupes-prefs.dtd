@@ -39,7 +39,7 @@
 <!ENTITY message_comparison.time_comparison_resolution.month.label "月">
 <!ENTITY message_comparison.time_comparison_resolution.year.label "年">
 <!ENTITY general_settings.tab_title "全般設定">
-<!ENTITY general_settings.search_subfolders.label "選択したフォルダのサブフォルダーを検索する">
+<!ENTITY general_settings.search_subfolders.label "選択したフォルダーのサブフォルダーを検索する">
 <!ENTITY general_settings.search_subfolders_first.label "サブフォルダーの検索を優先する (postorder) ">
 <!ENTITY general_settings.use_dialog_before_removal.label "削除前に検索結果を表示する">
 <!ENTITY general_settings.default_action.description "重複メッセージのデフォルト処理：">
