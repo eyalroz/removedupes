@@ -1,12 +1,12 @@
 var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
 if ("undefined" == typeof(ObjectUtils)) {
-  var { ObjectUtils } = ChromeUtils.import("resource://gre/modules/ObjectUtils.jsm");
+  var ObjectUtils = ChromeUtils.import("resource://gre/modules/ObjectUtils.jsm").ObjectUtils;
 }
 if ("undefined" == typeof(ImapService)) {
-  var { ImapService } = ChromeUtils.import("resource://gre/modules/ImapService.jsm");
+  var ImapService = ChromeUtils.import("resource://gre/modules/ImapService.jsm").ImapService ;
 }
 if ("undefined" == typeof(messenger)) {
-  var messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
+  const messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
 }
 
 RemoveDupes.MessengerOverlay = {

@@ -3,10 +3,9 @@ var EXPORTED_SYMBOLS = ["RemoveDupes"];
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 
-var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
-var { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm");
-var { Preferences } = ChromeUtils.import("resource://gre/modules/Preferences.jsm");
-var { MailUtils } = ChromeUtils.import("resource:///modules/MailUtils.jsm");
+const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+const Preferences = ChromeUtils.import("resource://gre/modules/Preferences.jsm").Preferences;
+const MailUtils = ChromeUtils.import("resource:///modules/MailUtils.jsm").MailUtils;
 
 if ("undefined" == typeof(messenger)) {
   var messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
@@ -68,8 +67,7 @@ RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
   let messageFolder = null;
 
   try {
-    messageFolder = // MailServices.folderLookup.getFolderForURL(uri);
-      RemoveDupes.FolderLookupService.getFolderForURL(uri);
+    messageFolder = RemoveDupes.FolderLookupService.getFolderForURL(uri);
   } catch(ex) { 
 #ifdef DEBUG_GetMsgFolderFromUri
       console.log('RemoveDupes.FolderLookupService.getFolderForURL(' + uri + ') failed:\n' + ex);
@@ -77,7 +75,7 @@ RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
   }
   if (messageFolder != null) { 
 #ifdef DEBUG_GetMsgFolderFromUri
-      console.log('got folder from URI with MailServices.folderLookup.getFolderForURL(' + uri + ')');
+      console.log('got folder from URI with RemoveDupes.folderLookup.getFolderForURL(' + uri + ')');
 #endif
     return messageFolder; 
 }

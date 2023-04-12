@@ -1,9 +1,8 @@
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 
-var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
-var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
-var { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm");
+const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+const RemoveDupes = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js").RemoveDupes;
 
 var msgWindow;
   // the 3-pane window which opened us
