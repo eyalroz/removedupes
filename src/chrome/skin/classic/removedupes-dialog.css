@@ -1,24 +1,24 @@
 treechildren::-moz-tree-cell(keep) {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="context-fill" fill-opacity="context-fill-opacity"><path stroke="context-stroke none" stroke-width="0.5" d="m6.023 13-4.84-4.839a.626.626 0 0 1 .885-.885l4.307 4.308 7.559-7.561a.628.628 0 0 1 .885 0 .628.628 0 0 1 0 .885l-8.09 8.09-.706.002z"/> </svg>');
+  background-image: url('data:image/svg+xml;utf8, <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"> <rect fill="none" stroke="context-stroke" stroke-opacity="1" width="15" height="15" x="0.5" y="0.5" rx="2" ry="2" /> <path fill="context-fill" fill-opacity="context-fill-opacity" d="M6 14a1 1 0 0 1-.7-.3l-3-3a1 1 0 0 1 1.4-1.4l2.16 2.15 6.32-9.02a1 1 0 0 1 1.64 1.14l-7 10a1 1 0 0 1-.73.43.86.86 0 0 1-.09 0z"/> </svg>');
   background-position: center center;
   background-repeat: no-repeat;
 }
 
 treechildren::-moz-tree-cell(delete) {
-  background-image: url('data:image/svg+xml;utf8,<svg width="4" height="4" xmlns="http://www.w3.org/2000/svg" fill="context-fill"> <circle cx="2" cy="2" r="2" /> </svg>');
+  background-image: url('data:image/svg+xml;utf8, <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"> <rect fill="none" stroke="context-stroke" stroke-opacity="1" width="15" height="15" x="0.5" y="0.5" rx="2" ry="2" /> </svg>');
   background-position: center center;
   background-repeat: no-repeat;
 }
 
 @media (prefers-color-scheme: dark) {
   treechildren::-moz-tree-cell(keep) {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="white" fill-opacity="context-fill-opacity"><path stroke="white none" stroke-width="0.5" d="m6.023 13-4.84-4.839a.626.626 0 0 1 .885-.885l4.307 4.308 7.559-7.561a.628.628 0 0 1 .885 0 .628.628 0 0 1 0 .885l-8.09 8.09-.706.002z"/> </svg>');
+    background-image: url('data:image/svg+xml;utf8, <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"> <rect fill="none" stroke="white" stroke-opacity="1" width="15" height="15" x="0.5" y="0.5" rx="2" ry="2" /> <path fill="white" fill-opacity="context-fill-opacity" d="M6 14a1 1 0 0 1-.7-.3l-3-3a1 1 0 0 1 1.4-1.4l2.16 2.15 6.32-9.02a1 1 0 0 1 1.64 1.14l-7 10a1 1 0 0 1-.73.43.86.86 0 0 1-.09 0z"/> </svg>');
     background-position: center center;
     background-repeat: no-repeat;
   }
 
   treechildren::-moz-tree-cell(delete) {
-    background-image: url('data:image/svg+xml;utf8,<svg width="4" height="4" xmlns="http://www.w3.org/2000/svg" fill="white"> <circle cx="2" cy="2" r="2" /> </svg>');
+    background-image: url('data:image/svg+xml;utf8, <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"> <rect fill="none" stroke="white" stroke-opacity="1" width="15" height="15" x="0.5" y="0.5" rx="2" ry="2" /> </svg>');
     background-position: center center;
     background-repeat: no-repeat;
   }
