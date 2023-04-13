@@ -1,9 +1,9 @@
-<!ENTITY prefs_dialog_title "Remove Duplicate Messages - Настройки">
+<!ENTITY prefs_dialog_title "Удаление дублей сообщений - Настройки">
 <!ENTITY guide-url "http://not.yet.written/">
 <!ENTITY message_comparison.tab_title "Сравнение сообщений">
-<!ENTITY message_comparison.criteria_box.label "Message elements used as comparison criteria">
-<!ENTITY message_comparison.skip_special_folders.label "Skip Special Folders (Sent, Drafts etc.)">
-<!ENTITY message_comparison.skip_imap_deleted_messages.label "Skip IMAP messages marked 'Deleted'">
+<!ENTITY message_comparison.criteria_box.label "Элементы сообщений используемые как критерии сравнения">
+<!ENTITY message_comparison.skip_special_folders.label "Пропускать специальные папки (Отправленные, Черновики и т.п.)">
+<!ENTITY message_comparison.skip_imap_deleted_messages.label "Пропускать IMAP сообщения отмеченные как 'Deleted'">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Compare addresses stripped and sorted">
 <!ENTITY message_comparison.tab_description "Параметры сообщения, используемые для сравнения:">
 <!ENTITY message_comparison.author.label "Автор (&apos;От&apos;)">
@@ -50,5 +50,5 @@
 <!ENTITY general_settings.search_subfolders_first.access_key "и">
 <!ENTITY general_settings.search_subfolders.access_key "s">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "с">
-<!ENTITY removedupes-preftree-label "Удалить дубликаты">
-<!ENTITY removedupes-preftree-page-title "Remove Duplicate Messages">
+<!ENTITY removedupes-preftree-label "Удалить дубли">
+<!ENTITY removedupes-preftree-page-title "Удаление дублей сообщений">

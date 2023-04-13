@@ -1,11 +1,11 @@
-<!ENTITY removedupes.title "Remove Duplicate Messages">
-<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Remove Duplicates...">
+<!ENTITY removedupes.title "Удаление дублей сообщений">
+<!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Удаление дублей...">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Set original message folder(s) for next duplicate search">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "o">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "У">
-<!ENTITY removedupes_dialog.dialog_title "Duplicate message review">
+<!ENTITY removedupes_dialog.dialog_title "Обзор дублей сообщений">
 <!ENTITY removedupes_dialog.id "ID сообщения">
 <!ENTITY removedupes_dialog.keep_label "В каждом наборе дубликатов, сохранять:">
 <!ENTITY removedupes_dialog.subject "Тема">
@@ -24,13 +24,13 @@
 <!ENTITY removedupes_dialog.keep_last.label "Последняя копия">
 <!ENTITY removedupes_dialog.keep_none.label "Ни одна">
 <!ENTITY removedupes_dialog.keep_all.label "Все копии">
-<!ENTITY removedupes_dialog.tree_label "Наборы дубликатов:">
+<!ENTITY removedupes_dialog.tree_label "Наборы дублей:">
 <!ENTITY removedupes_dialog.keep_flag "Сохранить?">
 <!ENTITY removedupes_dialog.action_label "Действие:">
 <!ENTITY action.delete_permanently.label "Удалять">
 <!ENTITY action.delete_permanently.accesskey "У">
-<!ENTITY action.move_to_common_account_trash.label "Move to account trash folder">
-<!ENTITY action.move_to_common_account_trash.accesskey "r">
+<!ENTITY action.move_to_common_account_trash.label "Переместить в корзину аккаунта">
+<!ENTITY action.move_to_common_account_trash.accesskey "А">
 <!ENTITY action.move_to_chosen_folder.label "Перемещать в:">
 <!ENTITY action.move_to_chosen_folder.accesskey "П">
 <!ENTITY removeduplicates-button.label "Удалить дубликаты">
