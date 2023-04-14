@@ -302,14 +302,18 @@ RemoveDupes.Removal = {
   //          aborted
   //
   // Also, see createDupesByFolderHashMap for explanation regarding 
-  // the haveMessageRecords parameter
+  // the haveMessageRecords parameter.
+  //
+  // Note: targetFolder is ignored (and should be null) if deletePermanently is true;
+  // but it must be non-null if deletePermanently is false.
+  //
   removeDuplicates : function(
     appWindow,
     msgWindow,
     dupeSetsHashMap,
     deletePermanently,
     confirmPermanentDeletion,
-    targetFolderUri,
+    targetFolder,
     haveMessageRecords) {
     // note that messenger and msgWindow have to be defined! if we're running from the
     // overlay of the 3-pane window, then this is ensured; otherwise,
@@ -318,24 +322,9 @@ RemoveDupes.Removal = {
 
 #ifdef DEBUG_removeDuplicates
     console.log(
-      'in removeDuplicates\ntargetFolderUri = ' + targetFolderUri +
+      'in removeDuplicates\ntargetFolder = ' + targetFolder +
+      '\ntargetFolder.URI = ' + targetFolder.URI +
       '\ndeletePermanently = ' + deletePermanently);
-#endif
-
-    var targetFolder;
-    if (!deletePermanently) {
-      if ((targetFolderUri == null) || (targetFolderUri == "")) {
-        targetFolder = getLocalFoldersTrashFolder().URI;
-      }
-      else targetFolder = RemoveDupes.GetMsgFolderFromUri(targetFolderUri, true);
-      if (!targetFolder) {
-        // TODO: Make namedAlert perform formatting if it gets a non-null, non-empty third argument
-        appWindow.alert(RemoveDupes.Strings.format('no_such_folder', [targetFolderUri]));
-        return false;
-      }
-    }
-#ifdef DEBUG_removeDuplicates
-    console.log('trgetFolder: ' + targetFolder);
 #endif
 
     var dupesByFolderHashMap =

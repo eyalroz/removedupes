@@ -44,6 +44,8 @@ var dupeMoveTargetFolder;
   // ... and thank you very much David Ascher & TB devs for checking in
   // a folder picker without the most basic folder picker functionality,
   // forcing me to write a workaround
+  //
+  // Note: This is a folder, not a folder URI
 
 // indices of columns in dupe tree rows
 // consts
@@ -694,7 +696,7 @@ function onAccept() {
 
   let action = document.getElementById('action').getAttribute('value');
   let deletePermanently = false;
-  let moveTargetFolderUri = null;
+  let moveTargetFolder = null;
   switch (action) {
   case 'delete_permanently':
     deletePermanently = true;
@@ -704,7 +706,7 @@ function onAccept() {
       RemoveDupes.namedAlert(window, 'no_folder_selected');
       return false;
     }
-    moveTargetFolderUri = dupeMoveTargetFolder.URI;
+    moveTargetFolder = dupeMoveTargetFolder;
     break;
   case 'move_to_common_account_trash':
     if (!commonRootFolder) {
@@ -712,7 +714,7 @@ function onAccept() {
       RemoveDupes.namedAlert(window, 'no_common_account');
       return false;
     }
-    moveTargetFolderUri = commonRootFolder.getFolderWithFlags(RemoveDupes.FolderFlags.Trash).URI;
+    moveTargetFolder = commonRootFolder.getFolderWithFlags(RemoveDupes.FolderFlags.Trash);
     break;
   default:
     alert("No such action '" + action + "'");
@@ -725,12 +727,12 @@ function onAccept() {
     dupeSetsHashMap,
     deletePermanently,
     confirmPermanentDeletion,
-    moveTargetFolderUri,
+    moveTargetFolder,
     true // the URI's have been replaced with messageRecords
     );
   if (retVal == false) { return false; }
-  if (action='move_to_chosen_folder' && (moveTargetFolderUri.length > 0)) {
-    RemoveDupes.Prefs.set('default_target_folder', moveTargetFolderUri);
+  if (action='move_to_chosen_folder' && (moveTargetFolder?.URI.length > 0)) {
+    RemoveDupes.Prefs.set('default_target_folder', moveTargetFolder.URI);
   }
   // If we've gotten here, either the deletion was succesful, or it
   // was partially successful, and at any rate - the dialog's contents are
@@ -897,7 +899,7 @@ function sortDupeSetsByField(field) {
 }
 
 function onTargetFolderClick(targetFolder) {
-  dupeMoveTargetFolder = targetFolder;
+  dupeMoveTargetFolder = targetFolder; // Note: Not a URI
 #ifdef DEBUG_onTargetFolderClick
   console.log('in onTargetFolderClick()\ntarget = ' + targetFolder.abbreviatedName);
 #endif

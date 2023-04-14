@@ -971,11 +971,17 @@ RemoveDupes.MessengerOverlay = {
 
     if (!searchData.useReviewDialog)
     {
-      let deletePermanently =
-        (RemoveDupes.Prefs.get('default_action', null) == 'delete_permanently');
-      let targetFolder = deletePermanently ?
-        null :
-        RemoveDupes.Prefs.get('default_target_folder', RemoveDupes.Removal.getLocalFoldersTrashFolder().URI);
+      let deletePermanently = (RemoveDupes.Prefs.get('default_action', null) == 'delete_permanently');
+      let targetFolder = deletePermanently ? null : function() {
+        let targetFolderURI = RemoveDupes.Prefs.get('default_target_folder', null);
+        if (! targetFolderURI) { return RemoveDupes.Removal.getLocalFoldersTrashFolder(); }
+        let result = RemoveDupes.GetMsgFolderFromUri(targetFolderURI, true);
+        if (!result) {
+          appWindow.alert(RemoveDupes.Strings.forma('no_such_folder', [targetFolderURI]));
+          throw 'No such folder ' + targetFolderURI;
+        }
+        return result;
+      }();
       // remove (move to trash or erase completely)
       // without user confirmation or review; we're keeping the first dupe
       // in every sequence of dupes and deleting the rest
