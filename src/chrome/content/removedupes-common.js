@@ -142,8 +142,8 @@ RemoveDupes.Strings = {
     return this.Bundle.GetStringFromName(this.prefix + stringName);
   },
   format: function(stringName, argsToFormat) {
-	return (RemoveDupes.App.versionIsAtLeast("69")) ?
-	  this.Bundle.formatStringFromName(this.prefix + stringName, argsToFormat) :
+    return (RemoveDupes.App.versionIsAtLeast("69")) ?
+      this.Bundle.formatStringFromName(this.prefix + stringName, argsToFormat) :
       this.Bundle.formatStringFromName(this.prefix + stringName, argsToFormat, argsToFormat.length);
   }
 }
@@ -173,11 +173,11 @@ RemoveDupes.App = {
   },
 
   versionIsAtLeast : function(minVersion) {
-  	return this.ensureVersion(minVersion, true);
+    return this.ensureVersion(minVersion, true);
   },
 
   versionIsAtMost : function(maxVersion) {
-  	return this.ensureVersion(maxVersion, false);
+    return this.ensureVersion(maxVersion, false);
   }
 }
 
@@ -403,8 +403,8 @@ RemoveDupes.Removal = {
         let copyService =
           Components.classes["@mozilla.org/messenger/messagecopyservice;1"]
             .getService(Components.interfaces.nsIMsgCopyService);
-		// The copy function name dropped the inital capital sometime between TB 78 and TB 91
-		let copyFunctionName =  ('copyMessages' in copyService) ? 'copyMessages' : 'CopyMessages';
+        // The copy function name dropped the inital capital sometime between TB 78 and TB 91
+        let copyFunctionName = ('copyMessages' in copyService) ? 'copyMessages' : 'CopyMessages';
         copyService[copyFunctionName](
             sourceFolder,
             removalMessageHdrs,

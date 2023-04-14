@@ -163,7 +163,7 @@ function initDupeReviewDialog() {
   // if no folders were pre-set as the 'originals', let's not
   // have the button mentioning them
   document.getElementById('keepPresetOriginalButton')
-	  .setAttribute('hidden',(!originalsFolderUris));
+          .setAttribute('hidden',(!originalsFolderUris));
   initializeFolderPicker();
   document.getElementById('action').value = RemoveDupes.Prefs.get('default_action', null);
   confirmPermanentDeletion = RemoveDupes.Prefs.get("confirm_permanent_deletion", true);
@@ -194,11 +194,11 @@ function initDupeReviewDialog() {
       let dmr = new DupeMessageRecord(dupeSet[i]);
       if (! dupesKnownNotToHaveCommonAccount) {
         if (!commonRootFolder) {
-			commonRootFolder = dmr.rootFolder;
-		}
+          commonRootFolder = dmr.rootFolder;
+        }
         else {
-			dupesKnownNotToHaveCommonAccount = ! (commonRootFolder == dmr.rootFolder);
-		}
+         dupesKnownNotToHaveCommonAccount = ! (commonRootFolder == dmr.rootFolder);
+        }
       }
       dupeSet[i] = dmr;
       if (originalsFolderUris) {

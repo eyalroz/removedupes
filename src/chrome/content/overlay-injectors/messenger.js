@@ -12,7 +12,7 @@ function injectToolbarButton() {
                      label="&removeduplicates-button.label;"
                      tooltiptext="&removeduplicates-button.tip;"
                      type="menu-button"
-					 is="toolbarbutton-menu-button"
+                     is="toolbarbutton-menu-button"
                      insertafter="qfb-show-filter-bar"
                      removable="true"
                      class="toolbarbutton-1 chromeclass-toolbar-additional custombutton">
@@ -79,37 +79,37 @@ function injectOtherElements() {
   WL.injectElements(`
     <keyset id="mailKeys">
       <key id="key-removedupes"
-  	 modifiers="&key-removedupes.modifiers;"
-  	 key="&key-removedupes.keycode;"
-  	 oncommand="RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages();"
+        modifiers="&key-removedupes.modifiers;"
+        key="&key-removedupes.keycode;"
+        oncommand="RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages();"
       /> 
     </keyset>
 
     <popup id="folderPaneContext">
       <menuitem id="removeDuplicatesContextMenuItemsRemove" 
-  	      insertafter="folderPaneContext-copy-location"
-  	      label="&removedupes.remove_duplicates_menuitems.remove.label;"
-  	      oncommand="RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages();" />
+        insertafter="folderPaneContext-copy-location"
+        label="&removedupes.remove_duplicates_menuitems.remove.label;"
+        oncommand="RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages();" />
       <menuitem id="removeDuplicatesContextMenuItemsSetOriginals" 
-  	      insertafter="removeDuplicatesMenuItemsRemove"
-  	      label="&removedupes.remove_duplicates_menuitems.set_originals.label;"
-  	      oncommand="RemoveDupes.MessengerOverlay.setOriginalsFolders();"/> 
+        insertafter="removeDuplicatesMenuItemsRemove"
+        label="&removedupes.remove_duplicates_menuitems.set_originals.label;"
+        oncommand="RemoveDupes.MessengerOverlay.setOriginalsFolders();"/> 
       <menuseparator id="folderPaneContext-removedupes-separator" 
-  	      insertafter="removeDuplicatesMenuItemsSetOriginals" />  
+        insertafter="removeDuplicatesMenuItemsSetOriginals" />  
     </popup> 
     
     <menupopup id="taskPopup">
       <menuseparator id="sep-removedupes"/>
       <menuitem id="removeDuplicatesToolsMenuItemsRemove"
-  	      insertafter="sep-removedupes"
-  	      label="&removedupes.remove_duplicates_menuitems.remove.label;"
-  	      accesskey="&removedupes.remove_duplicates_menuitems.remove.accesskey;" 
-  	      oncommand="RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages();" />
+        insertafter="sep-removedupes"
+        label="&removedupes.remove_duplicates_menuitems.remove.label;"
+        accesskey="&removedupes.remove_duplicates_menuitems.remove.accesskey;" 
+        oncommand="RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages();" />
       <menuitem id="removeDuplicatesToolsMenuItemsSetOriginals" 
-  	      insertafter="removedupes-menuitem"
-  	      label="&removedupes.remove_duplicates_menuitems.set_originals.label;"
-  	      accesskey="&removedupes.remove_duplicates_menuitems.set_originals.accesskey;" 
-  	      oncommand="RemoveDupes.MessengerOverlay.setOriginalsFolders();"/>
+        insertafter="removedupes-menuitem"
+        label="&removedupes.remove_duplicates_menuitems.set_originals.label;"
+        accesskey="&removedupes.remove_duplicates_menuitems.set_originals.accesskey;" 
+        oncommand="RemoveDupes.MessengerOverlay.setOriginalsFolders();"/>
     </menupopup>`,
     [
       "chrome://removedupes/locale/removedupes.dtd",
