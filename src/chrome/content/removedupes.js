@@ -640,6 +640,9 @@ RemoveDupes.MessengerOverlay = {
   // processing, in which suspected sets of dupes are refined
 
   messageBodyFromURI : function(msgURI) {
+//  The following lines don't work because of asynchronicity
+//    let msgHdr = RemoveDupes.GetMsgFolderFromUri(msgURI);
+//    let msgContent = await getRawMessage(msgHdr);
     var msgContent = "";
     var MsgService;
     try {
