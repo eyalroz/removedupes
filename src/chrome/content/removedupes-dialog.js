@@ -44,8 +44,6 @@ var dupeMoveTargetFolder;
   // ... and thank you very much David Ascher & TB devs for checking in
   // a folder picker without the most basic folder picker functionality,
   // forcing me to write a workaround
-  //
-  // Note: This is a folder, not a folder URI
 
 // indices of columns in dupe tree rows
 // consts
@@ -122,9 +120,6 @@ function flagsToString(flags) {
 }
 
 function initDupeReviewDialog() {
-#ifdef DEBUG_initDupeReviewDialog
-    console.log('in initDupeReviewDialog()');
-#endif
 
   // Since we no longer have per-platform-skin support, we set this attribute
   // on our root element, so that, in our stylesheet, we can contextualize using
@@ -172,9 +167,6 @@ function initDupeReviewDialog() {
   // indicate which columns were used in the search
 
   for (let criterion in useCriteria) {
-#ifdef DEBUG_initDupeReviewDialog
-    console.log('criterion = ' + criterion);
-#endif
   if (useCriteria[criterion] &&
       (criterion != 'body'))
       document.getElementById(criterion + 'Column')
@@ -207,10 +199,6 @@ function initDupeReviewDialog() {
         dupeSet[i].toKeep = originalsFolderUris.has(dupeSet[i].folderUri);
       }
       totalNumberOfDupes++;
-#ifdef DEBUG_initDupeReviewDialog
-      console.log('dupe ' + i + ' for hash value ' + hashValue + ':\n' + dupeSet[i].uri);
-#endif
-
     }
     if (!originalsFolderUris) {
       // if we don't have pre-set originals,
@@ -219,9 +207,6 @@ function initDupeReviewDialog() {
     }
   }
   if (! dupesKnownNotToHaveCommonAccount) {
-#ifdef DEBUG_initDupeReviewDialog
-    console.log('dupes have common account');
-#endif
     document.getElementById('action').value = 'move_to_common_account_trash';
     let move_to_common_trash_element =  document.getElementById('move_to_common_account_trash_action');
     move_to_common_trash_element.hidden = false;
@@ -231,10 +216,6 @@ function initDupeReviewDialog() {
 }
 
 function initializeDuplicateSetsTree() {
-
-#ifdef DEBUG_initializeDuplicateSetsTree
-  console.log('dupeSetTree = ' + dupeSetTree);
-#endif
   dupeSetTree.currentItem = null;
 
   createMessageRowTemplate();
@@ -326,16 +307,8 @@ function clearStatusBar() {
 }
 
 function rebuildDuplicateSetsTree() {
-#ifdef DEBUG_rebuildDuplicateSetsTree
-      console.log('in rebuildDuplicateSetsTree');
-#endif
-
   clearStatusBar();
-
   var dupeSetsTreeChildren = document.getElementById("dupeSetsTreeChildren");
-#ifdef DEBUG_rebuildDuplicateSetsTree
-  console.log('dupeSetsTreeChildren = ' + dupeSetsTreeChildren);
-#endif
   if (dupeSetsTreeChildren) {
     dupeSetTree.removeChild(dupeSetsTreeChildren);
   }
@@ -399,17 +372,8 @@ function rebuildDuplicateSetsTree() {
 }
 
 function resetCheckboxValues() {
-#ifdef DEBUG_resetCheckboxValues
-      console.log('in resetCheckboxValues');
-#endif
-
   clearStatusBar();
-
   var dupeSetsTreeChildren = document.getElementById("dupeSetsTreeChildren");
-#ifdef DEBUG_resetCheckboxValues
-  console.log('dupeSetsTreeChildren = ' + dupeSetsTreeChildren);
-#endif
-
   setNamedStatus('main-status-panel','status_panel.updating_list');
 
   numberToKeep = 0;
@@ -455,9 +419,6 @@ function updateStatusBar() {
 // from the messageRecord
 
 function createMessageTreeRow(messageRecord) {
-#ifdef DEBUG_createMessageTreeRow
-  console.log('makeNewRow');
-#endif
 
   var row = messageRowTemplate.cloneNode(true);
     // a shallow clone is enough here
@@ -491,10 +452,6 @@ function createMessageTreeRow(messageRecord) {
      .setAttribute("label", messageRecord.message_id);
   row.childNodes.item(flagsColumnIndex)
      .setAttribute("label", messageRecord.flags);
-#ifdef DEBUG_createMessageTreeRow
-  console.log('messageRecord.lineCount = ' + messageRecord.lineCount);
-#endif
-
   return row;
 }
 
@@ -504,17 +461,6 @@ function createMessageTreeRow(messageRecord) {
 function formatSendTime(sendTimeInSeconds) {
   var date = new Date( sendTimeInSeconds*1000 );
     // the Date() constructor expects miliseconds
-
-#ifdef DEBUG_formatSendTime
-  console.log('sendTimeInSeconds = ' + sendTimeInSeconds);
-  console.log('date = ' + date);
-  console.log('date.getFullYear() = ' + date.getFullYear());
-  console.log('date.getMonth()+1 = ' + date.getMonth()+1);
-  console.log('date.getDate() = ' + date.getDate());
-  console.log('date.getHours() = ' + date.getHours());
-  console.log('date.getMinutes() = ' + date.getMinutes());
-#endif
-
   return DateTimeFormatter.format(date);
 }
 
@@ -522,22 +468,12 @@ function formatSendTime(sendTimeInSeconds) {
 // Toggle the keep status for Space Bar
 
 function onTreeKeyPress(ev) {
-#ifdef DEBUG_onTreeKeyPress
-  console.log('onTreeKeyPress, keycode is ' + ev.keyCode);
-#endif
   if (ev.keyCode == KeyEvent.DOM_VK_SPACE) {
     toggleDeletionForCurrentRow();
   }
 }
 
 function onTreeKeyUp(ev) {
-#ifdef DEBUG_onTreeKeyUp
-  console.log('onTreeKeyUp, keycode is ' + ev.keyCode);
-#endif
-
-#ifdef DEBUG_onTreeKeyPress
-  console.log('selectedRow was ' + selectedRow + ', will now be ' + dupeSetTree.currentIndex);
-#endif
   if (selectedRow != dupeSetTree.currentIndex) {
     loadCurrentRowMessage();
     selectedRow = dupeSetTree.currentIndex;
@@ -556,11 +492,6 @@ function getFocusedDupeTreeItem() {
 function onClickTree(ev) {
 
   dupeSetTreeBoxObject = dupeSetTree;
-
-
-#ifdef DEBUG_onClickTree
-  console.log('in onClickTree()\nclick point = ' + ev.clientX + ':' + ev.clientY);
-#endif
 
   var row = null;
   var col = null;
@@ -582,9 +513,6 @@ function onClickTree(ev) {
       || !getFocusedDupeTreeItem().hasAttribute('indexInDupeSet')
      ) {
     // this isn't a valid cell we can use, or it's in one of the [+]/[-] rows
-#ifdef DEBUG_onClickTree
-    console.log('not a valid cell, doing nothing');
-#endif
     return;
   }
 
@@ -593,9 +521,6 @@ function onClickTree(ev) {
     return;
   }
 
-#ifdef DEBUG_onTreeKeyPress
-  console.log('selectedRow was ' + selectedRow + ', will now be ' + dupeSetTree.currentIndex);
-#endif
   selectedRow = dupeSetTree.currentIndex;
   loadCurrentRowMessage();
 }
@@ -604,32 +529,15 @@ function onClickTree(ev) {
 // When the user selects a message row, we load that message in the 3-pane window
 
 function loadCurrentRowMessage() {
-#ifdef DEBUG_loadCurrentRowMessage
-  console.log('in loadCurrentRowMessage()\ngTree.currentIndex = ' + dupeSetTree.currentIndex);
-#endif
   // when we click somewhere in the tree, the focused element should be an inner 'treeitem'
   var focusedTreeItem = getFocusedDupeTreeItem()
   var messageIndexInDupeSet = focusedTreeItem.getAttribute('indexInDupeSet');
   var dupeSetTreeItem = focusedTreeItem.parentNode.parentNode;
-#ifdef DEBUG_loadCurrentRowMessage
-  var node = dupeSetTreeItem;
-  console.log('dupeSetTreeItem: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
-  var node = dupeSetTreeItem.parentNode;
-  console.log('dupeSetTreeItem.parentNode: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
-  var node = dupeSetTreeItem.parentNode.parentNode;
-  console.log('dupeSetTreeItem.parentNode.parentNode: ' + node + "\ntype: " + node.nodeType + "\nname: " + node.nodeName + "\nvalue:\n" + node.nodeValue + "\ndata:\n" + node.data);
-#endif
   var dupeSetHashValue = dupeSetTreeItem.getAttribute('commonHashValue');
-#ifdef DEBUG_loadCurrentRowMessage
-  console.log('dupeSetHashValue = ' + dupeSetHashValue);
-#endif
   var dupeSetItem;
   try {
     dupeSetItem = dupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
   } catch(ex) {
-#ifdef DEBUG_loadCurrentRowMessage
-  console.log('Error retrieving dupe set item ' + messageIndexInDupeSet + ' in dupe set with hash ' + dupeSetHashValue);
-#endif
     return;
   }
 
@@ -653,9 +561,6 @@ function loadCurrentRowMessage() {
 }
 
 function toggleDeletionForCurrentRow() {
-#ifdef DEBUG_toggleDeletionForCurrentRow
-  console.log('in toggleDeletionForCurrentRow()\ngTree.currentIndex = ' + dupeSetTree.currentIndex);
-#endif
   var focusedTreeItem = getFocusedDupeTreeItem();
 
   // The user has clicked a message row, so change it status
@@ -682,9 +587,6 @@ function toggleDeletionForCurrentRow() {
 }
 
 function onCancel() {
-#ifdef DEBUG_onCancel
-  console.log('in onCancel()');
-#endif
   dupeSetsHashMap = null;
 }
 
@@ -801,18 +703,9 @@ function initializeFolderPicker() {
   } catch(ex) { }
 
   if (!msgFolder) {
-#ifdef DEBUG_initializeFolderPicker
-    for (let prop in RemoveDupes.Removal) {
-      console.log(prop);
-    }
-#endif
     uri = RemoveDupes.Removal.getLocalFoldersTrashFolder().URI;
     msgFolder = RemoveDupes.GetMsgFolderFromUri(uri, false);
   }
-
-#ifdef DEBUG_initializeFolderPicker
-  console.log('setting folder picker to uri:\n' + uri);
-#endif
 
   try {
     document.getElementById('actionTargetFolderPopup').selectFolder(msgFolder);
@@ -826,48 +719,29 @@ function initializeFolderPicker() {
 // column or vice versa
 
 function onClickColumn(ev) {
-#ifdef DEBUG_onClickColumn
-  console.log('in onClickColumn()');
-#endif
   ev.stopPropagation();
 
   var field = ev.target.getAttribute('fieldName');
-
-#ifdef DEBUG_onClickColumn
-  console.log('field = ' + field + '\ngTree.getAttribute(\'sortColumn\') = ' + dupeSetTree.getAttribute('sortColumn') );
-#endif
 
   if (!field)
     return;
 
   if (dupeSetTree.getAttribute('sortColumn') == ev.target.id) {
-#ifdef DEBUG_onClickColumn
-    console.log('reclick ; dupeSetTree.getAttribute(\'sortDirection\') = ' + dupeSetTree.getAttribute('sortDirection'));
-#endif
     // re-clicking the current sort indicator means flipping the sort order
     dupeSetTree.setAttribute('sortDirection',
       (dupeSetTree.getAttribute('sortDirection') == 'ascending') ? 'descending' : 'ascending')
   }
   else {
     if (dupeSetTree.getAttribute('sortColumn')) {
-#ifdef DEBUG_onClickColumn
-      console.log('clearing old sort column');
-#endif
       document.getElementById(dupeSetTree.getAttribute('sortColumn')).removeAttribute('class');
       document.getElementById(dupeSetTree.getAttribute('sortColumn')).removeAttribute('sortDirection');
     }
     dupeSetTree.setAttribute('sortColumn', ev.target.id);
-#ifdef DEBUG_onClickColumn
-    console.log('set dupeSetTree.getAttribute(\'sortColumn\') to' + dupeSetTree.getAttribute('sortColumn'));
-#endif
     dupeSetTree.setAttribute('sortDirection', 'ascending');
   }
 
   sortDupeSetsByField(field);
 
-#ifdef DEBUG_onClickColumn
-  console.log('setting attrs on new sort column' + ev.target + "\nto class and " + dupeSetTree.getAttribute('sortDirection'));
-#endif
   ev.target.setAttribute('class','sortDirectionIndicator');
   ev.target.setAttribute('sortDirection',dupeSetTree.getAttribute('sortDirection'));
   rebuildDuplicateSetsTree();
@@ -900,9 +774,6 @@ function sortDupeSetsByField(field) {
 
 function onTargetFolderClick(targetFolder) {
   dupeMoveTargetFolder = targetFolder; // Note: Not a URI
-#ifdef DEBUG_onTargetFolderClick
-  console.log('in onTargetFolderClick()\ntarget = ' + targetFolder.abbreviatedName);
-#endif
   document.getElementById('actionTargetFolderPopup').selectFolder(targetFolder);
 }
 

@@ -69,14 +69,8 @@ RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
   try {
     messageFolder = RemoveDupes.FolderLookupService.getFolderForURL(uri);
   } catch(ex) { 
-#ifdef DEBUG_GetMsgFolderFromUri
-      console.log('RemoveDupes.FolderLookupService.getFolderForURL(' + uri + ') failed:\n' + ex);
-#endif
   }
   if (messageFolder != null) { 
-#ifdef DEBUG_GetMsgFolderFromUri
-      console.log('got folder from URI with RemoveDupes.folderLookup.getFolderForURL(' + uri + ')');
-#endif
     return messageFolder; 
 }
 
@@ -93,9 +87,6 @@ RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
     }
   }
   catch (ex)  {
-#ifdef DEBUG_GetMsgFolderFromUri
-      console.log('Failed obtaining a message folder object using the folder URI ' + uri + ' :\n' + ex);
-#endif
   }
   return messageFolder;
 };
@@ -128,12 +119,6 @@ RemoveDupes.namedAlert = function(appWindow, alertName) {
 // Extension-Global Variables
 // --------------------------
 
-
-#ifdef DEBUG
-  // used for rough profiling
-  RemoveDupes.StartTime,
-  RemoveDupes.EndTime,
-#endif
 
 // localized strings
 RemoveDupes.Strings = {
@@ -206,9 +191,6 @@ RemoveDupes.Removal = {
       result = rootFolder.getFolderWithFlags(RemoveDupes.FolderFlags.Trash);
     } catch(ex) {
       // We did our best... let's just return _something_
-#ifdef DEBUG_getLocalFoldersTrashFolder
-      console.log('couldn\'t get local trash folder: ' + ex);
-#endif
     }
     if (!result || result == "") {
       return 'mailbox://nobody@Local%20Folders/Trash';
@@ -319,13 +301,6 @@ RemoveDupes.Removal = {
     // overlay of the 3-pane window, then this is ensured; otherwise,
     // the dupes review dialog should have gotten it as a parameter
     // and set a window-global variable of its own
-
-#ifdef DEBUG_removeDuplicates
-    console.log(
-      'in removeDuplicates\ntargetFolder = ' + targetFolder +
-      '\ntargetFolder.URI = ' + targetFolder.URI +
-      '\ndeletePermanently = ' + deletePermanently);
-#endif
 
     var dupesByFolderHashMap =
       RemoveDupes.Removal.createDupesByFolderHashMap(
