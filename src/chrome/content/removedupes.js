@@ -5,9 +5,6 @@ if ("undefined" == typeof(ObjectUtils)) {
 if ("undefined" == typeof(ImapService)) {
   var ImapService = ChromeUtils.import("resource://gre/modules/ImapService.jsm").ImapService ;
 }
-if ("undefined" == typeof(messenger)) {
-  const messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
-}
 
 RemoveDupes.MessengerOverlay = {
 
