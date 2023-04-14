@@ -34,7 +34,7 @@ RemoveDupes.MessengerOverlay = {
   },
 
   // see searchAndRemoveDuplicateMessages
-  StatusTextField : null,
+  statusTextField : null,
   originalsFolders : null,
   originalsFolderUris : null,
 
@@ -44,8 +44,7 @@ RemoveDupes.MessengerOverlay = {
   searchAndRemoveDuplicateMessages : function() {
 
     //document.getElementById('progress-panel').removeAttribute('collapsed');
-    RemoveDupes.MessengerOverlay.statusTextField =
-      document.getElementById('statusText');
+    RemoveDupes.MessengerOverlay.statusTextField = document.getElementById('statusText');
     RemoveDupes.MessengerOverlay.setNamedStatus('searching_for_dupes');
 
     // we'll need this for some calls involving UrlListeners
