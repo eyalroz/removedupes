@@ -1,4 +1,3 @@
-const Cc = Components.classes;
 const Ci = Components.interfaces;
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;

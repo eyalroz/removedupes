@@ -3,9 +3,11 @@ var EXPORTED_SYMBOLS = ["RemoveDupes"];
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const Preferences = ChromeUtils.import("resource://gre/modules/Preferences.jsm").Preferences;
-const MailUtils = ChromeUtils.import("resource:///modules/MailUtils.jsm").MailUtils;
+const Services    = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+const MailServices = ChromeUtils.import("resource:///modules/MailServices.jsm").MailServices;
+const Preferences  = ChromeUtils.import("resource://gre/modules/Preferences.jsm").Preferences;
+const MailUtils    = ChromeUtils.import("resource:///modules/MailUtils.jsm").MailUtils;
+const XPCOMUtils   = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm").XPCOMUtils;
 
 if ("undefined" == typeof(messenger)) {
   var messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
@@ -54,14 +56,8 @@ RemoveDupes.MessageStatusFlags = {
 // LABELS:         0x0E000000;
 };
 
-RemoveDupes.__defineGetter__("FolderLookupService", function() {
-  delete RemoveDupes.FolderLookupService;
-  return RemoveDupes.FolderLookupService =
-    Components.classes['@mozilla.org/mail/folder-lookup;1']
-              .getService(Components.interfaces.nsIFolderLookupService);
-  });
-
-
+XPCOMUtils.defineLazyServiceGetter(
+  RemoveDupes, "FolderLookupService", '@mozilla.org/mail/folder-lookup;1', 'nsIFolderLookupService');
 
 RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
   let messageFolder = null;
@@ -91,13 +87,14 @@ RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
   return messageFolder;
 };
 
+XPCOMUtils.defineLazyServiceGetter(
+	RemoveDupes, 'AlertsService', '@mozilla.org/alerts-service;1', 'nsIAlertsService');
+
 RemoveDupes.showNotification = function(appWindow, notificationName) {
   let text = RemoveDupes.Strings.getByName(notificationName);
   let title = RemoveDupes.Strings.getByName("title");
   try { 
-    let alertsService =
-      Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
-    alertsService.showAlertNotification(
+    RemoveDupes.AlertsService.showAlertNotification(
       null, // no image
       title,
       text);
@@ -133,11 +130,9 @@ RemoveDupes.Strings = {
   }
 }
 
-RemoveDupes.Strings.__defineGetter__("Bundle", function() {
-  delete this.Bundle;
-  return this.Bundle =
-      Services.strings.createBundle("chrome://removedupes/locale/removedupes.properties");
-});
+XPCOMUtils.defineLazyGetter(RemoveDupes.Strings, "Bundle",
+  function() { return Services.strings.createBundle("chrome://removedupes/locale/removedupes.properties"); }
+);
 
 //---------------------------------------------------------
 
@@ -171,9 +166,9 @@ RemoveDupes.App = {
 // Preferences
 // -----------
 
-RemoveDupes.__defineGetter__("Prefs", function() {
-    delete RemoveDupes.Prefs;
-    return RemoveDupes.Prefs = new Preferences("extensions.removedupes.");
+XPCOMUtils.defineLazyGetter(RemoveDupes, 'Prefs', function() {
+	let Preferences = ChromeUtils.import("resource://gre/modules/Preferences.jsm").Preferences;
+	return new Preferences('extensions.removedupes.');
 });
 
 //---------------------------------------------------------
@@ -375,12 +370,9 @@ RemoveDupes.Removal = {
     }
     else {
       try {
-        let copyService =
-          Components.classes["@mozilla.org/messenger/messagecopyservice;1"]
-            .getService(Components.interfaces.nsIMsgCopyService);
         // The copy function name dropped the inital capital sometime between TB 78 and TB 91
-        let copyFunctionName = ('copyMessages' in copyService) ? 'copyMessages' : 'CopyMessages';
-        copyService[copyFunctionName](
+        let copyFunctionName = ('copyMessages' in MailServices.copy) ? 'copyMessages' : 'CopyMessages';
+        MailServices.copy[copyFunctionName](
             sourceFolder,
             removalMessageHdrs,
             targetFolder,
