@@ -209,8 +209,7 @@ RemoveDupes.MessengerOverlay = {
         // subFolders is an nsISimpleEnumerator (pre-TB-86; see bug 1682941)
         while (subFolders.hasMoreElements()) {
           RemoveDupes.MessengerOverlay.addSearchFolders(
-            subFolders.getNext().QueryInterface(Ci.nsIMsgFolder),
-            searchData);
+            subFolders.getNext().QueryInterface(Ci.nsIMsgFolder), searchData);
         }
       }
       else {
@@ -269,11 +268,8 @@ RemoveDupes.MessengerOverlay = {
       return;
     }
 
-    searchData.generator =
-      RemoveDupes.MessengerOverlay.populateDupeSetsHash(searchData);
-    setTimeout(
-      RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2,
-      10, searchData);
+    searchData.generator = RemoveDupes.MessengerOverlay.populateDupeSetsHash(searchData);
+    setTimeout(RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2, 10, searchData);
   },
 
   // processMessagesInCollectedFoldersPhase2 -
@@ -579,8 +575,7 @@ RemoveDupes.MessengerOverlay = {
       while (folderMessageHdrsIterator.hasMoreElements()
              && (!searchData.limitNumberOfMessages
                  || (searchData.messagesHashed < searchData.maxMessages)) ) {
-        var messageHdr =
-          folderMessageHdrsIterator.getNext().QueryInterface(Ci.nsIMsgDBHdr);
+        var messageHdr = folderMessageHdrsIterator.getNext().QueryInterface(Ci.nsIMsgDBHdr);
 
         if (   (searchData.skipIMAPDeletedMessages)
             && (messageHdr.flags & RemoveDupes.MessageStatusFlags['IMAP_DELETED'])) {
@@ -605,8 +600,7 @@ RemoveDupes.MessengerOverlay = {
             // the dupes hash since until now we did not know it was a dupe;
             // copy it together with our current message's URI
             // TODO: use [blah, blah] as the array constructor
-            searchData.dupeSetsHashMap[messageHash] =
-              new Array(messageUriHashmap[messageHash], uri);
+            searchData.dupeSetsHashMap[messageHash] = new Array(messageUriHashmap[messageHash], uri);
             searchData.totalOriginalDupeSets++;
           }
         }
@@ -743,10 +737,7 @@ RemoveDupes.MessengerOverlay = {
 
       // sort the bodies
 
-      dupeSet.sort(
-        function(lhs,rhs) {
-          return lhs - rhs;
-        } );
+      dupeSet.sort( function(lhs,rhs) { return lhs - rhs; } );
 
       if (searchData.userAborted)
         return;
@@ -819,8 +810,7 @@ RemoveDupes.MessengerOverlay = {
         );
     }
     else {
-      let xulSuffix = (RemoveDupes.App.versionIsAtLeast("69.0") ? "xhtml" : "xul");
-      let dialogURI = "chrome://removedupes/content/removedupes-dialog." + xulSuffix;
+      let dialogURI = "chrome://removedupes/content/removedupes-dialog.xhtml";
 
       // open up a dialog in which the user sees all dupes we've found,
       // and can decide which to delete
@@ -915,8 +905,7 @@ RemoveDupes.MessengerOverlay = {
     var numSelectedFolders = 0;
     RemoveDupes.MessengerOverlay.originalsFolders = new Set;
     RemoveDupes.MessengerOverlay.originalsFolderUris = new Set;
-    var skipSpecialFolders =
-      RemoveDupes.Prefs.get('skip_special_folders','true');
+    var skipSpecialFolders = RemoveDupes.Prefs.get('skip_special_folders','true');
     for (let i = 0; i < rangeCount; i++) {
       let startIndex = {};
       let endIndex = {};
@@ -969,14 +958,12 @@ RemoveDupes.UpdateFolderDoneListener.prototype.QueryInterface =
   };
 
 RemoveDupes.UpdateFolderDoneListener.prototype.OnStartRunningUrl = function(url) { }
-
-RemoveDupes.UpdateFolderDoneListener.prototype.OnStopRunningUrl =
-  function(url, exitCode) {
-    // TODO: Perhaps we should actually check the exist code...
-    // for now we'll just assume the folder update wen't ok,
-    // or we'll fail when trying to traverse the children
-    RemoveDupes.MessengerOverlay.traverseSearchFolderSubfolders(this.folder,this.searchData);
-  };
+RemoveDupes.UpdateFolderDoneListener.prototype.OnStopRunningUrl = function(url, exitCode) {
+  // TODO: Perhaps we should actually check the exist code...
+  // for now we'll just assume the folder update wen't ok,
+  // or we'll fail when trying to traverse the children
+  RemoveDupes.MessengerOverlay.traverseSearchFolderSubfolders(this.folder,this.searchData);
+};
 //---------------------------------------------------
 
 
@@ -985,30 +972,27 @@ RemoveDupes.UpdateFolderDoneListener.prototype.OnStopRunningUrl =
 //---------------------------------------------------
 RemoveDupes.DupeSearchData = function ()
 {
-  this.searchSubfolders =
-    RemoveDupes.Prefs.get("search_subfolders");
+  this.searchSubfolders = RemoveDupes.Prefs.get("search_subfolders");
 
   this.useCriteria = new Object;
   // which information will we use for comparing messages?
   for (let criterion in RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults) {
     this.useCriteria[criterion] =
      RemoveDupes.Prefs.get("comparison_criteria." + criterion,
-                RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults[criterion]);
+       RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults[criterion]);
   }
 
   // an optimization: if we're comparing bodies, there shouldn't be any harm
   // in comparing by number of lines first
 
-  this.useCriteria['num_lines'] =
-    this.useCriteria['num_lines'] || this.useCriteria['body'];
+  this.useCriteria['num_lines'] = this.useCriteria['num_lines'] || this.useCriteria['body'];
 
   // when messages have no Message-ID header, Mozilla uses their MD5
   // digest value; however, the implementation is somewhat buggy and
   // two copies of the same message reportedly get different MD5s
   // sometimes; plus, it's not _really_ the message ID
 
-  this.allowMD5IDSubstitutes =
-    RemoveDupes.Prefs.get("allow_md5_id_substitute",false);
+  this.allowMD5IDSubstitutes = RemoveDupes.Prefs.get("allow_md5_id_substitute",false);
 
   // Sometimes, a criterion or field we're using as a comparison
   // criteria is missing. In these cases, we have the following options:
@@ -1039,7 +1023,6 @@ RemoveDupes.DupeSearchData = function ()
   this.assumeEachMissingValueIsUnique =
     RemoveDupes.Prefs.get("assume_each_missing_value_is_unique", true);
 
-
   // When comparing fields with address (recipients and CC list),
   // do we compare the fields in the way and order they appear in
   // the field, or do we canonicalize the fields by taking the
@@ -1048,23 +1031,15 @@ RemoveDupes.DupeSearchData = function ()
   this.compareStrippedAndSortedAddresses =
     RemoveDupes.Prefs.get("compare_stripped_and_sorted_addresses", false);
 
-  this.timeComparisonResolution =
-    RemoveDupes.Prefs.get("time_comparison_resolution", "seconds");
-  this.compareTimeNumerically =
-    (this.timeComparisonResolution == "seconds");
-
+  this.timeComparisonResolution = RemoveDupes.Prefs.get("time_comparison_resolution", "seconds");
+  this.compareTimeNumerically = (this.timeComparisonResolution == "seconds");
 
   // which of the special folders (inbox, sent, etc.) will we be willing
   // to search in for duplicates?
 
-  this.skipSpecialFolders =
-    RemoveDupes.Prefs.get("skip_special_folders", true);
-
-  this.skipIMAPDeletedMessages =
-    RemoveDupes.Prefs.get("skip_imap_deleted_messages", true);
-
-  this.useReviewDialog =
-    RemoveDupes.Prefs.get("use_dialog_before_removal", true);
+  this.skipSpecialFolders = RemoveDupes.Prefs.get("skip_special_folders", true);
+  this.skipIMAPDeletedMessages = RemoveDupes.Prefs.get("skip_imap_deleted_messages", true);
+  this.useReviewDialog = RemoveDupes.Prefs.get("use_dialog_before_removal", true);
 
   // we might have to trigger non-blocking IMAP folder updates;
   // each trigger will increase this, each folder update completing
@@ -1080,19 +1055,15 @@ RemoveDupes.DupeSearchData = function ()
   this.totalOriginalDupeSets = 0;
 
   // maximum number of messages to process
-  this.limitNumberOfMessages =
-    RemoveDupes.Prefs.get("limit_number_of_processed_messages", false);
-  this.maxMessages =
-    RemoveDupes.Prefs.get("processed_messages_limit", 10000);
+  this.limitNumberOfMessages = RemoveDupes.Prefs.get("limit_number_of_processed_messages", false);
+  this.maxMessages = RemoveDupes.Prefs.get("processed_messages_limit", 10000);
 
   // timing is used to decide when to make the next status
   // bar progress report and for yielding for processing UI events
   // (values here are in miliseconds)
   this.lastStatusBarReport = this.lastYield = (new Date()).getTime();
-  this.yieldQuantum =
-    RemoveDupes.Prefs.get("yield_quantum", 200);
-  this.reportQuantum =
-    RemoveDupes.Prefs.get("status_report_quantum", 1500);
+  this.yieldQuantum = RemoveDupes.Prefs.get("yield_quantum", 200);
+  this.reportQuantum = RemoveDupes.Prefs.get("status_report_quantum", 1500);
 
   if (RemoveDupes.MessengerOverlay.originalsFolders) {
     this.originalsFolderUris = RemoveDupes.MessengerOverlay.originalsFolderUris;
@@ -1105,7 +1076,6 @@ RemoveDupes.DupeSearchData = function ()
 }
 //---------------------------------------------------
 
-
 window.addEventListener("load", RemoveDupes.MessengerOverlay.replaceGetCellProperties, false);
-// this is not useful unless the event fires after all folder have
+// this is not useful unless the event fires after all folders have
 // been created - which is not the case

@@ -78,7 +78,7 @@ var DupeMessageRecord = function(messageUri) {
   this.folder_name  = messageHdr.folder.abbreviatedName;
   this.folderUri    = messageHdr.folder.URI;
   this.rootFolder   = messageHdr.folder.server.rootFolder;
-	// Used for checking whether all messages are from the same account
+    // the root folder is used for checking whether all messages are from the same account
   this.message_id   =
    ((   allowMD5IDSubstitutes
      || messageHdr.messageId.substr(0,4) != 'md5:') ?
@@ -102,8 +102,7 @@ var DupeMessageRecord = function(messageUri) {
   }
   this.cc_list      = messageHdr.ccList;
   //this.flags      = "0x" + num2hex(messageHdr.flags);
-  this.flags        =
-    flagsToString(messageHdr.flags);
+  this.flags        = flagsToString(messageHdr.flags);
   this.num_lines    = messageHdr.lineCount;
   // by default, we're deleting dupes, but see also below
   this.toKeep       = false;
@@ -166,8 +165,7 @@ function initDupeReviewDialog() {
   // indicate which columns were used in the search
 
   for (let criterion in useCriteria) {
-  if (useCriteria[criterion] &&
-      (criterion != 'body'))
+    if (useCriteria[criterion] && (criterion != 'body'))
       document.getElementById(criterion + 'Column')
               .setAttribute('comparisonCriterion',true);
   }
@@ -207,7 +205,7 @@ function initDupeReviewDialog() {
   }
   if (! dupesKnownNotToHaveCommonAccount) {
     document.getElementById('action').value = 'move_to_common_account_trash';
-    let move_to_common_trash_element =  document.getElementById('move_to_common_account_trash_action');
+    let move_to_common_trash_element = document.getElementById('move_to_common_account_trash_action');
     move_to_common_trash_element.hidden = false;
     move_to_common_trash_element.disabled = false;
   }
@@ -261,7 +259,7 @@ function createMessageRowTemplate() {
   folderCell.setAttribute("id", "folderCell");
   var sendTimeCell      = document.createXULElement("treecell");
   sendTimeCell.setAttribute("id", "sendTimeCell");
-  var sizeCell      = document.createXULElement("treecell");
+  var sizeCell          = document.createXULElement("treecell");
   sizeCell.setAttribute("id", "sizeCell");
   var lineCountCell     = document.createXULElement("treecell");
   lineCountCell.setAttribute("id", "lineCountCell");
@@ -401,14 +399,11 @@ function resetCheckboxValues() {
 
 function updateStatusBar() {
   setStatusBarPanelText("sets-status-panel",
-        RemoveDupes.Strings.getByName('status_panel.number_of_sets') + " " + numberOfDupeSets
-  );
+    RemoveDupes.Strings.getByName('status_panel.number_of_sets') + " " + numberOfDupeSets);
   setStatusBarPanelText("total-status-panel",
-        RemoveDupes.Strings.getByName('status_panel.total_number_of_dupes') + " " + totalNumberOfDupes
-  );
+    RemoveDupes.Strings.getByName('status_panel.total_number_of_dupes') + " " + totalNumberOfDupes);
   setStatusBarPanelText("keeping-status-panel",
-        RemoveDupes.Strings.getByName('status_panel.number_of_kept_dupes') + " " + numberToKeep
-  );
+    RemoveDupes.Strings.getByName('status_panel.number_of_kept_dupes') + " " + numberToKeep);
   setStatusBarPanelText("main-status-panel","");
 }
 
@@ -579,8 +574,8 @@ function toggleDeletionForCurrentRow() {
     numberToKeep++;
   }
   focusedRow = focusedTreeItem.firstChild;
-  focusedRow.childNodes.item(toKeepColumnIndex).setAttribute(
-    "properties", (dupeSetItem.toKeep ? "keep" : "delete"));
+  focusedRow.childNodes.item(toKeepColumnIndex)
+            .setAttribute("properties", (dupeSetItem.toKeep ? "keep" : "delete"));
 
   updateStatusBar();
 }

@@ -88,7 +88,7 @@ RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
 };
 
 XPCOMUtils.defineLazyServiceGetter(
-	RemoveDupes, 'AlertsService', '@mozilla.org/alerts-service;1', 'nsIAlertsService');
+    RemoveDupes, 'AlertsService', '@mozilla.org/alerts-service;1', 'nsIAlertsService');
 
 RemoveDupes.showNotification = function(appWindow, notificationName) {
   let text = RemoveDupes.Strings.getByName(notificationName);
@@ -165,8 +165,8 @@ RemoveDupes.App = {
 // -----------
 
 XPCOMUtils.defineLazyGetter(RemoveDupes, 'Prefs', function() {
-	let Preferences = ChromeUtils.import("resource://gre/modules/Preferences.jsm").Preferences;
-	return new Preferences('extensions.removedupes.');
+    let Preferences = ChromeUtils.import("resource://gre/modules/Preferences.jsm").Preferences;
+    return new Preferences('extensions.removedupes.');
 });
 
 //---------------------------------------------------------
@@ -295,9 +295,7 @@ RemoveDupes.Removal = {
     // the dupes review dialog should have gotten it as a parameter
     // and set a window-global variable of its own
 
-    var dupesByFolderHashMap =
-      RemoveDupes.Removal.createDupesByFolderHashMap(
-        dupeSetsHashMap,haveMessageRecords);
+    var dupesByFolderHashMap = RemoveDupes.Removal.createDupesByFolderHashMap(dupeSetsHashMap,haveMessageRecords);
 
     var any_deletions_performed = false;
     var any_deletions_failed_or_aborted = false;
