@@ -124,9 +124,7 @@ RemoveDupes.Strings = {
     return this.Bundle.GetStringFromName(this.prefix + stringName);
   },
   format: function(stringName, argsToFormat) {
-    return (RemoveDupes.App.versionIsAtLeast("69")) ?
-      this.Bundle.formatStringFromName(this.prefix + stringName, argsToFormat) :
-      this.Bundle.formatStringFromName(this.prefix + stringName, argsToFormat, argsToFormat.length);
+    return this.Bundle.formatStringFromName(this.prefix + stringName, argsToFormat);
   }
 }
 
