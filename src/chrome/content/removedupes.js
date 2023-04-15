@@ -858,30 +858,13 @@ RemoveDupes.MessengerOverlay = {
     if (typeof gFolderTreeView == 'undefined')
       return;
     gFolderTreeView.preRDGetCellProperties = gFolderTreeView.getCellProperties;
-
-    if(RemoveDupes.App.versionIsAtMost("17.1")) {
-      var atomService = Cc["@mozilla.org/atom-service;1"].getService(Ci.nsIAtomService);
-      gFolderTreeView.getCellProperties = function newGcp(aRow, aCol, aProps) {
-        gFolderTreeView.preRDGetCellProperties(aRow, aCol, aProps);
-        var row = gFolderTreeView._rowMap[aRow];
-        if (RemoveDupes.MessengerOverlay.originalsFolderUris && RemoveDupes.MessengerOverlay.originalsFolderUris.has(row._folder.URI)) {
-          aProps.AppendElement(atomService.getAtom("isOriginalsFolder-true"));
-        }
-        else {
-          aProps.AppendElement(atomService.getAtom("isOriginalsFolder-false"));
-        }
-      };
-      return;
-    }
-    if(RemoveDupes.App.versionIsAtLeast("23.0")) {
-      gFolderTreeView.getCellProperties = function newGcp(aRow, aCol) {
-        var properties = gFolderTreeView.preRDGetCellProperties(aRow, aCol);
-        var row = gFolderTreeView._rowMap[aRow];
-        if (RemoveDupes.MessengerOverlay.originalsFolderUris && RemoveDupes.MessengerOverlay.originalsFolderUris.has(row._folder.URI)) {
-          properties += " isOriginalsFolder-true";
-        }
-        return properties;
-      };
+    gFolderTreeView.getCellProperties = function newGcp(aRow, aCol) {
+	  var properties = gFolderTreeView.preRDGetCellProperties(aRow, aCol);
+	  var row = gFolderTreeView._rowMap[aRow];
+	  if (RemoveDupes.MessengerOverlay.originalsFolderUris && RemoveDupes.MessengerOverlay.originalsFolderUris.has(row._folder.URI)) {
+        properties += " isOriginalsFolder-true";
+      }
+	  return properties;
     }
   },
 
