@@ -300,6 +300,10 @@ RemoveDupes.Removal = {
     var any_deletions_performed = false;
     var any_deletions_failed_or_aborted = false;
     for (let folderUri in dupesByFolderHashMap) {
+      if (!deletePermanently && folderUri == targetFolder.URI) {
+        any_deletions_performed = true; // messages in this folder are indeed placed in their destinations...
+        continue;
+      }
       var retVal = 
         RemoveDupes.Removal.removeDupesFromSingleFolder(
           appWindow,
