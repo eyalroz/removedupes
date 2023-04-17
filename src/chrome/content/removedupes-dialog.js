@@ -18,8 +18,6 @@ var allowMD5IDSubstitutes;
   // how do we treat MD5 hashes as substitutes for message IDs?
 var useCriteria;
   // the comparison criteria used in the search
-var confirmPermanentDeletion;
-  // confirm permanent deletions again, after Ok'ing on the dialog?
 var commonRootFolder;
   // Root folder of the account in which all duplicate message are located... if one exists.
 
@@ -159,7 +157,6 @@ function initDupeReviewDialog() {
           .setAttribute('hidden',(!originalsFolderUris));
   initializeFolderPicker();
   document.getElementById('action').value = RemoveDupes.Prefs.get('default_action', null);
-  confirmPermanentDeletion = RemoveDupes.Prefs.get("confirm_permanent_deletion", true);
   dupeSetTree = document.getElementById("dupeSetsTree");
 
   // indicate which columns were used in the search
@@ -584,56 +581,44 @@ function onCancel() {
   dupeSetsHashMap = null;
 }
 
-// Note: This function returns true if any messages
-// were deleted and no deletion failed, or false
-// otherwise.
+// Note: This function returns true if any messages were deleted and no
+// deletion failed, or false otherwise (in which case the dialog is not
+// closed)
 function onAccept() {
   if (totalNumberOfDupes == numberToKeep) { return false; }
 
-  let action = document.getElementById('action').getAttribute('value');
-  let deletePermanently = false;
-  let moveTargetFolder = null;
-  switch (action) {
-  case 'delete_permanently':
-    deletePermanently = true;
-    break;
-  case 'move_to_chosen_folder':
-    if (!dupeMoveTargetFolder) {
-      RemoveDupes.namedAlert(window, 'no_folder_selected');
-      return false;
-    }
-    moveTargetFolder = dupeMoveTargetFolder;
-    break;
-  case 'move_to_common_account_trash':
-    if (!commonRootFolder) {
-      // This shouldn't happen, but let's be on the safe side:
-      RemoveDupes.namedAlert(window, 'no_common_account');
-      return false;
-    }
-    moveTargetFolder = commonRootFolder.getFolderWithFlags(RemoveDupes.FolderFlags.Trash);
-    break;
-  default:
-    alert("No such action '" + action + "'");
-    return false;
-  }
+  const HaveMessageRecords = true;
 
-  var retVal = RemoveDupes.Removal.removeDuplicates(
-    window,
-    msgWindow,
-    dupeSetsHashMap,
-    deletePermanently,
-    confirmPermanentDeletion,
-    moveTargetFolder,
-    true // the URI's have been replaced with messageRecords
-    );
-  if (retVal == false) { return false; }
-  if (action='move_to_chosen_folder' && (moveTargetFolder?.URI.length > 0)) {
-    RemoveDupes.Prefs.set('default_target_folder', moveTargetFolder.URI);
+  let action = document.getElementById('action').getAttribute('value');
+  let retVal;
+
+  if (action == 'delete_permanently') {
+	retVal = RemoveDupes.Removal.deleteMessages(window, msgWindow, dupeSetsHashMap, HaveMessageRecords);
   }
-  // If we've gotten here, either the deletion was succesful, or it
-  // was partially successful, and at any rate - the dialog's contents are
-  // stale, so it needs to go away
-  dupeSetsHashMap = null;
+  else {
+    let moveTargetFolder = null;
+    if (action == 'move_to_chosen_folder') {
+      if (!dupeMoveTargetFolder) {
+        RemoveDupes.namedAlert(window, 'no_folder_selected');
+        return false;
+      }
+      moveTargetFolder = dupeMoveTargetFolder;
+      if (moveTargetFolder?.URI.length > 0) {
+        RemoveDupes.Prefs.set('default_target_folder', moveTargetFolder.URI);
+      }
+    }
+    else { // action is 'move_to_common_account_trash':
+      if (!commonRootFolder) {
+        // This shouldn't happen, but let's be on the safe side:
+        RemoveDupes.namedAlert(window, 'no_common_account');
+        return false;
+      }
+      moveTargetFolder = commonRootFolder.getFolderWithFlags(RemoveDupes.FolderFlags.Trash);
+    }
+    retVal = RemoveDupes.Removal.moveMessages(window, msgWindow, dupeSetsHashMap, moveTargetFolder, HaveMessageRecords);
+  }
+  if (retVal == false) { return false; }
+  dupeSetsHashMap = null; // Is this necessary?
   return true;
 }
 

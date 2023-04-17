@@ -197,11 +197,13 @@ RemoveDupes.Removal = {
   // an array of Uri's and haveMessageRecords is false, or after displaying the
   // dialog, in which case the elements have been replaced with messageRecord 
   // objects (which also include indications of which messages to keep)
+  //
+  // Function returns a hash-map from folder URIs to folder object reference +
+  // list of headers
 
-  createDupesByFolderHashMap : function(
-    dupeSetsHashMap,haveMessageRecords) {
+  arrangeMessagesByFolder : function(dupeSetsHashMap,haveMessageRecords) {
 
-    var dupesByFolderHashMap = new Object;
+    var messagesByFolder = new Object;
     var messageHeader;
     var previousFolderUri = null;
     let usePlainArrayForremovalHeaders = RemoveDupes.App.versionIsAtLeast("79.0");
@@ -209,184 +211,125 @@ RemoveDupes.Removal = {
 
     for (let hashValue in dupeSetsHashMap) {
       var dupeSet = dupeSetsHashMap[hashValue];
-#ifdef DEBUG_removeDuplicates
-      console.log('hash value ' +
-        hashValue + '\nnumber of dupes: ' + dupeSet.length);
-#endif
       if (haveMessageRecords) {
         for (let i = 0; i < dupeSet.length; i++) {
           var messageRecord = dupeSet[i];
           if (!messageRecord.toKeep) {
-#ifdef DEBUG_removeDuplicates
-            console.log('processing URI ' +
-              messageRecord.uri);
-#endif
             messageHeader = messenger.msgHdrFromURI(messageRecord.uri);
-#ifdef DEBUG_removeDuplicates
-            if (!messageHeader)
-              console.log('header is null for ' +
-              messageRecord.uri);
-#endif
-            if (!(messageRecord.folderUri in dupesByFolderHashMap)) {
-              var folderDupesInfo = new Object; 
+            if (!(messageRecord.folderUri in messagesByFolder)) {
+              var folderDupesInfo = new Object;
               folderDupesInfo.folder = messageHeader.folder;
               folderDupesInfo.previousFolderUri = previousFolderUri;
               previousFolderUri = messageRecord.folderUri;
-              folderDupesInfo.removalHeaders = usePlainArrayForremovalHeaders ?
-                new Array :
-                Components.classes["@mozilla.org/array;1"]
-                          .createInstance(Components.interfaces.nsIMutableArray);
+              folderDupesInfo.messageHeaders = usePlainArrayForremovalHeaders ?
+                new Array : Components.classes["@mozilla.org/array;1"] .createInstance(Components.interfaces.nsIMutableArray);
 
-              dupesByFolderHashMap[messageRecord.folderUri] = folderDupesInfo;
+              messagesByFolder[messageRecord.folderUri] = folderDupesInfo;
             }
             // TODO: make sure using a weak reference is the right thing here
-            dupesByFolderHashMap[messageRecord.folderUri].removalHeaders[arrayAppendFunctionName](messageHeader);
+            messagesByFolder[messageRecord.folderUri].messageHeaders[arrayAppendFunctionName](messageHeader);
           }
         }
       }
       else {
         for (let i = 1; i < dupeSet.length; i++) {
-#ifdef DEBUG_removeDuplicates
-          console.log('processing URI ' + dupeSet[i]);
-#endif
           messageHeader = messenger.msgHdrFromURI(dupeSet[i]);
           var folderUri = messageHeader.folder.URI;
-          if (!dupesByFolderHashMap[folderUri]) {
+          if (!messagesByFolder[folderUri]) {
             var folderDupesInfo = new Object;
             folderDupesInfo.folder = messageHeader.folder;
             folderDupesInfo.previousFolderUri = previousFolderUri;
             previousFolderUri = folderUri;
-            folderDupesInfo.removalHeaders = usePlainArrayForremovalHeaders ?
-                new Array :
-                Components.classes["@mozilla.org/array;1"];
-            dupesByFolderHashMap[folderUri] = folderDupesInfo;
+            folderDupesInfo.messageHeaders = usePlainArrayForremovalHeaders ?
+                new Array : Components.classes["@mozilla.org/array;1"];
+            messagesByFolder[folderUri] = folderDupesInfo;
           }
-          dupesByFolderHashMap[folderUri].removalHeaders[arrayAppendFunctionName](messageHeader);
+          messagesByFolder[folderUri].messageHeaders[arrayAppendFunctionName](messageHeader);
         }
       }
     }
-    return dupesByFolderHashMap;
+    return messagesByFolder;
   },
 
-  //
-  // removeDuplicates() returns...
-  //
-  //   true   if all requested deletions were performed 
-  //   false  if no deletions were performed or none were requested
-  //   null   if some deletions were performed but some failed or were
-  //          aborted
-  //
-  // Also, see createDupesByFolderHashMap for explanation regarding 
-  // the haveMessageRecords parameter.
-  //
-  // Note: targetFolder is ignored (and should be null) if deletePermanently is true;
-  // but it must be non-null if deletePermanently is false.
-  //
-  removeDuplicates : function(
-    appWindow,
-    msgWindow,
-    dupeSetsHashMap,
-    deletePermanently,
-    confirmPermanentDeletion,
-    targetFolder,
-    haveMessageRecords) {
+  // Returns true on success, false on failure
+  moveMessages : function(appWindow, msgWindow, messageSetsHashMap, targetFolder, haveMessageRecords)
+  {
+    var messagesByFolder = RemoveDupes.Removal.arrangeMessagesByFolder(messageSetsHashMap,haveMessageRecords);
+
+    // TODO: iterate with field binding, e.g. for(const [key, { foo, bar }] of map) {
+    for (let folderUri in messagesByFolder) {
+      if (folderUri == targetFolder.URI) continue;
+      try {
+        RemoveDupes.Removal.moveMessagesFromFolder(
+          msgWindow,
+          messagesByFolder[folderUri].folder,
+          messagesByFolder[folderUri].messageHeaders,
+          targetFolder);
+      } catch(ex) {
+        appWindow.alert(RemoveDupes.Strings.format('failed_to_move_to_folder', [targetFolder.URI]));
+        console.log('Failed moving messages from folder\n' + folderUri + '\ntoFolder\n' + targetFolder.URI + '  :\n' + ex);
+        return false;
+      }
+    }
+    return true;
+  },
+
+  moveMessagesFromFolder : function(msgWindow, sourceFolder, removalMessageHdrs, targetFolder)
+  {
+    // The copy function name dropped the inital capital sometime between TB 78 and TB 91
+    let copyFunctionName = ('copyMessages' in MailServices.copy) ? 'copyMessages' : 'CopyMessages';
+    const MovingNotCopying = true;
+    const NoListener = null;
+    const AllowUndo = true;
+    return MailServices.copy[copyFunctionName](
+        sourceFolder, removalMessageHdrs, targetFolder,
+        MovingNotCopying, NoListener, msgWindow, AllowUndo);
+  },
+
+  deleteMessages : function(appWindow, msgWindow, messageSetsHashMap, haveMessageRecords)
+  {
     // note that messenger and msgWindow have to be defined! if we're running from the
     // overlay of the 3-pane window, then this is ensured; otherwise,
     // the dupes review dialog should have gotten it as a parameter
     // and set a window-global variable of its own
 
-    var dupesByFolderHashMap = RemoveDupes.Removal.createDupesByFolderHashMap(dupeSetsHashMap,haveMessageRecords);
+    let messagesByFolder = RemoveDupes.Removal.arrangeMessagesByFolder(messageSetsHashMap,haveMessageRecords);
 
-    var any_deletions_performed = false;
-    var any_deletions_failed_or_aborted = false;
-    for (let folderUri in dupesByFolderHashMap) {
-      if (!deletePermanently && folderUri == targetFolder.URI) {
-        any_deletions_performed = true; // messages in this folder are indeed placed in their destinations...
-        continue;
+    let anyDeletionsPerformed = false; // if we abort right away, the dialog can stay open, so the "accept" is cancelled
+
+    let needConfirmation = RemoveDupes.Prefs.get("confirm_permanent_deletion", true);
+
+    // TODO: iterate with field binding, e.g. for(const [key, { foo, bar }] of map) {
+    for (let folderUri in messagesByFolder) {
+      let folder = messagesByFolder[folderUri].folder;
+      let folderMessageHdrs = messagesByFolder[folderUri].messageHeaders;
+      var numMessagesToDelete = folderMessageHdrs.length;
+      var confirmationRequestMessage = RemoveDupes.Strings.format('confirm_permanent_deletion_from_folder',
+        [numMessagesToDelete ,folder.abbreviatedName]);
+      if (needConfirmation && !appWindow.confirm(confirmationRequestMessage)) {
+        appWindow.alert(RemoveDupes.Strings.getByName('deletion_aborted'));
+        break;
       }
-      var retVal = 
-        RemoveDupes.Removal.removeDupesFromSingleFolder(
-          appWindow,
-          msgWindow,
-          dupesByFolderHashMap[folderUri].folder,
-          dupesByFolderHashMap[folderUri].removalHeaders,
-          targetFolder,
-          deletePermanently,
-          confirmPermanentDeletion);
-      any_deletions_failed_or_aborted = any_deletions_failed_or_aborted || (!retVal);
-      any_deletions_performed = any_deletions_performed || (!!retVal);
+      try {
+        RemoveDupes.Removal.deleteMessagesFromFolder(msgWindow, folder, folderMessageHdrs);
+        anyDeletionsPerformed = true;
+      } catch(ex) {
+        appWindow.alert(RemoveDupes.Strings.getByName('failed_to_erase')); // todo: make this folder specific?
+        console.log('Failed erasing messages from folder\n' + folderUri + ' :\n' + ex);
+        break;
+      }
     }
-#ifdef DEBUG_removeDuplicates
-    console.log('Done. ' +
-      'any_deletions_performed ? ' + any_deletions_performed + '; ' +
-      'any_deletions_failed_or_aborted ? ' + any_deletions_performed);
-#endif
-    if (any_deletions_performed && any_deletions_failed_or_aborted) {
-      return null;
-    }
-    if (!any_deletions_performed && any_deletions_failed_or_aborted) {
-      return false;
-    }
-    if (any_deletions_performed && !any_deletions_failed_or_aborted) {
-      return true;
-    }
-    throw Components.results.NS_ERROR_UNEXPECTED;
+    return anyDeletionsPerformed;
   },
 
-  // if this returns false, something's amiss (currently an abortion)
-  // and the deletion should not go on.
-  removeDupesFromSingleFolder : function(
-    appWindow,
-    msgWindow,
-    sourceFolder,
-    removalMessageHdrs,
-    targetFolder,
-    deletePermanently,
-    confirmPermanentDeletion) {
-    if (deletePermanently) {
-      try {
-        if (confirmPermanentDeletion) {
-          var numMessagesToDelete = removalMessageHdrs.length;
-          var message = RemoveDupes.Strings.format('confirm_permanent_deletion_from_folder', [numMessagesToDelete ,sourceFolder.abbreviatedName]);
-          if (!appWindow.confirm(message)) {
-            appWindow.alert(RemoveDupes.Strings.getByName('deletion_aborted'));
-            return false;
-          }
-        }
-
-        sourceFolder.deleteMessages(
-          removalMessageHdrs, 
-          msgWindow,
-          true, // delete permanently
-          true, // delete storage - what does this mean? 
-          null, // no listener
-          true // allow undo... will this be possible at all?
-        );
-      } catch(ex) {
-        appWindow.alert(RemoveDupes.Strings.getByName('failed_to_erase'));
-        throw(ex);
-      }
-      return true;
-    }
-    else {
-      try {
-        // The copy function name dropped the inital capital sometime between TB 78 and TB 91
-        let copyFunctionName = ('copyMessages' in MailServices.copy) ? 'copyMessages' : 'CopyMessages';
-        MailServices.copy[copyFunctionName](
-            sourceFolder,
-            removalMessageHdrs,
-            targetFolder,
-            true, // moving, not copying
-            null, // no listener
-            msgWindow,
-            true // allow undo
-          )
-      } catch(ex) {
-        appWindow.alert(RemoveDupes.Strings.format('failed_to_move_to_folder', [targetFolder.URI]));
-        throw(ex);
-      }
-      return true;
-    }
+  deleteMessagesFromFolder : function(msgWindow, folder, removalMessageHdrs)
+  {
+    const DeletePermanently = true;
+    const DeleteStorage = true;
+    const NoListener = null;
+    const AllowUndo = true; // does this really work? I doubt it...
+    return folder.deleteMessages(removalMessageHdrs, msgWindow,
+	  DeletePermanently, DeleteStorage, NoListener, AllowUndo);
   }
 }
 
