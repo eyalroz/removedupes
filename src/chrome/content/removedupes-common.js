@@ -201,51 +201,36 @@ RemoveDupes.Removal = {
   // Function returns a hash-map from folder URIs to folder object reference +
   // list of headers
 
-  arrangeMessagesByFolder : function(dupeSetsHashMap,haveMessageRecords) {
+  arrangeMessagesByFolder : function(messageSetsHashMap,haveMessageRecords) {
 
-    var messagesByFolder = new Object;
-    var messageHeader;
-    var previousFolderUri = null;
-    let usePlainArrayForremovalHeaders = RemoveDupes.App.versionIsAtLeast("79.0");
-    let arrayAppendFunctionName = usePlainArrayForremovalHeaders ? 'push' : 'appendElement';
+    const UsePlainArrayForremovalHeaders = RemoveDupes.App.versionIsAtLeast("79.0");
+    const ArrayAppendFunctionName = UsePlainArrayForremovalHeaders ? 'push' : 'appendElement';
 
-    for (let hashValue in dupeSetsHashMap) {
-      var dupeSet = dupeSetsHashMap[hashValue];
-      if (haveMessageRecords) {
-        for (let i = 0; i < dupeSet.length; i++) {
-          var messageRecord = dupeSet[i];
-          if (!messageRecord.toKeep) {
-            messageHeader = messenger.msgHdrFromURI(messageRecord.uri);
-            if (!(messageRecord.folderUri in messagesByFolder)) {
-              var folderDupesInfo = new Object;
-              folderDupesInfo.folder = messageHeader.folder;
-              folderDupesInfo.previousFolderUri = previousFolderUri;
-              previousFolderUri = messageRecord.folderUri;
-              folderDupesInfo.messageHeaders = usePlainArrayForremovalHeaders ?
-                new Array : Components.classes["@mozilla.org/array;1"] .createInstance(Components.interfaces.nsIMutableArray);
-
-              messagesByFolder[messageRecord.folderUri] = folderDupesInfo;
-            }
-            // TODO: make sure using a weak reference is the right thing here
-            messagesByFolder[messageRecord.folderUri].messageHeaders[arrayAppendFunctionName](messageHeader);
-          }
+    let messagesByFolder = new Object; // TODO: Consider using Map
+    for (const hashValue in messageSetsHashMap) {
+      let messageSet = messageSetsHashMap[hashValue]; // cleaner iteration please!
+      let folderUri, messageHeader;
+      for (const messageInfo of messageSet) {
+        if (haveMessageRecords) {
+          const dupeMessageRecord = messageInfo;
+          if (dupeMessageRecord.toKeep) { continue; }
+          messageHeader = messenger.msgHdrFromURI(dupeMessageRecord.uri);
         }
-      }
-      else {
-        for (let i = 1; i < dupeSet.length; i++) {
-          messageHeader = messenger.msgHdrFromURI(dupeSet[i]);
-          var folderUri = messageHeader.folder.URI;
-          if (!messagesByFolder[folderUri]) {
-            var folderDupesInfo = new Object;
-            folderDupesInfo.folder = messageHeader.folder;
-            folderDupesInfo.previousFolderUri = previousFolderUri;
-            previousFolderUri = folderUri;
-            folderDupesInfo.messageHeaders = usePlainArrayForremovalHeaders ?
-                new Array : Components.classes["@mozilla.org/array;1"];
-            messagesByFolder[folderUri] = folderDupesInfo;
-          }
-          messagesByFolder[folderUri].messageHeaders[arrayAppendFunctionName](messageHeader);
+        else {
+          const messageUri = messageInfo;
+          messageHeader = messenger.msgHdrFromURI(messageUri);
         }
+
+        let folderEntry = messagesByFolder[folderUri];
+        if (!folderEntry) {
+          folderEntry = {
+            'folder' : messageHeader.folder,
+            'messageHeaders' : UsePlainArrayForremovalHeaders ?
+              new Array : Components.classes["@mozilla.org/array;1"].createInstance(Components.interfaces.nsIMutableArray)
+          };
+          messagesByFolder[folderUri] = folderEntry;
+        }
+        folderEntry.messageHeaders.push(messageHeader);
       }
     }
     return messagesByFolder;
