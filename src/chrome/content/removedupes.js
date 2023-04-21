@@ -6,8 +6,10 @@ if (typeof ImapService == 'undefined') {
   var ImapService = ChromeUtils.import("resource://gre/modules/ImapService.jsm").ImapService;
 }
 
-const Cc = Components.classes;
-const Ci = Components.interfaces;
+if (typeof Cc == 'undefined') {
+  const Cc = Components.classes;
+  const Ci = Components.interfaces;
+}
 
 RemoveDupes.MessengerOverlay = {}
 
