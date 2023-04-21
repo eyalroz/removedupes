@@ -9,7 +9,7 @@ const Preferences  = ChromeUtils.import("resource://gre/modules/Preferences.jsm"
 const MailUtils    = ChromeUtils.import("resource:///modules/MailUtils.jsm").MailUtils;
 const XPCOMUtils   = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm").XPCOMUtils;
 
-if ("undefined" == typeof(messenger)) {
+if (typeof messenger == 'undefined') {
   var messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
 }
 
@@ -67,7 +67,7 @@ RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
     return messageFolder; 
 }
 
-  if (typeof MailUtils != 'undefined' && MailUtils.getFolderForURI) {
+  if (MailUtils?.getFolderForURI) {
     return MailUtils.getFolderForURI(uri, checkFolderAttributes);
   }
   try {

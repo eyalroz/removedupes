@@ -1,8 +1,8 @@
 var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
-if ("undefined" == typeof(ObjectUtils)) {
+if (typeof ObjectUtils == 'undefined') {
   var ObjectUtils = ChromeUtils.import("resource://gre/modules/ObjectUtils.jsm").ObjectUtils;
 }
-if ("undefined" == typeof(ImapService)) {
+if (typeof ImapService == 'undefined') {
   var ImapService = ChromeUtils.import("resource://gre/modules/ImapService.jsm").ImapService;
 }
 
@@ -54,7 +54,7 @@ RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages = function() {
   // for this coming search, not for subsequent searches
   RemoveDupes.MessengerOverlay.originalsFolders = null;
   RemoveDupes.MessengerOverlay.originalsFolderUris = null;
-  if (typeof gFolderTreeView != 'undefined') {
+  if (gFolderTreeView !== undefined) {
     if (gFolderTreeView) { gFolderTreeView._tree.invalidate(); }
   }
   searchData.keyPressEventListener =
