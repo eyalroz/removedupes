@@ -2,4 +2,3 @@
 function onLoad(activatedWhileWindowOpen) {
   WL.injectCSS("chrome://removedupes/content/skin/classic/removedupes-button.css");
 }
-

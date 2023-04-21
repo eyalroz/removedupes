@@ -5,7 +5,8 @@ var debugInjection = false;
 Services.scriptloader.loadSubScript("chrome://removedupes/content/removedupes.js", window, "UTF-8");
 
 function injectToolbarButton() {
-  WL.injectElements(`
+  WL.injectElements(
+    `
     <toolbarpalette id="MailToolbarPalette">
       <toolbarbutton id="removedupes-button"
                      oncommand="RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages();"
@@ -68,7 +69,7 @@ function injectToolbarButton() {
     </toolbarpalette>`,
     [
       "chrome://removedupes/locale/removedupes.dtd",
-      "chrome://removedupes/locale/removedupes-prefs.dtd"
+      "chrome://removedupes/locale/removedupes-prefs.dtd",
     ],
     debugInjection
   );
@@ -76,7 +77,8 @@ function injectToolbarButton() {
 }
 
 function injectOtherElements() {
-  WL.injectElements(`
+  WL.injectElements(
+    `
     <keyset id="mailKeys">
       <key id="key-removedupes"
         modifiers="&key-removedupes.modifiers;"
@@ -113,7 +115,7 @@ function injectOtherElements() {
     </menupopup>`,
     [
       "chrome://removedupes/locale/removedupes.dtd",
-      "chrome://removedupes/locale/removedupes-prefs.dtd"
+      "chrome://removedupes/locale/removedupes-prefs.dtd",
     ],
     debugInjection
   );
