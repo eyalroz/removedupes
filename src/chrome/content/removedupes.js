@@ -1,9 +1,14 @@
 var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
+
 if (typeof ObjectUtils == 'undefined') {
   var ObjectUtils = ChromeUtils.import("resource://gre/modules/ObjectUtils.jsm").ObjectUtils;
 }
 if (typeof ImapService == 'undefined') {
   var ImapService = ChromeUtils.import("resource://gre/modules/ImapService.jsm").ImapService;
+}
+
+if (typeof MailUtils == 'undefined') {
+  const MailUtils    = ChromeUtils.import("resource:///modules/MailUtils.jsm").MailUtils;
 }
 
 if (typeof Cc == 'undefined') {
@@ -803,14 +808,20 @@ RemoveDupes.MessengerOverlay.reviewAndRemoveDupes = function(searchData) {
       RemoveDupes.Removal.deleteMessages(window, msgWindow, searchData.dupeSetsHashMap, DontHaveMessageRecords);
   }
   else {
-      let targetFolderURI =
-		RemoveDupes.Prefs.get('default_target_folder', null) ??
-		RemoveDupes.Removal.getLocalFoldersTrashFolder();
-	let targetFolder = RemoveDupes.GetMsgFolderFromUri(targetFolderURI, true);
-      if (!targetFolder) {
-        appWindow.alert(RemoveDupes.Strings.forma('no_such_folder', [targetFolderURI]));
-        throw 'No such folder ' + targetFolderURI;
+    let targetFolderURI = RemoveDupes.Prefs.get('default_target_folder', null);
+    let targetFolder = (targetFolderURI ? MailUtils.getExistingFolder(targetFolderURI) : null) ??
+      RemoveDupes.Removal.getLocalFoldersTrashFolder();
+    if (checkFolderAttributes) {
+        // TODO: Is this really a valid check? I wonder
+        if (!targetFolder.parent && !targetFolder.isServer) {
+          messageFolder = null;
       }
+    }
+    
+    if (!targetFolder) {
+      appWindow.alert(RemoveDupes.Strings.forma('no_such_folder', [targetFolderURI]));
+      throw 'No such folder ' + targetFolderURI;
+    }
 
       // without user confirmation or review; we're keeping the first dupe
       // in every sequence of dupes and deleting the rest

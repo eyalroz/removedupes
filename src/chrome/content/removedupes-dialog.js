@@ -1,7 +1,8 @@
 const Ci = Components.interfaces;
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const RemoveDupes = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js").RemoveDupes;
+const MailUtils    = ChromeUtils.import("resource:///modules/MailUtils.jsm").MailUtils;
+const RemoveDupes  = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js").RemoveDupes;
 
 var msgWindow;
   // the 3-pane window which opened us
@@ -673,17 +674,17 @@ function markNoDupesForDeletion() {
 }
 
 function initializeFolderPicker() {
-  var uri, msgFolder;
+  let uri, msgFolder = null;
   // We might not have a pref for the default folder,
   // or the folder URIs may have changed for some reason
   try {
     uri = RemoveDupes.Prefs.get('default_target_folder', null);
-    msgFolder = RemoveDupes.GetMsgFolderFromUri(uri, false);
+    msgFolder = MailUtils.getExistingFolder(uri);
   } catch(ex) { }
 
   if (!msgFolder) {
     uri = RemoveDupes.Removal.getLocalFoldersTrashFolder().URI;
-    msgFolder = RemoveDupes.GetMsgFolderFromUri(uri, false);
+    msgFolder = MailUtils.getExistingFolder(uri);
   }
 
   try {

@@ -56,36 +56,6 @@ RemoveDupes.MessageStatusFlags = {
 };
 
 XPCOMUtils.defineLazyServiceGetter(
-  RemoveDupes, "FolderLookupService", '@mozilla.org/mail/folder-lookup;1', 'nsIFolderLookupService');
-
-RemoveDupes.GetMsgFolderFromUri = function (uri, checkFolderAttributes) {
-  let messageFolder = null;
-
-  try {
-    messageFolder = RemoveDupes.FolderLookupService.getFolderForURL(uri);
-  } catch (ex) { }
-  if (messageFolder != null) {
-    return messageFolder;
-  }
-
-  if (MailUtils?.getFolderForURI) {
-    return MailUtils.getFolderForURI(uri, checkFolderAttributes);
-  }
-  try {
-    let resource = GetResourceFromUri(uri);
-    messageFolder = resource.QueryInterface(Ci.nsIMsgFolder);
-    if (checkFolderAttributes) {
-      if (!(messageFolder && (messageFolder.parent || messageFolder.isServer))) {
-        messageFolder = null;
-      }
-    }
-  }
-  catch (ex)  {
-  }
-  return messageFolder;
-};
-
-XPCOMUtils.defineLazyServiceGetter(
     RemoveDupes, 'AlertsService', '@mozilla.org/alerts-service;1', 'nsIAlertsService');
 
 RemoveDupes.showNotification = function (appWindow, notificationName) {
