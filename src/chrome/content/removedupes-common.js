@@ -119,7 +119,7 @@ RemoveDupes.namedAlert = function(appWindow, alertName) {
 
 // localized strings
 RemoveDupes.Strings = {
-#expand   prefix : '__SHORTNAME__.',
+  prefix : 'removedupes.',
   getByName: function(stringName) {
     return this.Bundle.GetStringFromName(this.prefix + stringName);
   },
