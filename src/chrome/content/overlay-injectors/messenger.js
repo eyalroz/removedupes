@@ -126,11 +126,3 @@ function onLoad(activatedWhileWindowOpen) {
   injectOtherElements();
 }
 
-// called on window unload or on add-on deactivation while window is still open
-function onUnload(deactivatedWhileWindowOpen) {
-  // no need to clean up UI on global shutdown
-  if (!deactivatedWhileWindowOpen)
-    return;
-  // If we've added any elements not through WL.inject functions - we need to remove
-  // them manually here. The WL-injected elements get auto-removed
-}
