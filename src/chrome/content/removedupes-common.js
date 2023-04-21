@@ -61,16 +61,8 @@ XPCOMUtils.defineLazyServiceGetter(
 RemoveDupes.showNotification = function (appWindow, notificationName) {
   let text = RemoveDupes.Strings.getByName(notificationName);
   let title = RemoveDupes.Strings.getByName("title");
-  try {
-    RemoveDupes.AlertsService.showAlertNotification(
-      null, // no image
-      title,
-      text);
-  } catch (e) {
-    // Thunderbird probably doesn't support nsIAlertsService, let's try
-    // the old-flashied way - a model alert
-    appWindow.alert(title + ":\n" + text);
-  }
+  const NoImage = null;
+  RemoveDupes.AlertsService.showAlertNotification(NoImage, title, text);
 }
 
 RemoveDupes.namedAlert = function (appWindow, alertName) {
