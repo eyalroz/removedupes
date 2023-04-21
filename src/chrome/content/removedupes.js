@@ -6,6 +6,9 @@ if ("undefined" == typeof(ImapService)) {
   var ImapService = ChromeUtils.import("resource://gre/modules/ImapService.jsm").ImapService ;
 }
 
+const Cc = Components.classes;
+const Ci = Components.interfaces;
+
 RemoveDupes.MessengerOverlay = {
 
   setNamedStatus: function(stringName) {

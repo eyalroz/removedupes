@@ -18,12 +18,9 @@ var RemoveDupes = {};
 try {
   // for some reason this is no longer defined recent Seamonkey trunk versions
   RemoveDupes.FolderFlags = {}
-  RemoveDupes.FolderFlags.Inbox   =
-    Components.interfaces.nsMsgFolderFlags.Inbox;
-  RemoveDupes.FolderFlags.Virtual =
-    Components.interfaces.nsMsgFolderFlags.Virtual;
-  RemoveDupes.FolderFlags.Trash =
-    Components.interfaces.nsMsgFolderFlags.Trash;
+  RemoveDupes.FolderFlags.Inbox   = Components.interfaces.nsMsgFolderFlags.Inbox;
+  RemoveDupes.FolderFlags.Virtual = Components.interfaces.nsMsgFolderFlags.Virtual;
+  RemoveDupes.FolderFlags.Trash   = Components.interfaces.nsMsgFolderFlags.Trash;
 } catch(ex) {
   // constants from nsMsgFolderFlags.idl
   RemoveDupes.FolderFlags.Inbox   = 0x1000;
@@ -75,7 +72,7 @@ RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
   }
   try {
     let resource = GetResourceFromUri(uri);
-    messageFolder = resource.QueryInterface(Components.interfaces.nsIMsgFolder);
+    messageFolder = resource.QueryInterface(Ci.nsIMsgFolder);
     if (checkFolderAttributes) {
       if (!(messageFolder && (messageFolder.parent || messageFolder.isServer))) {
         messageFolder = null;
@@ -176,9 +173,7 @@ RemoveDupes.Removal = {
   getLocalFoldersTrashFolder : function() {
     let result = null;
     try {
-      let accountManager =
-        Components.classes["@mozilla.org/messenger/account-manager;1"]
-          .getService(Components.interfaces.nsIMsgAccountManager);
+      let accountManager = Cc["@mozilla.org/messenger/account-manager;1"].getService(Ci.nsIMsgAccountManager);
       var rootFolder = 
         accountManager.localFoldersServer.rootFolder;
       result = rootFolder.getFolderWithFlags(RemoveDupes.FolderFlags.Trash);
