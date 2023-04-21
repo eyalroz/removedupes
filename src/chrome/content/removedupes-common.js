@@ -1,4 +1,5 @@
 var EXPORTED_SYMBOLS = ["RemoveDupes"];
+var RemoveDupes = {};
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
@@ -9,24 +10,25 @@ const Preferences  = ChromeUtils.import("resource://gre/modules/Preferences.jsm"
 const MailUtils    = ChromeUtils.import("resource:///modules/MailUtils.jsm").MailUtils;
 const XPCOMUtils   = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm").XPCOMUtils;
 
+/* eslint-disable */
 if (typeof messenger == 'undefined') {
   var messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
 }
+/* eslint-enable */
 
-var RemoveDupes = {};
 
 try {
   // for some reason this is no longer defined recent Seamonkey trunk versions
-  RemoveDupes.FolderFlags = {}
+  RemoveDupes.FolderFlags = {};
   RemoveDupes.FolderFlags.Inbox   = Components.interfaces.nsMsgFolderFlags.Inbox;
   RemoveDupes.FolderFlags.Virtual = Components.interfaces.nsMsgFolderFlags.Virtual;
   RemoveDupes.FolderFlags.Trash   = Components.interfaces.nsMsgFolderFlags.Trash;
-} catch(ex) {
+} catch (ex) {
   // constants from nsMsgFolderFlags.idl
   RemoveDupes.FolderFlags.Inbox   = 0x1000;
   RemoveDupes.FolderFlags.Virtual = 0x0020;
   RemoveDupes.FolderFlags.Trash   = 0x0100;
-};
+}
 
 RemoveDupes.MessageStatusFlags = {
   READ:            0x00000001,
@@ -56,16 +58,15 @@ RemoveDupes.MessageStatusFlags = {
 XPCOMUtils.defineLazyServiceGetter(
   RemoveDupes, "FolderLookupService", '@mozilla.org/mail/folder-lookup;1', 'nsIFolderLookupService');
 
-RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
+RemoveDupes.GetMsgFolderFromUri = function (uri, checkFolderAttributes) {
   let messageFolder = null;
 
   try {
     messageFolder = RemoveDupes.FolderLookupService.getFolderForURL(uri);
-  } catch(ex) { 
+  } catch (ex) { }
+  if (messageFolder != null) {
+    return messageFolder;
   }
-  if (messageFolder != null) { 
-    return messageFolder; 
-}
 
   if (MailUtils?.getFolderForURI) {
     return MailUtils.getFolderForURI(uri, checkFolderAttributes);
@@ -87,22 +88,22 @@ RemoveDupes.GetMsgFolderFromUri = function(uri, checkFolderAttributes) {
 XPCOMUtils.defineLazyServiceGetter(
     RemoveDupes, 'AlertsService', '@mozilla.org/alerts-service;1', 'nsIAlertsService');
 
-RemoveDupes.showNotification = function(appWindow, notificationName) {
+RemoveDupes.showNotification = function (appWindow, notificationName) {
   let text = RemoveDupes.Strings.getByName(notificationName);
   let title = RemoveDupes.Strings.getByName("title");
-  try { 
+  try {
     RemoveDupes.AlertsService.showAlertNotification(
       null, // no image
       title,
       text);
-  } catch(e) {
+  } catch (e) {
     // Thunderbird probably doesn't support nsIAlertsService, let's try
     // the old-flashied way - a model alert
     appWindow.alert(title + ":\n" + text);
   }
 }
 
-RemoveDupes.namedAlert = function(appWindow, alertName) {
+RemoveDupes.namedAlert = function (appWindow, alertName) {
   let text = RemoveDupes.Strings.getByName(alertName);
   let title = RemoveDupes.Strings.getByName("title");
   Services.prompt.alert(appWindow, title, text);
@@ -114,21 +115,21 @@ RemoveDupes.namedAlert = function(appWindow, alertName) {
 
 RemoveDupes.Strings = {};
 RemoveDupes.Strings.prefix = 'removedupes.';
-RemoveDupes.Strings.getByName = function(stringName) {
+RemoveDupes.Strings.getByName = function (stringName) {
   return this.Bundle.GetStringFromName(this.prefix + stringName);
 };
-RemoveDupes.Strings.format = function(stringName, argsToFormat) {
+RemoveDupes.Strings.format = function (stringName, argsToFormat) {
   return this.Bundle.formatStringFromName(this.prefix + stringName, argsToFormat);
 };
 
 XPCOMUtils.defineLazyGetter(RemoveDupes.Strings, "Bundle",
-  function() { return Services.strings.createBundle("chrome://removedupes/locale/removedupes.properties"); }
+  function () { return Services.strings.createBundle("chrome://removedupes/locale/removedupes.properties"); }
 );
 
 //---------------------------------------------------------
 
 RemoveDupes.App = {};
-RemoveDupes.App.getBuildID = function() {
+RemoveDupes.App.getBuildID = function () {
   var re = /rv:([0-9.]+).*Gecko\/([0-9]+)/;
   var arr = re.exec(navigator.userAgent);
   //var revision = arr[1];
@@ -136,18 +137,18 @@ RemoveDupes.App.getBuildID = function() {
 };
 
 // returns true if the app version is equal-or-higher to minVersion, false otherwise;
-RemoveDupes.App.ensureVersion = function(versionThreshold, checkMinimum) {
+RemoveDupes.App.ensureVersion = function (versionThreshold, checkMinimum) {
   var versionCheckResult = Services.vc.compare(Services.appinfo.version, versionThreshold);
   return (   (checkMinimum  && (versionCheckResult >= 0))
           || (!checkMinimum && (versionCheckResult <= 0)));
 };
 
-RemoveDupes.App.versionIsAtLeast = function(minVersion) { 
-  return this.ensureVersion(minVersion, true); 
+RemoveDupes.App.versionIsAtLeast = function (minVersion) {
+  return this.ensureVersion(minVersion, true);
 };
 
-RemoveDupes.App.versionIsAtMost = function(maxVersion) {
-  return this.ensureVersion(maxVersion, false); 
+RemoveDupes.App.versionIsAtMost = function (maxVersion) {
+  return this.ensureVersion(maxVersion, false);
 };
 
 //---------------------------------------------------------
@@ -155,7 +156,7 @@ RemoveDupes.App.versionIsAtMost = function(maxVersion) {
 // Preferences
 // -----------
 
-XPCOMUtils.defineLazyGetter(RemoveDupes, 'Prefs', function() {
+XPCOMUtils.defineLazyGetter(RemoveDupes, 'Prefs', function () {
     let Preferences = ChromeUtils.import("resource://gre/modules/Preferences.jsm").Preferences;
     return new Preferences('extensions.removedupes.');
 });
@@ -163,14 +164,14 @@ XPCOMUtils.defineLazyGetter(RemoveDupes, 'Prefs', function() {
 //---------------------------------------------------------
 
 RemoveDupes.Removal = {};
-  
-RemoveDupes.Removal.getLocalFoldersTrashFolder = function() {
+
+RemoveDupes.Removal.getLocalFoldersTrashFolder = function () {
   let result = null;
   try {
     let accountManager = Cc["@mozilla.org/messenger/account-manager;1"].getService(Ci.nsIMsgAccountManager);
     var rootFolder = accountManager.localFoldersServer.rootFolder;
     result = rootFolder.getFolderWithFlags(RemoveDupes.FolderFlags.Trash);
-  } catch(ex) {
+  } catch (ex) {
     // We did our best... let's just return _something_
   }
   if (!result || result == "") {
@@ -183,13 +184,13 @@ RemoveDupes.Removal.getLocalFoldersTrashFolder = function() {
 // either after the dupes are collected,
 // without displaying the dialog, in which case each element in the hash is
 // an array of Uri's and haveMessageRecords is false, or after displaying the
-// dialog, in which case the elements have been replaced with messageRecord 
+// dialog, in which case the elements have been replaced with messageRecord
 // objects (which also include indications of which messages to keep)
 //
 // Function returns a hash-map from folder URIs to folder object reference +
 // list of headers
 
-RemoveDupes.Removal.arrangeMessagesByFolder = function(messageSetsHashMap,haveMessageRecords) {
+RemoveDupes.Removal.arrangeMessagesByFolder = function (messageSetsHashMap,haveMessageRecords) {
 
   const UsePlainArrayForremovalHeaders = RemoveDupes.App.versionIsAtLeast("79.0");
   const ArrayAppendFunctionName = UsePlainArrayForremovalHeaders ? 'push' : 'appendElement';
@@ -225,7 +226,7 @@ RemoveDupes.Removal.arrangeMessagesByFolder = function(messageSetsHashMap,haveMe
 };
 
 // Returns true on success, false on failure
-RemoveDupes.Removal.moveMessages = function(appWindow, msgWindow, messageSetsHashMap, targetFolder, haveMessageRecords)
+RemoveDupes.Removal.moveMessages = function (appWindow, msgWindow, messageSetsHashMap, targetFolder, haveMessageRecords)
 {
   var messagesByFolder = RemoveDupes.Removal.arrangeMessagesByFolder(messageSetsHashMap,haveMessageRecords);
 
@@ -238,7 +239,7 @@ RemoveDupes.Removal.moveMessages = function(appWindow, msgWindow, messageSetsHas
         messagesByFolder[folderUri].folder,
         messagesByFolder[folderUri].messageHeaders,
         targetFolder);
-    } catch(ex) {
+    } catch (ex) {
       appWindow.alert(RemoveDupes.Strings.format('failed_to_move_to_folder', [targetFolder.URI]));
       console.log('Failed moving messages from folder\n' + folderUri + '\ntoFolder\n' + targetFolder.URI + '  :\n' + ex);
       return false;
@@ -247,7 +248,7 @@ RemoveDupes.Removal.moveMessages = function(appWindow, msgWindow, messageSetsHas
   return true;
 };
 
-RemoveDupes.Removal.moveMessagesFromFolder = function(msgWindow, sourceFolder, removalMessageHdrs, targetFolder)
+RemoveDupes.Removal.moveMessagesFromFolder = function (msgWindow, sourceFolder, removalMessageHdrs, targetFolder)
 {
   // The copy function name dropped the inital capital sometime between TB 78 and TB 91
   let copyFunctionName = ('copyMessages' in MailServices.copy) ? 'copyMessages' : 'CopyMessages';
@@ -259,7 +260,7 @@ RemoveDupes.Removal.moveMessagesFromFolder = function(msgWindow, sourceFolder, r
       MovingNotCopying, NoListener, msgWindow, AllowUndo);
 };
 
-RemoveDupes.Removal.deleteMessages = function(appWindow, msgWindow, messageSetsHashMap, haveMessageRecords)
+RemoveDupes.Removal.deleteMessages = function (appWindow, msgWindow, messageSetsHashMap, haveMessageRecords)
 {
   // note that messenger and msgWindow have to be defined! if we're running from the
   // overlay of the 3-pane window, then this is ensured; otherwise,
@@ -286,7 +287,7 @@ RemoveDupes.Removal.deleteMessages = function(appWindow, msgWindow, messageSetsH
     try {
       RemoveDupes.Removal.deleteMessagesFromFolder(msgWindow, folder, folderMessageHdrs);
       anyDeletionsPerformed = true;
-    } catch(ex) {
+    } catch (ex) {
       appWindow.alert(RemoveDupes.Strings.getByName('failed_to_erase')); // todo: make this folder specific?
       console.log('Failed erasing messages from folder\n' + folderUri + ' :\n' + ex);
       break;
@@ -295,7 +296,7 @@ RemoveDupes.Removal.deleteMessages = function(appWindow, msgWindow, messageSetsH
   return anyDeletionsPerformed;
 };
 
-RemoveDupes.Removal.deleteMessagesFromFolder = function(msgWindow, folder, removalMessageHdrs)
+RemoveDupes.Removal.deleteMessagesFromFolder = function (msgWindow, folder, removalMessageHdrs)
 {
   const DeletePermanently = true;
   const DeleteStorage = true;
