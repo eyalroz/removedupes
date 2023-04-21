@@ -84,12 +84,14 @@ RemoveDupes.namedAlert = function (appWindow, alertName) {
 // Localized strings
 
 RemoveDupes.Strings = {};
-RemoveDupes.Strings.prefix = 'removedupes.';
-RemoveDupes.Strings.getByName = function (stringName) {
-  return this.Bundle.GetStringFromName(this.prefix + stringName);
+
+RemoveDupes.Strings.format = function (stringName, formatArguments) {
+  const args = formatArguments ? Array.from(formatArguments) : [];
+  return this.Bundle.formatStringFromName('removedupes.' + stringName, args);
 };
-RemoveDupes.Strings.format = function (stringName, argsToFormat) {
-  return this.Bundle.formatStringFromName(this.prefix + stringName, argsToFormat);
+
+RemoveDupes.Strings.getByName = function (stringName) {
+  return RemoveDupes.Strings.format(stringName, []);
 };
 
 XPCOMUtils.defineLazyGetter(RemoveDupes.Strings, "Bundle",

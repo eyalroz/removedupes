@@ -16,11 +16,16 @@ if (typeof Cc == 'undefined') {
   const Ci = Components.interfaces;
 }
 
-RemoveDupes.MessengerOverlay = {}
+RemoveDupes.MessengerOverlay = {};
 
-RemoveDupes.MessengerOverlay.setNamedStatus = function(stringName) {
-  RemoveDupes.MessengerOverlay.statusTextField.label =
-    (stringName ? RemoveDupes.Strings.getByName(stringName) : null);
+RemoveDupes.MessengerOverlay.setStatus = function (statusText) {
+  RemoveDupes.MessengerOverlay.statusTextField.value = statusText;
+  RemoveDupes.MessengerOverlay.statusTextField.textContent = statusText;
+};
+
+RemoveDupes.MessengerOverlay.setNamedStatus = function (stringName, formatArguments){
+  let text = RemoveDupes.Strings.format(stringName, formatArguments);
+  RemoveDupes.MessengerOverlay.setStatus(text);
 };
 
 // These default criteria are used in the dupe search if the preferences
@@ -320,7 +325,7 @@ RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2 = function(
     if (searchData.useReviewDialog) {
       // if the user wants a dialog to pop up for the dupes,
       // we can bother him/her with a message box for 'no dupes'
-      RemoveDupes.MessengerOverlay.statusTextField.label = '';
+      RemoveDupes.MessengerOverlay.setStatus('');
       RemoveDupes.namedAlert(window, 'no_duplicates_found');
     }
     else {
@@ -623,8 +628,7 @@ RemoveDupes.MessengerOverlay.populateDupeSetsHash = function*(searchData) {
       var currentTime = (new Date()).getTime();
       if (currentTime - searchData.lastStatusBarReport > searchData.reportQuantum) {
         searchData.lastStatusBarReport = currentTime;
-        RemoveDupes.MessengerOverlay.statusTextField.label =
-          RemoveDupes.Strings.format('hashed_x_messages', [searchData.messagesHashed]);
+        RemoveDupes.MessengerOverlay.setNamedStatus('hashed_x_messages', [searchData.messagesHashed]);
       }
       if (currentTime - searchData.lastYield > searchData.yieldQuantum) {
         searchData.lastYield = currentTime;
@@ -685,8 +689,7 @@ RemoveDupes.MessengerOverlay.reportRefinementProgress = function(searchData,acti
     searchData.lastStatusBarReport = (new Date()).getTime();
     switch (activity) {
       case 'bodies':
-        RemoveDupes.MessengerOverlay.statusTextField.label =
-          RemoveDupes.Strings.format(
+        RemoveDupes.MessengerOverlay.setNamedStatus(
             'refinement_status_getting_bodies',
             [searchData.setsRefined,
              searchData.totalOriginalDupeSets,
@@ -695,8 +698,7 @@ RemoveDupes.MessengerOverlay.reportRefinementProgress = function(searchData,acti
             ]);
         break;
       case 'subsets':
-        RemoveDupes.MessengerOverlay.statusTextField.label =
-          RemoveDupes.Strings.format(
+        RemoveDupes.MessengerOverlay.setNamedStatus(
             'refinement_status_building_subsets',
             [searchData.setsRefined,
              searchData.totalOriginalDupeSets,
@@ -817,7 +819,7 @@ RemoveDupes.MessengerOverlay.reviewAndRemoveDupes = function(searchData) {
           messageFolder = null;
       }
     }
-    
+
     if (!targetFolder) {
       appWindow.alert(RemoveDupes.Strings.forma('no_such_folder', [targetFolderURI]));
       throw 'No such folder ' + targetFolderURI;
@@ -954,7 +956,7 @@ RemoveDupes.UpdateFolderDoneListener.prototype.OnStopRunningUrl = function(url, 
 // a class for holding the search parameters (instead of
 // using a bunch of globals)
 //---------------------------------------------------
-RemoveDupes.DupeSearchData = function () 
+RemoveDupes.DupeSearchData = function ()
 {
   this.searchSubfolders = RemoveDupes.Prefs.get("search_subfolders");
 
