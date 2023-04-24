@@ -4,11 +4,11 @@ const Ci = Components.interfaces;
 var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
 
 RemoveDupes.PrefPane = {};
-RemoveDupes.PrefPane.init = function() {
+RemoveDupes.PrefPane.init = function () {
   window.addEventListener("dialoghelp", this.openGuide, true);
 };
 
-RemoveDupes.PrefPane.openGuide = function(aEvent) {
+RemoveDupes.PrefPane.openGuide = function (aEvent) {
   try {
     // Open the user guide in the default browser.
     let helpLink = document.getElementById("removeDupesPrefPane").getAttribute("helpURI");

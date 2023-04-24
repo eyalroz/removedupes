@@ -4,31 +4,18 @@ var RemoveDupes = {};
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 
-const Services    = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const MailServices = ChromeUtils.import("resource:///modules/MailServices.jsm").MailServices;
-const Preferences  = ChromeUtils.import("resource://gre/modules/Preferences.jsm").Preferences;
-const MailUtils    = ChromeUtils.import("resource:///modules/MailUtils.jsm").MailUtils;
-const XPCOMUtils   = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm").XPCOMUtils;
+const { Services     } = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm");
+const { XPCOMUtils   } = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
-/* eslint-disable */
-if (typeof messenger == 'undefined') {
-  var messenger = Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
-}
-/* eslint-enable */
+globalThis.messenger ??= Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
 
-
-try {
-  // for some reason this is no longer defined recent Seamonkey trunk versions
-  RemoveDupes.FolderFlags = {};
-  RemoveDupes.FolderFlags.Inbox   = Components.interfaces.nsMsgFolderFlags.Inbox;
-  RemoveDupes.FolderFlags.Virtual = Components.interfaces.nsMsgFolderFlags.Virtual;
-  RemoveDupes.FolderFlags.Trash   = Components.interfaces.nsMsgFolderFlags.Trash;
-} catch (ex) {
-  // constants from nsMsgFolderFlags.idl
-  RemoveDupes.FolderFlags.Inbox   = 0x1000;
-  RemoveDupes.FolderFlags.Virtual = 0x0020;
-  RemoveDupes.FolderFlags.Trash   = 0x0100;
-}
+// for some reason this is no longer defined recent Seamonkey trunk versions
+RemoveDupes.FolderFlags = {
+  Inbox:   Ci.nsMsgFolderFlags?.Inbox   ?? 0x1000,
+  Virtual: Ci.nsMsgFolderFlags?.Virtual ?? 0x0020,
+  Trash:   Ci.nsMsgFolderFlags?.Trash   ?? 0x0100,
+};
 
 RemoveDupes.MessageStatusFlags = {
   READ:            0x00000001,
@@ -56,38 +43,34 @@ RemoveDupes.MessageStatusFlags = {
 };
 
 XPCOMUtils.defineLazyServiceGetter(
-    RemoveDupes, 'AlertsService', '@mozilla.org/alerts-service;1', 'nsIAlertsService');
+  RemoveDupes, 'AlertsService', '@mozilla.org/alerts-service;1', 'nsIAlertsService');
 
 RemoveDupes.showNotification = function (appWindow, notificationName) {
   let text = RemoveDupes.Strings.getByName(notificationName);
   let title = RemoveDupes.Strings.getByName("title");
   const NoImage = null;
   RemoveDupes.AlertsService.showAlertNotification(NoImage, title, text);
-}
+};
 
 RemoveDupes.namedAlert = function (appWindow, alertName) {
   let text = RemoveDupes.Strings.getByName(alertName);
   let title = RemoveDupes.Strings.getByName("title");
   Services.prompt.alert(appWindow, title, text);
-}
+};
 
 //---------------------------------------------------------
-
-// Localized strings
 
 RemoveDupes.Strings = {};
 
 RemoveDupes.Strings.format = function (stringName, formatArguments) {
   const args = formatArguments ? Array.from(formatArguments) : [];
-  return this.Bundle.formatStringFromName('removedupes.' + stringName, args);
+  return this.Bundle.formatStringFromName(`removedupes.${stringName}`, args);
 };
 
-RemoveDupes.Strings.getByName = function (stringName) {
-  return RemoveDupes.Strings.format(stringName, []);
-};
+RemoveDupes.Strings.getByName = (stringName) => RemoveDupes.Strings.format(stringName, []);
 
 XPCOMUtils.defineLazyGetter(RemoveDupes.Strings, "Bundle",
-  function () { return Services.strings.createBundle("chrome://removedupes/locale/removedupes.properties"); }
+  () => Services.strings.createBundle("chrome://removedupes/locale/removedupes.properties")
 );
 
 //---------------------------------------------------------
@@ -96,15 +79,15 @@ RemoveDupes.App = {};
 RemoveDupes.App.getBuildID = function () {
   var re = /rv:([0-9.]+).*Gecko\/([0-9]+)/;
   var arr = re.exec(navigator.userAgent);
-  //var revision = arr[1];
+  // var revision = arr[1];
   return arr[2];
 };
 
 // returns true if the app version is equal-or-higher to minVersion, false otherwise;
 RemoveDupes.App.ensureVersion = function (versionThreshold, checkMinimum) {
   var versionCheckResult = Services.vc.compare(Services.appinfo.version, versionThreshold);
-  return (   (checkMinimum  && (versionCheckResult >= 0))
-          || (!checkMinimum && (versionCheckResult <= 0)));
+  return ((checkMinimum  && (versionCheckResult >= 0)) ||
+          (!checkMinimum && (versionCheckResult <= 0)));
 };
 
 RemoveDupes.App.versionIsAtLeast = function (minVersion) {
@@ -117,12 +100,9 @@ RemoveDupes.App.versionIsAtMost = function (maxVersion) {
 
 //---------------------------------------------------------
 
-// Preferences
-// -----------
-
-XPCOMUtils.defineLazyGetter(RemoveDupes, 'Prefs', function () {
-    let Preferences = ChromeUtils.import("resource://gre/modules/Preferences.jsm").Preferences;
-    return new Preferences('extensions.removedupes.');
+XPCOMUtils.defineLazyGetter(RemoveDupes, 'Prefs', () => {
+  let Preferences = ChromeUtils.import("resource://gre/modules/Preferences.jsm").Preferences;
+  return new Preferences('extensions.removedupes.');
 });
 
 //---------------------------------------------------------
@@ -133,8 +113,7 @@ RemoveDupes.Removal.getLocalFoldersTrashFolder = function () {
   let result = null;
   try {
     let accountManager = Cc["@mozilla.org/messenger/account-manager;1"].getService(Ci.nsIMsgAccountManager);
-    var rootFolder = accountManager.localFoldersServer.rootFolder;
-    result = rootFolder.getFolderWithFlags(RemoveDupes.FolderFlags.Trash);
+    result = accountManager.localFoldersServer.rootFolder.getFolderWithFlags(RemoveDupes.FolderFlags.Trash);
   } catch (ex) {
     // We did our best... let's just return _something_
   }
@@ -154,12 +133,11 @@ RemoveDupes.Removal.getLocalFoldersTrashFolder = function () {
 // Function returns a hash-map from folder URIs to folder object reference +
 // list of headers
 
-RemoveDupes.Removal.arrangeMessagesByFolder = function (messageSetsHashMap,haveMessageRecords) {
-
+RemoveDupes.Removal.arrangeMessagesByFolder = function (messageSetsHashMap, haveMessageRecords) {
   const UsePlainArrayForremovalHeaders = RemoveDupes.App.versionIsAtLeast("79.0");
   const ArrayAppendFunctionName = UsePlainArrayForremovalHeaders ? 'push' : 'appendElement';
 
-  let messagesByFolder = new Object; // TODO: Consider using Map
+  let messagesByFolder = { }; // TODO: Consider using Map
   for (const hashValue in messageSetsHashMap) {
     let messageSet = messageSetsHashMap[hashValue]; // cleaner iteration please!
     let folderUri, messageHeader;
@@ -168,8 +146,7 @@ RemoveDupes.Removal.arrangeMessagesByFolder = function (messageSetsHashMap,haveM
         const dupeMessageRecord = messageInfo;
         if (dupeMessageRecord.toKeep) { continue; }
         messageHeader = messenger.msgHdrFromURI(dupeMessageRecord.uri);
-      }
-      else {
+      } else {
         const messageUri = messageInfo;
         messageHeader = messenger.msgHdrFromURI(messageUri);
       }
@@ -177,9 +154,9 @@ RemoveDupes.Removal.arrangeMessagesByFolder = function (messageSetsHashMap,haveM
       let folderEntry = messagesByFolder[folderUri];
       if (!folderEntry) {
         folderEntry = {
-          'folder' : messageHeader.folder,
-          'messageHeaders' : UsePlainArrayForremovalHeaders ?
-            new Array : Components.classes["@mozilla.org/array;1"].createInstance(Components.interfaces.nsIMutableArray)
+          folder : messageHeader.folder,
+          messageHeaders : UsePlainArrayForremovalHeaders ?
+            [] : Cc["@mozilla.org/array;1"].createInstance(Ci.nsIMutableArray)
         };
         messagesByFolder[folderUri] = folderEntry;
       }
@@ -190,9 +167,8 @@ RemoveDupes.Removal.arrangeMessagesByFolder = function (messageSetsHashMap,haveM
 };
 
 // Returns true on success, false on failure
-RemoveDupes.Removal.moveMessages = function (appWindow, msgWindow, messageSetsHashMap, targetFolder, haveMessageRecords)
-{
-  var messagesByFolder = RemoveDupes.Removal.arrangeMessagesByFolder(messageSetsHashMap,haveMessageRecords);
+RemoveDupes.Removal.moveMessages = function (appWindow, msgWindow, messageSetsHashMap, targetFolder, haveMessageRecords)  {
+  var messagesByFolder = RemoveDupes.Removal.arrangeMessagesByFolder(messageSetsHashMap, haveMessageRecords);
 
   // TODO: iterate with field binding, e.g. for(const [key, { foo, bar }] of map) {
   for (let folderUri in messagesByFolder) {
@@ -205,33 +181,31 @@ RemoveDupes.Removal.moveMessages = function (appWindow, msgWindow, messageSetsHa
         targetFolder);
     } catch (ex) {
       appWindow.alert(RemoveDupes.Strings.format('failed_to_move_to_folder', [targetFolder.URI]));
-      console.log('Failed moving messages from folder\n' + folderUri + '\ntoFolder\n' + targetFolder.URI + '  :\n' + ex);
+      console.log(`Failed moving messages from folder\n${folderUri}\ntoFolder\n${targetFolder.URI} :\n${ex}`);
       return false;
     }
   }
   return true;
 };
 
-RemoveDupes.Removal.moveMessagesFromFolder = function (msgWindow, sourceFolder, removalMessageHdrs, targetFolder)
-{
+RemoveDupes.Removal.moveMessagesFromFolder = function (msgWindow, sourceFolder, removalMessageHdrs, targetFolder)  {
   // The copy function name dropped the inital capital sometime between TB 78 and TB 91
   let copyFunctionName = ('copyMessages' in MailServices.copy) ? 'copyMessages' : 'CopyMessages';
   const MovingNotCopying = true;
   const NoListener = null;
   const AllowUndo = true;
   return MailServices.copy[copyFunctionName](
-      sourceFolder, removalMessageHdrs, targetFolder,
-      MovingNotCopying, NoListener, msgWindow, AllowUndo);
+    sourceFolder, removalMessageHdrs, targetFolder,
+    MovingNotCopying, NoListener, msgWindow, AllowUndo);
 };
 
-RemoveDupes.Removal.deleteMessages = function (appWindow, msgWindow, messageSetsHashMap, haveMessageRecords)
-{
+RemoveDupes.Removal.deleteMessages = function (appWindow, msgWindow, messageSetsHashMap, haveMessageRecords)  {
   // note that messenger and msgWindow have to be defined! if we're running from the
   // overlay of the 3-pane window, then this is ensured; otherwise,
   // the dupes review dialog should have gotten it as a parameter
   // and set a window-global variable of its own
 
-  let messagesByFolder = RemoveDupes.Removal.arrangeMessagesByFolder(messageSetsHashMap,haveMessageRecords);
+  let messagesByFolder = RemoveDupes.Removal.arrangeMessagesByFolder(messageSetsHashMap, haveMessageRecords);
 
   let anyDeletionsPerformed = false; // if we abort right away, the dialog can stay open, so the "accept" is cancelled
 
@@ -243,7 +217,7 @@ RemoveDupes.Removal.deleteMessages = function (appWindow, msgWindow, messageSets
     let folderMessageHdrs = messagesByFolder[folderUri].messageHeaders;
     var numMessagesToDelete = folderMessageHdrs.length;
     var confirmationRequestMessage = RemoveDupes.Strings.format('confirm_permanent_deletion_from_folder',
-      [numMessagesToDelete ,folder.abbreviatedName]);
+      [numMessagesToDelete, folder.abbreviatedName]);
     if (needConfirmation && !appWindow.confirm(confirmationRequestMessage)) {
       appWindow.alert(RemoveDupes.Strings.getByName('deletion_aborted'));
       break;
@@ -253,20 +227,19 @@ RemoveDupes.Removal.deleteMessages = function (appWindow, msgWindow, messageSets
       anyDeletionsPerformed = true;
     } catch (ex) {
       appWindow.alert(RemoveDupes.Strings.getByName('failed_to_erase')); // todo: make this folder specific?
-      console.log('Failed erasing messages from folder\n' + folderUri + ' :\n' + ex);
+      console.log(`Failed erasing messages from folder\n${folderUri} :\n${ex}`);
       break;
     }
   }
   return anyDeletionsPerformed;
 };
 
-RemoveDupes.Removal.deleteMessagesFromFolder = function (msgWindow, folder, removalMessageHdrs)
-{
+RemoveDupes.Removal.deleteMessagesFromFolder = function (msgWindow, folder, removalMessageHdrs) {
   const DeletePermanently = true;
   const DeleteStorage = true;
   const NoListener = null;
   const AllowUndo = true; // does this really work? I doubt it...
   return folder.deleteMessages(removalMessageHdrs, msgWindow,
-  DeletePermanently, DeleteStorage, NoListener, AllowUndo);
+    DeletePermanently, DeleteStorage, NoListener, AllowUndo);
 };
 

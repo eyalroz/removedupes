@@ -1,8 +1,8 @@
-const Ci = Components.interfaces;
+const { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
+const { Services    } = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm");
+const { MailUtils   } = ChromeUtils.import("resource:///modules/MailUtils.jsm");
 
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const MailUtils    = ChromeUtils.import("resource:///modules/MailUtils.jsm").MailUtils;
-const RemoveDupes  = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js").RemoveDupes;
+const Ci = Components.interfaces;
 
 var msgWindow;
   // the 3-pane window which opened us
@@ -25,7 +25,6 @@ var commonRootFolder;
 // used to refer to chrome elements
 var dupeSetTree;
 var messageRowTemplate;
-var treeLineUriColumn;
 
 // statistical info displayed on the status bar
 var numberOfDupeSets;
@@ -62,62 +61,64 @@ const  flagsColumnIndex       = 11;
 
 
 var formattingOptions = {
-  year: 'numeric', month:  'numeric', day:    'numeric',
-  hour: 'numeric', minute: 'numeric', second: 'numeric',
+  year:   'numeric',
+  month:  'numeric',
+  day:    'numeric',
+  hour:   'numeric',
+  minute: 'numeric',
+  second: 'numeric',
   timeZoneName: 'short'
 };
 var DateTimeFormatter = new Services.intl.DateTimeFormat(undefined, formattingOptions);
 
 // DupeMessageRecord - a self-describing class;
 // each dupe message in each dupe set will have a record built
-var DupeMessageRecord = function(messageUri) {
-  var messageHdr  = messenger.msgHdrFromURI(messageUri);
+var DupeMessageRecord = function (messageUri) {
+  let messageHdr  = messenger.msgHdrFromURI(messageUri);
 
   this.uri          = messageUri;
   this.folder_name  = messageHdr.folder.abbreviatedName;
   this.folderUri    = messageHdr.folder.URI;
   this.rootFolder   = messageHdr.folder.server.rootFolder;
     // the root folder is used for checking whether all messages are from the same account
-  this.message_id   =
-   ((   allowMD5IDSubstitutes
-     || messageHdr.messageId.substr(0,4) != 'md5:') ?
+  this.message_id   = ((allowMD5IDSubstitutes || messageHdr.messageId.substr(0, 4) != 'md5:') ?
     messageHdr.messageId : '');
   this.send_time    = messageHdr.dateInSeconds;
   this.size         = messageHdr.messageSize;
   try {
     this.subject    = messageHdr.mime2DecodedSubject;
-  } catch(ex) {
+  } catch (ex) {
     this.subject    = '(decoding failure)';
   }
   try {
     this.author     = messageHdr.mime2DecodedAuthor;
-  } catch(ex) {
+  } catch (ex) {
     this.author     = '(decoding failure)';
   }
   try {
     this.recipients = messageHdr.mime2DecodedRecipients;
-  } catch(ex) {
+  } catch (ex) {
     this.recipients = '(decoding failure)';
   }
   this.cc_list      = messageHdr.ccList;
-  //this.flags      = "0x" + num2hex(messageHdr.flags);
+  // this.flags      = "0x" + num2hex(messageHdr.flags);
   this.flags        = flagsToString(messageHdr.flags);
   this.num_lines    = messageHdr.lineCount;
   // by default, we're deleting dupes, but see also below
   this.toKeep       = false;
-}
+};
 
 function flagsToString(flags) {
-  var str = '';
+  let str = '';
   for (let flagName in RemoveDupes.MessageStatusFlags) {
-    if (flags & RemoveDupes.MessageStatusFlags[flagName])
-      str += ' | ' + flagName;
+    if (flags & RemoveDupes.MessageStatusFlags[flagName]) {
+      str += ` | ${flagName}`;
+    }
   }
-  return str.replace(' | ','');
+  return str.replace(' | ', '');
 }
 
 function initDupeReviewDialog() {
-
   // Since we no longer have per-platform-skin support, we set this attribute
   // on our root element, so that, in our stylesheet, we can contextualize using
   // this attribute, e.g.
@@ -126,10 +127,10 @@ function initDupeReviewDialog() {
   //     background-color: red;
   //   }
   //
-  document.documentElement.setAttribute("platform",Services.appinfo.os);
+  document.documentElement.setAttribute("platform", Services.appinfo.os);
 
-  document.addEventListener("dialogaccept", function(event) { onAccept() || event.preventDefault(); } );
-  document.addEventListener("dialogcancel", function(event) { onCancel(); } );
+  document.addEventListener("dialogaccept", (event) => { onAccept() || event.preventDefault(); });
+  document.addEventListener("dialogcancel", () => { onCancel(); });
 
   // TODO: If we're only using some of the fields for comparison,
   // our messageRecords currently have 'null' instead of actual values
@@ -155,7 +156,7 @@ function initDupeReviewDialog() {
   // if no folders were pre-set as the 'originals', let's not
   // have the button mentioning them
   document.getElementById('keepPresetOriginalButton')
-          .setAttribute('hidden',(!originalsFolderUris));
+          .setAttribute('hidden', (!originalsFolderUris));
   initializeFolderPicker();
   document.getElementById('action').value = RemoveDupes.Prefs.get('default_action', null);
   dupeSetTree = document.getElementById("dupeSetsTree");
@@ -163,9 +164,10 @@ function initDupeReviewDialog() {
   // indicate which columns were used in the search
 
   for (let criterion in useCriteria) {
-    if (useCriteria[criterion] && (criterion != 'body'))
-      document.getElementById(criterion + 'Column')
-              .setAttribute('comparisonCriterion',true);
+    if (useCriteria[criterion] && (criterion != 'body')) {
+      document.getElementById(`${criterion}Column`)
+              .setAttribute('comparisonCriterion', true);
+    }
   }
 
   // we re-form the dupe sets - instead of arrays of message URIs we
@@ -176,15 +178,14 @@ function initDupeReviewDialog() {
 
   for (let hashValue in dupeSetsHashMap) {
     numberOfDupeSets++;
-    var dupeSet = dupeSetsHashMap[hashValue];
-    for (let i=0; i < dupeSet.length; i++) {
+    let dupeSet = dupeSetsHashMap[hashValue];
+    for (let i = 0; i < dupeSet.length; i++) {
       let dmr = new DupeMessageRecord(dupeSet[i]);
-      if (! dupesKnownNotToHaveCommonAccount) {
+      if (!dupesKnownNotToHaveCommonAccount) {
         if (!commonRootFolder) {
           commonRootFolder = dmr.rootFolder;
-        }
-        else {
-         dupesKnownNotToHaveCommonAccount = ! (commonRootFolder == dmr.rootFolder);
+        } else {
+          dupesKnownNotToHaveCommonAccount = !(commonRootFolder == dmr.rootFolder);
         }
       }
       dupeSet[i] = dmr;
@@ -201,7 +202,7 @@ function initDupeReviewDialog() {
       dupeSet[0].toKeep = true;
     }
   }
-  if (! dupesKnownNotToHaveCommonAccount) {
+  if (!dupesKnownNotToHaveCommonAccount) {
     document.getElementById('action').value = 'move_to_common_account_trash';
     let move_to_common_trash_element = document.getElementById('move_to_common_account_trash_action');
     move_to_common_trash_element.hidden = false;
@@ -214,9 +215,10 @@ function initializeDuplicateSetsTree() {
   dupeSetTree.currentItem = null;
 
   createMessageRowTemplate();
-  var sortColumnId = dupeSetTree.getAttribute('sortColumn');
-  if (sortColumnId)
+  let sortColumnId = dupeSetTree.getAttribute('sortColumn');
+  if (sortColumnId) {
     sortDupeSetsByField(document.getElementById(sortColumnId).getAttribute('fieldName'));
+  }
 
   for (let hashValue in dupeSetsHashMap) {
     if (originalsFolderUris) {
@@ -239,31 +241,30 @@ function createMessageRowTemplate() {
   // criteria or not (or maybe display them in the top treerow
   // rather than in the unfolded rows)
 
-  var dummyCell         = document.createXULElement("treecell");
+  let dummyCell         = document.createXULElement("treecell");
    // the dummy column stores no information but shows the [+] box
    // for expansion and the lines to the expanded rows
-  var keepIndicatorCell = document.createXULElement("treecell");
+  let keepIndicatorCell = document.createXULElement("treecell");
   keepIndicatorCell.setAttribute("id", "keepIndicatorCell");
-  //keepIndicatorCell.setAttribute("src", "chrome://messenger/skin/icons/notchecked.gif");
-  var authorCell        = document.createXULElement("treecell");
+  let authorCell        = document.createXULElement("treecell");
   authorCell.setAttribute("id", "authorCell");
-  var recipientsCell    = document.createXULElement("treecell");
+  let recipientsCell    = document.createXULElement("treecell");
   recipientsCell.setAttribute("id", "recipientsCell");
-  var ccListCell    = document.createXULElement("treecell");
+  let ccListCell    = document.createXULElement("treecell");
   ccListCell.setAttribute("id", "ccListCell");
-  var subjectCell       = document.createXULElement("treecell");
+  let subjectCell       = document.createXULElement("treecell");
   subjectCell.setAttribute("id", "subjectCell");
-  var folderCell        = document.createXULElement("treecell");
+  let folderCell        = document.createXULElement("treecell");
   folderCell.setAttribute("id", "folderCell");
-  var sendTimeCell      = document.createXULElement("treecell");
+  let sendTimeCell      = document.createXULElement("treecell");
   sendTimeCell.setAttribute("id", "sendTimeCell");
-  var sizeCell          = document.createXULElement("treecell");
+  let sizeCell          = document.createXULElement("treecell");
   sizeCell.setAttribute("id", "sizeCell");
-  var lineCountCell     = document.createXULElement("treecell");
+  let lineCountCell     = document.createXULElement("treecell");
   lineCountCell.setAttribute("id", "lineCountCell");
-  var messageIdCell     = document.createXULElement("treecell");
+  let messageIdCell     = document.createXULElement("treecell");
   messageIdCell.setAttribute("id", "messageIdCell");
-  var flagsCell         = document.createXULElement("treecell");
+  let flagsCell         = document.createXULElement("treecell");
   flagsCell.setAttribute("id", "messageIdCell");
 
   messageRowTemplate = document.createXULElement("treerow");
@@ -295,29 +296,28 @@ function setNamedStatus(panelId, statusName) {
 }
 
 function clearStatusBar() {
-  setNamedStatus("total-status-panel","");
-  setNamedStatus("sets-status-panel","");
-  setNamedStatus("keeping-status-panel","");
-  setNamedStatus("main-status-panel","");
+  setNamedStatus("total-status-panel", "");
+  setNamedStatus("sets-status-panel", "");
+  setNamedStatus("keeping-status-panel", "");
+  setNamedStatus("main-status-panel", "");
 }
 
 function rebuildDuplicateSetsTree() {
   clearStatusBar();
-  var dupeSetsTreeChildren = document.getElementById("dupeSetsTreeChildren");
+  let dupeSetsTreeChildren = document.getElementById("dupeSetsTreeChildren");
   if (dupeSetsTreeChildren) {
     dupeSetTree.removeChild(dupeSetsTreeChildren);
   }
 
   dupeSetsTreeChildren = document.createXULElement("treechildren");
-  dupeSetsTreeChildren.setAttribute("id","dupeSetsTreeChildren");
+  dupeSetsTreeChildren.setAttribute("id", "dupeSetsTreeChildren");
 
-  setNamedStatus('main-status-panel','status_panel.populating_list');
+  setNamedStatus('main-status-panel', 'status_panel.populating_list');
 
   numberToKeep = 0;
 
   for (let hashValue in dupeSetsHashMap) {
-
-    var dupeSet = dupeSetsHashMap[hashValue];
+    let dupeSet = dupeSetsHashMap[hashValue];
 
     // Every XUL tree has a single treechildren element. The treechildren
     // for the global tree of the 'removedupes' dialog has a treeitem for every
@@ -340,12 +340,12 @@ function rebuildDuplicateSetsTree() {
     //         |            \---treeitem (for M+1'th message in Nth set; not expanded here)
     //         \--treeitem (for N+1'th dupe set; not expanded here)
 
-    var dupeSetTreeChildrenInner  = document.createXULElement("treechildren");
+    let dupeSetTreeChildrenInner  = document.createXULElement("treechildren");
 
-    for (let i=0; i < dupeSet.length; i++) {
+    for (let i = 0; i < dupeSet.length; i++) {
       if (dupeSet[i].toKeep) numberToKeep++;
-      var dupeInSetRow = createMessageTreeRow(dupeSet[i]);
-      var dupeInSetTreeItem = document.createXULElement("treeitem");
+      let dupeInSetRow = createMessageTreeRow(dupeSet[i]);
+      let dupeInSetTreeItem = document.createXULElement("treeitem");
       dupeInSetTreeItem.setAttribute('indexInDupeSet', i);
       // TODO: does anyone know a simple way of getting the index of a treeitem within
       // its parent's childNodes?
@@ -353,8 +353,8 @@ function rebuildDuplicateSetsTree() {
       dupeSetTreeChildrenInner.appendChild(dupeInSetTreeItem);
     }
 
-    var dupeSetTreeItem  = document.createXULElement("treeitem");
-    dupeSetTreeItem.setAttribute('commonHashValue',hashValue);
+    let dupeSetTreeItem  = document.createXULElement("treeitem");
+    dupeSetTreeItem.setAttribute('commonHashValue', hashValue);
     dupeSetTreeItem.appendChild(dupeSetTreeChildrenInner);
     dupeSetTreeItem.setAttribute("container", true);
     dupeSetTreeItem.setAttribute("open", true);
@@ -368,21 +368,21 @@ function rebuildDuplicateSetsTree() {
 
 function resetCheckboxValues() {
   clearStatusBar();
-  var dupeSetsTreeChildren = document.getElementById("dupeSetsTreeChildren");
-  setNamedStatus('main-status-panel','status_panel.updating_list');
+  let dupeSetsTreeChildren = document.getElementById("dupeSetsTreeChildren");
+  setNamedStatus('main-status-panel', 'status_panel.updating_list');
 
   numberToKeep = 0;
 
   // to understand how this code works, see the comment regarding the tree
   // structure in the code of rebuildDuplicateSetsTree()
 
-  var dupeSetTreeItem  = dupeSetsTreeChildren.firstChild;
+  let dupeSetTreeItem  = dupeSetsTreeChildren.firstChild;
   while (dupeSetTreeItem) {
-    var hashValue = dupeSetTreeItem.getAttribute('commonHashValue');
-    var dupeSet = dupeSetsHashMap[hashValue];
-    var dupeInSetTreeItem = dupeSetTreeItem.firstChild.firstChild;
+    let hashValue = dupeSetTreeItem.getAttribute('commonHashValue');
+    let dupeSet = dupeSetsHashMap[hashValue];
+    let dupeInSetTreeItem = dupeSetTreeItem.firstChild.firstChild;
     while (dupeInSetTreeItem) {
-      var indexInDupeSet = parseInt(dupeInSetTreeItem.getAttribute('indexInDupeSet'));
+      let indexInDupeSet = parseInt(dupeInSetTreeItem.getAttribute('indexInDupeSet'), 10);
 
       dupeInSetTreeItem.firstChild.childNodes.item(toKeepColumnIndex).setAttribute(
         "properties", (dupeSet[indexInDupeSet].toKeep ? "keep" : "delete"));
@@ -397,12 +397,12 @@ function resetCheckboxValues() {
 
 function updateStatusBar() {
   setStatusBarPanelText("sets-status-panel",
-    RemoveDupes.Strings.getByName('status_panel.number_of_sets') + " " + numberOfDupeSets);
+    `${RemoveDupes.Strings.getByName('status_panel.number_of_sets')} ${numberOfDupeSets}`);
   setStatusBarPanelText("total-status-panel",
-    RemoveDupes.Strings.getByName('status_panel.total_number_of_dupes') + " " + totalNumberOfDupes);
+    `${RemoveDupes.Strings.getByName('status_panel.total_number_of_dupes')} ${totalNumberOfDupes}`);
   setStatusBarPanelText("keeping-status-panel",
-    RemoveDupes.Strings.getByName('status_panel.number_of_kept_dupes') + " " + numberToKeep);
-  setStatusBarPanelText("main-status-panel","");
+    `${RemoveDupes.Strings.getByName('status_panel.number_of_kept_dupes')} ${numberToKeep}`);
+  setStatusBarPanelText("main-status-panel", "");
 }
 
 // createMessageTreeRow -
@@ -411,8 +411,7 @@ function updateStatusBar() {
 // from the messageRecord
 
 function createMessageTreeRow(messageRecord) {
-
-  var row = messageRowTemplate.cloneNode(true);
+  let row = messageRowTemplate.cloneNode(true);
     // a shallow clone is enough here
 
   // recall we set the child nodes order in createMessageRowTemplate()
@@ -421,7 +420,7 @@ function createMessageTreeRow(messageRecord) {
   // this next line allows us to use the css to choose whether to
   // use a [ ] image or a [v] image
   row.childNodes.item(toKeepColumnIndex)
-     .setAttribute("properties", (messageRecord.toKeep ? "keep" : "delete") );
+     .setAttribute("properties", (messageRecord.toKeep ? "keep" : "delete"));
   // the author and subject should be decoded from the
   // proper charset and transfer encoding
   row.childNodes.item(authorColumnIndex)
@@ -451,8 +450,8 @@ function createMessageTreeRow(messageRecord) {
 // Create a user-legible string for our seconds-since-epoch time value
 
 function formatSendTime(sendTimeInSeconds) {
-  var date = new Date( sendTimeInSeconds*1000 );
-    // the Date() constructor expects miliseconds
+  // the Date() constructor expects milliseconds
+  let date = new Date(sendTimeInSeconds * 1000);
   return DateTimeFormatter.format(date);
 }
 
@@ -482,28 +481,24 @@ function getFocusedDupeTreeItem() {
 // or do nothing
 
 function onClickTree(ev) {
+  let dupeSetTreeBoxObject = dupeSetTree;
 
-  dupeSetTreeBoxObject = dupeSetTree;
-
-  var row = null;
-  var col = null;
+  let row = null;
+  let col = null;
 
   try {
     let cell = dupeSetTreeBoxObject.getCellAt(ev.clientX, ev.clientY);
     row = cell.row;
     col = cell.col;
-  } catch(ex) {
-    let rowObject = {}, colObject = {}; obj = {};
+  } catch (ex) {
+    let rowObject = {}, colObject = {}, obj = {};
     dupeSetTreeBoxObject.getCellAt(ev.clientX, ev.clientY, rowObject, col, obj);
     if (colObject.value) { col = colObject.value; }
     if (rowObject.value) { row = rowObject.value; }
   }
 
-  if (   !col
-      || !row
-      || !col.index
-      || !getFocusedDupeTreeItem().hasAttribute('indexInDupeSet')
-     ) {
+  if (!col || !row || !col.index ||
+      !getFocusedDupeTreeItem().hasAttribute('indexInDupeSet')) {
     // this isn't a valid cell we can use, or it's in one of the [+]/[-] rows
     return;
   }
@@ -522,22 +517,19 @@ function onClickTree(ev) {
 
 function loadCurrentRowMessage() {
   // when we click somewhere in the tree, the focused element should be an inner 'treeitem'
-  var focusedTreeItem = getFocusedDupeTreeItem()
-  var messageIndexInDupeSet = focusedTreeItem.getAttribute('indexInDupeSet');
-  var dupeSetTreeItem = focusedTreeItem.parentNode.parentNode;
-  var dupeSetHashValue = dupeSetTreeItem.getAttribute('commonHashValue');
-  var dupeSetItem;
+  let focusedTreeItem = getFocusedDupeTreeItem();
+  let messageIndexInDupeSet = focusedTreeItem.getAttribute('indexInDupeSet');
+  let dupeSetTreeItem = focusedTreeItem.parentNode.parentNode;
+  let dupeSetHashValue = dupeSetTreeItem.getAttribute('commonHashValue');
+  let dupeSetItem;
   try {
     dupeSetItem = dupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
-  } catch(ex) {
+  } catch (ex) {
     return;
   }
 
-  var messageUri = dupeSetItem.uri;
-  var folder = messenger.msgHdrFromURI(messageUri).folder;
-  //msgFolder = folder.QueryInterface(Ci.nsIMsgFolder);
-  //msgWindow.RerootFolderForStandAlone(folder.uri);
-  //msgWindow.RerootFolder(folder.uri, msgFolder, gCurrentLoadingFolderViewType, gCurrentLoadingFolderViewFlags, gCurrentLoadingFolderSortType, gCurrentLoadingFolderSortOrder);
+  let messageUri = dupeSetItem.uri;
+  let folder = messenger.msgHdrFromURI(messageUri).folder;
 
   msgWindow = msgWindow.QueryInterface(Ci.nsIMsgWindow);
   if (msgWindow.SelectFolder) {
@@ -545,33 +537,31 @@ function loadCurrentRowMessage() {
     // which changed the API
     msgWindow.SelectFolder(folder.URI);
     msgWindow.SelectMessage(messageUri);
-  }
-  else {
+  } else {
     msgWindow.windowCommands.selectFolder(folder.URI);
     msgWindow.windowCommands.selectMessage(messageUri);
   }
 }
 
 function toggleDeletionForCurrentRow() {
-  var focusedTreeItem = getFocusedDupeTreeItem();
+  let focusedTreeItem = getFocusedDupeTreeItem();
 
   // The user has clicked a message row, so change it status
   // from 'Keep' to 'Delete' or vice-versa
 
-  var messageIndexInDupeSet = focusedTreeItem.getAttribute('indexInDupeSet');
-  var dupeSetTreeItem = focusedTreeItem.parentNode.parentNode;
-  var dupeSetHashValue = dupeSetTreeItem.getAttribute('commonHashValue');
-  var dupeSetItem = dupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
+  let messageIndexInDupeSet = focusedTreeItem.getAttribute('indexInDupeSet');
+  let dupeSetTreeItem = focusedTreeItem.parentNode.parentNode;
+  let dupeSetHashValue = dupeSetTreeItem.getAttribute('commonHashValue');
+  let dupeSetItem = dupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
 
   if (dupeSetItem.toKeep) {
     dupeSetItem.toKeep = false;
     numberToKeep--;
-  }
-  else {
+  } else {
     dupeSetItem.toKeep = true;
     numberToKeep++;
   }
-  focusedRow = focusedTreeItem.firstChild;
+  let focusedRow = focusedTreeItem.firstChild;
   focusedRow.childNodes.item(toKeepColumnIndex)
             .setAttribute("properties", (dupeSetItem.toKeep ? "keep" : "delete"));
 
@@ -594,9 +584,8 @@ function onAccept() {
   let retVal;
 
   if (action == 'delete_permanently') {
-	retVal = RemoveDupes.Removal.deleteMessages(window, msgWindow, dupeSetsHashMap, HaveMessageRecords);
-  }
-  else {
+    retVal = RemoveDupes.Removal.deleteMessages(window, msgWindow, dupeSetsHashMap, HaveMessageRecords);
+  } else {
     let moveTargetFolder = null;
     if (action == 'move_to_chosen_folder') {
       if (!dupeMoveTargetFolder) {
@@ -607,8 +596,7 @@ function onAccept() {
       if (moveTargetFolder?.URI.length > 0) {
         RemoveDupes.Prefs.set('default_target_folder', moveTargetFolder.URI);
       }
-    }
-    else { // action is 'move_to_common_account_trash':
+    } else { // action is 'move_to_common_account_trash':
       if (!commonRootFolder) {
         // This shouldn't happen, but let's be on the safe side:
         RemoveDupes.namedAlert(window, 'no_common_account');
@@ -625,9 +613,9 @@ function onAccept() {
 
 function markAllDupesForDeletion() {
   for (let hashValue in dupeSetsHashMap) {
-    var dupeSet = dupeSetsHashMap[hashValue];
-    for (let i=0; i<dupeSet.length; i++ )
-      dupeSet[i].toKeep = false;
+    for (let dupe of dupeSetsHashMap[hashValue]) {
+      dupe.toKeep = false;
+    }
   }
   resetCheckboxValues();
 }
@@ -637,16 +625,11 @@ function markKeepOneInEveryDupeSet(keepFirst) {
   // or the last of every set, and mark the rest for deletion
 
   for (let hashValue in dupeSetsHashMap) {
-    var dupeSet = dupeSetsHashMap[hashValue];
-    for (let i=0; i<dupeSet.length; i++ ) {
-      dupeSet[i].toKeep = false;
-      if (keepFirst) {
-        dupeSet[0].toKeep = true;
-      }
-      else {
-        dupeSet[dupeSet.length-1].toKeep = true;
-      }
+    let dupeSet = dupeSetsHashMap[hashValue];
+    for (let dupe of dupeSet) {
+      dupe.toKeep = false;
     }
+    dupeSet[keepFirst ? 0 : (dupeSet.length - 1)].toKeep = true;
   }
 
   resetCheckboxValues();
@@ -654,9 +637,9 @@ function markKeepOneInEveryDupeSet(keepFirst) {
 
 function markKeepPresetOriginals() {
   for (let hashValue in dupeSetsHashMap) {
-    var dupeSet = dupeSetsHashMap[hashValue];
-    for (let i=0; i < dupeSet.length; i++ ) {
-      dupeSet[i].toKeep = originalsFolderUris.has(dupeSet[i].folderUri);
+    let dupeSet = dupeSetsHashMap[hashValue];
+    for (let dupe of dupeSet) {
+      dupe.toKeep = originalsFolderUris.has(dupe.folderUri);
     }
   }
   resetCheckboxValues();
@@ -665,9 +648,9 @@ function markKeepPresetOriginals() {
 
 function markNoDupesForDeletion() {
   for (let hashValue in dupeSetsHashMap) {
-    var dupeSet = dupeSetsHashMap[hashValue];
-    for (let i=0; i<dupeSet.length; i++ )
-      dupeSet[i].toKeep = true;
+    for (let dupe of dupeSetsHashMap[hashValue]) {
+      dupe.toKeep = true;
+    }
   }
 
   resetCheckboxValues();
@@ -680,7 +663,7 @@ function initializeFolderPicker() {
   try {
     uri = RemoveDupes.Prefs.get('default_target_folder', null);
     msgFolder = MailUtils.getExistingFolder(uri);
-  } catch(ex) { }
+  } catch (ex) { }
 
   if (!msgFolder) {
     uri = RemoveDupes.Removal.getLocalFoldersTrashFolder().URI;
@@ -689,7 +672,7 @@ function initializeFolderPicker() {
 
   try {
     document.getElementById('actionTargetFolderPopup').selectFolder(msgFolder);
-  } catch(ex) { }
+  } catch (ex) { }
   dupeMoveTargetFolder = msgFolder;
 }
 
@@ -701,17 +684,17 @@ function initializeFolderPicker() {
 function onClickColumn(ev) {
   ev.stopPropagation();
 
-  var field = ev.target.getAttribute('fieldName');
+  let field = ev.target.getAttribute('fieldName');
 
-  if (!field)
+  if (!field) {
     return;
+  }
 
   if (dupeSetTree.getAttribute('sortColumn') == ev.target.id) {
     // re-clicking the current sort indicator means flipping the sort order
     dupeSetTree.setAttribute('sortDirection',
-      (dupeSetTree.getAttribute('sortDirection') == 'ascending') ? 'descending' : 'ascending')
-  }
-  else {
+      (dupeSetTree.getAttribute('sortDirection') == 'ascending') ? 'descending' : 'ascending');
+  } else {
     if (dupeSetTree.getAttribute('sortColumn')) {
       document.getElementById(dupeSetTree.getAttribute('sortColumn')).removeAttribute('class');
       document.getElementById(dupeSetTree.getAttribute('sortColumn')).removeAttribute('sortDirection');
@@ -722,8 +705,8 @@ function onClickColumn(ev) {
 
   sortDupeSetsByField(field);
 
-  ev.target.setAttribute('class','sortDirectionIndicator');
-  ev.target.setAttribute('sortDirection',dupeSetTree.getAttribute('sortDirection'));
+  ev.target.setAttribute('class', 'sortDirectionIndicator');
+  ev.target.setAttribute('sortDirection', dupeSetTree.getAttribute('sortDirection'));
   rebuildDuplicateSetsTree();
 }
 
@@ -734,21 +717,20 @@ function sortDupeSetsByField(field) {
   // we will now re-sort every dupe set using the field whose
   // column the user has clicked
 
-  var compareFunction = function(lhs, rhs) {
-    if (lhs[field] == rhs[field])
+  var compareFunction = function (lhs, rhs) {
+    if (lhs[field] == rhs[field]) {
       return 0;
-    if (dupeSetTree.getAttribute('sortDirection') == 'descending')
-      return ( (lhs[field] > rhs[field]) ? -1 : 1);
-    else
-      return ( (lhs[field] > rhs[field]) ? 1 : -1);
+    }
+    let descending = dupeSetTree.getAttribute('sortDirection') == 'descending';
+    let lhsIsGreater = lhs[field] > rhs[field];
+    return ((descending && lhsIsGreater) || (!descending && !lhsIsGreater)) ? -1 : 1;
   };
 
   // TODO: see if you can't use the XUL tree's internal sorting mechanism; if we do that, we'll be able to
   // spare lots of tree-rebuilding
 
   for (let hashValue in dupeSetsHashMap) {
-    var dupeSet = dupeSetsHashMap[hashValue];
-    dupeSet.sort(compareFunction);
+    dupeSetsHashMap[hashValue].sort(compareFunction);
   }
 }
 

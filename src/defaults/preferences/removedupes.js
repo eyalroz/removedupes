@@ -34,5 +34,5 @@ pref("extensions.removedupes.processed_messages_limit", 10000);
 
 // no default for 'extensions.removedupes.default_target_folder'
 
-pref('extensions.removedupes.status_report_quantum',500);
-pref('extensions.removedupes.yield_quantum',2500);
+pref('extensions.removedupes.status_report_quantum', 500);
+pref('extensions.removedupes.yield_quantum', 2500);
