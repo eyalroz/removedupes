@@ -75,31 +75,6 @@ XPCOMUtils.defineLazyGetter(RemoveDupes.Strings, "Bundle",
 
 //---------------------------------------------------------
 
-RemoveDupes.App = {};
-RemoveDupes.App.getBuildID = function () {
-  var re = /rv:([0-9.]+).*Gecko\/([0-9]+)/;
-  var arr = re.exec(navigator.userAgent);
-  // var revision = arr[1];
-  return arr[2];
-};
-
-// returns true if the app version is equal-or-higher to minVersion, false otherwise;
-RemoveDupes.App.ensureVersion = function (versionThreshold, checkMinimum) {
-  var versionCheckResult = Services.vc.compare(Services.appinfo.version, versionThreshold);
-  return ((checkMinimum  && (versionCheckResult >= 0)) ||
-          (!checkMinimum && (versionCheckResult <= 0)));
-};
-
-RemoveDupes.App.versionIsAtLeast = function (minVersion) {
-  return this.ensureVersion(minVersion, true);
-};
-
-RemoveDupes.App.versionIsAtMost = function (maxVersion) {
-  return this.ensureVersion(maxVersion, false);
-};
-
-//---------------------------------------------------------
-
 XPCOMUtils.defineLazyGetter(RemoveDupes, 'Prefs', () => {
   let Preferences = ChromeUtils.import("resource://gre/modules/Preferences.jsm").Preferences;
   return new Preferences('extensions.removedupes.');
