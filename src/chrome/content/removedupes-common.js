@@ -134,9 +134,6 @@ RemoveDupes.Removal.getLocalFoldersTrashFolder = function () {
 // list of headers
 
 RemoveDupes.Removal.arrangeMessagesByFolder = function (messageSetsHashMap, haveMessageRecords) {
-  const UsePlainArrayForremovalHeaders = RemoveDupes.App.versionIsAtLeast("79.0");
-  const ArrayAppendFunctionName = UsePlainArrayForremovalHeaders ? 'push' : 'appendElement';
-
   let messagesByFolder = { }; // TODO: Consider using Map
   for (const hashValue in messageSetsHashMap) {
     let messageSet = messageSetsHashMap[hashValue]; // cleaner iteration please!
@@ -155,8 +152,7 @@ RemoveDupes.Removal.arrangeMessagesByFolder = function (messageSetsHashMap, have
       if (!folderEntry) {
         folderEntry = {
           folder : messageHeader.folder,
-          messageHeaders : UsePlainArrayForremovalHeaders ?
-            [] : Cc["@mozilla.org/array;1"].createInstance(Ci.nsIMutableArray)
+          messageHeaders : []
         };
         messagesByFolder[folderUri] = folderEntry;
       }
