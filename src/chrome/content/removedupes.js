@@ -64,9 +64,9 @@ RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages = function() {
 };
 
 RemoveDupes.MessengerOverlay.onKeyPress = function(ev,searchData) {
-  if ((ev.keyCode == KeyEvent.DOM_VK_CANCEL ||
-       ev.keyCode == 27 ||
-       ev.keyCode == KeyEvent.DOM_VK_BACK_SPACE) &&
+  if ((ev.code == KeyEvent.DOM_VK_CANCEL ||
+       ev.code == 27 ||
+       ev.code == KeyEvent.DOM_VK_BACK_SPACE) &&
       !ev.shiftKey && !ev.altKey && !ev.ctrlKey && !ev.metaKey) {
     searchData.userAborted = true;
   }

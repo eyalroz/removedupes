@@ -459,7 +459,7 @@ function formatSendTime(sendTimeInSeconds) {
 // Toggle the keep status for Space Bar
 
 function onTreeKeyPress(ev) {
-  if (ev.keyCode == KeyEvent.DOM_VK_SPACE) {
+  if (ev.code == KeyEvent.DOM_VK_SPACE) {
     toggleDeletionForCurrentRow();
   }
 }
