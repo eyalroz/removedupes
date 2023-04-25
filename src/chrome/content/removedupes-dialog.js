@@ -118,6 +118,40 @@ function flagsToString(flags) {
   return str.replace(' | ', '');
 }
 
+// This function re-forms the dupe sets - it replaces the arrays of message URIs,
+// with arrays of DupeMessageRecord's, containing additional useful information
+// about the dupe message.
+function enrichDupeInfo() {
+  let dupesKnownNotToHaveCommonAccount = false;
+  for (let hashValue in dupeSetsHashMap) {
+    dupeSetsHashMap[hashValue] = dupeSetsHashMap[hashValue].map(
+      (uri) => {
+        let dmr = new DupeMessageRecord(uri);
+        if (!dupesKnownNotToHaveCommonAccount) {
+          if (!commonRootFolder) {
+            commonRootFolder = dmr.rootFolder;
+          } else {
+            dupesKnownNotToHaveCommonAccount = !(commonRootFolder == dmr.rootFolder);
+          }
+        }
+        if (originalsFolderUris) {
+          // if we have pre-set originals folders, the default is to
+          // keep all messages in them and remove their dupes elsewhere
+          dmr.toKeep = originalsFolderUris.has(dmr.folderUri);
+        }
+        return dmr;
+      });
+    if (!originalsFolderUris) {
+      // if we don't have pre-set originals,
+      // the default is to keep the first dupe in each set
+      dupeSetsHashMap[hashValue][0].toKeep = true;
+    }
+    totalNumberOfDupes += dupeSetsHashMap[hashValue].length;
+  }
+  numberOfDupeSets += Object.keys(dupeSetsHashMap).length;
+  return dupesKnownNotToHaveCommonAccount;
+}
+
 function initDupeReviewDialog() {
   // Since we no longer have per-platform-skin support, we set this attribute
   // on our root element, so that, in our stylesheet, we can contextualize using
@@ -170,41 +204,12 @@ function initDupeReviewDialog() {
     }
   }
 
-  // we re-form the dupe sets - instead of arrays of message URIs we
-  // will now have arrays of DupeMessageRecord's, which contain much more
-  // information (rather than having to repeatedly retrieve it)
+  let dupesKnownNotToHaveCommonAccount = enrichDupeInfo();
 
-  let dupesKnownNotToHaveCommonAccount = false;
-
-  for (let hashValue in dupeSetsHashMap) {
-    numberOfDupeSets++;
-    let dupeSet = dupeSetsHashMap[hashValue];
-    for (let i = 0; i < dupeSet.length; i++) {
-      let dmr = new DupeMessageRecord(dupeSet[i]);
-      if (!dupesKnownNotToHaveCommonAccount) {
-        if (!commonRootFolder) {
-          commonRootFolder = dmr.rootFolder;
-        } else {
-          dupesKnownNotToHaveCommonAccount = !(commonRootFolder == dmr.rootFolder);
-        }
-      }
-      dupeSet[i] = dmr;
-      if (originalsFolderUris) {
-        // if we have pre-set originals folders, the default is to
-        // keep all of messages in them and remove their dupes elsewhere
-        dupeSet[i].toKeep = originalsFolderUris.has(dupeSet[i].folderUri);
-      }
-      totalNumberOfDupes++;
-    }
-    if (!originalsFolderUris) {
-      // if we don't have pre-set originals,
-      // the default is to keep the first dupe in each set
-      dupeSet[0].toKeep = true;
-    }
-  }
   if (!dupesKnownNotToHaveCommonAccount) {
     document.getElementById('action').value = 'move_to_common_account_trash';
-    let move_to_common_trash_element = document.getElementById('move_to_common_account_trash_action');
+    let move_to_common_trash_element =
+      document.getElementById('move_to_common_account_trash_action');
     move_to_common_trash_element.hidden = false;
     move_to_common_trash_element.disabled = false;
   }
