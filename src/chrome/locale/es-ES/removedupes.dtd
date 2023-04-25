@@ -14,7 +14,7 @@
 <!ENTITY removedupes_dialog.recipients "Destinatarios">
 <!ENTITY removedupes_dialog.cc_list "Lista CC">
 <!ENTITY removedupes_dialog.flags "Estado">
-<!ENTITY removedupes_dialog.folder "Carpeta">
+<!ENTITY removedupes_dialog.folder_name "Carpeta">
 <!ENTITY removedupes_dialog.line_count "Núm. de lineas">
 <!ENTITY removedupes_dialog.date "Fecha">
 <!ENTITY removedupes_dialog.send_time "Hora de envío">

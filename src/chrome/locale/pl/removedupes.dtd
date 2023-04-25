@@ -14,7 +14,7 @@
 <!ENTITY removedupes_dialog.recipients "Adresaci">
 <!ENTITY removedupes_dialog.cc_list "Adresaci kopii">
 <!ENTITY removedupes_dialog.flags "Flagi">
-<!ENTITY removedupes_dialog.folder "Folder">
+<!ENTITY removedupes_dialog.folder_name "Folder">
 <!ENTITY removedupes_dialog.line_count "Liczba linii">
 <!ENTITY removedupes_dialog.date "Data">
 <!ENTITY removedupes_dialog.send_time "Czas wysłania">

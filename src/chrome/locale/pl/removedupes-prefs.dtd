@@ -11,7 +11,7 @@
 <!ENTITY message_comparison.cc_list.label "Adresaci kopii">
 <!ENTITY message_comparison.flags.label "Flagi stanu">
 <!ENTITY message_comparison.message_id.label "Identyfikator wiadomości">
-<!ENTITY message_comparison.num_lines.label "Liczba linii we wiadomości">
+<!ENTITY message_comparison.line_count.label "Liczba linii we wiadomości">
 <!ENTITY message_comparison.send_time.label "Data wysłania">
 <!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
 <!ENTITY message_comparison.subject.label "Temat">
@@ -25,7 +25,7 @@
 <!ENTITY message_comparison.recipients.access_key "A">
 <!ENTITY message_comparison.cc_list.access_key "k">
 <!ENTITY message_comparison.message_id.access_key "I">
-<!ENTITY message_comparison.num_lines.access_key "l">
+<!ENTITY message_comparison.line_count.access_key "l">
 <!ENTITY message_comparison.send_time.access_key "D">
 <!ENTITY message_comparison.size.access_key "R">
 <!ENTITY message_comparison.subject.access_key "T">

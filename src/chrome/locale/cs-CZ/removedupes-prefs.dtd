@@ -11,7 +11,7 @@
 <!ENTITY message_comparison.cc_list.label "Kopie (&apos;CC&apos;)">
 <!ENTITY message_comparison.flags.label "Štítky">
 <!ENTITY message_comparison.message_id.label "ID zprávy">
-<!ENTITY message_comparison.num_lines.label "Počet řádků ve zprávě">
+<!ENTITY message_comparison.line_count.label "Počet řádků ve zprávě">
 <!ENTITY message_comparison.send_time.label "Čas odeslání">
 <!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
 <!ENTITY message_comparison.subject.label "Předmět">
@@ -25,7 +25,7 @@
 <!ENTITY message_comparison.recipients.access_key "P">
 <!ENTITY message_comparison.cc_list.access_key "K">
 <!ENTITY message_comparison.message_id.access_key "I">
-<!ENTITY message_comparison.num_lines.access_key "ř">
+<!ENTITY message_comparison.line_count.access_key "ř">
 <!ENTITY message_comparison.send_time.access_key "Č">
 <!ENTITY message_comparison.size.access_key "V">
 <!ENTITY message_comparison.subject.access_key "m">

@@ -45,20 +45,12 @@ var dupeMoveTargetFolder;
 // indices of columns in dupe tree rows
 // consts
 
-const  toKeepColumnIndex      = 1;
-const  authorColumnIndex      = 2;
-const  recipientsColumnIndex  = 3;
-const  ccListColumnIndex      = 4;
-const  subjectColumnIndex     = 5;
-const  folderNameColumnIndex  = 6;
-const  sendTimeColumnIndex    = 7;
-const  sizeColumnIndex        = 8;
-const  lineCountColumnIndex   = 9;
-const  messageIdColumnIndex   = 10;
-const  flagsColumnIndex       = 11;
-
-// state variables for dupe set sorting (see onClickColumn() )
-
+const FieldNames = [
+  // the dummy column stores no information but shows the [+] box
+  // for expansion and the lines to the expanded rows
+  'dummy', 'toKeep', 'author', 'recipients', 'ccList', 'subject',
+  'folderName', 'sendTime', 'size', 'lineCount', 'messageId', 'flags'
+];
 
 var formattingOptions = {
   year:   'numeric',
@@ -77,13 +69,13 @@ var DupeMessageRecord = function (messageUri) {
   let messageHdr  = messenger.msgHdrFromURI(messageUri);
 
   this.uri          = messageUri;
-  this.folder_name  = messageHdr.folder.abbreviatedName;
+  this.folderName   = messageHdr.folder.abbreviatedName;
   this.folderUri    = messageHdr.folder.URI;
   this.rootFolder   = messageHdr.folder.server.rootFolder;
     // the root folder is used for checking whether all messages are from the same account
-  this.message_id   = ((allowMD5IDSubstitutes || messageHdr.messageId.substr(0, 4) != 'md5:') ?
+  this.messageId    = ((allowMD5IDSubstitutes || messageHdr.messageId.substr(0, 4) != 'md5:') ?
     messageHdr.messageId : '');
-  this.send_time    = messageHdr.dateInSeconds;
+  this.sendTime    = messageHdr.dateInSeconds;
   this.size         = messageHdr.messageSize;
   try {
     this.subject    = messageHdr.mime2DecodedSubject;
@@ -100,10 +92,10 @@ var DupeMessageRecord = function (messageUri) {
   } catch (ex) {
     this.recipients = '(decoding failure)';
   }
-  this.cc_list      = messageHdr.ccList;
+  this.ccList      = messageHdr.recipients;
   // this.flags      = "0x" + num2hex(messageHdr.flags);
   this.flags        = flagsToString(messageHdr.flags);
-  this.num_lines    = messageHdr.lineCount;
+  this.lineCount    = messageHdr.lineCount;
   // by default, we're deleting dupes, but see also below
   this.toKeep       = false;
 };
@@ -125,6 +117,7 @@ function enrichDupeInfo() {
   let dupesKnownNotToHaveCommonAccount = false;
   for (let hashValue in dupeSetsHashMap) {
     dupeSetsHashMap[hashValue] = dupeSetsHashMap[hashValue].map(
+      // eslint-disable-next-line no-loop-func
       (uri) => {
         let dmr = new DupeMessageRecord(uri);
         if (!dupesKnownNotToHaveCommonAccount) {
@@ -222,7 +215,12 @@ function initializeDuplicateSetsTree() {
   createMessageRowTemplate();
   let sortColumnId = dupeSetTree.getAttribute('sortColumn');
   if (sortColumnId) {
-    sortDupeSetsByField(document.getElementById(sortColumnId).getAttribute('fieldName'));
+    // TODO: Don't look for the "field" attribute of the sort column, just parse its name;
+    // and actually, let's keep the field name to begin with
+    let sortColumn = document.getElementById(sortColumnId);
+    if (sortColumn) {
+      sortDupeSetsByField(document.getElementById(sortColumnId).getAttribute('fieldName'));
+    }
   }
 
   for (let hashValue in dupeSetsHashMap) {
@@ -241,50 +239,21 @@ function initializeDuplicateSetsTree() {
 // duplicate it and update it for each individual dupe set message
 
 function createMessageRowTemplate() {
-  // TODO: consider whether we want to disply/not display
+  // TODO: consider whether we want to display/not display
   // certain fields based on whether they were in the comparison
   // criteria or not (or maybe display them in the top treerow
   // rather than in the unfolded rows)
 
-  let dummyCell         = document.createXULElement("treecell");
-   // the dummy column stores no information but shows the [+] box
-   // for expansion and the lines to the expanded rows
-  let keepIndicatorCell = document.createXULElement("treecell");
-  keepIndicatorCell.setAttribute("id", "keepIndicatorCell");
-  let authorCell        = document.createXULElement("treecell");
-  authorCell.setAttribute("id", "authorCell");
-  let recipientsCell    = document.createXULElement("treecell");
-  recipientsCell.setAttribute("id", "recipientsCell");
-  let ccListCell    = document.createXULElement("treecell");
-  ccListCell.setAttribute("id", "ccListCell");
-  let subjectCell       = document.createXULElement("treecell");
-  subjectCell.setAttribute("id", "subjectCell");
-  let folderCell        = document.createXULElement("treecell");
-  folderCell.setAttribute("id", "folderCell");
-  let sendTimeCell      = document.createXULElement("treecell");
-  sendTimeCell.setAttribute("id", "sendTimeCell");
-  let sizeCell          = document.createXULElement("treecell");
-  sizeCell.setAttribute("id", "sizeCell");
-  let lineCountCell     = document.createXULElement("treecell");
-  lineCountCell.setAttribute("id", "lineCountCell");
-  let messageIdCell     = document.createXULElement("treecell");
-  messageIdCell.setAttribute("id", "messageIdCell");
-  let flagsCell         = document.createXULElement("treecell");
-  flagsCell.setAttribute("id", "messageIdCell");
+  let createCell = function (colName) {
+    let cell = document.createXULElement('treecell');
+    cell.setAttribute('id', `${colName}Cell`);
+    return cell;
+  };
 
   messageRowTemplate = document.createXULElement("treerow");
-  messageRowTemplate.appendChild(dummyCell);
-  messageRowTemplate.appendChild(keepIndicatorCell);
-  messageRowTemplate.appendChild(authorCell);
-  messageRowTemplate.appendChild(recipientsCell);
-  messageRowTemplate.appendChild(ccListCell);
-  messageRowTemplate.appendChild(subjectCell);
-  messageRowTemplate.appendChild(folderCell);
-  messageRowTemplate.appendChild(sendTimeCell);
-  messageRowTemplate.appendChild(sizeCell);
-  messageRowTemplate.appendChild(lineCountCell);
-  messageRowTemplate.appendChild(messageIdCell);
-  messageRowTemplate.appendChild(flagsCell);
+  for (const colName of FieldNames) {
+    messageRowTemplate.appendChild(createCell(colName));
+  }
   messageRowTemplate.setAttribute('indexInDupeSet', 0);
 }
 
@@ -389,7 +358,7 @@ function resetCheckboxValues() {
     while (dupeInSetTreeItem) {
       let indexInDupeSet = parseInt(dupeInSetTreeItem.getAttribute('indexInDupeSet'), 10);
 
-      dupeInSetTreeItem.firstChild.childNodes.item(toKeepColumnIndex).setAttribute(
+      dupeInSetTreeItem.firstChild.childNodes.item(FieldNames.indexOf('toKeep')).setAttribute(
         "properties", (dupeSet[indexInDupeSet].toKeep ? "keep" : "delete"));
 
       if (dupeSet[indexInDupeSet].toKeep) numberToKeep++;
@@ -419,46 +388,27 @@ function createMessageTreeRow(messageRecord) {
   let row = messageRowTemplate.cloneNode(true);
     // a shallow clone is enough here
 
-  // recall we set the child nodes order in createMessageRowTemplate()
+  let massageValue = (fieldName, value) => {
+    switch (fieldName) {
+    case 'sendTime': {
+      let sendTimeInMilliseconds = value * 1000;
+      return DateTimeFormatter.format(new Date(sendTimeInMilliseconds));
+    }
+    case 'toKeep':   return value ? "keep" : "delete";
+    default:         return value;
+    }
+  };
+  // Note we're skipping the first column, which doesn't really
+  // correspond to a field
+  FieldNames.slice(1).forEach((fieldName, index) => {
+    let attributeName =  (fieldName == 'toKeep') ? 'properties' : 'label';
+    let attributeValue = massageValue(fieldName, messageRecord[fieldName]);
+    row.childNodes.item(index + 1).setAttribute(attributeName, attributeValue);
+  });
 
-  // first there's the dummy cell we don't touch
-  // this next line allows us to use the css to choose whether to
-  // use a [ ] image or a [v] image
-  row.childNodes.item(toKeepColumnIndex)
-     .setAttribute("properties", (messageRecord.toKeep ? "keep" : "delete"));
-  // the author and subject should be decoded from the
-  // proper charset and transfer encoding
-  row.childNodes.item(authorColumnIndex)
-     .setAttribute("label", messageRecord.author);
-  row.childNodes.item(recipientsColumnIndex)
-     .setAttribute("label", messageRecord.recipients);
-  row.childNodes.item(ccListColumnIndex)
-     .setAttribute("label", messageRecord.cc_list);
-  row.childNodes.item(subjectColumnIndex)
-     .setAttribute("label", messageRecord.subject);
-  row.childNodes.item(folderNameColumnIndex)
-     .setAttribute("label", messageRecord.folder_name);
-  row.childNodes.item(sendTimeColumnIndex)
-     .setAttribute("label", formatSendTime(messageRecord.send_time));
-  row.childNodes.item(sizeColumnIndex)
-     .setAttribute("label", messageRecord.size);
-  row.childNodes.item(lineCountColumnIndex)
-     .setAttribute("label", messageRecord.num_lines);
-  row.childNodes.item(messageIdColumnIndex)
-     .setAttribute("label", messageRecord.message_id);
-  row.childNodes.item(flagsColumnIndex)
-     .setAttribute("label", messageRecord.flags);
   return row;
 }
 
-// formatSendTime -
-// Create a user-legible string for our seconds-since-epoch time value
-
-function formatSendTime(sendTimeInSeconds) {
-  // the Date() constructor expects milliseconds
-  let date = new Date(sendTimeInSeconds * 1000);
-  return DateTimeFormatter.format(date);
-}
 
 // onTreeKeyPress -
 // Toggle the keep status for Space Bar
@@ -508,7 +458,7 @@ function onClickTree(ev) {
     return;
   }
 
-  if (col.index == toKeepColumnIndex) {
+  if (col.index == FieldNames.indexOf('toKeep')) {
     toggleDeletionForCurrentRow();
     return;
   }
@@ -567,7 +517,7 @@ function toggleDeletionForCurrentRow() {
     numberToKeep++;
   }
   let focusedRow = focusedTreeItem.firstChild;
-  focusedRow.childNodes.item(toKeepColumnIndex)
+  focusedRow.childNodes.item(FieldNames.indexOf('toKeep'))
             .setAttribute("properties", (dupeSetItem.toKeep ? "keep" : "delete"));
 
   updateStatusBar();
@@ -701,8 +651,14 @@ function onClickColumn(ev) {
       (dupeSetTree.getAttribute('sortDirection') == 'ascending') ? 'descending' : 'ascending');
   } else {
     if (dupeSetTree.getAttribute('sortColumn')) {
-      document.getElementById(dupeSetTree.getAttribute('sortColumn')).removeAttribute('class');
-      document.getElementById(dupeSetTree.getAttribute('sortColumn')).removeAttribute('sortDirection');
+      // TODO: Don't keep the column Id, but rather the column name; then we can use `${columnName}Column` for the ID
+      let sortColumnName = dupeSetTree.getAttribute('sortColumn');
+      let fieldName = sortColumnName.replace(/Column$/, '');
+      if (FieldNames.includes(fieldName)) { // Sanity check...
+        let previousSortColumn = document.getElementById(sortColumnName);
+        previousSortColumn.removeAttribute('class');
+        previousSortColumn.removeAttribute('sortDirection');
+      }
     }
     dupeSetTree.setAttribute('sortColumn', ev.target.id);
     dupeSetTree.setAttribute('sortDirection', 'ascending');
@@ -722,7 +678,7 @@ function sortDupeSetsByField(field) {
   // we will now re-sort every dupe set using the field whose
   // column the user has clicked
 
-  var compareFunction = function (lhs, rhs) {
+  let compareFunction = function (lhs, rhs) {
     if (lhs[field] == rhs[field]) {
       return 0;
     }

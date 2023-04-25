@@ -14,7 +14,7 @@
 <!ENTITY removedupes_dialog.recipients "收件人">
 <!ENTITY removedupes_dialog.cc_list "抄送列表">
 <!ENTITY removedupes_dialog.flags "标志">
-<!ENTITY removedupes_dialog.folder "文件夹">
+<!ENTITY removedupes_dialog.folder_name "文件夹">
 <!ENTITY removedupes_dialog.line_count "行数">
 <!ENTITY removedupes_dialog.date "日期">
 <!ENTITY removedupes_dialog.send_time "发送时间">

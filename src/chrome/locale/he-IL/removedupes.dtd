@@ -14,7 +14,7 @@
 <!ENTITY removedupes_dialog.recipients "נמענים">
 <!ENTITY removedupes_dialog.cc_list "מקבלי עותק">
 <!ENTITY removedupes_dialog.flags "דגלים">
-<!ENTITY removedupes_dialog.folder "תיקיה">
+<!ENTITY removedupes_dialog.folder_name "תיקיה">
 <!ENTITY removedupes_dialog.line_count "מס&apos; שורות">
 <!ENTITY removedupes_dialog.date "תאריך">
 <!ENTITY removedupes_dialog.send_time "זמן משלוח">

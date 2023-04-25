@@ -14,7 +14,7 @@
 <!ENTITY removedupes_dialog.recipients "Destinatários">
 <!ENTITY removedupes_dialog.cc_list "Lista CC">
 <!ENTITY removedupes_dialog.flags "Etiquetas">
-<!ENTITY removedupes_dialog.folder "Pasta">
+<!ENTITY removedupes_dialog.folder_name "Pasta">
 <!ENTITY removedupes_dialog.line_count "# Linhas">
 <!ENTITY removedupes_dialog.date "Data">
 <!ENTITY removedupes_dialog.send_time "Enviar Hora">

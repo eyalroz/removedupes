@@ -11,7 +11,7 @@
 <!ENTITY message_comparison.cc_list.label "Lista destinatari in Cc">
 <!ENTITY message_comparison.flags.label "Indicatore di stato">
 <!ENTITY message_comparison.message_id.label "ID del messaggio">
-<!ENTITY message_comparison.num_lines.label "Numero di righe nel messaggio">
+<!ENTITY message_comparison.line_count.label "Numero di righe nel messaggio">
 <!ENTITY message_comparison.send_time.label "Ora di invio">
 <!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
 <!ENTITY message_comparison.subject.label "Oggetto">
@@ -25,7 +25,7 @@
 <!ENTITY message_comparison.recipients.access_key "D">
 <!ENTITY message_comparison.cc_list.access_key "C">
 <!ENTITY message_comparison.message_id.access_key "I">
-<!ENTITY message_comparison.num_lines.access_key "R">
+<!ENTITY message_comparison.line_count.access_key "R">
 <!ENTITY message_comparison.send_time.access_key "O">
 <!ENTITY message_comparison.size.access_key "S">
 <!ENTITY message_comparison.subject.access_key "G">

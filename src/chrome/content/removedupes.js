@@ -18,9 +18,7 @@ RemoveDupes.MessengerOverlay.setNamedStatus = function (stringName, formatArgume
   RemoveDupes.MessengerOverlay.setStatus(text);
 };
 
-// These default criteria are used in the dupe search if the preferences
-// are not set for some reason
-// const
+// These default criteria are used in the dupe search if their corresponding preferences are not set
 RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults = {
   message_id: true,
   send_time: true,
@@ -28,7 +26,7 @@ RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults = {
   folder: true,
   subject: true,
   author: true,
-  num_lines: false,
+  line_count: false,
   recipients: false,
   cc_list: false,
   flags: false,
@@ -398,7 +396,7 @@ RemoveDupes.MessengerOverlay.sillyHash = function (searchData, messageHdr, folde
   //    the message body
 
   let retVal = '';
-  if (searchData.useCriteria.message_id) {
+  if (searchData.useCriteria.messageId) {
     let messageId = messageHdr.messageId;
     if (messageHdr.messageId.substr(0, 4) == 'md5:' && !searchData.allowMD5IDSubstitutes) {
       // Note: We are making a (generally invalid) assumption that actual message headers don't
@@ -411,7 +409,7 @@ RemoveDupes.MessengerOverlay.sillyHash = function (searchData, messageHdr, folde
     // some mail servers add newlines and spaces before or after message IDs
     retVal += `${messageId.replace(/(\n|^)\s+|\s+$/, "")}|`;
   }
-  if (searchData.useCriteria.send_time) {
+  if (searchData.useCriteria.sendTime) {
     if (searchData.compareTimeNumerically) {
       retVal += `${messageHdr.dateInSeconds}|`;
     } else {
@@ -463,12 +461,12 @@ RemoveDupes.MessengerOverlay.sillyHash = function (searchData, messageHdr, folde
   // We're stripping here the non-MIME-transfer-encoding-decoded CC list!
   // It might not work but we don't have immediate access to the decoded
   // version...
-  if (searchData.useCriteria.cc_list) {
-    let cc_list = searchData.compareStrippedAndSortedAddresses ?
+  if (searchData.useCriteria.ccList) {
+    let ccList = searchData.compareStrippedAndSortedAddresses ?
       RemoveDupes.MessengerOverlay.stripAndSortAddresses(messageHdr.ccList) : messageHdr.ccList;
-    retVal += `${cc_list}|w7Exh' s%k|`;
+    retVal += `${ccList}|w7Exh' s%k|`;
   }
-  if (searchData.useCriteria.num_lines) {
+  if (searchData.useCriteria.lineCount) {
     retVal += `${messageHdr.lineCount}|`;
   }
   if (searchData.useCriteria.flags) {
@@ -647,33 +645,15 @@ RemoveDupes.MessengerOverlay.messageBodyFromURI = function (msgURI) {
 };
 
 // Write some progress info to the status bar
-
-RemoveDupes.MessengerOverlay.reportRefinementProgress = function (searchData, activity, setSize, curr) {
+RemoveDupes.MessengerOverlay.reportRefinementProgress = function (searchData, activity, messageIndex, numMessages) {
   let currentTime = (new Date()).getTime();
-  if (currentTime - searchData.lastStatusBarReport > searchData.reportQuantum) {
-    searchData.lastStatusBarReport = (new Date()).getTime();
-    switch (activity) {
-    case 'bodies':
-      RemoveDupes.MessengerOverlay.setNamedStatus(
-        'refinement_status_getting_bodies',
-        [searchData.setsRefined,
-          searchData.totalOriginalDupeSets,
-          curr,
-          setSize
-        ]);
-      break;
-    case 'subsets':
-      RemoveDupes.MessengerOverlay.setNamedStatus(
-        'refinement_status_building_subsets',
-        [searchData.setsRefined,
-          searchData.totalOriginalDupeSets,
-          setSize - curr,
-          setSize
-        ]); // fallthrough
-    default:
-      break;
-    }
+  if (currentTime - searchData.lastStatusBarReport < searchData.reportQuantum) {
+    return;
   }
+  searchData.lastStatusBarReport = currentTime;
+  RemoveDupes.MessengerOverlay.setNamedStatus(`refinement_status_getting_${activity}`,
+    // We add 1 to get 1-based indices
+    [searchData.setsRefined + 1, searchData.totalOriginalDupeSets, messageIndex + 1, numMessages]);
 };
 
 // The actual second phase of message processing (see
@@ -701,13 +681,13 @@ RemoveDupes.MessengerOverlay.refineDupeSets = function (searchData) {
     let initialSetSize = dupeSet.length;
 
     for (let i = 0; i < dupeSet.length; i++) {
+      RemoveDupes.MessengerOverlay.reportRefinementProgress(searchData, 'bodies', i, initialSetSize);
       let dupeUri = dupeSet[i];
       dupeSet[i] = {
         uri: dupeUri,
         body: RemoveDupes.MessengerOverlay.messageBodyFromURI(dupeUri)
       };
       if (searchData.userAborted) return;
-      RemoveDupes.MessengerOverlay.reportRefinementProgress(searchData, 'bodies', initialSetSize, i);
     }
 
     // sort the bodies
@@ -737,7 +717,8 @@ RemoveDupes.MessengerOverlay.refineDupeSets = function (searchData) {
         dupeSet[0] = dupeSet[0].uri;
         searchData.dupeSetsHashMap[`${hashValue}|${subsetIndex++}`] = dupeSet.splice(0, subsetLength);
       } else dupeSet.shift();
-      RemoveDupes.MessengerOverlay.reportRefinementProgress(searchData, 'subsets', initialSetSize, dupeSet.length);
+      RemoveDupes.MessengerOverlay.reportRefinementProgress(
+        searchData, 'subsets', dupeSet.length - initialSetSize, dupeSet.length);
     }
     delete searchData.dupeSetsHashMap[hashValue];
     searchData.setsRefined++;
@@ -793,11 +774,12 @@ RemoveDupes.MessengerOverlay.reviewAndRemoveDupes = function (searchData) {
 };
 
 RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion = function (ev, criterion) {
-  let useCriterion =
-    !RemoveDupes.Prefs.get(`comparison_criteria.${criterion}`,
-      RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults[criterion]);
-  RemoveDupes.Prefs.set(`comparison_criteria.${criterion}`, useCriterion);
-  document.getElementById(`removedupesCriterionMenuItem_${criterion}`).setAttribute("checked", useCriterion ? "true" : "false");
+  // Note the criterion must be in snake_case, not camelCase
+  let toggledValue = !RemoveDupes.Prefs.get(`comparison_criteria.${criterion}`,
+    RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults[criterion]);
+  RemoveDupes.Prefs.set(`comparison_criteria.${criterion}`, toggledValue);
+  document.getElementById(`removedupesCriterionMenuItem_${criterion}`)
+    .setAttribute("checked", toggledValue ? "true" : "false");
   ev.stopPropagation();
 };
 
@@ -911,18 +893,19 @@ RemoveDupes.UpdateFolderDoneListener.prototype.OnStopRunningUrl = function (url,
 RemoveDupes.DupeSearchData = function () {
   this.searchSubfolders = RemoveDupes.Prefs.get("search_subfolders");
 
+  let snakeToCamelCase = (str) => str.replace(/_[a-z]/g, (m) => m.slice(1).toUpperCase());
   this.useCriteria = { };
   // which information will we use for comparing messages?
-  for (let criterion in RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults) {
-    this.useCriteria[criterion] =
-     RemoveDupes.Prefs.get(`comparison_criteria.${criterion}`,
-       RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults[criterion]);
+  for (let snakeCaseCriterion in RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults) {
+    let camelCaseCriterion = snakeToCamelCase(snakeCaseCriterion);
+    this.useCriteria[camelCaseCriterion] = RemoveDupes.Prefs.get(`comparison_criteria.${snakeCaseCriterion}`,
+      RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults[snakeCaseCriterion]);
   }
 
   // an optimization: if we're comparing bodies, there shouldn't be any harm
   // in comparing by number of lines first
 
-  this.useCriteria.num_lines = this.useCriteria.num_lines || this.useCriteria.body;
+  this.useCriteria.lineCount = this.useCriteria.lineCount || this.useCriteria.body;
 
   // when messages have no Message-ID header, Mozilla uses their MD5
   // digest value; however, the implementation is somewhat buggy and

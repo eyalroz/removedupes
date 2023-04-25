@@ -11,7 +11,7 @@
 <!ENTITY message_comparison.cc_list.label "Kopie-mottagarlista ('CC')">
 <!ENTITY message_comparison.flags.label "Statusflaggor">
 <!ENTITY message_comparison.message_id.label "Meddelande-ID">
-<!ENTITY message_comparison.num_lines.label "Antal rader i meddelandet">
+<!ENTITY message_comparison.line_count.label "Antal rader i meddelandet">
 <!ENTITY message_comparison.send_time.label "Tidpunkt för sändning ('Datum')">
 <!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
 <!ENTITY message_comparison.subject.label "Ämne">
@@ -25,7 +25,7 @@
 <!ENTITY message_comparison.recipients.access_key "M">
 <!ENTITY message_comparison.cc_list.access_key "K">
 <!ENTITY message_comparison.message_id.access_key "I">
-<!ENTITY message_comparison.num_lines.access_key "r">
+<!ENTITY message_comparison.line_count.access_key "r">
 <!ENTITY message_comparison.send_time.access_key "T">
 <!ENTITY message_comparison.size.access_key "S">
 <!ENTITY message_comparison.subject.access_key "Ä">

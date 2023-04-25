@@ -40,11 +40,12 @@
         <treecols>
           <treecol width="40"
                    persist="width hidden class sortDirection"
-                   id="dummyCell"
+                   id="dummyColumn"
                    primary="true"
                    closemenu="none"/>
           <splitter class="tree-splitter"/>
-          <treecol id="keepColumn"
+          <treecol id="toKeepColumn"
+                   fieldName="toKeep"
                    width="60"
                    persist="width hidden class sortDirection"
                    label="&removedupes_dialog.keep_flag;"
@@ -66,8 +67,8 @@
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
           <splitter class="tree-splitter"/>
-          <treecol id="cc_listColumn"
-                   fieldName="cc_list"
+          <treecol id="ccListColumn"
+                   fieldName="ccList"
                    label="&removedupes_dialog.cc_list;"
                    hidden="true"
                    flex="5"
@@ -83,16 +84,16 @@
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
           <splitter class="tree-splitter"/>
-          <treecol id="folderColumn"
+          <treecol id="folderNameColumn"
                    fieldName="folder"
-                   label="&removedupes_dialog.folder;"
+                   label="&removedupes_dialog.folder_name;"
                    flex="2"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
           <splitter class="tree-splitter"/>
-          <treecol id="send_timeColumn"  width="150"
-                   fieldName="send_time"
+          <treecol id="sendTimeColumn"  width="150"
+                   fieldName="sendTime"
                    label="&removedupes_dialog.send_time;"
                    flex="3"
                    persist="width hidden class sortDirection"
@@ -107,15 +108,15 @@
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
           <splitter class="tree-splitter"/>
-          <treecol id="num_linesColumn"
-                   fieldName="num_lines"
+          <treecol id="lineCountColumn"
+                   fieldName="lineCount"
                    label="&removedupes_dialog.line_count;"
                    flex="2"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
-          <treecol id="message_idColumn"
-                   fieldName="message_id"
+          <treecol id="messageIdColumn"
+                   fieldName="messageId"
                    label="&removedupes_dialog.id;"
                    hidden="true"
                    flex="2"

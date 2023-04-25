@@ -14,7 +14,7 @@
 <!ENTITY removedupes_dialog.recipients "Modtager">
 <!ENTITY removedupes_dialog.cc_list "CC liste">
 <!ENTITY removedupes_dialog.flags "Status">
-<!ENTITY removedupes_dialog.folder "Mappe">
+<!ENTITY removedupes_dialog.folder_name "Mappe">
 <!ENTITY removedupes_dialog.line_count "# Linjer">
 <!ENTITY removedupes_dialog.date "Dato">
 <!ENTITY removedupes_dialog.send_time "Tidspunkt">

@@ -11,7 +11,7 @@
 <!ENTITY message_comparison.cc_list.label "CC listi">
 <!ENTITY message_comparison.flags.label "Stöðuflögg">
 <!ENTITY message_comparison.message_id.label "Auðkenni skeytis - ID">
-<!ENTITY message_comparison.num_lines.label "Fjöldi lína í skeyti">
+<!ENTITY message_comparison.line_count.label "Fjöldi lína í skeyti">
 <!ENTITY message_comparison.send_time.label "Sendingartími">
 <!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
 <!ENTITY message_comparison.subject.label "Efnislína">
@@ -25,7 +25,7 @@
 <!ENTITY message_comparison.recipients.access_key "R">
 <!ENTITY message_comparison.cc_list.access_key "C">
 <!ENTITY message_comparison.message_id.access_key "I">
-<!ENTITY message_comparison.num_lines.access_key "l">
+<!ENTITY message_comparison.line_count.access_key "l">
 <!ENTITY message_comparison.send_time.access_key "t">
 <!ENTITY message_comparison.size.access_key "s">
 <!ENTITY message_comparison.subject.access_key "S">

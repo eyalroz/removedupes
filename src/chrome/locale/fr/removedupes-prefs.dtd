@@ -11,7 +11,7 @@
 <!ENTITY message_comparison.cc_list.label "Liste des Cc">
 <!ENTITY message_comparison.flags.label "Drapeaux concernant l'état">
 <!ENTITY message_comparison.message_id.label "Identifiant du message">
-<!ENTITY message_comparison.num_lines.label "Nombre de lignes du message">
+<!ENTITY message_comparison.line_count.label "Nombre de lignes du message">
 <!ENTITY message_comparison.send_time.label "Date d'envoi">
 <!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
 <!ENTITY message_comparison.subject.label "Sujet">
@@ -25,7 +25,7 @@
 <!ENTITY message_comparison.recipients.access_key "r">
 <!ENTITY message_comparison.cc_list.access_key "C">
 <!ENTITY message_comparison.message_id.access_key "I">
-<!ENTITY message_comparison.num_lines.access_key "l">
+<!ENTITY message_comparison.line_count.access_key "l">
 <!ENTITY message_comparison.send_time.access_key "t">
 <!ENTITY message_comparison.size.access_key "a">
 <!ENTITY message_comparison.subject.access_key "S">

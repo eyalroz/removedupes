@@ -13,7 +13,7 @@ Preferences.addAll([
   { id: "extensions.removedupes.comparison_criteria.cc_list",            type: "bool"   },
   { id: "extensions.removedupes.comparison_criteria.flags",              type: "bool"   },
   { id: "extensions.removedupes.comparison_criteria.message_id",         type: "bool"   },
-  { id: "extensions.removedupes.comparison_criteria.num_lines",          type: "bool"   },
+  { id: "extensions.removedupes.comparison_criteria.line_count",         type: "bool"   },
   { id: "extensions.removedupes.comparison_criteria.send_time",          type: "bool"   },
   { id: "extensions.removedupes.comparison_criteria.size",               type: "bool"   },
   { id: "extensions.removedupes.comparison_criteria.subject",            type: "bool"   },

@@ -14,7 +14,7 @@
 <!ENTITY removedupes_dialog.recipients "Mottagare">
 <!ENTITY removedupes_dialog.cc_list "Kopie-mottagarlista">
 <!ENTITY removedupes_dialog.flags "Flaggor">
-<!ENTITY removedupes_dialog.folder "Mapp">
+<!ENTITY removedupes_dialog.folder_name "Mapp">
 <!ENTITY removedupes_dialog.line_count "Antal rader">
 <!ENTITY removedupes_dialog.date "Datum">
 <!ENTITY removedupes_dialog.send_time "Tidpunkt för sändning">

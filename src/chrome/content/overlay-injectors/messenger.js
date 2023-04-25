@@ -41,9 +41,9 @@ function injectToolbarButton() {
                     label="&message_comparison.message_id.label;"
                     oncommand="RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion(event,'message_id')"/>
           <menuitem type="checkbox"
-                    id="removedupesCriterionMenuItem_num_lines"
-                    label="&message_comparison.num_lines.label;"
-                    oncommand="RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion(event,'num_lines')"/>
+                    id="removedupesCriterionMenuItem_line_count"
+                    label="&message_comparison.line_count.label;"
+                    oncommand="RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion(event,'line_count')"/>
           <menuitem type="checkbox"
                     id="removedupesCriterionMenuItem_send_time"
                     label="&message_comparison.send_time.label;"

@@ -11,7 +11,7 @@
 <!ENTITY message_comparison.cc_list.label "CC-Empfänger">
 <!ENTITY message_comparison.flags.label "Status (z.B. Junk, ungelesen, usw.)">
 <!ENTITY message_comparison.message_id.label "Nachrichten-ID">
-<!ENTITY message_comparison.num_lines.label "Anzahl der Zeilen in der Nachricht">
+<!ENTITY message_comparison.line_count.label "Anzahl der Zeilen in der Nachricht">
 <!ENTITY message_comparison.send_time.label "Versandzeit">
 <!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
 <!ENTITY message_comparison.subject.label "Betreff">
@@ -25,7 +25,7 @@
 <!ENTITY message_comparison.recipients.access_key "E">
 <!ENTITY message_comparison.cc_list.access_key "C">
 <!ENTITY message_comparison.message_id.access_key "N">
-<!ENTITY message_comparison.num_lines.access_key "Z">
+<!ENTITY message_comparison.line_count.access_key "Z">
 <!ENTITY message_comparison.send_time.access_key "V">
 <!ENTITY message_comparison.size.access_key "s">
 <!ENTITY message_comparison.subject.access_key "B">

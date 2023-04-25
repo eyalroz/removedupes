@@ -14,7 +14,7 @@
 <!ENTITY removedupes_dialog.recipients "Viðtakendur">
 <!ENTITY removedupes_dialog.cc_list "CC listi">
 <!ENTITY removedupes_dialog.flags "Flögg">
-<!ENTITY removedupes_dialog.folder "Mappa">
+<!ENTITY removedupes_dialog.folder_name "Mappa">
 <!ENTITY removedupes_dialog.line_count "# lína">
 <!ENTITY removedupes_dialog.date "Dagsetning">
 <!ENTITY removedupes_dialog.send_time "Sendingartími">
