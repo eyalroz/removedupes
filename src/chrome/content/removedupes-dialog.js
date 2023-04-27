@@ -75,25 +75,12 @@ var DupeMessageRecord = function (messageUri) {
     // the root folder is used for checking whether all messages are from the same account
   this.messageId    = ((allowMD5IDSubstitutes || messageHdr.messageId.substr(0, 4) != 'md5:') ?
     messageHdr.messageId : '');
-  this.sendTime    = messageHdr.dateInSeconds;
+  this.sendTime     = messageHdr.dateInSeconds;
   this.size         = messageHdr.messageSize;
-  try {
-    this.subject    = messageHdr.mime2DecodedSubject;
-  } catch (ex) {
-    this.subject    = '(decoding failure)';
-  }
-  try {
-    this.author     = messageHdr.mime2DecodedAuthor;
-  } catch (ex) {
-    this.author     = '(decoding failure)';
-  }
-  try {
-    this.recipients = messageHdr.mime2DecodedRecipients;
-  } catch (ex) {
-    this.recipients = '(decoding failure)';
-  }
-  this.ccList      = messageHdr.recipients;
-  // this.flags      = "0x" + num2hex(messageHdr.flags);
+  this.subject      = messageHdr?.mime2DecodedSubject    ?? '(decoding failure)';
+  this.author       = messageHdr?.mime2DecodedAuthor     ?? '(decoding failure)';
+  this.recipients   = messageHdr?.mime2DecodedRecipients ?? '(decoding failure)';
+  this.ccList       = messageHdr.recipients;
   this.flags        = flagsToString(messageHdr.flags);
   this.lineCount    = messageHdr.lineCount;
   // by default, we're deleting dupes, but see also below
