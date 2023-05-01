@@ -20,7 +20,6 @@
         title="&removedupes_dialog.dialog_title;">
 
   <script type="application/javascript" src="chrome://global/content/globalOverlay.js"/>
-  <script type="application/javascript" src="chrome://messenger/content/customElements.js"/>
   <script type="application/javascript" src="chrome://messenger/content/widgetglue.js"/>
   <script type="application/javascript" src="chrome://removedupes/content/removedupes-dialog.js"/>
 
