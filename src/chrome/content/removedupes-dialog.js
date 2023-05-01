@@ -61,7 +61,6 @@ var formattingOptions = {
   second: 'numeric',
   timeZoneName: 'short'
 };
-var DateTimeFormatter = new Services.intl.DateTimeFormat(undefined, formattingOptions);
 
 // DupeMessageRecord - a self-describing class;
 // each dupe message in each dupe set will have a record built
@@ -371,31 +370,34 @@ function updateStatusBar() {
 // we duplicate the row template and modify it with data
 // from the messageRecord
 
-function createMessageTreeRow(messageRecord) {
-  let row = messageRowTemplate.cloneNode(true);
-    // a shallow clone is enough here
+{
+  var DateTimeFormatter = new Services.intl.DateTimeFormat(undefined, formattingOptions);
+  
+  function createMessageTreeRow(messageRecord) {
+    let row = messageRowTemplate.cloneNode(true);
+      // a shallow clone is enough here
 
-  let massageValue = (fieldName, value) => {
-    switch (fieldName) {
-    case 'sendTime': {
-      let sendTimeInMilliseconds = value * 1000;
-      return DateTimeFormatter.format(new Date(sendTimeInMilliseconds));
-    }
-    case 'toKeep':   return value ? "keep" : "delete";
-    default:         return value;
-    }
-  };
-  // Note we're skipping the first column, which doesn't really
-  // correspond to a field
-  FieldNames.slice(1).forEach((fieldName, index) => {
-    let attributeName =  (fieldName == 'toKeep') ? 'properties' : 'label';
-    let attributeValue = massageValue(fieldName, messageRecord[fieldName]);
-    row.childNodes.item(index + 1).setAttribute(attributeName, attributeValue);
-  });
+    let massageValue = (fieldName, value) => {
+      switch (fieldName) {
+      case 'sendTime': {
+        let sendTimeInMilliseconds = value * 1000;
+        return DateTimeFormatter.format(new Date(sendTimeInMilliseconds));
+      }
+      case 'toKeep':   return value ? "keep" : "delete";
+      default:         return value;
+      }
+    };
+    // Note we're skipping the first column, which doesn't really
+    // correspond to a field
+    FieldNames.slice(1).forEach((fieldName, index) => {
+      let attributeName =  (fieldName == 'toKeep') ? 'properties' : 'label';
+      let attributeValue = massageValue(fieldName, messageRecord[fieldName]);
+      row.childNodes.item(index + 1).setAttribute(attributeName, attributeValue);
+    });
 
-  return row;
+    return row;
+  }
 }
-
 
 // onTreeKeyPress -
 // Toggle the keep status for Space Bar
