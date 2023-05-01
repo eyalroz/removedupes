@@ -744,6 +744,10 @@ RemoveDupes.MessengerOverlay.reviewAndRemoveDupes = function (searchData) {
       searchData.dupeSetsHashMap, searchData.originalsFolderUris,
       searchData.allowMD5IDSubstitutes);
   } else {
+    // We'll keep one message from each set - by the arbitrary order in which we found them
+    for (const messageHash in searchData.dupeSetsHashMap) {
+      searchData.dupeSetsHashMap[messageHash].shift();
+    }
     const DontHaveMessageRecords = false;
     let action = RemoveDupes.Prefs.get('default_action', null);
     if (action == 'delete_permanently') {
