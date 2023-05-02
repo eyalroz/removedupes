@@ -149,13 +149,12 @@
           <hbox>
             <radio id="move_to_common_account_trash_action"
                    selected="false"
-                   hidden="true"
                    disabled="true"
                    value="move_to_common_account_trash"
                    label="&action.move_to_common_account_trash.label;"
                    accesskey="&action.move_to_common_account_trash.accesskey;"/>
             <radio id="move_to_chosen_folder_action"
-                   selected="false"
+                   selected="true"
                    value="move_to_chosen_folder"
                    label="&action.move_to_chosen_folder.label;"
                    accesskey="&action.move_to_chosen_folder.accesskey;"/>

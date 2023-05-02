@@ -60,7 +60,7 @@
               <radiogroup preference="extensions.removedupes.default_action"
                 prefstring="extensions.removedupes.default_action"
                 id="extensions.removedupes.default_action">
-                <radio value="move"
+                <radio value="move_to_chosen_folder"
                   label="&general_settings.default_action.move_to_chosen_folder.label;"
                   accesskey="&general_settings.default_action.move_to_chosen_folder.accesskey;"/>
                 <!-- add here: folder picker! -->

@@ -24,7 +24,7 @@ pref("extensions.removedupes.comparison_criteria.body", false);
 
 pref("extensions.removedupes.use_dialog_before_removal", true);
 pref("extensions.removedupes.confirm_permanent_deletion", true);
-pref("extensions.removedupes.default_action", 'move');
+pref("extensions.removedupes.default_action", 'move_to_chosen_folder');
 
 pref("extensions.removedupes.limit_number_of_processed_messages", false);
 pref("extensions.removedupes.processed_messages_limit", 10000);

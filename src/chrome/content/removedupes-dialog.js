@@ -171,7 +171,6 @@ function initDupeReviewDialog() {
   document.getElementById('keepPresetOriginalButton')
           .setAttribute('hidden', (!originalsFolderUris));
   initializeFolderPicker();
-  document.getElementById('action').value = RemoveDupes.Prefs.get('default_action', null);
   dupeSetTree = document.getElementById("dupeSetsTree");
 
   // indicate which columns were used in the search
@@ -184,14 +183,24 @@ function initDupeReviewDialog() {
   }
 
   let dupesKnownNotToHaveCommonAccount = enrichDupeInfo();
+  let move_to_common_trash_element = document.getElementById('move_to_common_account_trash_action');
+  move_to_common_trash_element.disabled = Boolean(dupesKnownNotToHaveCommonAccount);
 
-  if (!dupesKnownNotToHaveCommonAccount) {
-    document.getElementById('action').value = 'move_to_common_account_trash';
-    let move_to_common_trash_element =
-      document.getElementById('move_to_common_account_trash_action');
-    move_to_common_trash_element.hidden = false;
-    move_to_common_trash_element.disabled = false;
+  let defaultAction = RemoveDupes.Prefs.get('default_action', null);
+  let action;
+
+  if (defaultAction && (defaultAction != 'move_to_common_account_trash' || !dupesKnownNotToHaveCommonAccount)) {
+    action = defaultAction;
+  } else if (!dupesKnownNotToHaveCommonAccount) {
+    action = 'move_to_common_account_trash';
+  } else {
+    // Dupes aren't known to have a common trash folder
+    action = 'move_to_chosen_folder';
   }
+
+  let actionRadio = document.getElementById(`${action}_action`);
+  document.getElementById('action').selectedItem = actionRadio;
+
   initializeDuplicateSetsTree();
 }
 
@@ -372,7 +381,7 @@ function updateStatusBar() {
 
 {
   var DateTimeFormatter = new Services.intl.DateTimeFormat(undefined, formattingOptions);
-  
+
   function createMessageTreeRow(messageRecord) {
     let row = messageRowTemplate.cloneNode(true);
       // a shallow clone is enough here
