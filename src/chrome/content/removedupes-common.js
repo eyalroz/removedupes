@@ -218,7 +218,9 @@ RemoveDupes.Removal.deleteMessages = function (appWindow, msgWindow, messageSets
       anyDeletionsPerformed = true;
     } catch (ex) {
       appWindow.alert(RemoveDupes.Strings.getByName('failed_to_erase')); // todo: make this folder specific?
-      console.log(`Failed erasing messages from folder\n${folderUri} :\n${ex}`);
+      console.error(`Failed erasing ${folderMessageHdrs.length} messages from folder ${
+        folder.abbreviatedName}\n(${folderUri}):\n${ex}`);
+      RemoveDupes.StatusBar.setNamedStatus('failed_erasing_from_folder', [folder.abbreviatedName]);
       break;
     }
   }
