@@ -82,6 +82,22 @@ XPCOMUtils.defineLazyGetter(RemoveDupes, 'Prefs', () => {
 
 //---------------------------------------------------------
 
+RemoveDupes.StatusBar = {};
+RemoveDupes.StatusBar.textElement = null;
+
+RemoveDupes.StatusBar.setStatus = function (statusText) {
+  // Do we really need both of these? I wonder
+  RemoveDupes.StatusBar.textElement.value = statusText;
+  RemoveDupes.StatusBar.textElement.textContent = statusText;
+};
+
+RemoveDupes.StatusBar.setNamedStatus = function (stringName, formatArguments) {
+  let text = RemoveDupes.Strings.format(stringName, formatArguments);
+  RemoveDupes.StatusBar.setStatus(text);
+};
+
+//---------------------------------------------------------
+
 RemoveDupes.Removal = {};
 
 RemoveDupes.Removal.getLocalFoldersTrashFolder = function () {
@@ -159,16 +175,19 @@ RemoveDupes.Removal.moveMessages = function (appWindow, msgWindow, messageSetsHa
   return true;
 };
 
-RemoveDupes.Removal.moveMessagesFromFolder = function (msgWindow, sourceFolder, removalMessageHdrs, targetFolder)  {
+RemoveDupes.Removal.moveMessagesFromFolder = function (msgWindow, sourceFolder, removalMessageHdrs, targetFolder) {
   // The copy function name dropped the inital capital sometime between TB 78 and TB 91
   let copyFunctionName = ('copyMessages' in MailServices.copy) ? 'copyMessages' : 'CopyMessages';
   const MovingNotCopying = true;
   const NoListener = null;
   const AllowUndo = true;
+  RemoveDupes.StatusBar.setNamedStatus('moving_messages_from_to',
+    [removalMessageHdrs.length, sourceFolder.abbreviatedName, targetFolder.abbreviatedName]);
   return MailServices.copy[copyFunctionName](
     sourceFolder, removalMessageHdrs, targetFolder,
     MovingNotCopying, NoListener, msgWindow, AllowUndo);
 };
+
 
 RemoveDupes.Removal.deleteMessages = function (appWindow, msgWindow, messageSetsHashMap, haveMessageRecords)  {
   // note that messenger and msgWindow have to be defined! if we're running from the
@@ -194,6 +213,7 @@ RemoveDupes.Removal.deleteMessages = function (appWindow, msgWindow, messageSets
       break;
     }
     try {
+      RemoveDupes.StatusBar.setNamedStatus('deleting_messages_from', [folderMessageHdrs.length, folder.abbreviatedName]);
       RemoveDupes.Removal.deleteMessagesFromFolder(msgWindow, folder, folderMessageHdrs);
       anyDeletionsPerformed = true;
     } catch (ex) {
