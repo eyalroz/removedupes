@@ -83,7 +83,7 @@
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
           <splitter class="tree-splitter"/>
-          <treecol id="folderNameColumn"
+          <treecol id="folderColumn"
                    fieldName="folder"
                    label="&removedupes_dialog.folder_name;"
                    flex="2"
