@@ -301,7 +301,7 @@ RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2 = function 
     if (searchData.useReviewDialog) {
       // if the user wants a dialog to pop up for the dupes,
       // we can bother him/her with a message box for 'no dupes'
-      RemoveDupes.MessengerOverlay.setStatus('');
+      RemoveDupes.StatusBar.setStatus('');
       RemoveDupes.namedAlert(window, 'no_duplicates_found');
     } else {
       // if the user wanted silent removal, we'll be more quiet about telling
