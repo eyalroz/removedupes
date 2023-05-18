@@ -646,7 +646,7 @@ RemoveDupes.MessengerOverlay.reportRefinementProgress = function (searchData, ac
     return;
   }
   searchData.lastStatusBarReport = currentTime;
-  RemoveDupes.StatusBar.setNamedStatus(`refinement_status_getting_${activity}`,
+  RemoveDupes.StatusBar.setNamedStatus(`refinement_status_${activity}`,
     // We add 1 to get 1-based indices
     [searchData.setsRefined + 1, searchData.totalOriginalDupeSets, messageIndex + 1, numMessages]);
 };
@@ -676,7 +676,7 @@ RemoveDupes.MessengerOverlay.refineDupeSets = function (searchData) {
     let initialSetSize = dupeSet.length;
 
     for (let i = 0; i < dupeSet.length; i++) {
-      RemoveDupes.MessengerOverlay.reportRefinementProgress(searchData, 'bodies', i, initialSetSize);
+      RemoveDupes.MessengerOverlay.reportRefinementProgress(searchData, 'getting_bodies', i, initialSetSize);
       let dupeUri = dupeSet[i];
       dupeSet[i] = {
         uri: dupeUri,
@@ -713,7 +713,7 @@ RemoveDupes.MessengerOverlay.refineDupeSets = function (searchData) {
         searchData.dupeSetsHashMap[`${hashValue}|${subsetIndex++}`] = dupeSet.splice(0, subsetLength);
       } else dupeSet.shift();
       RemoveDupes.MessengerOverlay.reportRefinementProgress(
-        searchData, 'subsets', dupeSet.length - initialSetSize, dupeSet.length);
+        searchData, 'building_subsets', dupeSet.length - initialSetSize, dupeSet.length);
     }
     delete searchData.dupeSetsHashMap[hashValue];
     searchData.setsRefined++;
