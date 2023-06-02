@@ -475,6 +475,7 @@ function loadCurrentRowMessage() {
   try {
     dupeSetItem = dupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
   } catch (ex) {
+    console.log(`Failed loading the currently-reviewed dupe message for display in the 3-pane window:\n${ex}`);
     return;
   }
 
