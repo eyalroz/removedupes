@@ -479,18 +479,19 @@ function loadCurrentRowMessage() {
   }
 
   let messageUri = dupeSetItem.uri;
-  let folder = messenger.msgHdrFromURI(messageUri).folder;
+  let messageHeader = messenger.msgHdrFromURI(messageUri);
 
-  msgWindow = msgWindow.QueryInterface(Ci.nsIMsgWindow);
-  if (msgWindow.SelectFolder) {
-    // it's an old-skool msgWindow, i.e. before the 2007-05-21 check-in
-    // which changed the API
-    msgWindow.SelectFolder(folder.URI);
-    msgWindow.SelectMessage(messageUri);
-  } else {
-    msgWindow.windowCommands.selectFolder(folder.URI);
-    msgWindow.windowCommands.selectMessage(messageUri);
+  let mail3PaneWindow = Services.wm.getMostRecentWindow("mail:3pane");
+  if (mail3PaneWindow) {
+    mail3PaneWindow.MsgDisplayMessageInFolderTab(messageHeader);
+    if (Ci.nsIMessengerWindowsIntegration) {
+      Cc["@mozilla.org/messenger/osintegration;1"]
+        .getService(Ci.nsIMessengerWindowsIntegration)
+        .showWindow(mail3PaneWindow);
+    }
   }
+
+  // MailUtils.displayMessageInFolderTab(messageHeader);
 }
 
 function toggleDeletionForCurrentRow() {
