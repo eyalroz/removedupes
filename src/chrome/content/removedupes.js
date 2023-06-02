@@ -735,7 +735,7 @@ RemoveDupes.MessengerOverlay.reviewAndRemoveDupes = function (searchData) {
 
     // open up a dialog in which the user sees all dupes we've found, and can decide which to delete
     window.openDialog(dialogURI, "removedupes", "chrome, resizable=yes",
-      messenger, msgWindow, gDBView, searchData.useCriteria,
+      messenger, msgWindow, searchData.useCriteria,
       searchData.dupeSetsHashMap, searchData.originalsFolderUris,
       searchData.allowMD5IDSubstitutes);
   } else {

@@ -8,8 +8,6 @@ var msgWindow;
   // the 3-pane window which opened us
 var messenger;
   // msgWindow's messenger
-var dbView;
-  // the 3-pane window's message db view
 var dupeSetsHashMap;
   // the sets of duplicate messages we're reviewing for deletion
 var originalsFolderUris;
@@ -154,11 +152,10 @@ function initDupeReviewDialog() {
   msgWindow              = window.arguments[1];
   // XXX TO DO:
   // Do we need this argument?
-  dbView                 = window.arguments[2];
-  useCriteria            = window.arguments[3];
-  dupeSetsHashMap        = window.arguments[4];
-  originalsFolderUris    = window.arguments[5];
-  allowMD5IDSubstitutes  = window.arguments[6];
+  useCriteria            = window.arguments[2];
+  dupeSetsHashMap        = window.arguments[3];
+  originalsFolderUris    = window.arguments[4];
+  allowMD5IDSubstitutes  = window.arguments[5];
 
   // let's replace the URI's with all the necessary information
   // for the display dialog:
