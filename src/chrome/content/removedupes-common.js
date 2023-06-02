@@ -4,7 +4,7 @@ var RemoveDupes = {};
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 
-const { Services     } = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const   Services      = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm");
 const { XPCOMUtils   } = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
