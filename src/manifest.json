@@ -4,7 +4,7 @@
 		"gecko": {
 #expand			"id": "__UUID__",
 			"strict_min_version": "91.0",
-			"strict_max_version": "103.0"
+			"strict_max_version": "115.0"
 		}
 	},
 	"author": "Eyal Rozenberg",
