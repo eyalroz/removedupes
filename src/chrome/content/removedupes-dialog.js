@@ -479,18 +479,8 @@ function loadCurrentRowMessage() {
   }
 
   let messageUri = dupeSetItem.uri;
-  let folder = messenger.msgHdrFromURI(messageUri).folder;
-
-  msgWindow = msgWindow.QueryInterface(Ci.nsIMsgWindow);
-  if (msgWindow.SelectFolder) {
-    // it's an old-skool msgWindow, i.e. before the 2007-05-21 check-in
-    // which changed the API
-    msgWindow.SelectFolder(folder.URI);
-    msgWindow.SelectMessage(messageUri);
-  } else {
-    msgWindow.windowCommands.selectFolder(folder.URI);
-    msgWindow.windowCommands.selectMessage(messageUri);
-  }
+  let messageHeader = messenger.msgHdrFromURI(messageUri);
+  MailUtils.displayMessageInFolderTab(messageHeader);
 }
 
 function toggleDeletionForCurrentRow() {
