@@ -29,15 +29,17 @@
       <spacer />
       <tree id="dupeSetsTree"
             enableColumnDrag="true"
-            height="250"
+            style="height: 550px; width: 700px; "
+            height="550"
             width="700"
-            flex="2"
+            flex="1"
             persist="sortColumn sortDirection"
             onkeydown="onTreeKeyPress(event);"
             onkeyup="onTreeKeyUp(event);"
             onclick="onClickTree(event);">
         <treecols>
-          <treecol width="40"
+          <treecol style="width: 40px"
+                   width="40"
                    persist="width hidden class sortDirection"
                    id="dummyColumn"
                    primary="true"
@@ -45,6 +47,7 @@
           <splitter class="tree-splitter"/>
           <treecol id="toKeepColumn"
                    fieldName="toKeep"
+                   style="width: 60px"
                    width="60"
                    persist="width hidden class sortDirection"
                    label="&removedupes_dialog.keep_flag;"
@@ -53,7 +56,7 @@
           <treecol id="authorColumn"
                    fieldName="author"
                    label="&removedupes_dialog.author;"
-                   flex="5"
+                   flex="1"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
@@ -61,7 +64,7 @@
           <treecol id="recipientsColumn"
                    fieldName="recipients"
                    label="&removedupes_dialog.recipients;"
-                   flex="5"
+                   flex="1"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
@@ -70,7 +73,7 @@
                    fieldName="ccList"
                    label="&removedupes_dialog.cc_list;"
                    hidden="true"
-                   flex="5"
+                   flex="1"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
@@ -78,7 +81,7 @@
           <treecol id="subjectColumn"
                    fieldName="subject"
                    label="&removedupes_dialog.subject;"
-                   flex="5"
+                   flex="1"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
@@ -86,23 +89,27 @@
           <treecol id="folderColumn"
                    fieldName="folder"
                    label="&removedupes_dialog.folder_name;"
-                   flex="2"
+                   flex="1"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
           <splitter class="tree-splitter"/>
-          <treecol id="sendTimeColumn"  width="150"
+          <treecol id="sendTimeColumn"
+                   style="width: 150px"
+                   width="150"
                    fieldName="sendTime"
                    label="&removedupes_dialog.send_time;"
-                   flex="3"
+                   flex="1"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
           <splitter class="tree-splitter"/>
-          <treecol id="sizeColumn"  width="150"
+          <treecol id="sizeColumn"
+                   style="width: 150px"
+                   width="150"
                    fieldName="size"
                    label="&removedupes_dialog.size;"
-                   flex="3"
+                   flex="1"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
@@ -118,7 +125,7 @@
                    fieldName="messageId"
                    label="&removedupes_dialog.id;"
                    hidden="true"
-                   flex="2"
+                   flex="1"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
@@ -126,7 +133,7 @@
                    fieldName="flags"
                    label="&removedupes_dialog.flags;"
                    hidden="true"
-                   flex="2"
+                   flex="1"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
@@ -135,14 +142,14 @@
         <treechildren id="dupeSetsTreeChildren"/>
       </tree>
       <hbox class="statusbar">
-        <spacer width="5" />
-        <label class="statusbarpanel" id="main-status-panel"  flex="6"/>
+        <spacer width="5" style="width: 5px"/>
+        <label class="statusbarpanel" id="main-status-panel"  flex="1"/>
         <label class="statusbarpanel" id="sets-status-panel"  flex="1"/>
         <label class="statusbarpanel" id="total-status-panel"  flex="1"/>
         <label class="statusbarpanel" id="keeping-status-panel" flex="1"/>
-        <spacer width="2.5" />
+        <spacer width="2.5" style="width: 2.5px"/>
       </hbox>
-      <spacer height="10"/>
+      <spacer height="10" style="width: 10px"/>
       <groupbox>
         <caption label="&removedupes_dialog.action_label;"/>
         <radiogroup id="action">
@@ -178,9 +185,9 @@
         </radiogroup>
         </groupbox>
     </vbox>
-    <hbox width="60">
+    <hbox width="50" style="width: 50px">
       <vbox>
-        <description  width="60">
+        <description  width="50" style="width: 50px">
           &removedupes_dialog.keep_label;
         </description>
         <button id="keepPresetOriginalButton"
