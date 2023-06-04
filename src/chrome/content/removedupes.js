@@ -651,6 +651,7 @@ RemoveDupes.MessengerOverlay.reportRefinementProgress = function (searchData, ac
   RemoveDupes.StatusBar.setNamedStatus(`refinement_status_${activity}`,
     // We add 1 to get 1-based indices
     [searchData.setsRefined + 1, searchData.totalOriginalDupeSets, messageIndex + 1, numMessages]);
+  window.MsgStatusFeedback.showProgress((searchData.setsRefined + 1) / searchData.totalOriginalDupeSets);
 };
 
 // The actual second phase of message processing (see
