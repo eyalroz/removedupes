@@ -38,8 +38,8 @@ RemoveDupes.MessengerOverlay.originalsFolderUris = null;
 
 RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages = function () {
   // document.getElementById('progress-panel').removeAttribute('collapsed');
-  RemoveDupes.StatusBar.textElement = document.getElementById('statusText');
-  RemoveDupes.StatusBar.setNamedStatus('searching_for_dupes');
+  window.MsgStatusFeedback._startMeteors();
+  RemoveDupes.StatusBar.setNamedStatus(msgWindow, 'searching_for_dupes');
 
   // we'll need this for some calls involving UrlListeners
 
@@ -112,6 +112,7 @@ RemoveDupes.MessengerOverlay.beginSearchForDuplicateMessages = function (searchD
 RemoveDupes.MessengerOverlay.abortDupeSearch = function (searchData, labelStringName) {
   window.removeEventListener("keypress", searchData.keyPressEventListener, true);
   searchData = null;
+  window.MsgStatusFeedback._stopMeteors();
   RemoveDupes.StatusBar.setNamedStatus(labelStringName);
 };
 
@@ -192,7 +193,7 @@ RemoveDupes.MessengerOverlay.addSearchFolders = function (folder, searchData) {
 // for IMAP folders
 
 RemoveDupes.MessengerOverlay.traverseSearchFolderSubfolders = function (folder, searchData) {
-  RemoveDupes.StatusBar.setNamedStatus('searching_for_dupes');
+  RemoveDupes.StatusBar.setNamedStatus(msgWindow, 'searching_for_dupes');
 
   if (searchData.searchSubfolders && folder.hasSubFolders) {
     // traverse the children
@@ -220,7 +221,7 @@ RemoveDupes.MessengerOverlay.traverseSearchFolderSubfolders = function (folder, 
 // from the folders
 
 RemoveDupes.MessengerOverlay.waitForFolderCollection = function (searchData) {
-  RemoveDupes.StatusBar.setNamedStatus('searching_for_dupes');
+  RemoveDupes.StatusBar.setNamedStatus(msgWindow, 'searching_for_dupes');
 
   if (searchData.userAborted) {
     RemoveDupes.MessengerOverlay.abortDupeSearch(searchData, 'search_aborted');
@@ -297,6 +298,7 @@ RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2 = function 
     return;
   }
 
+  window.MsgStatusFeedback._stopMeteors();
   if (ObjectUtils.isEmpty(searchData.dupeSetsHashMap)) {
     if (searchData.useReviewDialog) {
       // if the user wants a dialog to pop up for the dupes,
@@ -306,11 +308,11 @@ RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2 = function 
     } else {
       // if the user wanted silent removal, we'll be more quiet about telling
       // him/her there are no dupes
-      RemoveDupes.StatusBar.setNamedStatus('no_duplicates_found');
+      RemoveDupes.StatusBar.setNamedStatus(msgWindow, 'no_duplicates_found');
     }
     searchData = null;
   } else {
-    RemoveDupes.StatusBar.setNamedStatus('search_complete');
+    RemoveDupes.StatusBar.setNamedStatus(msgWindow, 'search_complete');
     RemoveDupes.MessengerOverlay.reviewAndRemoveDupes(searchData);
     // document.getElementById('progress-panel').setAttribute('collapsed', true);
   }
@@ -586,7 +588,7 @@ RemoveDupes.MessengerOverlay.populateDupeSetsHash = function* (searchData) {
       let currentTime = (new Date()).getTime();
       if (currentTime - searchData.lastStatusBarReport > searchData.reportQuantum) {
         searchData.lastStatusBarReport = currentTime;
-        RemoveDupes.StatusBar.setNamedStatus('hashed_x_messages', [searchData.messagesHashed]);
+        RemoveDupes.StatusBar.setNamedStatus(msgWindow, 'hashed_x_messages', [searchData.messagesHashed]);
       }
       if (currentTime - searchData.lastYield > searchData.yieldQuantum) {
         searchData.lastYield = currentTime;

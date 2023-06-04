@@ -83,17 +83,14 @@ XPCOMUtils.defineLazyGetter(RemoveDupes, 'Prefs', () => {
 //---------------------------------------------------------
 
 RemoveDupes.StatusBar = {};
-RemoveDupes.StatusBar.textElement = null;
 
-RemoveDupes.StatusBar.setStatus = function (statusText) {
-  // Do we really need both of these? I wonder
-  RemoveDupes.StatusBar.textElement.value = statusText;
-  RemoveDupes.StatusBar.textElement.textContent = statusText;
+RemoveDupes.StatusBar.setStatus = function (messageWindow, statusString) {
+  messageWindow.statusFeedback.showStatusString(statusString);
 };
 
-RemoveDupes.StatusBar.setNamedStatus = function (stringName, formatArguments) {
-  let text = RemoveDupes.Strings.format(stringName, formatArguments);
-  RemoveDupes.StatusBar.setStatus(text);
+RemoveDupes.StatusBar.setNamedStatus = function (messageWindow, stringName, formatArguments) {
+  let formattedString = RemoveDupes.Strings.format(stringName, formatArguments);
+  RemoveDupes.StatusBar.setStatus(messageWindow, formattedString);
 };
 
 //---------------------------------------------------------
@@ -176,12 +173,12 @@ RemoveDupes.Removal.moveMessages = function (appWindow, msgWindow, messageSetsHa
 };
 
 RemoveDupes.Removal.moveMessagesFromFolder = function (msgWindow, sourceFolder, removalMessageHdrs, targetFolder) {
-  // The copy function name dropped the inital capital sometime between TB 78 and TB 91
+  // The copy function name dropped the initial capital sometime between TB 78 and TB 91
   let copyFunctionName = ('copyMessages' in MailServices.copy) ? 'copyMessages' : 'CopyMessages';
   const MovingNotCopying = true;
   const NoListener = null;
   const AllowUndo = true;
-  RemoveDupes.StatusBar.setNamedStatus('moving_messages_from_to',
+  RemoveDupes.StatusBar.setNamedStatus(msgWindow, 'moving_messages_from_to',
     [removalMessageHdrs.length, sourceFolder.abbreviatedName, targetFolder.abbreviatedName]);
   return MailServices.copy[copyFunctionName](
     sourceFolder, removalMessageHdrs, targetFolder,
@@ -213,14 +210,14 @@ RemoveDupes.Removal.deleteMessages = function (appWindow, msgWindow, messageSets
       break;
     }
     try {
-      RemoveDupes.StatusBar.setNamedStatus('deleting_messages_from', [folderMessageHdrs.length, folder.abbreviatedName]);
+      RemoveDupes.StatusBar.setNamedStatus(msgWindow, 'deleting_messages_from', [folderMessageHdrs.length, folder.abbreviatedName]);
       RemoveDupes.Removal.deleteMessagesFromFolder(msgWindow, folder, folderMessageHdrs);
       anyDeletionsPerformed = true;
     } catch (ex) {
       appWindow.alert(RemoveDupes.Strings.getByName('failed_to_erase')); // todo: make this folder specific?
       console.error(`Failed erasing ${folderMessageHdrs.length} messages from folder ${
         folder.abbreviatedName}\n(${folderUri}):\n${ex}`);
-      RemoveDupes.StatusBar.setNamedStatus('failed_erasing_from_folder', [folder.abbreviatedName]);
+      RemoveDupes.StatusBar.setNamedStatus(msgWindow, 'failed_erasing_from_folder', [folder.abbreviatedName]);
       break;
     }
   }
