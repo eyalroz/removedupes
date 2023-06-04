@@ -196,19 +196,8 @@ RemoveDupes.MessengerOverlay.traverseSearchFolderSubfolders = function (folder, 
   RemoveDupes.StatusBar.setNamedStatus(msgWindow, 'searching_for_dupes');
 
   if (searchData.searchSubfolders && folder.hasSubFolders) {
-    // traverse the children
-    let subFolders = folder.subFolders;
-    if ('hasMoreElements' in subFolders) {
-      // subFolders is an nsISimpleEnumerator (pre-TB-86; see bug 1682941)
-      while (subFolders.hasMoreElements()) {
-        RemoveDupes.MessengerOverlay.addSearchFolders(
-          subFolders.getNext().QueryInterface(Ci.nsIMsgFolder), searchData);
-      }
-    } else {
-      // subFolders is an nsIArray; this is what we expect in TB 86 and later
-      for (let subFolder of subFolders) {
-        RemoveDupes.MessengerOverlay.addSearchFolders(subFolder, searchData);
-      }
+    for (let subFolder of folder.subFolders) {
+      RemoveDupes.MessengerOverlay.addSearchFolders(subFolder, searchData);
     }
   }
 

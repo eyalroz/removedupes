@@ -173,18 +173,15 @@ RemoveDupes.Removal.moveMessages = function (appWindow, msgWindow, messageSetsHa
 };
 
 RemoveDupes.Removal.moveMessagesFromFolder = function (msgWindow, sourceFolder, removalMessageHdrs, targetFolder) {
-  // The copy function name dropped the initial capital sometime between TB 78 and TB 91
-  let copyFunctionName = ('copyMessages' in MailServices.copy) ? 'copyMessages' : 'CopyMessages';
   const MovingNotCopying = true;
   const NoListener = null;
   const AllowUndo = true;
   RemoveDupes.StatusBar.setNamedStatus(msgWindow, 'moving_messages_from_to',
     [removalMessageHdrs.length, sourceFolder.abbreviatedName, targetFolder.abbreviatedName]);
-  return MailServices.copy[copyFunctionName](
+  return MailServices.copy.copyMessages(
     sourceFolder, removalMessageHdrs, targetFolder,
     MovingNotCopying, NoListener, msgWindow, AllowUndo);
 };
-
 
 RemoveDupes.Removal.deleteMessages = function (appWindow, msgWindow, messageSetsHashMap, haveMessageRecords)  {
   // note that messenger and msgWindow have to be defined! if we're running from the
