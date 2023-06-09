@@ -2,8 +2,6 @@ const { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removed
 const   Services      = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const { MailUtils   } = ChromeUtils.import("resource:///modules/MailUtils.jsm");
 
-const Ci = Components.interfaces;
-
 var msgWindow;
   // the 3-pane window which opened us
 var messenger;

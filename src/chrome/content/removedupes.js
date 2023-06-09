@@ -1,6 +1,3 @@
-window.Cc ??= Components.classes;
-window.Ci ??= Components.interfaces;
-
 var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
 var { ObjectUtils } = ChromeUtils.import("resource://gre/modules/ObjectUtils.jsm");
 var { ImapService } = () => {

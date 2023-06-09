@@ -1,6 +1,3 @@
-const Cc = Components.classes;
-const Ci = Components.interfaces;
-
 var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
 
 RemoveDupes.PrefPane = {};
