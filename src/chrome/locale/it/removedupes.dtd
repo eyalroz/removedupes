@@ -14,11 +14,11 @@
 <!ENTITY removedupes_dialog.recipients "Destinatario">
 <!ENTITY removedupes_dialog.cc_list "Lista destinatari in Cc">
 <!ENTITY removedupes_dialog.flags "Indicatori">
-<!ENTITY removedupes_dialog.folder "Cartella">
+<!ENTITY removedupes_dialog.folder_name "Cartella">
 <!ENTITY removedupes_dialog.line_count "N° righe">
 <!ENTITY removedupes_dialog.date "Data">
 <!ENTITY removedupes_dialog.send_time "Ora di invio">
-<!ENTITY removedupes_dialog.size "Dimensione">
+<!ENTITY removedupes_dialog.size "Size (Headers &amp; Body)">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "Imposta originali">
 <!ENTITY removedupes_dialog.keep_first.label "La prima copia">
 <!ENTITY removedupes_dialog.keep_last.label "L&apos;ultima copia">

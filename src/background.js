@@ -45,11 +45,8 @@
     ["locale",  "removedupes", "sl-SI",                                 "chrome/locale/sl-SI/"]
   ]);
 
-  let browserInfo = await browser.runtime.getBrowserInfo();
-  let majorVersion = parseInt(browserInfo.version.split('.',1)[0]);
-  let xulSuffix = (majorVersion >= 69 ? "xhtml" : "xul");
-  messenger.WindowListener.registerWindow("chrome://messenger/content/messenger." + xulSuffix,       "chrome://removedupes/content/overlay-injectors/messenger.js");
-  messenger.WindowListener.registerWindow("chrome://messenger/content/customizeToolbar." + xulSuffix, "chrome://removedupes/content/overlay-injectors/customizeToolbar.js");
-  messenger.WindowListener.registerOptionsPage("chrome://removedupes/content/removedupes-prefs." + xulSuffix)
+  messenger.WindowListener.registerWindow("chrome://messenger/content/messenger.xhtml",       "chrome://removedupes/content/overlay-injectors/messenger.js");
+  messenger.WindowListener.registerWindow("chrome://messenger/content/customizeToolbar.xhtml", "chrome://removedupes/content/overlay-injectors/customizeToolbar.js");
+  messenger.WindowListener.registerOptionsPage("chrome://removedupes/content/removedupes-prefs.xhtml")
   messenger.WindowListener.startListening();
 })()

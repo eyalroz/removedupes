@@ -14,11 +14,11 @@
 <!ENTITY removedupes_dialog.recipients "收件者">
 <!ENTITY removedupes_dialog.cc_list "副本清單">
 <!ENTITY removedupes_dialog.flags "標記">
-<!ENTITY removedupes_dialog.folder "資料夾">
+<!ENTITY removedupes_dialog.folder_name "資料夾">
 <!ENTITY removedupes_dialog.line_count "行數">
 <!ENTITY removedupes_dialog.date "日期">
 <!ENTITY removedupes_dialog.send_time "傳送時間">
-<!ENTITY removedupes_dialog.size "大小">
+<!ENTITY removedupes_dialog.size "Size (Headers &amp; Body)">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "預設原始資料夾">
 <!ENTITY removedupes_dialog.keep_first.label "第一個副本">
 <!ENTITY removedupes_dialog.keep_last.label "最後一個副本">

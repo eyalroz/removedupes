@@ -17,10 +17,10 @@ function usage {
 	echo "Build script for the $SHORTNAME extension."
 	echo ""
 	echo "Options:"
-	echo "    -v | --version [VERSION]     The version to build"
-	echo "    -b | --build-type [TYPE]     Specify the build type: beta, release-candidate, or release"
-	echo "    -s | --subversion [VERSION]  Specify the subversion number for beta or rc builds (default: 1)"
-	echo "    -h | --help                  This message"
+	echo "    -v | --version VERSION    The version to build"
+	echo "    -b | --build-type TYPE    Specify the build type: beta, release-candidate, or release"
+	echo "    -s | --subversion SUBVER  Specify the subversion number for beta or rc builds (default: 1)"
+	echo "    -h | --help               This message"
 	echo ""
 	exit
 }
@@ -37,7 +37,7 @@ while (( $# > 0 )); do
 			VERSION="$1"
 			shift
 			;;
-		-b | --build-type)
+		-b | --build-type | --type)
 			BUILD_TYPE="$1"
 			shift
 			;;
@@ -50,7 +50,7 @@ while (( $# > 0 )); do
 		--release-candidate|--rc)
 			BUILD_TYPE=rc
 			;;
-		--sub-version-number|--sub-version|--sver|--sub|--sv|-s)
+		--sub-version-number|--sub-version|--subversion|--sver|--sub|--sv|-s)
 			SUB_VERSION="$1"
 			shift
 			;;
@@ -132,6 +132,8 @@ $BUILD_TOOLS_DIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILD_DIR/jar.mn
 # Our invocation of make-jars.pl doesn't literally make JAR files, it only preprocesses and copies.
 $BUILD_TOOLS_DIR/make-jars.pl -q -f flat -z zip -p "$BUILD_TOOLS_DIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILD_DIR/jar.mn || exit
 $BUILD_TOOLS_DIR/preprocessor.pl $PREPROCESSOR_PARAMS src/manifest.json > $BUILD_DIR/manifest.json
+# Difficult to use the XUL preprocessor with package.json, since npm and IDEs rely on it being well-formed, and JSON doesn't have #-comments
+sed -r "s/__VERSION__/${VERSION}/" package.json > $BUILD_DIR/package.json
 rm -f installed-chrome.txt
 
 mkdir -p $BUILD_DIR/defaults/preferences

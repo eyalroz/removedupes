@@ -11,9 +11,9 @@
 <!ENTITY message_comparison.cc_list.label "同報者 (Cc)">
 <!ENTITY message_comparison.flags.label "フラグ">
 <!ENTITY message_comparison.message_id.label "Message ID">
-<!ENTITY message_comparison.num_lines.label "本文行数">
+<!ENTITY message_comparison.line_count.label "本文行数">
 <!ENTITY message_comparison.send_time.label "送信日時">
-<!ENTITY message_comparison.size.label "サイズ">
+<!ENTITY message_comparison.size.label "サイズ (ヘッダーと本文)">
 <!ENTITY message_comparison.subject.label "件名">
 <!ENTITY message_comparison.folder.label "フォルダー">
 <!ENTITY message_comparison.body.label "本文">
@@ -25,7 +25,7 @@
 <!ENTITY message_comparison.recipients.access_key "R">
 <!ENTITY message_comparison.cc_list.access_key "C">
 <!ENTITY message_comparison.message_id.access_key "I">
-<!ENTITY message_comparison.num_lines.access_key "l">
+<!ENTITY message_comparison.line_count.access_key "l">
 <!ENTITY message_comparison.send_time.access_key "t">
 <!ENTITY message_comparison.size.access_key "s">
 <!ENTITY message_comparison.subject.access_key "S">
@@ -39,7 +39,7 @@
 <!ENTITY message_comparison.time_comparison_resolution.month.label "月">
 <!ENTITY message_comparison.time_comparison_resolution.year.label "年">
 <!ENTITY general_settings.tab_title "全般設定">
-<!ENTITY general_settings.search_subfolders.label "選択したフォルダのサブフォルダーを検索する">
+<!ENTITY general_settings.search_subfolders.label "選択したフォルダーのサブフォルダーを検索する">
 <!ENTITY general_settings.search_subfolders_first.label "サブフォルダーの検索を優先する (postorder) ">
 <!ENTITY general_settings.use_dialog_before_removal.label "削除前に検索結果を表示する">
 <!ENTITY general_settings.default_action.description "重複メッセージのデフォルト処理：">

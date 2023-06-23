@@ -14,11 +14,11 @@
 <!ENTITY removedupes_dialog.recipients "Komu">
 <!ENTITY removedupes_dialog.cc_list "Kópia">
 <!ENTITY removedupes_dialog.flags "Atribúty">
-<!ENTITY removedupes_dialog.folder "Priečinok">
+<!ENTITY removedupes_dialog.folder_name "Priečinok">
 <!ENTITY removedupes_dialog.line_count "Riadky">
 <!ENTITY removedupes_dialog.date "Dátum">
 <!ENTITY removedupes_dialog.send_time "Čas odoslania">
-<!ENTITY removedupes_dialog.size "Veľkosť">
+<!ENTITY removedupes_dialog.size "Size (Headers &amp; Body)">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "Stanoviť originály">
 <!ENTITY removedupes_dialog.keep_first.label "Prvú kópiu">
 <!ENTITY removedupes_dialog.keep_last.label "Poslednú kópiu">

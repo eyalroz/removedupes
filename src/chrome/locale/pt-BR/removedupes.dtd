@@ -14,11 +14,11 @@
 <!ENTITY removedupes_dialog.recipients "Destinatários">
 <!ENTITY removedupes_dialog.cc_list "Lista CC">
 <!ENTITY removedupes_dialog.flags "Flags">
-<!ENTITY removedupes_dialog.folder "Pasta">
+<!ENTITY removedupes_dialog.folder_name "Pasta">
 <!ENTITY removedupes_dialog.line_count "# Linhas">
 <!ENTITY removedupes_dialog.date "Data">
 <!ENTITY removedupes_dialog.send_time "Data de envio">
-<!ENTITY removedupes_dialog.size "Tamanho">
+<!ENTITY removedupes_dialog.size "Size (Headers &amp; Body)">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "Pré-definir Originais">
 <!ENTITY removedupes_dialog.keep_first.label "Primeira cópia">
 <!ENTITY removedupes_dialog.keep_last.label "Última cópia">

@@ -20,31 +20,34 @@
         title="&removedupes_dialog.dialog_title;">
 
   <script type="application/javascript" src="chrome://global/content/globalOverlay.js"/>
-  <script type="application/javascript" src="chrome://messenger/content/customElements.js"/>
   <script type="application/javascript" src="chrome://messenger/content/widgetglue.js"/>
   <script type="application/javascript" src="chrome://removedupes/content/removedupes-dialog.js"/>
 
-  <hbox flex="1">
-    <vbox flex="2">
+  <hbox flex="1" style="flex: 1;">
+    <vbox flex="1" style="flex: 2;">
       <description>&removedupes_dialog.tree_label;</description>
       <spacer />
       <tree id="dupeSetsTree"
             enableColumnDrag="true"
-            height="250"
+            style="height: 550px; width: 700px; flex: 2; resize: horizontal;"
+            height="550"
             width="700"
-            flex="2"
+            flex="1"
             persist="sortColumn sortDirection"
             onkeydown="onTreeKeyPress(event);"
             onkeyup="onTreeKeyUp(event);"
             onclick="onClickTree(event);">
         <treecols>
-          <treecol width="40"
+          <treecol style="width: 40px"
+                   width="40"
                    persist="width hidden class sortDirection"
-                   id="dummyCell"
+                   id="dummyColumn"
                    primary="true"
                    closemenu="none"/>
           <splitter class="tree-splitter"/>
-          <treecol id="keepColumn"
+          <treecol id="toKeepColumn"
+                   fieldName="toKeep"
+                   style="width: 60px"
                    width="60"
                    persist="width hidden class sortDirection"
                    label="&removedupes_dialog.keep_flag;"
@@ -53,7 +56,6 @@
           <treecol id="authorColumn"
                    fieldName="author"
                    label="&removedupes_dialog.author;"
-                   flex="5"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
@@ -61,16 +63,14 @@
           <treecol id="recipientsColumn"
                    fieldName="recipients"
                    label="&removedupes_dialog.recipients;"
-                   flex="5"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
           <splitter class="tree-splitter"/>
-          <treecol id="cc_listColumn"
-                   fieldName="cc_list"
+          <treecol id="ccListColumn"
+                   fieldName="ccList"
                    label="&removedupes_dialog.cc_list;"
                    hidden="true"
-                   flex="5"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
@@ -78,47 +78,45 @@
           <treecol id="subjectColumn"
                    fieldName="subject"
                    label="&removedupes_dialog.subject;"
-                   flex="5"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
           <splitter class="tree-splitter"/>
           <treecol id="folderColumn"
                    fieldName="folder"
-                   label="&removedupes_dialog.folder;"
-                   flex="2"
+                   label="&removedupes_dialog.folder_name;"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
           <splitter class="tree-splitter"/>
-          <treecol id="send_timeColumn"  width="150"
-                   fieldName="send_time"
+          <treecol id="sendTimeColumn"
+                   style="width: 150px"
+                   width="150"
+                   fieldName="sendTime"
                    label="&removedupes_dialog.send_time;"
-                   flex="3"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
           <splitter class="tree-splitter"/>
-          <treecol id="sizeColumn"  width="150"
+          <treecol id="sizeColumn"
+                   style="width: 150px"
+                   width="150"
                    fieldName="size"
                    label="&removedupes_dialog.size;"
-                   flex="3"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
           <splitter class="tree-splitter"/>
-          <treecol id="num_linesColumn"
-                   fieldName="num_lines"
+          <treecol id="lineCountColumn"
+                   fieldName="lineCount"
                    label="&removedupes_dialog.line_count;"
-                   flex="2"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
-          <treecol id="message_idColumn"
-                   fieldName="message_id"
+          <treecol id="messageIdColumn"
+                   fieldName="messageId"
                    label="&removedupes_dialog.id;"
                    hidden="true"
-                   flex="2"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
@@ -126,7 +124,6 @@
                    fieldName="flags"
                    label="&removedupes_dialog.flags;"
                    hidden="true"
-                   flex="2"
                    persist="width hidden class sortDirection"
                    onclick="onClickColumn(event);"
                    closemenu="none"/>
@@ -135,27 +132,26 @@
         <treechildren id="dupeSetsTreeChildren"/>
       </tree>
       <hbox class="statusbar">
-        <spacer width="5" />
-        <label class="statusbarpanel" id="main-status-panel"  flex="6"/>
-        <label class="statusbarpanel" id="sets-status-panel"  flex="1"/>
-        <label class="statusbarpanel" id="total-status-panel"  flex="1"/>
-        <label class="statusbarpanel" id="keeping-status-panel" flex="1"/>
-        <spacer width="2.5" />
+        <spacer width="5" style="width: 5px"/>
+        <label class="statusbarpanel" id="main-status-panel"  flex="1" style="flex: 1; resize: horizontal;"/>
+        <label class="statusbarpanel" id="sets-status-panel"  flex="1" style="flex: 1; resize: horizontal;"/>
+        <label class="statusbarpanel" id="total-status-panel"  flex="1" style="flex: 1; resize: horizontal;"/>
+        <label class="statusbarpanel" id="keeping-status-panel" flex="1" style="flex: 1; resize: horizontal;"/>
+        <spacer width="2.5" style="width: 2.5px"/>
       </hbox>
-      <spacer height="10"/>
+      <spacer height="10" style="width: 10px"/>
       <groupbox>
         <caption label="&removedupes_dialog.action_label;"/>
         <radiogroup id="action">
           <hbox>
             <radio id="move_to_common_account_trash_action"
                    selected="false"
-                   hidden="true"
                    disabled="true"
                    value="move_to_common_account_trash"
                    label="&action.move_to_common_account_trash.label;"
                    accesskey="&action.move_to_common_account_trash.accesskey;"/>
             <radio id="move_to_chosen_folder_action"
-                   selected="false"
+                   selected="true"
                    value="move_to_chosen_folder"
                    label="&action.move_to_chosen_folder.label;"
                    accesskey="&action.move_to_chosen_folder.accesskey;"/>
@@ -179,9 +175,9 @@
         </radiogroup>
         </groupbox>
     </vbox>
-    <hbox width="60">
+    <hbox width="60" style="width: 60px; flex: 1;" flex="1">
       <vbox>
-        <description  width="60">
+        <description  width="60" style="width: 60px">
           &removedupes_dialog.keep_label;
         </description>
         <button id="keepPresetOriginalButton"

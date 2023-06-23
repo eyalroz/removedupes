@@ -14,11 +14,11 @@
 <!ENTITY removedupes_dialog.recipients "Ontvangers">
 <!ENTITY removedupes_dialog.cc_list "CC-lijst">
 <!ENTITY removedupes_dialog.flags "Vlaggen">
-<!ENTITY removedupes_dialog.folder "Map">
+<!ENTITY removedupes_dialog.folder_name "Map">
 <!ENTITY removedupes_dialog.line_count "Aantal regels">
 <!ENTITY removedupes_dialog.date "Datum">
 <!ENTITY removedupes_dialog.send_time "Tijdstip van verzenden">
-<!ENTITY removedupes_dialog.size "Grootte">
+<!ENTITY removedupes_dialog.size "Size (Headers &amp; Body)">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "Ingestelde originelen">
 <!ENTITY removedupes_dialog.keep_first.label "Eerste exemplaar">
 <!ENTITY removedupes_dialog.keep_last.label "Laatste exemplaar">

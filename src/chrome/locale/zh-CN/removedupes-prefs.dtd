@@ -11,9 +11,9 @@
 <!ENTITY message_comparison.cc_list.label "抄送列表">
 <!ENTITY message_comparison.flags.label "状态标志">
 <!ENTITY message_comparison.message_id.label "消息 ID">
-<!ENTITY message_comparison.num_lines.label "消息的行数">
+<!ENTITY message_comparison.line_count.label "消息的行数">
 <!ENTITY message_comparison.send_time.label "发送时间">
-<!ENTITY message_comparison.size.label "大小">
+<!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
 <!ENTITY message_comparison.subject.label "主题">
 <!ENTITY message_comparison.folder.label "文件夹">
 <!ENTITY message_comparison.body.label "消息体">
@@ -25,7 +25,7 @@
 <!ENTITY message_comparison.recipients.access_key "R">
 <!ENTITY message_comparison.cc_list.access_key "C">
 <!ENTITY message_comparison.message_id.access_key "I">
-<!ENTITY message_comparison.num_lines.access_key "l">
+<!ENTITY message_comparison.line_count.access_key "l">
 <!ENTITY message_comparison.send_time.access_key "t">
 <!ENTITY message_comparison.size.access_key "s">
 <!ENTITY message_comparison.subject.access_key "S">

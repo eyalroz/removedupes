@@ -1,18 +1,19 @@
-var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 
 var debugInjection = false;
 
 Services.scriptloader.loadSubScript("chrome://removedupes/content/removedupes.js", window, "UTF-8");
 
 function injectToolbarButton() {
-  WL.injectElements(`
+  WL.injectElements(
+    `
     <toolbarpalette id="MailToolbarPalette">
       <toolbarbutton id="removedupes-button"
                      oncommand="RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages();"
                      label="&removeduplicates-button.label;"
                      tooltiptext="&removeduplicates-button.tip;"
                      type="menu-button"
-					 is="toolbarbutton-menu-button"
+                     is="toolbarbutton-menu-button"
                      insertafter="qfb-show-filter-bar"
                      removable="true"
                      class="toolbarbutton-1 chromeclass-toolbar-additional custombutton">
@@ -40,9 +41,9 @@ function injectToolbarButton() {
                     label="&message_comparison.message_id.label;"
                     oncommand="RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion(event,'message_id')"/>
           <menuitem type="checkbox"
-                    id="removedupesCriterionMenuItem_num_lines"
-                    label="&message_comparison.num_lines.label;"
-                    oncommand="RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion(event,'num_lines')"/>
+                    id="removedupesCriterionMenuItem_line_count"
+                    label="&message_comparison.line_count.label;"
+                    oncommand="RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion(event,'line_count')"/>
           <menuitem type="checkbox"
                     id="removedupesCriterionMenuItem_send_time"
                     label="&message_comparison.send_time.label;"
@@ -68,7 +69,7 @@ function injectToolbarButton() {
     </toolbarpalette>`,
     [
       "chrome://removedupes/locale/removedupes.dtd",
-      "chrome://removedupes/locale/removedupes-prefs.dtd"
+      "chrome://removedupes/locale/removedupes-prefs.dtd",
     ],
     debugInjection
   );
@@ -76,44 +77,45 @@ function injectToolbarButton() {
 }
 
 function injectOtherElements() {
-  WL.injectElements(`
+  WL.injectElements(
+    `
     <keyset id="mailKeys">
       <key id="key-removedupes"
-  	 modifiers="&key-removedupes.modifiers;"
-  	 key="&key-removedupes.keycode;"
-  	 oncommand="RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages();"
+        modifiers="&key-removedupes.modifiers;"
+        key="&key-removedupes.keycode;"
+        oncommand="RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages();"
       /> 
     </keyset>
 
     <popup id="folderPaneContext">
       <menuitem id="removeDuplicatesContextMenuItemsRemove" 
-  	      insertafter="folderPaneContext-copy-location"
-  	      label="&removedupes.remove_duplicates_menuitems.remove.label;"
-  	      oncommand="RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages();" />
+        insertafter="folderPaneContext-copy-location"
+        label="&removedupes.remove_duplicates_menuitems.remove.label;"
+        oncommand="RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages();" />
       <menuitem id="removeDuplicatesContextMenuItemsSetOriginals" 
-  	      insertafter="removeDuplicatesMenuItemsRemove"
-  	      label="&removedupes.remove_duplicates_menuitems.set_originals.label;"
-  	      oncommand="RemoveDupes.MessengerOverlay.setOriginalsFolders();"/> 
+        insertafter="removeDuplicatesMenuItemsRemove"
+        label="&removedupes.remove_duplicates_menuitems.set_originals.label;"
+        oncommand="RemoveDupes.MessengerOverlay.setOriginalsFolders();"/> 
       <menuseparator id="folderPaneContext-removedupes-separator" 
-  	      insertafter="removeDuplicatesMenuItemsSetOriginals" />  
+        insertafter="removeDuplicatesMenuItemsSetOriginals" />  
     </popup> 
     
     <menupopup id="taskPopup">
       <menuseparator id="sep-removedupes"/>
       <menuitem id="removeDuplicatesToolsMenuItemsRemove"
-  	      insertafter="sep-removedupes"
-  	      label="&removedupes.remove_duplicates_menuitems.remove.label;"
-  	      accesskey="&removedupes.remove_duplicates_menuitems.remove.accesskey;" 
-  	      oncommand="RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages();" />
+        insertafter="sep-removedupes"
+        label="&removedupes.remove_duplicates_menuitems.remove.label;"
+        accesskey="&removedupes.remove_duplicates_menuitems.remove.accesskey;" 
+        oncommand="RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages();" />
       <menuitem id="removeDuplicatesToolsMenuItemsSetOriginals" 
-  	      insertafter="removedupes-menuitem"
-  	      label="&removedupes.remove_duplicates_menuitems.set_originals.label;"
-  	      accesskey="&removedupes.remove_duplicates_menuitems.set_originals.accesskey;" 
-  	      oncommand="RemoveDupes.MessengerOverlay.setOriginalsFolders();"/>
+        insertafter="removedupes-menuitem"
+        label="&removedupes.remove_duplicates_menuitems.set_originals.label;"
+        accesskey="&removedupes.remove_duplicates_menuitems.set_originals.accesskey;" 
+        oncommand="RemoveDupes.MessengerOverlay.setOriginalsFolders();"/>
     </menupopup>`,
     [
       "chrome://removedupes/locale/removedupes.dtd",
-      "chrome://removedupes/locale/removedupes-prefs.dtd"
+      "chrome://removedupes/locale/removedupes-prefs.dtd",
     ],
     debugInjection
   );
@@ -126,11 +128,3 @@ function onLoad(activatedWhileWindowOpen) {
   injectOtherElements();
 }
 
-// called on window unload or on add-on deactivation while window is still open
-function onUnload(deactivatedWhileWindowOpen) {
-  // no need to clean up UI on global shutdown
-  if (!deactivatedWhileWindowOpen)
-    return;
-  // If we've added any elements not through WL.inject functions - we need to remove
-  // them manually here. The WL-injected elements get auto-removed
-}

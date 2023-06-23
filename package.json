@@ -1,0 +1,35 @@
+{
+  "name": "removedupes",
+  "version": "__VERSION__",
+  "description": "Search mail folders for duplicate messages and move or delete them",
+  "keywords": ["duplicates", "dupes", "cleanup", "clean", "clear", "deletion", "filter-messages", "search-messages"],
+  "homepage": "https://github.com/eyalroz/removedupes",
+  "bugs": {
+    "url" : "https://github.com/eyalroz/removedupes/issues",
+    "email" : "eyalroz1@gmx.com"
+  },
+  "license" : "MPL-1.1",
+  "author" : { "name" : "Eyal Rozenberg",
+    "email" : "eyalroz1@gmx.com",
+    "url" : "http://eyalroz.github.io/"
+  },
+  "funding" : [
+    {
+      "type" : "individual",
+      "url" : "https://www.patreon.com/einpoklum"
+    },
+    {
+      "type" : "paypal",
+    "url" : "https://paypal.me/eyalroz"
+    }
+  ],
+  "repository" : "https://github.com/eyalroz/removedupes.git",
+  "devDependencies": {
+    "eslint": "^8.38.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5"
+  },
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint src/chrome/content"
+  }
+}

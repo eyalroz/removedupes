@@ -1,0 +1,102 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "es2021": true
+  },
+  "extends": [
+    "airbnb-base"
+  ],
+  "globals": {
+    "appWindow" : "writable",
+    "gDBView" : "readonly",
+    "dump" : "readonly",
+    "msgWindow" : "readonly",
+    "GetSelectedMsgFolders" : "readonly",
+    "KeyEvent" : "readonly",
+    "gFolderTreeView" : "writable",
+    "messenger": "writable",
+    "Console": "readonly",
+    "Services": "readonly",
+    "Preferences": "readonly",
+    "globalThis": "readonly",
+    "WL": "readonly",
+    "RemoveDupes": "writable",
+    "ChromeUtils": "readonly",
+    "Components": "readonly",
+    "Ci": "readonly",
+    "Cc": "readonly",
+    "Cr": "readonly",
+    "Cu": "readonly"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2022
+  },
+  "rules": {
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 0,
+        "MemberExpression" : "off",
+        "ignoreComments": true
+      }
+    ],
+    "max-len": [
+      "error",
+      {
+        "code": 130,
+        "tabWidth": 2
+      }
+    ],
+    "quotes": [
+      "off", "double"
+    ],
+    "operator-linebreak": [
+      2, "after", {
+        "overrides": { "?": "after", ":": "none" }
+      }
+    ],
+    "comma-dangle": ["error", {
+        "arrays": "only-multiline",
+        "objects": "only-multiline",
+        "imports": "only-multiline",
+        "exports": "only-multiline",
+        "functions": "never"
+    }],
+    "func-names": ["off", "always"],
+    "comment: the following all come from airbnb-base, let's leave them off": "off",
+    "key-spacing": "off",
+    "array-callback-return": "off",
+    "camelcase": "off",
+    "class-methods-use-this": "off",
+    "eqeqeq": "off",
+    "guard-for-in": "off",
+    "max-classes-per-file": "off",
+    "new-cap": "off",
+    "no-bitwise": "off",
+    "no-console": "off",
+    "no-continue": "off",
+    "no-empty": "off",
+    "no-multi-spaces": "off",
+    "no-param-reassign": "off",
+    "no-plusplus": "off",
+    "no-prototype-builtins": "off",
+    "no-restricted-syntax": "off",
+    "no-underscore-dangle": "off",
+    "no-unused-expressions": "off",
+    "no-use-before-define": "off",
+    "function-call-argument-newline" : "off",
+    "one-var-declaration-per-line": "off",
+    "no-multi-assign": "off",
+    "one-var": "off",
+    "vars-on-top": "off",
+    "no-var": "off",
+    "prefer-const": "off",
+    "prefer-destructuring": "off",
+    "function-paren-newline": "off",
+    "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1, "maxBOF": 1} ],
+    "comment: will need to look at the following one-by-one": "off",
+    "no-unused-vars": "off"
+  }
+}

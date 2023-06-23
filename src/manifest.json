@@ -1,15 +1,15 @@
 {
 	"manifest_version": 2,
-	"applications": {
+	"browser_specific_settings": {
 		"gecko": {
 #expand			"id": "__UUID__",
-			"strict_min_version": "68.0",
-			"strict_max_version": "103.0"
+			"strict_min_version": "91.0",
+			"strict_max_version": "115.0"
 		}
 	},
 	"author": "Eyal Rozenberg",
 	"name": "Remove Duplicate Messages",
-	"description": "Searches mail folders for duplicate messages and lets the user remove them",
+	"description": "Search mail folders for duplicate messages and move or delete them",
 	"icons": {
 		"32": "chrome/content/removedupes.png",
 		"16": "chrome/content/removedupes-button-16x16.png"

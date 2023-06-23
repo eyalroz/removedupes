@@ -60,7 +60,7 @@
               <radiogroup preference="extensions.removedupes.default_action"
                 prefstring="extensions.removedupes.default_action"
                 id="extensions.removedupes.default_action">
-                <radio value="move"
+                <radio value="move_to_chosen_folder"
                   label="&general_settings.default_action.move_to_chosen_folder.label;"
                   accesskey="&general_settings.default_action.move_to_chosen_folder.accesskey;"/>
                 <!-- add here: folder picker! -->
@@ -113,11 +113,11 @@
                   label="&message_comparison.message_id.label;"
                   accesskey="&message_comparison.message_id.access_key;"
                   autostretch="never"/>
-                <checkbox preference="extensions.removedupes.comparison_criteria.num_lines"
-                  prefstring="extensions.removedupes.comparison_criteria.num_lines"
-                  id="extensions.removedupes.comparison_criteria.num_lines"
-                  label="&message_comparison.num_lines.label;"
-                   accesskey="&message_comparison.num_lines.access_key;"
+                <checkbox preference="extensions.removedupes.comparison_criteria.line_count"
+                  prefstring="extensions.removedupes.comparison_criteria.line_count"
+                  id="extensions.removedupes.comparison_criteria.line_count"
+                  label="&message_comparison.line_count.label;"
+                   accesskey="&message_comparison.line_count.access_key;"
                   autostretch="never"/>
                  <checkbox preference="extensions.removedupes.comparison_criteria.send_time"
                   prefstring="extensions.removedupes.comparison_criteria.send_time"

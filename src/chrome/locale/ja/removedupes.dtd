@@ -14,11 +14,11 @@
 <!ENTITY removedupes_dialog.recipients "受信者">
 <!ENTITY removedupes_dialog.cc_list "同報者">
 <!ENTITY removedupes_dialog.flags "フラグ">
-<!ENTITY removedupes_dialog.folder "フォルダー">
+<!ENTITY removedupes_dialog.folder_name "フォルダー">
 <!ENTITY removedupes_dialog.line_count "本文行数">
 <!ENTITY removedupes_dialog.date "日時">
 <!ENTITY removedupes_dialog.send_time "送信日時">
-<!ENTITY removedupes_dialog.size "サイズ">
+<!ENTITY removedupes_dialog.size "サイズ (ヘッダーと本文)">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "オリジナルのセット">
 <!ENTITY removedupes_dialog.keep_first.label "上段のメッセージのみ保持">
 <!ENTITY removedupes_dialog.keep_last.label "下段のメッセージのみ保持">

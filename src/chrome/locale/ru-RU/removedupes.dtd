@@ -14,11 +14,11 @@
 <!ENTITY removedupes_dialog.recipients "Получатели">
 <!ENTITY removedupes_dialog.cc_list "Скрытая копия">
 <!ENTITY removedupes_dialog.flags "Флаги">
-<!ENTITY removedupes_dialog.folder "Папка">
+<!ENTITY removedupes_dialog.folder_name "Папка">
 <!ENTITY removedupes_dialog.line_count "Кол-во строк">
 <!ENTITY removedupes_dialog.date "Дата">
 <!ENTITY removedupes_dialog.send_time "Время отправки">
-<!ENTITY removedupes_dialog.size "Size">
+<!ENTITY removedupes_dialog.size "Size (Headers &amp; Body)">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "Preset Originals">
 <!ENTITY removedupes_dialog.keep_first.label "Первая копия">
 <!ENTITY removedupes_dialog.keep_last.label "Последняя копия">

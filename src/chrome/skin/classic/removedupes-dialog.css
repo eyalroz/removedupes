@@ -1,22 +1,28 @@
-
 treechildren::-moz-tree-cell(keep) {
-  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gYZEhY5aTa3XQAAAJZJREFUOMvV0jEOQVEQRuEvUSlFvF5iC5YgdiGWwTLYhVgEEYl4GqHSSixAVBSeZnrv3orpJplz/kxm+LdqYo91rmCOCscceIA3Xuinwi1cI32Sk74IeItGKjwO+IFeKtzFPQSjb8MrlCiib2AT8LJOWhnD55BMo7+hXUdQBFzhgmecbZiycwenkFSY5ZyswAG7eN0frw+91iN6CA2PcQAAAABJRU5ErkJggg==) no-repeat;
+  background-image: url('data:image/svg+xml;utf8, <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"> <rect fill="none" stroke="context-stroke" stroke-opacity="1" width="15" height="15" x="0.5" y="0.5" rx="2" ry="2" /> <path fill="context-fill" fill-opacity="context-fill-opacity" d="M6 14a1 1 0 0 1-.7-.3l-3-3a1 1 0 0 1 1.4-1.4l2.16 2.15 6.32-9.02a1 1 0 0 1 1.64 1.14l-7 10a1 1 0 0 1-.73.43.86.86 0 0 1-.09 0z"/> </svg>');
   background-position: center center;
+  background-repeat: no-repeat;
 }
 
 treechildren::-moz-tree-cell(delete) {
+  background-image: url('data:image/svg+xml;utf8, <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"> <rect fill="none" stroke="context-stroke" stroke-opacity="1" width="15" height="15" x="0.5" y="0.5" rx="2" ry="2" /> </svg>');
   background-position: center center;
+  background-repeat: no-repeat;
 }
 
-dialog[platform="Darwin"] treechildren::-moz-tree-cell(keep) {
-  background: url("chrome://messenger/skin/icons/check.png") no-repeat;
-  background-position: center center;
-}
+@media (prefers-color-scheme: dark) {
+  treechildren::-moz-tree-cell(keep) {
+    background-image: url('data:image/svg+xml;utf8, <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"> <rect fill="none" stroke="white" stroke-opacity="1" width="15" height="15" x="0.5" y="0.5" rx="2" ry="2" /> <path fill="white" fill-opacity="context-fill-opacity" d="M6 14a1 1 0 0 1-.7-.3l-3-3a1 1 0 0 1 1.4-1.4l2.16 2.15 6.32-9.02a1 1 0 0 1 1.64 1.14l-7 10a1 1 0 0 1-.73.43.86.86 0 0 1-.09 0z"/> </svg>');
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
 
-dialog[platform="Darwin"] treechildren::-moz-tree-cell(delete) {
-  background: url("chrome://messenger/skin/icons/dot.png") no-repeat;
-  background-position: center center;
-}
+  treechildren::-moz-tree-cell(delete) {
+    background-image: url('data:image/svg+xml;utf8, <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"> <rect fill="none" stroke="white" stroke-opacity="1" width="15" height="15" x="0.5" y="0.5" rx="2" ry="2" /> </svg>');
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+} /* @media (prefers-color-scheme: dark) */
 
 treecol[comparisonCriterion] {
   font-weight: bold;

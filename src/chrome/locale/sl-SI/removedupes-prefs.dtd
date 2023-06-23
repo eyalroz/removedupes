@@ -11,9 +11,9 @@
 <!ENTITY message_comparison.cc_list.label "Seznam Kp">
 <!ENTITY message_comparison.flags.label "Zastavice stanja">
 <!ENTITY message_comparison.message_id.label "ID sporočila">
-<!ENTITY message_comparison.num_lines.label "Število vrstic sporočila">
+<!ENTITY message_comparison.line_count.label "Število vrstic sporočila">
 <!ENTITY message_comparison.send_time.label "Čas pošiljanja">
-<!ENTITY message_comparison.size.label "Velikost">
+<!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
 <!ENTITY message_comparison.subject.label "Zadeva">
 <!ENTITY message_comparison.folder.label "Mapa">
 <!ENTITY message_comparison.body.label "Telo">
@@ -25,7 +25,7 @@
 <!ENTITY message_comparison.recipients.access_key "P">
 <!ENTITY message_comparison.cc_list.access_key "S">
 <!ENTITY message_comparison.message_id.access_key "D">
-<!ENTITY message_comparison.num_lines.access_key "Š">
+<!ENTITY message_comparison.line_count.access_key "Š">
 <!ENTITY message_comparison.send_time.access_key "Č">
 <!ENTITY message_comparison.size.access_key "V">
 <!ENTITY message_comparison.subject.access_key "Z">

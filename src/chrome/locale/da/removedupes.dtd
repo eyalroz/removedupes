@@ -14,11 +14,11 @@
 <!ENTITY removedupes_dialog.recipients "Modtager">
 <!ENTITY removedupes_dialog.cc_list "CC liste">
 <!ENTITY removedupes_dialog.flags "Status">
-<!ENTITY removedupes_dialog.folder "Mappe">
+<!ENTITY removedupes_dialog.folder_name "Mappe">
 <!ENTITY removedupes_dialog.line_count "# Linjer">
 <!ENTITY removedupes_dialog.date "Dato">
 <!ENTITY removedupes_dialog.send_time "Tidspunkt">
-<!ENTITY removedupes_dialog.size "Størrelse">
+<!ENTITY removedupes_dialog.size "Size (Headers &amp; Body)">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "Forvælg oprindelige">
 <!ENTITY removedupes_dialog.keep_first.label "Første kopi">
 <!ENTITY removedupes_dialog.keep_last.label "Sidste kopi">

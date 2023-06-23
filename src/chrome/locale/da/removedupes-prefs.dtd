@@ -11,9 +11,9 @@
 <!ENTITY message_comparison.cc_list.label "CC liste">
 <!ENTITY message_comparison.flags.label "Status">
 <!ENTITY message_comparison.message_id.label "Meddelelses-ID">
-<!ENTITY message_comparison.num_lines.label "Antal linjer i meddelelse">
+<!ENTITY message_comparison.line_count.label "Antal linjer i meddelelse">
 <!ENTITY message_comparison.send_time.label "Dato">
-<!ENTITY message_comparison.size.label "Størrelse">
+<!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
 <!ENTITY message_comparison.subject.label "Emne">
 <!ENTITY message_comparison.folder.label "Mappe">
 <!ENTITY message_comparison.body.label "Meddelelsestekst">
@@ -25,7 +25,7 @@
 <!ENTITY message_comparison.recipients.access_key "o">
 <!ENTITY message_comparison.cc_list.access_key "C">
 <!ENTITY message_comparison.message_id.access_key "I">
-<!ENTITY message_comparison.num_lines.access_key "n">
+<!ENTITY message_comparison.line_count.access_key "n">
 <!ENTITY message_comparison.send_time.access_key "D">
 <!ENTITY message_comparison.size.access_key "S">
 <!ENTITY message_comparison.subject.access_key "E">
