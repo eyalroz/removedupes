@@ -13,7 +13,7 @@
 <!ENTITY message_comparison.message_id.label "ID сообщения">
 <!ENTITY message_comparison.line_count.label "Кол-во строк в сообщении">
 <!ENTITY message_comparison.send_time.label "Время отправки">
-<!ENTITY message_comparison.size.label "Size (Headers &amp; Body)">
+<!ENTITY message_comparison.size.label "Размер (заголовки и тело)">
 <!ENTITY message_comparison.subject.label "Тема">
 <!ENTITY message_comparison.folder.label "Папка">
 <!ENTITY message_comparison.body.label "Содержимое">
@@ -39,7 +39,7 @@
 <!ENTITY message_comparison.time_comparison_resolution.month.label "месяцев">
 <!ENTITY message_comparison.time_comparison_resolution.year.label "лет">
 <!ENTITY general_settings.tab_title "Основные настройки">
-<!ENTITY general_settings.search_subfolders.label "Search subfolders of selected top folder(s)">
+<!ENTITY general_settings.search_subfolders.label "Искать в подпапках выбранных папок">
 <!ENTITY general_settings.search_subfolders_first.label "Сначала искать в подпапках (обратный порядок)">
 <!ENTITY general_settings.use_dialog_before_removal.label "Пересмотреть результаты поиска перед удалением">
 <!ENTITY general_settings.default_action.description "Действия по умолчанию для удаляемых сообщений:">

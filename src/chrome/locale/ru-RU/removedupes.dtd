@@ -1,13 +1,13 @@
 <!ENTITY removedupes.title "Удаление дублей сообщений">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Удаление дублей...">
-<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Set original message folder(s) for next duplicate search">
+<!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Запомнить папк(у/и) с исходными сообщениями для следующего поиска дублей">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "D">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.accesskey "o">
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "У">
 <!ENTITY removedupes_dialog.dialog_title "Обзор дублей сообщений">
 <!ENTITY removedupes_dialog.id "ID сообщения">
-<!ENTITY removedupes_dialog.keep_label "В каждом наборе дубликатов, сохранять:">
+<!ENTITY removedupes_dialog.keep_label "В каждом наборе дублей сохранять:">
 <!ENTITY removedupes_dialog.subject "Тема">
 <!ENTITY removedupes_dialog.sender "Отправитель">
 <!ENTITY removedupes_dialog.author "Автор">
@@ -18,7 +18,7 @@
 <!ENTITY removedupes_dialog.line_count "Кол-во строк">
 <!ENTITY removedupes_dialog.date "Дата">
 <!ENTITY removedupes_dialog.send_time "Время отправки">
-<!ENTITY removedupes_dialog.size "Size (Headers &amp; Body)">
+<!ENTITY removedupes_dialog.size "Размер (заголовки и тело)">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "Preset Originals">
 <!ENTITY removedupes_dialog.keep_first.label "Первая копия">
 <!ENTITY removedupes_dialog.keep_last.label "Последняя копия">
@@ -33,6 +33,6 @@
 <!ENTITY action.move_to_common_account_trash.accesskey "А">
 <!ENTITY action.move_to_chosen_folder.label "Перемещать в:">
 <!ENTITY action.move_to_chosen_folder.accesskey "П">
-<!ENTITY removeduplicates-button.label "Удалить дубликаты">
+<!ENTITY removeduplicates-button.label "Удалить дубли">
 <!ENTITY removeduplicates-button.tip "Удаление одинаковых сообщений...">
 <!ENTITY removedupes.criteria_menu.label "Критерий сравнения:">
