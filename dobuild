@@ -2,8 +2,7 @@
 
 SHORTNAME="removedupes"
 TARGET="tbird" # We used to support multiple targets, but no longer
-UUID="{a300a000-5e21-4ee0-a115-9ec8f4eaa92b}"
-PREPROCESSOR_PARAMS=" -DUUID=$UUID -DSHORTNAME=$SHORTNAME"
+PREPROCESSOR_PARAMS=" -DSHORTNAME=$SHORTNAME"
 PREPROCESSOR_PARAMS+=" -DMOZ_THUNDERBIRD"
 
 function die {
