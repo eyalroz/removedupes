@@ -20,4 +20,6 @@ downloads/*
 *.rej
 *.orig
 
-
+# node.js files and folders
+node_modules
+package-lock.json
