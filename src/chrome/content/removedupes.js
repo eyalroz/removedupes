@@ -90,8 +90,8 @@ RemoveDupes.MessengerOverlay.beginSearchForDuplicateMessages = function (searchD
 
   if (searchData.folders.size == 0) {
     // all top folders were special folders and therefore skipped
-    RemoveDupes.namedAlert(window, 'not_searching_special_folders');
     RemoveDupes.MessengerOverlay.abortDupeSearch(searchData);
+    RemoveDupes.namedAlert(window, 'not_searching_special_folders');
     return;
   }
 
@@ -110,6 +110,11 @@ RemoveDupes.MessengerOverlay.abortDupeSearch = function (searchData, labelString
   window.removeEventListener("keypress", searchData.keyPressEventListener, true);
   searchData = null;
   window.statusFeedback.stopMeteors();
+  if (labelStringName) {
+    RemoveDupes.StatusBar.setNamedStatus(window, labelStringName);
+  } else {
+    RemoveDupes.StatusBar.setStatus(window, '');
+  }
 };
 
 // addSearchFolders -
