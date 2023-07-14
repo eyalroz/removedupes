@@ -81,13 +81,21 @@ XPCOMUtils.defineLazyGetter(RemoveDupes, 'Prefs', () => {
 
 RemoveDupes.StatusBar = {};
 
-RemoveDupes.StatusBar.setStatus = function (messageWindow, statusString) {
-  messageWindow.statusFeedback.showStatusString(statusString);
+RemoveDupes.StatusBar.statusFeedback = function (window_) {
+  return window_.statusFeedback ?? window_.MessageStatusFeedback;
 };
 
-RemoveDupes.StatusBar.setNamedStatus = function (messageWindow, stringName, formatArguments) {
+RemoveDupes.StatusBar.showProgress = function (window_, progressFraction) {
+  return this.statusFeedback(window_)?.showProgress?.(progressFraction);
+};
+
+RemoveDupes.StatusBar.setStatus = function (window_, statusString) {
+  this.statusFeedback(window_)?.showStatusString(statusString);
+};
+
+RemoveDupes.StatusBar.setNamedStatus = function (window_, stringName, formatArguments) {
   let formattedString = RemoveDupes.Strings.format(stringName, formatArguments);
-  RemoveDupes.StatusBar.setStatus(messageWindow, formattedString);
+  this.setStatus(window_, formattedString);
 };
 
 //---------------------------------------------------------
