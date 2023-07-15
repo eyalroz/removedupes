@@ -1,7 +1,5 @@
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 
-var debugInjection = false;
-
 Services.scriptloader.loadSubScript("chrome://removedupes/content/removedupes.js", window, "UTF-8");
 
 function injectToolbarButton() {
@@ -71,7 +69,7 @@ function injectToolbarButton() {
       "chrome://removedupes/locale/removedupes.dtd",
       "chrome://removedupes/locale/removedupes-prefs.dtd",
     ],
-    debugInjection
+    false // debugInjection
   );
   WL.injectCSS("chrome://removedupes/content/skin/classic/removedupes-button.css");
 }
@@ -117,7 +115,7 @@ function injectOtherElements() {
       "chrome://removedupes/locale/removedupes.dtd",
       "chrome://removedupes/locale/removedupes-prefs.dtd",
     ],
-    debugInjection
+    false // debugInjection
   );
   WL.injectCSS("chrome://removedupes/content/skin/classic/removedupes-messenger.css");
 }

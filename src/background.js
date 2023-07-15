@@ -46,6 +46,7 @@
   ]);
 
   messenger.WindowListener.registerWindow("chrome://messenger/content/messenger.xhtml",       "chrome://removedupes/content/overlay-injectors/messenger.js");
+  messenger.WindowListener.registerWindow("about:3pane",       "chrome://removedupes/content/overlay-injectors/3pane.js");
   messenger.WindowListener.registerWindow("chrome://messenger/content/customizeToolbar.xhtml", "chrome://removedupes/content/overlay-injectors/customizeToolbar.js");
   messenger.WindowListener.registerOptionsPage("chrome://removedupes/content/removedupes-prefs.xhtml")
   messenger.WindowListener.startListening();

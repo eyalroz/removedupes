@@ -288,7 +288,7 @@ RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2 = function 
     return;
   }
 
-  window.statusFeedback.stopMeteors();
+  window.statusFeedback?.stopMeteors?.();
   if (ObjectUtils.isEmpty(searchData.dupeSetsHashMap)) {
     if (searchData.useReviewDialog) {
       // if the user wants a dialog to pop up for the dupes,

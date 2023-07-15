@@ -11,6 +11,7 @@ removedupes.jar:
 *   content/removedupes-dialog.js                     (src/chrome/content/removedupes-dialog.js)
     content/removedupes-set-preference-types.js       (src/chrome/content/removedupes-set-preference-types.js)
     content/overlay-injectors/messenger.js            (src/chrome/content/overlay-injectors/messenger.js)
+    content/overlay-injectors/3pane.js                (src/chrome/content/overlay-injectors/3pane.js)
     content/overlay-injectors/customizeToolbar.js     (src/chrome/content/overlay-injectors/customizeToolbar.js)
 *   content/skin/classic/removedupes-messenger.css    (src/chrome/skin/classic/removedupes-messenger.css)
 *   content/skin/classic/removedupes-button.css       (src/chrome/skin/classic/removedupes-button.css)
