@@ -808,7 +808,7 @@ RemoveDupes.MessengerOverlay.setOriginalsFolders = function () {
     let selectedMsgFolders = GetSelectedMsgFolders();
     RemoveDupes.MessengerOverlay.originalsFolders = new Set();
     RemoveDupes.MessengerOverlay.originalsFolderUris = new Set();
-    for (let originalsFolder of RemoveDupes.MessengerOverlay.originalsFolders) {
+    for (let originalsFolder of selectedMsgFolders) {
       RemoveDupes.MessengerOverlay.originalsFolders.add(originalsFolder);
       RemoveDupes.MessengerOverlay.originalsFolderUris.add(originalsFolder.URI);
     }
