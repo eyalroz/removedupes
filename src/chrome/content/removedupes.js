@@ -6,7 +6,7 @@ var { ImapService } = () => {
     return ChromeUtils.import("resource://gre/modules/ImapService.jsm");
   } catch (ex) {
     return Cc['@mozilla.org/messenger/imapservice;1'].getService(Ci.nsIImapService);
-  };
+  }
 };
 var { MailUtils   } = ChromeUtils.import("resource:///modules/MailUtils.jsm");
 
@@ -973,7 +973,6 @@ RemoveDupes.DupeSearchData = function () {
   // timing is used to decide when to make the next status
   // bar progress report and for yielding for processing UI events
   // (values here are in milliseconds)
-  this.lastStatusBarReport = this.lastYield = (new Date()).getTime();
   this.yieldQuantum = RemoveDupes.Prefs.get("yield_quantum", 200);
   this.reportQuantum = RemoveDupes.Prefs.get("status_report_quantum", 1500);
 
