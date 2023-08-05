@@ -2,24 +2,16 @@
   // for the removedupes Thunderbird extension
   // by Eyal Rozenberg
 
-(async function() {
+(async function () {
   messenger.WindowListener.registerDefaultPrefs("defaults/preferences/removedupes.js");
   messenger.WindowListener.registerChromeUrl([
     ["content", "removedupes",                                          "chrome/content/"],
 
-// Formerly skin elements, which are no longer supported; these are now just content (problematic...)
-//  ["content", "removedupes",                                          "chrome/content/skin/classic/"]
-//  ["content", "removedupes",                                          "chrome/skin/classic/"]
+    // skin elements are no longer supported as such, they are now considered just part of the content
 
-// Overlays can't just be registered and then apply. Rather, we need to register an injector script, see below
-//  ["overlay", "chrome://messenger/content/messenger.xul",             "chrome://removedupes/content/removedupes-mailWindowOverlay.xul"]
-//  ["overlay", "chrome://messenger/content/messenger.xul",             "chrome://removedupes/content/removedupes-button.xul"]
+    // Overlays can't just be registered and then apply; rather, we need to register an injector script, see below
 
-// Style elements need not be registered; it's enough to just inject them later on (in injector scripts)
-//  ["style",  "chrome://messenger/content/customizeToolbar.xul",       "chrome://removedupes/content/skin/classic/removedupes-button.css"]
-//  ["style",  "chrome://messenger/content/removedupes-dialog.xul",     "chrome://removedupes/content/skin/classic/removedupes-dialog.css"]
-//  ["style",  "chrome://messenger/content/messenger.xul",              "chrome://removedupes/content/skin/classic/removedupes-messenger.css"]
-//  ["style",  "chrome://messenger/content/removedupes-dialog.xul",     "platform/Darwin/chrome/skin/classic/removedupes-dialog-macos.css"]
+    // Style elements need not be registered; it's enough to just inject them later on (in injector scripts)
 
     ["locale",  "removedupes", "en-US",                                 "chrome/locale/en-US/"],
     ["locale",  "removedupes", "de",                                    "chrome/locale/de/"],
@@ -45,9 +37,21 @@
     ["locale",  "removedupes", "sl-SI",                                 "chrome/locale/sl-SI/"]
   ]);
 
-  messenger.WindowListener.registerWindow("chrome://messenger/content/messenger.xhtml",       "chrome://removedupes/content/overlay-injectors/messenger.js");
-  messenger.WindowListener.registerWindow("about:3pane",       "chrome://removedupes/content/overlay-injectors/3pane.js");
-  messenger.WindowListener.registerWindow("chrome://messenger/content/customizeToolbar.xhtml", "chrome://removedupes/content/overlay-injectors/customizeToolbar.js");
-  messenger.WindowListener.registerOptionsPage("chrome://removedupes/content/removedupes-prefs.xhtml")
+  let registerChromeInjectors = function (registrationInfo) {
+    for (let [windowHref, relativeInjectorPath] of registrationInfo) {
+      let absoluteWindowHref = windowHref.startsWith('about:') ?
+        windowHref : `chrome://messenger/content/${windowHref}`;
+      let jsFile = `chrome://removedupes/content/overlay-injectors/${relativeInjectorPath}`;
+      messenger.WindowListener.registerWindow(absoluteWindowHref, jsFile);
+    }
+  };
+
+  registerChromeInjectors([
+    ["messenger.xhtml",        "messenger.js"],
+    ["about:3pane",            "3pane.js"],
+    ["customizeToolbar.xhtml", "customizeToolbar.js"]
+  ]);
+
+  messenger.WindowListener.registerOptionsPage("chrome://removedupes/content/removedupes-prefs.xhtml");
   messenger.WindowListener.startListening();
-})()
+})();
