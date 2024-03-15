@@ -1,12 +1,12 @@
 <!ENTITY prefs_dialog_title "Remove Duplicate Messages [de] - Einstellungen">
 <!ENTITY guide-url "http://not.yet.written/">
 <!ENTITY message_comparison.tab_title "Vergleich der Nachrichten">
-<!ENTITY message_comparison.criteria_box.label "Message elements used as comparison criteria">
+<!ENTITY message_comparison.criteria_box.label "Nachrichtenelemente, die als Vergleichskriterien verwendet werden">
 <!ENTITY message_comparison.skip_special_folders.label "Überspringe spezielle Ordner (Gesendet, Entwürfe, etc.)">
 <!ENTITY message_comparison.skip_imap_deleted_messages.label "IMAP-Nachrichten überspringen, die als „Gelöscht” markiert sind">
 <!ENTITY message_comparison.compare_stripped_and_sorted_addresses.label "Vergleiche Adressen gekürzt und sortiert">
 <!ENTITY message_comparison.tab_description "Nachrichtenelemente, die als Vergleichskriterium verwendet werden sollen:">
-<!ENTITY message_comparison.author.label "Absender ('Absender' Adresse)">
+<!ENTITY message_comparison.author.label "Absender ('Absender'-Adresse)">
 <!ENTITY message_comparison.recipients.label "Empfänger">
 <!ENTITY message_comparison.cc_list.label "CC-Empfänger">
 <!ENTITY message_comparison.flags.label "Status (z.B. Junk, ungelesen, usw.)">
