@@ -6,7 +6,7 @@
 <!ENTITY key-removedupes.modifiers "accel,shift">
 <!ENTITY key-removedupes.keycode "P">
 <!ENTITY removedupes_dialog.dialog_title "Überblick über die Duplikate">
-<!ENTITY removedupes_dialog.id "Nachrichten ID">
+<!ENTITY removedupes_dialog.id "Nachrichten-ID">
 <!ENTITY removedupes_dialog.keep_label "In jeder Gruppe von Duplikaten behalten:">
 <!ENTITY removedupes_dialog.subject "Betreff">
 <!ENTITY removedupes_dialog.sender "Absender">
