@@ -43,14 +43,14 @@ RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages = function () {
   let searchData = new RemoveDupes.DupeSearchData();
   // the marked 'originals folders' are only used as such
   // for this coming search, not for subsequent searches
-  RemoveDupes.MessengerOverlay.originalsFolders = null;
-  RemoveDupes.MessengerOverlay.originalsFolderUris = null;
+  this.originalsFolders = null;
+  this.originalsFolderUris = null;
   if (typeof gFolderTreeView != 'undefined' && gFolderTreeView) {
     gFolderTreeView._tree.invalidate();
   }
-  searchData.keyPressEventListener = (ev) => { RemoveDupes.MessengerOverlay.onKeyPress(ev, searchData); };
+  searchData.keyPressEventListener = (ev) => { this.onKeyPress(ev, searchData); };
   window.addEventListener("keypress", searchData.keyPressEventListener, true);
-  RemoveDupes.MessengerOverlay.beginSearchForDuplicateMessages(searchData);
+  this.beginSearchForDuplicateMessages(searchData);
 };
 
 RemoveDupes.MessengerOverlay.onKeyPress = function (ev, searchData) {
@@ -223,7 +223,7 @@ RemoveDupes.MessengerOverlay.waitForFolderCollection = function (searchData) {
   // search, so we may have to wait some more
 
   if (searchData.remainingFolders > 0) {
-    setTimeout(RemoveDupes.MessengerOverlay.waitForFolderCollection, 100, searchData);
+    setTimeout(this.waitForFolderCollection, 100, searchData);
     return;
   }
   RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase1(searchData);
@@ -249,8 +249,8 @@ RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase1 = function 
     return;
   }
 
-  searchData.generator = RemoveDupes.MessengerOverlay.populateDupeSetsHash(searchData);
-  setTimeout(RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2, 10, searchData);
+  searchData.generator = this.populateDupeSetsHash(searchData);
+  setTimeout(this.processMessagesInCollectedFoldersPhase2, 10, searchData);
 };
 
 // processMessagesInCollectedFoldersPhase2 -
@@ -552,7 +552,7 @@ RemoveDupes.MessengerOverlay.populateDupeSetsHash = function* (searchData) {
         continue;
       }
 
-      let messageHash = RemoveDupes.MessengerOverlay.sillyHash(searchData, messageHdr, folder);
+      let messageHash = this.sillyHash(searchData, messageHdr, folder);
       if (messageHash == null) {
         continue; // something about the message made us not be willing to compare it against other messages
       }
@@ -669,11 +669,11 @@ RemoveDupes.MessengerOverlay.refineDupeSets = function (searchData) {
     let initialSetSize = dupeSet.length;
 
     for (let i = 0; i < dupeSet.length; i++) {
-      RemoveDupes.MessengerOverlay.reportRefinementProgress(searchData, 'getting_bodies', i, initialSetSize);
+      this.reportRefinementProgress(searchData, 'getting_bodies', i, initialSetSize);
       let dupeUri = dupeSet[i];
       dupeSet[i] = {
         uri: dupeUri,
-        body: RemoveDupes.MessengerOverlay.messageBodyFromURI(dupeUri)
+        body: this.messageBodyFromURI(dupeUri)
       };
       if (searchData.userAborted) return;
     }
@@ -719,7 +719,7 @@ RemoveDupes.MessengerOverlay.refineDupeSets = function (searchData) {
 
 RemoveDupes.MessengerOverlay.reviewAndRemoveDupes = function (searchData) {
   if (searchData.userAborted) {
-    RemoveDupes.MessengerOverlay.abortDupeSearch(searchData, 'search_aborted');
+    this.abortDupeSearch(searchData, 'search_aborted');
   }
   window.removeEventListener("keypress", searchData.keyPressEventListener, true);
 
@@ -768,7 +768,7 @@ RemoveDupes.MessengerOverlay.reviewAndRemoveDupes = function (searchData) {
 RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion = function (ev, criterion) {
   // Note the criterion must be in snake_case, not camelCase
   let toggledValue = !RemoveDupes.Prefs.get(`comparison_criteria.${criterion}`,
-    RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults[criterion]);
+    this.SearchCriterionUsageDefaults[criterion]);
   RemoveDupes.Prefs.set(`comparison_criteria.${criterion}`, toggledValue);
   document.getElementById(`removedupesCriterionMenuItem_${criterion}`)
     .setAttribute("checked", toggledValue ? "true" : "false");
@@ -776,7 +776,7 @@ RemoveDupes.MessengerOverlay.toggleDupeSearchCriterion = function (ev, criterion
 };
 
 RemoveDupes.MessengerOverlay.criteriaPopupMenuInit = function () {
-  for (let criterion in RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults) {
+  for (let criterion in this.SearchCriterionUsageDefaults) {
     document.getElementById(`removedupesCriterionMenuItem_${criterion}`)
       .setAttribute("checked",
         (RemoveDupes.Prefs.get(`comparison_criteria.${criterion}`,
@@ -796,7 +796,7 @@ RemoveDupes.MessengerOverlay.replaceGetCellProperties = function () {
   gFolderTreeView.getCellProperties = function newGcp(aRow, aCol) {
     let properties = gFolderTreeView.preRDGetCellProperties(aRow, aCol);
     let row = gFolderTreeView._rowMap[aRow];
-    if (RemoveDupes.MessengerOverlay.originalsFolderUris?.has(row._folder.URI)) {
+    if (this.originalsFolderUris?.has(row._folder.URI)) {
       properties += " isOriginalsFolder-true";
     }
     return properties;
@@ -806,11 +806,11 @@ RemoveDupes.MessengerOverlay.replaceGetCellProperties = function () {
 RemoveDupes.MessengerOverlay.setOriginalsFolders = function () {
   if (typeof gFolderTreeView == 'undefined') {
     let selectedMsgFolders = GetSelectedMsgFolders();
-    RemoveDupes.MessengerOverlay.originalsFolders = new Set();
-    RemoveDupes.MessengerOverlay.originalsFolderUris = new Set();
+    this.originalsFolders = new Set();
+    this.originalsFolderUris = new Set();
     for (let originalsFolder of selectedMsgFolders) {
-      RemoveDupes.MessengerOverlay.originalsFolders.add(originalsFolder);
-      RemoveDupes.MessengerOverlay.originalsFolderUris.add(originalsFolder.URI);
+      this.originalsFolders.add(originalsFolder);
+      this.originalsFolderUris.add(originalsFolder.URI);
     }
     return;
   }
@@ -820,8 +820,8 @@ RemoveDupes.MessengerOverlay.setOriginalsFolders = function () {
 
   let selection = gFolderTreeView._treeElement.view.selection;
   let rangeCount = selection.getRangeCount();
-  RemoveDupes.MessengerOverlay.originalsFolders = new Set();
-  RemoveDupes.MessengerOverlay.originalsFolderUris = new Set();
+  this.originalsFolders = new Set();
+  this.originalsFolderUris = new Set();
   var skipSpecialFolders = RemoveDupes.Prefs.get('skip_special_folders', 'true');
   for (let i = 0; i < rangeCount; i++) {
     let startIndex = {};
@@ -840,8 +840,8 @@ RemoveDupes.MessengerOverlay.setOriginalsFolders = function () {
           continue;
         }
       }
-      RemoveDupes.MessengerOverlay.originalsFolders.add(folder);
-      RemoveDupes.MessengerOverlay.originalsFolderUris.add(folder.URI);
+      this.originalsFolders.add(folder);
+      this.originalsFolderUris.add(folder.URI);
     }
   }
   gFolderTreeView._tree.invalidate();

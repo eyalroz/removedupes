@@ -157,7 +157,7 @@ RemoveDupes.Removal.arrangeMessagesByFolder = function (messageSetsHashMap, have
 
 // Returns true on success, false on failure
 RemoveDupes.Removal.moveMessages = function (appWindow, msgWindow, messageSetsHashMap, targetFolder, haveMessageRecords)  {
-  var messagesByFolder = RemoveDupes.Removal.arrangeMessagesByFolder(messageSetsHashMap, haveMessageRecords);
+  var messagesByFolder = this.arrangeMessagesByFolder(messageSetsHashMap, haveMessageRecords);
 
   // TODO: iterate with field binding, e.g. for(const [key, { foo, bar }] of map) {
   for (let folderUri in messagesByFolder) {
@@ -194,7 +194,7 @@ RemoveDupes.Removal.deleteMessages = function (appWindow, msgWindow, messageSets
   // the dupes review dialog should have gotten it as a parameter
   // and set a window-global variable of its own
 
-  let messagesByFolder = RemoveDupes.Removal.arrangeMessagesByFolder(messageSetsHashMap, haveMessageRecords);
+  let messagesByFolder = this.arrangeMessagesByFolder(messageSetsHashMap, haveMessageRecords);
 
   let anyDeletionsPerformed = false; // if we abort right away, the dialog can stay open, so the "accept" is cancelled
 
@@ -212,8 +212,9 @@ RemoveDupes.Removal.deleteMessages = function (appWindow, msgWindow, messageSets
       break;
     }
     try {
-      RemoveDupes.StatusBar.setNamedStatus(msgWindow, 'deleting_messages_from', [folderMessageHdrs.length, folder.abbreviatedName]);
-      RemoveDupes.Removal.deleteMessagesFromFolder(msgWindow, folder, folderMessageHdrs);
+      RemoveDupes.StatusBar.setNamedStatus(msgWindow, 'deleting_messages_from',
+        [folderMessageHdrs.length, folder.abbreviatedName]);
+      this.deleteMessagesFromFolder(msgWindow, folder, folderMessageHdrs);
       anyDeletionsPerformed = true;
     } catch (ex) {
       appWindow.alert(RemoveDupes.Strings.getByName('failed_to_erase')); // todo: make this folder specific?
