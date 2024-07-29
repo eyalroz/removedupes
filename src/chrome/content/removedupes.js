@@ -1,13 +1,6 @@
 var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
 var { ObjectUtils } = ChromeUtils.importESModule("resource://gre/modules/ObjectUtils.sys.mjs");
-var { ImapService } = () => {
-  try {
-    // This should work with TB >= 102, and fail with TB <= 91
-    return ChromeUtils.importESModule("resource://gre/modules/ImapService.sys.mjs");
-  } catch (ex) {
-    return Cc['@mozilla.org/messenger/imapservice;1'].getService(Ci.nsIImapService);
-  }
-};
+var { ImapService } = ChromeUtils.importESModule("resource://gre/modules/ImapService.sys.mjs");
 var { MailUtils   } = ChromeUtils.importESModule("resource:///modules/MailUtils.sys.mjs");
 
 RemoveDupes.MessengerOverlay = {};
