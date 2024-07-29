@@ -1,6 +1,6 @@
 const { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
-const   Services      = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const { MailUtils   } = ChromeUtils.import("resource:///modules/MailUtils.jsm");
+const   Services      = globalThis.Services || ChromeUtils.importESModule("resource://gre/modules/Services.sys.mjs").Services;
+const { MailUtils   } = ChromeUtils.importESModule("resource:///modules/MailUtils.sys.mjs");
 
 var msgWindow;
   // the 3-pane window which opened us

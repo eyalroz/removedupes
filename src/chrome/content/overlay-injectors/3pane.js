@@ -1,4 +1,4 @@
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+const Services = globalThis.Services || ChromeUtils.importESModule("resource://gre/modules/Services.sys.mjs").Services;
 
 function injectOtherElements() {
    WL.injectElements(

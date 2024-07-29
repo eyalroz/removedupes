@@ -19,7 +19,7 @@ var { ExtensionSupport } = ChromeUtils.import(
   "resource:///modules/ExtensionSupport.jsm"
 );
 var Services = globalThis.Services || 
-  ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+  ChromeUtils.importESModule("resource://gre/modules/Services.sys.mjs").Services;
 
 function getThunderbirdVersion() {
   let parts = Services.appinfo.version.split(".");
@@ -404,7 +404,7 @@ var WindowListener_102 = class extends ExtensionCommon.ExtensionAPI {
 
           let prefsObj = {};
           prefsObj.Services = globalThis.Services||
-            ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+            ChromeUtils.importESModule("resource://gre/modules/Services.sys.mjs").Services;
           prefsObj.pref = function (aName, aDefault) {
             let defaults = Services.prefs.getDefaultBranch("");
             switch (typeof aDefault) {
@@ -1477,7 +1477,7 @@ var WindowListener_115 = class extends ExtensionCommon.ExtensionAPI {
 
           let prefsObj = {};
           prefsObj.Services = globalThis.Services||
-            ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+            ChromeUtils.importESModule("resource://gre/modules/Services.sys.mjs").Services;
           prefsObj.pref = function (aName, aDefault) {
             let defaults = Services.prefs.getDefaultBranch("");
             switch (typeof aDefault) {

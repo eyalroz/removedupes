@@ -1,9 +1,9 @@
 var EXPORTED_SYMBOLS = ["RemoveDupes"];
 var RemoveDupes = {};
 
-const   Services      = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm");
-const { XPCOMUtils   } = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
+const   Services      = globalThis.Services || ChromeUtils.importESModule("resource://gre/modules/Services.sys.mjs").Services;
+const { MailServices } = ChromeUtils.importESModule("resource:///modules/MailServices.sys.mjs");
+const { XPCOMUtils   } = ChromeUtils.importESModule("resource://gre/modules/XPCOMUtils.sys.mjs");
 
 globalThis.messenger ??= Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
 
@@ -73,7 +73,7 @@ XPCOMUtils.defineLazyGetter(RemoveDupes.Strings, "Bundle",
 //---------------------------------------------------------
 
 XPCOMUtils.defineLazyGetter(RemoveDupes, 'Prefs', () => {
-  let Preferences = ChromeUtils.import("resource://gre/modules/Preferences.jsm").Preferences;
+  let Preferences = ChromeUtils.importESModule("resource://gre/modules/Preferences.sys.mjs").Preferences;
   return new Preferences('extensions.removedupes.');
 });
 
