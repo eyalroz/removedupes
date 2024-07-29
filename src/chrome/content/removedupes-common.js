@@ -66,13 +66,13 @@ RemoveDupes.Strings.format = function (stringName, formatArguments) {
 
 RemoveDupes.Strings.getByName = (stringName) => RemoveDupes.Strings.format(stringName, []);
 
-XPCOMUtils.defineLazyGetter(RemoveDupes.Strings, "Bundle",
+ChromeUtils.defineLazyGetter(RemoveDupes.Strings, "Bundle",
   () => Services.strings.createBundle("chrome://removedupes/locale/removedupes.properties")
 );
 
 //---------------------------------------------------------
 
-XPCOMUtils.defineLazyGetter(RemoveDupes, 'Prefs', () => {
+ChromeUtils.defineLazyGetter(RemoveDupes, 'Prefs', () => {
   let Preferences = ChromeUtils.importESModule("resource://gre/modules/Preferences.sys.mjs").Preferences;
   return new Preferences('extensions.removedupes.');
 });
