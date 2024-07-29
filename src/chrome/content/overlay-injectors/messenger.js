@@ -1,5 +1,3 @@
-const Services = globalThis.Services;
-
 Services.scriptloader.loadSubScript("chrome://removedupes/content/removedupes.js", window, "UTF-8");
 
 function injectToolbarButton() {
