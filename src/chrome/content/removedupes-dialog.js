@@ -1,5 +1,5 @@
 const { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
-const   Services      = globalThis.Services || ChromeUtils.importESModule("resource://gre/modules/Services.sys.mjs").Services;
+const   Services      = globalThis.Services;
 const { MailUtils   } = ChromeUtils.importESModule("resource:///modules/MailUtils.sys.mjs");
 
 var msgWindow;
