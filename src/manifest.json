@@ -8,6 +8,7 @@
 		}
 	},
 	"author": "Eyal Rozenberg",
+	"homepage_url": "https://github.com/eyalroz/removedupes",
 	"name": "Remove Duplicate Messages",
 	"description": "Search mail folders for duplicate messages and move or delete them",
 	"icons": {
