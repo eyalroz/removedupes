@@ -10,6 +10,7 @@
 	"author": "Eyal Rozenberg",
 	"homepage_url": "https://github.com/eyalroz/removedupes",
 	"name": "Remove Duplicate Messages",
+	"short_name" : "removedupes",
 	"description": "Search mail folders for duplicate messages and move or delete them",
 	"icons": {
 		"32": "chrome/content/removedupes.png",
@@ -30,7 +31,7 @@
 		}
 	},
 	"background": {
-		"scripts": [
+			"scripts": [
 			"background.js"
 		]
 	}
