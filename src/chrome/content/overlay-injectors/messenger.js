@@ -1,4 +1,4 @@
-const Services = globalThis.Services || ChromeUtils.importESModule("resource://gre/modules/Services.sys.mjs").Services;
+const Services = globalThis.Services;
 
 Services.scriptloader.loadSubScript("chrome://removedupes/content/removedupes.js", window, "UTF-8");
 

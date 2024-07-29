@@ -1,5 +1,3 @@
-const Services = globalThis.Services || ChromeUtils.importESModule("resource://gre/modules/Services.sys.mjs").Services;
-
 function injectOtherElements() {
    WL.injectElements(
     `
@@ -29,4 +27,3 @@ function injectOtherElements() {
 function onLoad(activatedWhileWindowOpen) {
   injectOtherElements();
 }
-

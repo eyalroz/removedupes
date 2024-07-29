@@ -18,8 +18,7 @@ var { ExtensionCommon } = ChromeUtils.import(
 var { ExtensionSupport } = ChromeUtils.import(
   "resource:///modules/ExtensionSupport.jsm"
 );
-var Services = globalThis.Services || 
-  ChromeUtils.importESModule("resource://gre/modules/Services.sys.mjs").Services;
+var Services = globalThis.Services;
 
 function getThunderbirdVersion() {
   let parts = Services.appinfo.version.split(".");
@@ -220,7 +219,7 @@ var WindowListener_102 = class extends ExtensionCommon.ExtensionAPI {
 
   async getAddonManagerFromWindowWaitForLoad(window) {
     let { setTimeout } = Services.wm.getMostRecentWindow("mail:3pane");
-    
+
     let tabMail = this.getTabMail(window);
     for (let tab of tabMail.tabInfo) {
       if (tab.browser && tab.mode.name == "contentTab") {
@@ -403,8 +402,7 @@ var WindowListener_102 = class extends ExtensionCommon.ExtensionAPI {
           let url = context.extension.rootURI.resolve(defaultUrl);
 
           let prefsObj = {};
-          prefsObj.Services = globalThis.Services||
-            ChromeUtils.importESModule("resource://gre/modules/Services.sys.mjs").Services;
+          prefsObj.Services = globalThis.Services;
           prefsObj.pref = function (aName, aDefault) {
             let defaults = Services.prefs.getDefaultBranch("");
             switch (typeof aDefault) {
@@ -1476,8 +1474,7 @@ var WindowListener_115 = class extends ExtensionCommon.ExtensionAPI {
           let url = context.extension.rootURI.resolve(defaultUrl);
 
           let prefsObj = {};
-          prefsObj.Services = globalThis.Services||
-            ChromeUtils.importESModule("resource://gre/modules/Services.sys.mjs").Services;
+          prefsObj.Services = globalThis.Services;
           prefsObj.pref = function (aName, aDefault) {
             let defaults = Services.prefs.getDefaultBranch("");
             switch (typeof aDefault) {
@@ -2063,7 +2060,7 @@ var WindowListener_115 = class extends ExtensionCommon.ExtensionAPI {
           let managerWindow = this.getAddonManagerFromWindow(window);
           if (
             managerWindow &&
-            managerWindow[this.uniqueRandomID] && 
+            managerWindow[this.uniqueRandomID] &&
             managerWindow[this.uniqueRandomID].hasAddonManagerEventListeners
           ) {
             managerWindow.document.removeEventListener("ViewChanged", this);
