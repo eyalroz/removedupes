@@ -16,10 +16,20 @@
 		"32": "chrome/content/removedupes.png",
 		"16": "chrome/content/removedupes-button-16x16.png"
 	},
+	"locales": [
+		"en-US", "de", "it", "ja", "ja-JP-mac", "zh-TW", "zh-CN", "sk-SK", "pt-PT",
+		"pt-BR", "nl", "fr", "pl", "he-IL", "ru-RU", "da", "cs-CZ", "es-AR", "es-ES",
+		"is-IS", "sv-SE", "sl-SI"
+	],
 #expand		"version": "__VERSION__",
 #ifdef VERSION_NAME
 #expand	"version_name": "__VERSION_NAME__",
 #endif
+	"chrome_injectors": [
+		["messenger.xhtml",        "messenger.js"],
+		["about:3pane",            "3pane.js"],
+		["customizeToolbar.xhtml", "customizeToolbar.js"]
+	],
 	"experiment_apis": {
 		"WindowListener": {
 			"schema": "api/WindowListener/schema.json",
@@ -31,9 +41,7 @@
 		}
 	},
 	"background": {
-			"scripts": [
-			"background.js"
-		]
+			"page": "background.html"
 	}
 }
 
