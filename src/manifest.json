@@ -25,6 +25,11 @@
 #ifdef VERSION_NAME
 #expand	"version_name": "__VERSION_NAME__",
 #endif
+	"chrome_injectors": [
+		["messenger.xhtml",        "messenger.js"],
+		["about:3pane",            "3pane.js"],
+		["customizeToolbar.xhtml", "customizeToolbar.js"]
+	],
 	"experiment_apis": {
 		"WindowListener": {
 			"schema": "api/WindowListener/schema.json",

@@ -1,9 +1,8 @@
-// Loader / background script
-// for the removedupes Thunderbird extension
-// by Eyal Rozenberg
+// Thunderbird regular extension loader script
+//
+// Note: All extension-specific information is passed through the manifest; avoid
+// modifying this file unless absolutely necessary
 
-// TODO: Support overriding the set of content locations from manifest.json
-// TODO: Support taking the locales either from an argument or from manifest.json
 function registerChromeUrls(locales) {
   let manifest = browser.runtime.getManifest();
   let shortname = manifest.short_name;
@@ -46,28 +45,26 @@ function registerOptionsPage(uri) {
 
 // TODO: Instead of registering overlay injectors for windows,
 // we should generate overlay injectors ourselves
-function registerChromeInjectors(registrationInfo) {
+function registerChromeInjectors(chromeInjectors) {
   let manifest = browser.runtime.getManifest();
   let shortname = manifest.short_name;
   if (!shortname) {
     return false;
   }
-  for (let [windowHref, relativeInjectorPath] of registrationInfo) {
+  chromeInjectors ??= manifest.chrome_injectors;
+  for (let [windowHref, rawInjectionUri] of chromeInjectors) {
     let absoluteWindowHref = windowHref.startsWith('about:') ?
       windowHref : `chrome://messenger/content/${windowHref}`;
-    let inectorJSFile = `chrome://${shortname}/content/overlay-injectors/${relativeInjectorPath}`;
-    messenger.WindowListener.registerWindow(absoluteWindowHref, inectorJSFile);
+    let injectionUri = rawInjectionUri.startsWith(`chrome://`) ?
+      rawInjectionUri : `chrome://${shortname}/content/overlay-injectors/${rawInjectionUri}`;
+    messenger.WindowListener.registerWindow(absoluteWindowHref, injectionUri);
   }
   return true;
 }
 
 (async function () {
   registerChromeUrls();
-  registerChromeInjectors([
-    ["messenger.xhtml",        "messenger.js"],
-    ["about:3pane",            "3pane.js"],
-    ["customizeToolbar.xhtml", "customizeToolbar.js"]
-  ]);
+  registerChromeInjectors();
   registerDefaultPrefs();
   registerOptionsPage();
   messenger.WindowListener.startListening();
