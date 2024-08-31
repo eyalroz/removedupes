@@ -616,10 +616,11 @@ RemoveDupes.MessengerOverlay.messageBodyFromURI = function (msgURI) {
   // by \n's or \r\n's ; of course, this is a very lame hack, since if the
   // message has multiple MIME parts we're still getting the headers of all
   // the sub-parts, and not taking into any account the multipart delimiters
-  let endOfHeaders = /\r?\n\r?\n/;
-  if (endOfHeaders.test(msgContent)) {
+  let endOfHeaders = /\r?\n\r?\n(.*)$/;
+  let match = endOfHeaders.exec(msgContent);
+  if (match) {
     // return everything after the end-of-headers
-    return RegExp.rightContext;
+    return match[0];
   }
   return null;
 };
