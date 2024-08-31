@@ -345,7 +345,7 @@ RemoveDupes.MessengerOverlay.stripAndSortAddresses = function (headerString) {
     // original header string rather than assume there are no addresses
     if (!matches) return headerString;
     for (let i = 0; i < matches.length; i++) {
-      matches[i] = matches[i].substr(1, matches[i].length - 2);
+      matches[i] = matches[i].substring(1, matches[i].length - 3);
     }
   }
   return matches.sort();
@@ -378,7 +378,7 @@ RemoveDupes.MessengerOverlay.sillyHash = function (searchData, messageHdr, folde
   let retVal = '';
   if (searchData.useCriteria.messageId) {
     let messageId = messageHdr.messageId;
-    if (messageHdr.messageId.substr(0, 4) == 'md5:' && !searchData.allowMD5IDSubstitutes) {
+    if (messageHdr.messageId.substring(0, 3) == 'md5:' && !searchData.allowMD5IDSubstitutes) {
       // Note: We are making a (generally invalid) assumption that actual message headers don't
       // begin with 'md5:'.
       if (searchData.assumeEachMissingValueIsUnique) {
@@ -815,7 +815,7 @@ RemoveDupes.MessengerOverlay.setOriginalsFolders = function () {
   let rangeCount = selection.getRangeCount();
   this.originalsFolders = new Set();
   this.originalsFolderUris = new Set();
-  var skipSpecialFolders = RemoveDupes.Prefs.get('skip_special_folders', 'true');
+  let skipSpecialFolders = RemoveDupes.Prefs.get('skip_special_folders', 'true');
   for (let i = 0; i < rangeCount; i++) {
     let startIndex = {};
     let endIndex = {};
