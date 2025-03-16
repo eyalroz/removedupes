@@ -1,4 +1,5 @@
 {
+  "ignorePatterns": ["src/api/WindowListener/*.js"],
   "env": {
     "browser": true,
     "es6": true,
@@ -8,18 +9,23 @@
     "airbnb-base"
   ],
   "globals": {
-    "appWindow" : "writable",
-    "gDBView" : "readonly",
-    "dump" : "readonly",
-    "msgWindow" : "readonly",
-    "GetSelectedMsgFolders" : "readonly",
-    "KeyEvent" : "readonly",
-    "gFolderTreeView" : "writable",
+    "gContentChanged": "writable",
+    "gMsgCompose": "writable",
+    "appWindow": "writable",
+    "gDBView": "readonly",
+    "dump": "readonly",
+    "content": "readonly",
+    "msgWindow": "readonly",
+    "GetSelectedMsgFolders": "readonly",
+    "KeyEvent": "readonly",
+    "gFolderTreeView": "writable",
     "messenger": "writable",
     "Console": "readonly",
+    "OutputFormatMenuSelect": "readonly",
     "Services": "readonly",
     "Preferences": "readonly",
     "globalThis": "readonly",
+    "gMessageDisplay" : "readonly",
     "WL": "readonly",
     "RemoveDupes": "writable",
     "ChromeUtils": "readonly",
@@ -27,7 +33,11 @@
     "Ci": "readonly",
     "Cc": "readonly",
     "Cr": "readonly",
-    "Cu": "readonly"
+    "Cu": "readonly",
+    "pref": "readonly",
+    "IsHTMLEditor": "readonly",
+    "GetCurrentEditor": "readonly",
+    "GetCurrentEditorElement": "readonly"
   },
   "parserOptions": {
     "ecmaVersion": 2022
@@ -38,7 +48,7 @@
       2,
       {
         "SwitchCase": 0,
-        "MemberExpression" : "off",
+        "MemberExpression": "off",
         "ignoreComments": true
       }
     ],
@@ -53,9 +63,10 @@
       "off", "double"
     ],
     "operator-linebreak": [
-      2, "after", {
-        "overrides": { "?": "after", ":": "none" }
-      }
+      "error", "after", { "overrides": { ":": "ignore" } }
+//      2, "after", {
+//        "overrides": { "?": "after", ":": "none" }
+//      }
     ],
     "comma-dangle": ["error", {
         "arrays": "only-multiline",
@@ -65,38 +76,49 @@
         "functions": "never"
     }],
     "func-names": ["off", "always"],
-    "comment: the following all come from airbnb-base, let's leave them off": "off",
-    "key-spacing": "off",
+    "array-bracket-spacing": "off",
     "array-callback-return": "off",
     "camelcase": "off",
     "class-methods-use-this": "off",
+    "default-case": "off",
+    "default-case": "warn",
     "eqeqeq": "off",
+    "function-call-argument-newline": "off",
+    "function-paren-newline": "off",
     "guard-for-in": "off",
+    "import/extensions": "off",
+    "import/no-mutable-exports": "off",
+    "import/no-unresolved": "off",
+    "key-spacing": "off",
     "max-classes-per-file": "off",
     "new-cap": "off",
+    "no-await-in-loop": "warn",
     "no-bitwise": "off",
+    "no-cond-assign": "off",
     "no-console": "off",
     "no-continue": "off",
+    "no-control-regex": "off",
     "no-empty": "off",
+    "no-lonely-if": "warn",
+    "no-multi-assign": "off",
     "no-multi-spaces": "off",
     "no-param-reassign": "off",
     "no-plusplus": "off",
     "no-prototype-builtins": "off",
+    "no-restricted-globals": "off",
     "no-restricted-syntax": "off",
+    "no-return-assign": "off",
     "no-underscore-dangle": "off",
     "no-unused-expressions": "off",
+    "no-unused-vars": "off",
     "no-use-before-define": "off",
-    "function-call-argument-newline" : "off",
-    "one-var-declaration-per-line": "off",
-    "no-multi-assign": "off",
-    "one-var": "off",
-    "vars-on-top": "off",
     "no-var": "off",
+    "one-var-declaration-per-line": "off",
+    "one-var": "off",
     "prefer-const": "off",
     "prefer-destructuring": "off",
-    "function-paren-newline": "off",
-    "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1, "maxBOF": 1} ],
-    "comment: will need to look at the following one-by-one": "off",
-    "no-unused-vars": "off"
+    "vars-on-top": "off",
+    "wrap-iife": "warn",
+    "no-multiple-empty-lines": [ "error", { "max": 2, "maxEOF": 1, "maxBOF": 1} ]
   }
 }
