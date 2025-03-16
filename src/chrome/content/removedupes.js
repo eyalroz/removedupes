@@ -365,7 +365,7 @@ RemoveDupes.MessengerOverlay.sillyHash = function (searchData, messageHdr, folde
   // Notes:
   // 1. There could theoretically be two messages which should not
   //    have the same hash, but do have it, if the subject includes the
-  //    string |6xX$\WG-C?| or the author includes the string
+  //    string '|6xX$\WG-C?|' or the author includes the string
   //    '|^#=)A?mUi5|' ; this is however highly unlikely... about as
   //    unlikely as collisions of a hash function, except that we haven't
   //    randomized; still, if a malicious user sent you e-mail with these
@@ -439,7 +439,7 @@ RemoveDupes.MessengerOverlay.sillyHash = function (searchData, messageHdr, folde
   }
   // note:
   // We're stripping here the non-MIME-transfer-encoding-decoded CC list!
-  // It might not work but we don't have immediate access to the decoded
+  // It might not work, but we don't have immediate access to the decoded
   // version...
   if (searchData.useCriteria.ccList) {
     let ccList = searchData.compareStrippedAndSortedAddresses ?
@@ -903,7 +903,7 @@ RemoveDupes.DupeSearchData = function () {
   // Sometimes, a criterion or field we're using as a comparison
   // criteria is missing. In these cases, we have the following options:
   //
-  // 1. Be cautious, and assume the field does actually have some value
+  // 1. Be cautious, and assume the field does actually have some value,
   //    and we just don't have access to it; in which case, we need to
   //    assume that value is distinct from all other messages - hence
   //    the message with the missing header cannot be considered a
