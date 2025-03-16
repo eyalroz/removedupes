@@ -1,24 +1,21 @@
 /*
  * This file is provided by the addon-developer-support repository at
- * https://github.com/thundernest/addon-developer-support
+ * https://github.com/RealRaven2000/addon-developer-support
  *
- * Version 1.62
+ * Version 1.63
  *
- * Author: John Bieling (john@thunderbird.net)
+ * Authors (in alphabetical order by surname):
+ *   John Bieling <john@thunderbird.net>
+ *   Axel Grude <axel.grude@gmail.com>
+ *   Eyal Rozenberg <eyalroz1@gmx.com>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-// Import some things we need.
-var { ExtensionCommon } = ChromeUtils.import(
-  "resource://gre/modules/ExtensionCommon.jsm"
-);
-var { ExtensionSupport } = ChromeUtils.import(
-  "resource:///modules/ExtensionSupport.jsm"
-);
-var Services = globalThis.Services;
+var Services = globalThis.Services ||
+  ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 
 function getThunderbirdVersion() {
   let parts = Services.appinfo.version.split(".");
@@ -27,6 +24,15 @@ function getThunderbirdVersion() {
     minor: parseInt(parts[1]),
   }
 }
+const CanUseJSMModules = getThunderbirdVersion().major <= 128;
+
+var { ExtensionCommon } = CanUseJSMModules ?
+    ChromeUtils.import("resource://gre/modules/ExtensionCommon.jsm")
+  : ChromeUtils.importESModule("resource://gre/modules/ExtensionCommon.sys.mjs");
+var { ExtensionSupport } = CanUseJSMModules ?
+    ChromeUtils.import("resource:///modules/ExtensionSupport.jsm")
+  : ChromeUtils.importESModule("resource:///modules/ExtensionSupport.sys.mjs");
+
 
 var WindowListener_102 = class extends ExtensionCommon.ExtensionAPI {
   log(msg) {
@@ -237,9 +243,7 @@ var WindowListener_102 = class extends ExtensionCommon.ExtensionAPI {
   }
 
   setupAddonManager(managerWindow, forceLoad = false) {
-    if (!managerWindow) {
-      return;
-    }
+    if (!managerWindow) return;
     if (!(
       managerWindow &&
       managerWindow[this.uniqueRandomID] &&
@@ -283,7 +287,9 @@ var WindowListener_102 = class extends ExtensionCommon.ExtensionAPI {
           break;
 
         default:
-          ChromeUtils.defineLazyGetter(messenger, api, () => context.apiCan.findAPIPath(api));
+          ChromeUtils.defineLazyGetter(messenger, api, () =>
+            context.apiCan.findAPIPath(api)
+          );
       }
     }
     return messenger;
@@ -400,7 +406,8 @@ var WindowListener_102 = class extends ExtensionCommon.ExtensionAPI {
           let url = context.extension.rootURI.resolve(defaultUrl);
 
           let prefsObj = {};
-          prefsObj.Services = globalThis.Services;
+          prefsObj.Services = globalThis.Services||
+            ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
           prefsObj.pref = function (aName, aDefault) {
             let defaults = Services.prefs.getDefaultBranch("");
             switch (typeof aDefault) {
@@ -1143,16 +1150,19 @@ var WindowListener_102 = class extends ExtensionCommon.ExtensionAPI {
       }
     }
 
-    // Unload JSMs of this add-on
-    const rootURI = this.extension.rootURI.spec;
-    for (let module of Cu.loadedModules) {
-      if (
-        module.startsWith(rootURI) ||
-        (module.startsWith("chrome://") &&
-          chromeUrls.find((s) => module.startsWith(s)))
-      ) {
-        this.log("Unloading: " + module);
-        Cu.unload(module);
+
+    if (CanUseJSMModules) {
+      // Unload JSMs of this add-on
+      const rootURI = this.extension.rootURI.spec;
+      for (let module of Cu.loadedModules) {
+        if (
+          module.startsWith(rootURI) ||
+          (module.startsWith("chrome://") &&
+            chromeUrls.find((s) => module.startsWith(s)))
+        ) {
+          this.log("Unloading: " + module);
+          Cu.unload(module);
+        }
       }
     }
 
@@ -1269,19 +1279,13 @@ var WindowListener_115 = class extends ExtensionCommon.ExtensionAPI {
   }
 
   setupAddonManager(managerWindow, forceLoad = false) {
-    if (!managerWindow) {
-      return;
-    }
-    if (!this.pathToOptionsPage) {
-      return;
-    }
+    if (!managerWindow) return;
+    if (!this.pathToOptionsPage) return;
     if (
       managerWindow &&
       managerWindow[this.uniqueRandomID] &&
       managerWindow[this.uniqueRandomID].hasAddonManagerEventListeners
-    ) {
-      return;
-    }
+    ) return;
 
     managerWindow.document.addEventListener("ViewChanged", this);
     managerWindow.document.addEventListener("update", this);
@@ -1472,7 +1476,8 @@ var WindowListener_115 = class extends ExtensionCommon.ExtensionAPI {
           let url = context.extension.rootURI.resolve(defaultUrl);
 
           let prefsObj = {};
-          prefsObj.Services = globalThis.Services;
+          prefsObj.Services = globalThis.Services||
+            ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
           prefsObj.pref = function (aName, aDefault) {
             let defaults = Services.prefs.getDefaultBranch("");
             switch (typeof aDefault) {
@@ -1678,16 +1683,14 @@ var WindowListener_115 = class extends ExtensionCommon.ExtensionAPI {
           window &&
           window.location.href != "about:blank" &&
           window.document.readyState == "complete"
-        ) {
-          return;
-        }
+        ) return;
       }
       throw new Error("Window ignored");
     }
 
     try {
       await fullyLoaded(window);
-    } catch(ex) {
+    } catch (ex) {
       return;
     }
 
@@ -2126,16 +2129,18 @@ var WindowListener_115 = class extends ExtensionCommon.ExtensionAPI {
       }
     }
 
-    // Unload JSMs of this add-on
-    const rootURI = this.extension.rootURI.spec;
-    for (let module of Cu.loadedModules) {
-      if (
-        module.startsWith(rootURI) ||
-        (module.startsWith("chrome://") &&
-          chromeUrls.find((s) => module.startsWith(s)))
-      ) {
-        this.log("Unloading: " + module);
-        Cu.unload(module);
+    if (CanUseJSMModules) {
+      // Unload JSMs of this add-on
+      const rootURI = this.extension.rootURI.spec;
+      for (let module of Cu.loadedModules) {
+        if (
+          module.startsWith(rootURI) ||
+          (module.startsWith("chrome://") &&
+            chromeUrls.find((s) => module.startsWith(s)))
+        ) {
+          this.log("Unloading: " + module);
+          Cu.unload(module);
+        }
       }
     }
 
