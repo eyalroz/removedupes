@@ -1,5 +1,5 @@
-var EXPORTED_SYMBOLS = ["RemoveDupes"];
-var RemoveDupes = {};
+export var RemoveDupes;
+RemoveDupes = {};
 
 const { MailServices } = ChromeUtils.importESModule("resource:///modules/MailServices.sys.mjs");
 const { XPCOMUtils   } = ChromeUtils.importESModule("resource://gre/modules/XPCOMUtils.sys.mjs");

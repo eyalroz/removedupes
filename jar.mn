@@ -6,7 +6,7 @@ removedupes.jar:
 *   content/removedupes-dialog.xhtml                  (src/chrome/content/removedupes-dialog.xul)
 *   content/removedupes-prefs.xhtml                   (src/chrome/content/removedupes-prefs.xul)
 *   content/removedupes.js                            (src/chrome/content/removedupes.js)
-*   content/removedupes-common.js                     (src/chrome/content/removedupes-common.js)
+*   content/removedupes-common.sys.mjs                (src/chrome/content/removedupes-common.sys.mjs)
 *   content/removedupes-prefs.js                      (src/chrome/content/removedupes-prefs.js)
 *   content/removedupes-dialog.js                     (src/chrome/content/removedupes-dialog.js)
     content/removedupes-set-preference-types.js       (src/chrome/content/removedupes-set-preference-types.js)

@@ -1,4 +1,4 @@
-const { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
+const { RemoveDupes } = ChromeUtils.importESModule("chrome://removedupes/content/removedupes-common.sys.mjs");
 const { MailUtils   } = ChromeUtils.importESModule("resource:///modules/MailUtils.sys.mjs");
 
 var msgWindow;

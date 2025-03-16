@@ -1,4 +1,4 @@
-var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
+var { RemoveDupes } = ChromeUtils.importESModule("chrome://removedupes/content/removedupes-common.sys.mjs");
 
 RemoveDupes.PrefPane = {};
 RemoveDupes.PrefPane.init = function () {

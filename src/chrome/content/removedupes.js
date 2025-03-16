@@ -1,4 +1,4 @@
-var { RemoveDupes } = ChromeUtils.import("chrome://removedupes/content/removedupes-common.js");
+var { RemoveDupes } = ChromeUtils.importESModule("chrome://removedupes/content/removedupes-common.sys.mjs");
 var { ObjectUtils } = ChromeUtils.importESModule("resource://gre/modules/ObjectUtils.sys.mjs");
 var { ImapService } = ChromeUtils.importESModule("resource://gre/modules/ImapService.sys.mjs");
 var { MailUtils   } = ChromeUtils.importESModule("resource:///modules/MailUtils.sys.mjs");
