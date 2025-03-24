@@ -1,7 +1,8 @@
-var { RemoveDupes } = ChromeUtils.importESModule("chrome://removedupes/content/removedupes-common.sys.mjs");
-var { ObjectUtils } = ChromeUtils.importESModule("resource://gre/modules/ObjectUtils.sys.mjs");
-var { ImapService } = ChromeUtils.importESModule("resource://gre/modules/ImapService.sys.mjs");
-var { MailUtils   } = ChromeUtils.importESModule("resource:///modules/MailUtils.sys.mjs");
+var { RemoveDupes  } = ChromeUtils.importESModule("chrome://removedupes/content/removedupes-common.sys.mjs");
+var { ObjectUtils  } = ChromeUtils.importESModule("resource://gre/modules/ObjectUtils.sys.mjs");
+var { ImapService  } = ChromeUtils.importESModule("resource://gre/modules/ImapService.sys.mjs");
+var { MailUtils    } = ChromeUtils.importESModule("resource:///modules/MailUtils.sys.mjs");
+var { MailServices } = ChromeUtils.importESModule("resource:///modules/MailServices.sys.mjs");
 
 RemoveDupes.MessengerOverlay = {};
 
@@ -590,11 +591,8 @@ RemoveDupes.MessengerOverlay.messageBodyFromURI = function (msgURI) {
 //  The following lines don't work because of asynchronicity
 //    let msgHdr = RemoveDupes.GetMsgFolderFromUri(msgURI);
 //    let msgContent = await getRawMessage(msgHdr);
-  let msgContent = "";
-  let MsgService;
-  try {
-    MsgService = messenger.messageServiceFromURI(msgURI);
-  } catch (ex) {
+  let MsgService = MailServices.messageServiceFromURI(msgURI);
+  if (!MsgService) {
     return null;
   }
   let MsgStream =  Cc["@mozilla.org/network/sync-stream-listener;1"].createInstance();
@@ -608,21 +606,18 @@ RemoveDupes.MessengerOverlay.messageBodyFromURI = function (msgURI) {
     return null;
   }
   ScriptInputStream.available();
+  let msgContent = "";
   while (ScriptInputStream.available()) {
     msgContent += ScriptInputStream.read(512);
   }
-
   // the message headers end on the first empty line, and lines are delimited
-  // by \n's or \r\n's ; of course, this is a very lame hack, since if the
-  // message has multiple MIME parts we're still getting the headers of all
-  // the sub-parts, and not taking into any account the multipart delimiters
-  let endOfHeaders = /\r?\n\r?\n(.*)$/;
-  let match = endOfHeaders.exec(msgContent);
-  if (match) {
-    // return everything after the end-of-headers
-    return match[0];
-  }
-  return null;
+  // by \n's or \r\n's ; of course, this logic is a rather lame hack, since if
+  // the message has multiple MIME parts we're still getting the headers of all
+  // the sub-parts, and not taking into any account the multipart delimiters.
+  let endOfHeaders = /\r?\n\r?\n(.*)$/s;
+  let matchResults = endOfHeaders.exec(msgContent);
+  let msgBody = matchResults?.[1];
+  return msgBody;
 };
 
 // Write some progress info to the status bar
