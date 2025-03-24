@@ -2,13 +2,21 @@
 
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+<!-- Is this next one useful? -->
+<?xml-stylesheet href="chrome://global/skin/tree.css" type="text/css"?>
 <?xml-stylesheet href="chrome://communicator/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://messenger/skin/prefPanels.css" type="text/css"?>
 <?xml-stylesheet href="chrome://messenger/skin/messenger.css" type="text/css"?>
 <?xml-stylesheet href="chrome://messenger/skin/dialogs.css" type="text/css"?>
 <?xml-stylesheet href="chrome://messenger/skin/folderMenus.css" type="text/css"?>
+<!-- Is this next one useful? -->
+<?xml-stylesheet href="chrome://messenger/skin/shared/tree-listbox.css"?>
+<!-- <?xml-stylesheet href="chrome://messenger/skin/shared/tree/tree.css"?> -->
 <?xml-stylesheet href="chrome://removedupes/content/skin/classic/removedupes-dialog.css" type="text/css"?>
 <?xml-stylesheet href="chrome://messenger/content/bindings.css" type="text/css"?>
+<?xml-stylesheet href="chrome://messenger/content/mailWindow1.css" type="text/css"?>
+<?xml-stylesheet href="chrome://messenger/content/icons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://messenger/content/colors.css" type="text/css"?>
 
 <!DOCTYPE dialog SYSTEM "chrome://removedupes/locale/removedupes.dtd">
 
