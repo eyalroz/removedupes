@@ -29,9 +29,7 @@
       <spacer />
       <tree id="dupeSetsTree"
             enableColumnDrag="true"
-            style="height: 550px; width: 700px; flex: 2; resize: horizontal;"
-            height="550"
-            width="700"
+            style="min-width: 800px; min-height: 500px; flex: 1"
             flex="1"
             persist="sortColumn sortDirection"
             onkeydown="onTreeKeyPress(event);"
@@ -39,7 +37,6 @@
             onclick="onClickTree(event);">
         <treecols>
           <treecol style="width: 40px"
-                   width="40"
                    persist="width hidden class sortDirection"
                    id="dummyColumn"
                    primary="true"
@@ -48,7 +45,6 @@
           <treecol id="toKeepColumn"
                    fieldName="toKeep"
                    style="width: 60px"
-                   width="60"
                    persist="width hidden class sortDirection"
                    label="&removedupes_dialog.keep_flag;"
                    closemenu="none"/>
@@ -175,9 +171,8 @@
         </radiogroup>
         </groupbox>
     </vbox>
-    <hbox width="60" style="width: 60px; flex: 1;" flex="1">
-      <vbox>
-        <description  width="60" style="width: 60px">
+      <vbox style="min-width: 9em; width: 9em; padding-left: 1em; padding-right: 1em">
+        <description style="min-width: 7em">
           &removedupes_dialog.keep_label;
         </description>
         <button id="keepPresetOriginalButton"
@@ -197,6 +192,5 @@
                 oncommand="markAllDupesForDeletion();"/>
         <spacer flex="1"/>
       </vbox>
-    </hbox>
-  </hbox>
+      </hbox>
 </dialog>
