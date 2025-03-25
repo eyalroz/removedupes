@@ -33,7 +33,7 @@
 
   <hbox flex="1" style="flex: 1; padding: 0.5em">
     <vbox flex="1" style="flex: 2;">
-      <description>&removedupes_dialog.tree_label;</description>
+      <description class="header">&removedupes_dialog.tree_label;</description>
       <spacer />
       <tree id="dupeSetsTree"
             enableColumnDrag="true"
@@ -140,8 +140,10 @@
         <label class="statusbarpanel" id="keeping-status-panel" />
       </hbox>
       <spacer style="width: 0.5em"/>
-      <groupbox>
-        <caption label="&removedupes_dialog.action_label;"/>
+      <groupbox align="start">
+        <hbox class="groupbox-title">
+          <label class="header">&removedupes_dialog.action_label;</label>
+        </hbox>
         <radiogroup id="action">
           <hbox>
             <radio id="move_to_common_account_trash_action"
