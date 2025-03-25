@@ -31,28 +31,29 @@
   <script type="application/javascript" src="chrome://messenger/content/widgetglue.js"/>
   <script type="application/javascript" src="chrome://removedupes/content/removedupes-dialog.js"/>
 
-  <hbox flex="1" style="flex: 1;">
+  <hbox flex="1" style="flex: 1; padding: 0.5em">
     <vbox flex="1" style="flex: 2;">
       <description>&removedupes_dialog.tree_label;</description>
       <spacer />
       <tree id="dupeSetsTree"
             enableColumnDrag="true"
+            resizable="true"
             style="min-width: 800px; min-height: 500px; flex: 1"
             flex="1"
             persist="sortColumn sortDirection"
             onkeydown="onTreeKeyPress(event);"
             onkeyup="onTreeKeyUp(event);"
             onclick="onClickTree(event);">
-        <treecols>
-          <treecol style="width: 40px"
+        <treecols sizeble="true">
+          <treecol id="dummyColumn"
                    persist="width hidden class sortDirection"
-                   id="dummyColumn"
+                   style="width: 40px"
                    primary="true"
                    closemenu="none"/>
           <splitter class="tree-splitter"/>
           <treecol id="toKeepColumn"
-                   fieldName="toKeep"
                    style="width: 60px"
+                   fieldName="toKeep"
                    persist="width hidden class sortDirection"
                    label="&removedupes_dialog.keep_flag;"
                    closemenu="none"/>
@@ -94,8 +95,6 @@
                    closemenu="none"/>
           <splitter class="tree-splitter"/>
           <treecol id="sendTimeColumn"
-                   style="width: 150px"
-                   width="150"
                    fieldName="sendTime"
                    label="&removedupes_dialog.send_time;"
                    persist="width hidden class sortDirection"
@@ -103,8 +102,6 @@
                    closemenu="none"/>
           <splitter class="tree-splitter"/>
           <treecol id="sizeColumn"
-                   style="width: 150px"
-                   width="150"
                    fieldName="size"
                    label="&removedupes_dialog.size;"
                    persist="width hidden class sortDirection"
@@ -136,14 +133,13 @@
         <treechildren id="dupeSetsTreeChildren"/>
       </tree>
       <hbox class="statusbar">
-        <spacer width="5" style="width: 5px"/>
-        <label class="statusbarpanel" id="main-status-panel"  flex="1" style="flex: 1; resize: horizontal;"/>
-        <label class="statusbarpanel" id="sets-status-panel"  flex="1" style="flex: 1; resize: horizontal;"/>
-        <label class="statusbarpanel" id="total-status-panel"  flex="1" style="flex: 1; resize: horizontal;"/>
-        <label class="statusbarpanel" id="keeping-status-panel" flex="1" style="flex: 1; resize: horizontal;"/>
-        <spacer width="2.5" style="width: 2.5px"/>
+        <spacer style="flex: 2; resize: horizontal"/>
+        <label class="statusbarpanel" id="main-status-panel" />
+        <label class="statusbarpanel" id="sets-status-panel" />
+        <label class="statusbarpanel" id="total-status-panel" />
+        <label class="statusbarpanel" id="keeping-status-panel" />
       </hbox>
-      <spacer height="10" style="width: 10px"/>
+      <spacer style="width: 0.5em"/>
       <groupbox>
         <caption label="&removedupes_dialog.action_label;"/>
         <radiogroup id="action">
@@ -159,7 +155,7 @@
                    value="move_to_chosen_folder"
                    label="&action.move_to_chosen_folder.label;"
                    accesskey="&action.move_to_chosen_folder.accesskey;"/>
-            <menulist id="actionTargetFolder" class="folderMenuItem">
+            <menulist id="actionTargetFolder" class="folderMenuItem" style="width: 220px">
               <menupopup
                    is="folder-menupopup"
                    id="actionTargetFolderPopup"
