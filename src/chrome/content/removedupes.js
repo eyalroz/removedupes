@@ -57,19 +57,16 @@ RemoveDupes.MessengerOverlay.onKeyPress = function (ev, searchData) {
 };
 
 RemoveDupes.MessengerOverlay.beginSearchForDuplicateMessages = function (searchData) {
-  searchData.topFolders = GetSelectedMsgFolders();
+  searchData.topFolders = RemoveDupes.MessengerOverlay.getSelectedFolders();
 
-  if (searchData.topFolders.length == 0) {
+  if (!searchData.topFolders || searchData.topFolders.length == 0) {
     // no folders selected; we shouldn't get here
     RemoveDupes.MessengerOverlay.abortDupeSearch(searchData, 'no_folders_selected');
     return;
   }
 
-  // TODO: check we haven't selected some folders along with
-  // their subfolders - this would mean false dupes!
-
-  for (let i = 0; i < searchData.topFolders.length; i++) {
-    let folder = searchData.topFolders[i];
+  for (const folder of searchData.topFolders) {
+    // TODO: nsIMsgFolder has a method for checking specialness...
     if (searchData.skipSpecialFolders) {
       if (!folder.canRename && (folder.rootFolder != folder)) {
         // one of the top folders is a special folders; if it's not
@@ -792,48 +789,45 @@ RemoveDupes.MessengerOverlay.replaceGetCellProperties = function () {
   };
 };
 
+RemoveDupes.MessengerOverlay.getSelectedFolderUris = function () {
+  let tabMail = document.getElementById('tabmail');
+  if (tabMail?.currentTabInfo.mode.name != 'mail3PaneTab') { return null; }
+  let values = tabMail.currentAbout3Pane?.folderTree?.selection?.values();
+  if (!values) { return null; }
+  return [...values].map((row) => row.uri);
+};
+
+RemoveDupes.MessengerOverlay.getSelectedFolders = function () {
+  let tabMail = document.getElementById('tabmail');
+  if (tabMail?.currentTabInfo.mode.name != 'mail3PaneTab') { return null; }
+  let values = tabMail.currentAbout3Pane?.folderTree?.selection?.values();
+  return [...values].map((row) => MailServices.folderLookup.getFolderForURL(row.uri));
+};
+
 RemoveDupes.MessengerOverlay.setOriginalsFolders = function () {
-  if (typeof gFolderTreeView == 'undefined') {
-    let selectedMsgFolders = GetSelectedMsgFolders();
-    this.originalsFolders = new Set();
-    this.originalsFolderUris = new Set();
-    for (let originalsFolder of selectedMsgFolders) {
-      this.originalsFolders.add(originalsFolder);
-      this.originalsFolderUris.add(originalsFolder.URI);
-    }
+
+  let selection = RemoveDupes.MessengerOverlay.getSelectedFolders();
+  if (!selection || selection.length == 0) {
+    RemoveDupes.namedAlert(window, 'invalid_originals_folders');
     return;
   }
-
-  // at this point we assume the gFolderTreeView object exists,
-  // i.e. we can set custom properties for folders in the tree
-
-  let selection = gFolderTreeView._treeElement.view.selection;
-  let rangeCount = selection.getRangeCount();
   this.originalsFolders = new Set();
   this.originalsFolderUris = new Set();
   let skipSpecialFolders = RemoveDupes.Prefs.get('skip_special_folders', 'true');
-  for (let i = 0; i < rangeCount; i++) {
-    let startIndex = {};
-    let endIndex = {};
-    selection.getRangeAt(i, startIndex, endIndex);
-    for (let j = startIndex.value; j <= endIndex.value; j++) {
-      if (j >= gFolderTreeView._rowMap.length) break;
-
-      let folder = gFolderTreeView._rowMap[j]._folder;
-      if (skipSpecialFolders) {
-        if (!folder.canFileMessages ||
-            (folder.rootFolder == folder) ||
-            (!folder.canRename &&
-            (!(folder.flags & RemoveDupes.FolderFlags.Inbox)))) {
-          RemoveDupes.namedAlert(window, 'invalid_originals_folders');
-          continue;
-        }
+  for (let folder of selection) {
+    if (skipSpecialFolders) {
+      if (!folder.canFileMessages ||
+        (folder.rootFolder == folder) ||
+        (!folder.canRename &&
+          (!(folder.flags & RemoveDupes.FolderFlags.Inbox)))) {
+        RemoveDupes.namedAlert(window, 'invalid_originals_folders');
+        continue;
       }
-      this.originalsFolders.add(folder);
-      this.originalsFolderUris.add(folder.URI);
     }
+    this.originalsFolders.add(folder);
+    this.originalsFolderUris.add(folder.URI);
   }
-  gFolderTreeView._tree.invalidate();
+  // TODO: How do I invalidate the selection?
 
   // TODO: Think of what happens if the user first marks the originals folders,
   // then changes the special folder skipping prefs; if we could clear the originals
