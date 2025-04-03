@@ -1,6 +1,5 @@
 var { RemoveDupes  } = ChromeUtils.importESModule("chrome://removedupes/content/removedupes-common.sys.mjs");
 var { ObjectUtils  } = ChromeUtils.importESModule("resource://gre/modules/ObjectUtils.sys.mjs");
-var { ImapService  } = ChromeUtils.importESModule("resource://gre/modules/ImapService.sys.mjs");
 var { MailUtils    } = ChromeUtils.importESModule("resource:///modules/MailUtils.sys.mjs");
 var { MailServices } = ChromeUtils.importESModule("resource:///modules/MailServices.sys.mjs");
 
@@ -153,7 +152,7 @@ RemoveDupes.MessengerOverlay.addSearchFolders = function (folder, searchData) {
 
   try {
     let listener = new RemoveDupes.UpdateFolderDoneListener(folder, searchData);
-    ImapService.liteSelectFolder(folder, listener, msgWindow);
+    MailServices.imap.liteSelectFolder(folder, listener, msgWindow);
     // no traversal of children - the listener will take care of that in due time
     return;
   } catch (ex) {}
