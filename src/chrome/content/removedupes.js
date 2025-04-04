@@ -1,5 +1,4 @@
 var { RemoveDupes  } = ChromeUtils.importESModule("chrome://removedupes/content/removedupes-common.sys.mjs");
-var { ObjectUtils  } = ChromeUtils.importESModule("resource://gre/modules/ObjectUtils.sys.mjs");
 var { MailUtils    } = ChromeUtils.importESModule("resource:///modules/MailUtils.sys.mjs");
 var { MailServices } = ChromeUtils.importESModule("resource:///modules/MailServices.sys.mjs");
 
@@ -278,8 +277,13 @@ RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2 = function 
     return;
   }
 
+  function isEmpty(obj) {
+    for(var i in obj) { return false; }
+    return true;
+  };
+
   window.statusFeedback?.stopMeteors?.();
-  if (ObjectUtils.isEmpty(searchData.dupeSetsHashMap)) {
+  if (isEmpty(searchData.dupeSetsHashMap)) {
     if (searchData.useReviewDialog) {
       // if the user wants a dialog to pop up for the dupes,
       // we can bother him/her with a message box for 'no dupes'
