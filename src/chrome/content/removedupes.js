@@ -468,7 +468,7 @@ RemoveDupes.MessengerOverlay.populateDupeSetsHash = function* (searchData) {
   //
   // Anyway, we want to have a function which takes an iterator into a collection of
   // folders, populating the hash with the messages in each folder - and run it twice,
-  // first for the originals folder (allowing the creation of new dupe sets), then
+  // first for the originals folders (allowing the creation of new dupe sets), then
   // for the search folders (allowing the creation of dupe sets if there are no originals,
   // and allowing the addition of dupes to existing sets
 
@@ -494,7 +494,7 @@ RemoveDupes.MessengerOverlay.populateDupeSetsHash = function* (searchData) {
         break;
       }
       foldersIterator = searchData.folders.values();
-      allowNewDupeSets = Boolean(searchData.originalsFolders);
+      allowNewDupeSets = false;
       maybeNext = foldersIterator.next();
     }
     let folder = maybeNext.value.QueryInterface(Ci.nsIMsgFolder);
