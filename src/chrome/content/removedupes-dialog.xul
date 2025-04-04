@@ -2,22 +2,32 @@
 
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
-<!-- Is this next one useful? -->
-<?xml-stylesheet href="chrome://global/skin/tree.css" type="text/css"?>
 <?xml-stylesheet href="chrome://communicator/skin/" type="text/css"?>
-<?xml-stylesheet href="chrome://messenger/skin/prefPanels.css" type="text/css"?>
 <?xml-stylesheet href="chrome://messenger/skin/messenger.css" type="text/css"?>
 <?xml-stylesheet href="chrome://messenger/skin/dialogs.css" type="text/css"?>
 <?xml-stylesheet href="chrome://messenger/skin/folderMenus.css" type="text/css"?>
-<!-- Is this next one useful? -->
-<?xml-stylesheet href="chrome://messenger/skin/shared/tree-listbox.css"?>
-<!-- <?xml-stylesheet href="chrome://messenger/skin/shared/tree/tree.css"?> -->
 <?xml-stylesheet href="chrome://removedupes/content/skin/classic/removedupes-dialog.css" type="text/css"?>
 <?xml-stylesheet href="chrome://messenger/content/bindings.css" type="text/css"?>
+<?xml-stylesheet href="chrome://messenger/skin/themeableDialog.css"?>
+
+<!--
+Not _all_ the stylesheets above may actually contribute anything to the styling
+of this dialog. But - I'm pretty certain the ones below do _not_ contribute anythinf:
+
+<?xml-stylesheet href="chrome://messenger/skin/colors.css"?>
+<?xml-stylesheet href="chrome://messenger/skin/prefPanels.css" type="text/css"?>
+<?xml-stylesheet href="chrome://messenger/skin/folderPane.css"?>
+<?xml-stylesheet href="chrome://messenger/skin/folderMenus.css"?>
+<?xml-stylesheet href="chrome://messenger/skin/contextMenu.css"?>
+<?xml-stylesheet href="chrome://messenger/skin/tagColors.css"?>
+<?xml-stylesheet href="chrome://messenger/skin/input-fields.css"?>
+<?xml-stylesheet href="chrome://global/skin/tree.css" type="text/css"?>
+<?xml-stylesheet href="chrome://messenger/skin/shared/tree-listbox.css"?>
+<?xml-stylesheet href="chrome://messenger/skin/shared/tree/tree.css"?>
 <?xml-stylesheet href="chrome://messenger/content/mailWindow1.css" type="text/css"?>
 <?xml-stylesheet href="chrome://messenger/content/icons.css" type="text/css"?>
 <?xml-stylesheet href="chrome://messenger/content/colors.css" type="text/css"?>
-
+-->
 <!DOCTYPE dialog SYSTEM "chrome://removedupes/locale/removedupes.dtd">
 
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
@@ -31,14 +41,14 @@
   <script type="application/javascript" src="chrome://messenger/content/widgetglue.js"/>
   <script type="application/javascript" src="chrome://removedupes/content/removedupes-dialog.js"/>
 
-  <hbox flex="1" style="flex: 1; padding: 0.5em">
-    <vbox flex="1" style="flex: 2;">
+  <hbox style="flex: 1; padding: 0.5em">
+    <vbox style="flex: 2;">
       <description class="header">&removedupes_dialog.tree_label;</description>
       <spacer />
       <tree id="dupeSetsTree"
             enableColumnDrag="true"
             resizable="true"
-            style="min-width: 800px; min-height: 500px; flex: 1"
+            style="min-width: 800px; min-height: 500px; flex: 2; resize: horizontal;"
             flex="1"
             persist="sortColumn sortDirection"
             onkeydown="onTreeKeyPress(event);"
@@ -159,14 +169,14 @@
                    accesskey="&action.move_to_chosen_folder.accesskey;"/>
             <menulist id="actionTargetFolder" class="folderMenuItem" style="width: 220px">
               <menupopup
-                   is="folder-menupopup"
-                   id="actionTargetFolderPopup"
-                   class="menulist-menupopup"
-                   mode="filing"
-                   showRecent="true"
-                   recentLabel="Recent"
-                   showFileHereLabel="true"
-                   oncommand="onTargetFolderClick(event.target._folder);" />
+                      is="folder-menupopup"
+                      id="actionTargetFolderPopup"
+                      class="menulist-menupopup"
+                      mode="filing"
+                      showRecent="true"
+                      recentLabel="Recent"
+                      showFileHereLabel="true"
+                      oncommand="onTargetFolderClick(event.target._folder);" />
             </menulist>
             <radio id="delete_permanently_action"
                    selected="false"
@@ -175,28 +185,28 @@
                    accesskey="&action.delete_permanently.accesskey;"/>
           </hbox>
         </radiogroup>
-        </groupbox>
+      </groupbox>
     </vbox>
-      <vbox style="min-width: 9em; width: 9em; padding-left: 1em; padding-right: 1em">
-        <description style="min-width: 7em">
-          &removedupes_dialog.keep_label;
-        </description>
-        <button id="keepPresetOriginalButton"
-                label="&removedupes_dialog.keep_preset_originals.label;"
-                oncommand="markKeepPresetOriginals();"/>
-        <button id="keepFirstButton"
-                label="&removedupes_dialog.keep_first.label;"
-                oncommand="markKeepOneInEveryDupeSet(true);"/>
-        <button id="keepLastButton"
-                label="&removedupes_dialog.keep_last.label;"
-                oncommand="markKeepOneInEveryDupeSet(false);"/>
-        <button id="keepAllButton"
-                label="&removedupes_dialog.keep_all.label;"
-                oncommand="markNoDupesForDeletion();"/>
-        <button id="keepNoneButton"
-                label="&removedupes_dialog.keep_none.label;"
-                oncommand="markAllDupesForDeletion();"/>
-        <spacer flex="1"/>
-      </vbox>
-      </hbox>
+    <vbox style="min-width: 9em; width: 9em; padding-left: 1em; padding-right: 1em">
+      <description style="min-width: 7em">
+        &removedupes_dialog.keep_label;
+      </description>
+      <button id="keepPresetOriginalButton"
+              label="&removedupes_dialog.keep_preset_originals.label;"
+              oncommand="markKeepPresetOriginals();"/>
+      <button id="keepFirstButton"
+              label="&removedupes_dialog.keep_first.label;"
+              oncommand="markKeepOneInEveryDupeSet(true);"/>
+      <button id="keepLastButton"
+              label="&removedupes_dialog.keep_last.label;"
+              oncommand="markKeepOneInEveryDupeSet(false);"/>
+      <button id="keepAllButton"
+              label="&removedupes_dialog.keep_all.label;"
+              oncommand="markNoDupesForDeletion();"/>
+      <button id="keepNoneButton"
+              label="&removedupes_dialog.keep_none.label;"
+              oncommand="markAllDupesForDeletion();"/>
+      <spacer flex="1"/>
+    </vbox>
+  </hbox>
 </dialog>
