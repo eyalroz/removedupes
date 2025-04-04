@@ -1,10 +1,8 @@
 removedupes.jar:
 #   Destination                                       Source
 # -------------------------------------------------------------------------------------------------------
-*   content/removedupes-dialog.xul                    (src/chrome/content/removedupes-dialog.xul)
-*   content/removedupes-prefs.xul                     (src/chrome/content/removedupes-prefs.xul)
-*   content/removedupes-dialog.xhtml                  (src/chrome/content/removedupes-dialog.xul)
-*   content/removedupes-prefs.xhtml                   (src/chrome/content/removedupes-prefs.xul)
+*   content/removedupes-dialog.xhtml                  (src/chrome/content/removedupes-dialog.xhtml)
+*   content/removedupes-prefs.xhtml                   (src/chrome/content/removedupes-prefs.xhtml)
 *   content/removedupes.js                            (src/chrome/content/removedupes.js)
 *   content/removedupes-common.sys.mjs                (src/chrome/content/removedupes-common.sys.mjs)
 *   content/removedupes-prefs.js                      (src/chrome/content/removedupes-prefs.js)
