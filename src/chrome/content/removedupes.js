@@ -212,7 +212,7 @@ RemoveDupes.MessengerOverlay.waitForFolderCollection = function (searchData) {
   // search, so we may have to wait some more
 
   if (searchData.remainingFolders > 0) {
-    setTimeout(this.waitForFolderCollection, 100, searchData);
+    setTimeout(() => this.waitForFolderCollection(searchData), 100);
     return;
   }
   RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase1(searchData);
