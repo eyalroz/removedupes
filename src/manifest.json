@@ -4,7 +4,7 @@
 		"gecko": {
 			"id": "{a300a000-5e21-4ee0-a115-9ec8f4eaa92b}",
 			"strict_min_version": "128.0",
-			"strict_max_version": "137.*"
+			"strict_max_version": "144.*"
 		}
 	},
 	"author": "Eyal Rozenberg",
