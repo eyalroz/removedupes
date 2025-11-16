@@ -636,66 +636,96 @@ RemoveDupes.MessengerOverlay.reportRefinementProgress = function (searchData, ac
 // The actual second phase of message processing (see
 // processMessagesInCollectedFoldersPhase2 for more details)
 
+// Group the objects in an array (of objects) using one of their
+// properties, forming small arrays for each value of the property,
+// and returning an object of arrays, keyed by the values of the
+// property in the original objects.
+//
+// Example:
+//   groupBy(
+//     [
+//       { color: 'red', foo: 2 },
+//       { color: 'green' },
+//       { color: 'red', foo: 1 }
+//     ], 'color')
+//
+// will produce the object
+//   {
+//     'red':   [ { color: 'red', foo: 2 }, { color: 'red', foo: 1 } ]
+//     'green': [ { color: 'green' } ]
+//   }
+//
+// Adapted from: https://stackoverflow.com/a/34890276/1593077
+// and: https://gist.github.com/robmathers/1830ce09695f759bf2c4df15c29dd22d
+//
+// `data` is an array of objects, `key` is the key (or property accessor) to group by
+// reduce runs this anonymous function on each element of `data` (the `item` parameter,
+// returning the `storage` parameter at the end
+RemoveDupes.MessengerOverlay.groupArrayBy = function (arr, property) {
+  return arr.reduce((storage, item) => {
+    // get the first instance of the key by which we're grouping
+    let groupKey = item[property];
+
+
+    // set `storage` for this instance of group to the outer scope (if not empty) or initialize it
+    storage[groupKey] = storage[groupKey] || [];
+
+    // add this item to its group within `storage`
+    storage[groupKey].push(item);
+
+    // return the updated storage to the reduce function, which will then loop through the next
+    return storage;
+  }, {}); // {} is the initial value of the storage
+};
+
 RemoveDupes.MessengerOverlay.refineDupeSets = function (searchData) {
+  // we'll split every dupe set into multiple sets based on additional comparison criteria
+  // (the more 'expensive' ones); size-1 dupe sets will be discarded of course.
+
+  // For now, our only 'expensive' criterion is the message body; if and when we get
+  // additional criteria, this should be rewritten so that each message-representing object
+  // gets keys for each of the expensive criteria in use, and those are reported for
+  // the groupBy() operation.
+
   if (!searchData.useCriteria.body) return;
 
-  // we'll split every dupe set into separate sets based on additional
-  // comparison criteria (the more 'expensive' ones); size-1 dupe sets
-  // are removed from the hash map entirely.
-
-  // TODO: for now, our only 'expensive' criterion is the message body,
-  // so I'm leaving the actual comparison code in this function and
-  // not even checking for searchData.useBody; if and when we get additional
-  // criteria this should be rewritten so that dupeSet[i] gets
-  // a comparison record created for it, then for every j we call
-  // `ourcomparefunc(comparisonrecord, dupeSet[j])`
-
   for (let hashValue in searchData.dupeSetsHashMap) {
-    let dupeSet = searchData.dupeSetsHashMap[hashValue];
+    let unrefinedDupeSet = searchData.dupeSetsHashMap[hashValue]; // and it's an array of URIs
 
-    // get the message bodies
-
-    let initialSetSize = dupeSet.length;
-
-    for (let i = 0; i < dupeSet.length; i++) {
-      this.reportRefinementProgress(searchData, 'getting_bodies', i, initialSetSize);
-      let dupeUri = dupeSet[i];
-      dupeSet[i] = {
+    let unrefinedDupeSetWithBodies = unrefinedDupeSet.map((dupeUri, idxInSet) => {
+      if (searchData.userAborted) return {};
+      this.reportRefinementProgress(searchData, 'getting_bodies', idxInSet, unrefinedDupeSet.length);
+      return {
         uri: dupeUri,
         body: this.messageBodyFromURI(dupeUri)
       };
-      if (searchData.userAborted) return;
-    }
+    });
+    if (searchData.userAborted) return;
+    unrefinedDupeSetWithBodies.filter((uriAndBody) => (uriAndBody.body != null));
+      // We won't consider messages, whose bodies we can't obtain, to be null - as a safety
+      // precaution. But note that we _are_ willing to identify messages with empty-string
+      // bodies as duplicates.
 
-    // sort the bodies
-
-    dupeSet.sort((lhs, rhs) => lhs - rhs);
+    let refinedDupeSets = Object
+      .groupBy(unrefinedDupeSetWithBodies, (uriAndBody) => uriAndBody.body);
+      // refinedDupeSets is now an object keyed by body, of arrays of { body, uri } - all sharing the same body
+    refinedDupeSets = Object.values(refinedDupeSets)
+      .filter((refinedDupeSet) => refinedDupeSet.length > 1)
+        // if a "single dupe" remains - it is not a dupe of anything...
+      .map((refinedDupeSet) => refinedDupeSet.map((uriAndBody) => uriAndBody.uri));
 
     if (searchData.userAborted) return;
 
-    // now build sub-dupesets from identical-body sequences of the sorted array
+    // TODO: We used to have this reporting code run inside a raw loop, and would report the
+    // index within the unrefined dupe set at which we were positioned; but that's no
+    // longer the case - while the .properties string has not yet changed. We should
+    // probably make it something like 'dupe_set_refined'.
+    RemoveDupes.MessengerOverlay.reportRefinementProgress(
+      searchData, 'building_subsets', unrefinedDupeSet.length, unrefinedDupeSet.length);
 
     let subsetIndex = 0;
-    while (dupeSet.length > 0) {
-      if (searchData.userAborted) {
-        return;
-      }
-      if (!dupeSet[0].body) {
-        dupeSet.shift();
-        continue;
-      }
-      let subsetLength = 1;
-      while ((subsetLength < dupeSet.length) &&
-               (dupeSet[subsetLength].body == dupeSet[0].body)) {
-        subsetLength++;
-        dupeSet[subsetLength - 1] = dupeSet[subsetLength - 1].uri;
-      }
-      if (subsetLength > 1) {
-        dupeSet[0] = dupeSet[0].uri;
-        searchData.dupeSetsHashMap[`${hashValue}|${subsetIndex++}`] = dupeSet.splice(0, subsetLength);
-      } else dupeSet.shift();
-      RemoveDupes.MessengerOverlay.reportRefinementProgress(
-        searchData, 'building_subsets', dupeSet.length - initialSetSize, dupeSet.length);
+    for (const refinedDupeSet of refinedDupeSets) {
+      searchData.dupeSetsHashMap[`${hashValue}|${subsetIndex++}`] = refinedDupeSet;
     }
     delete searchData.dupeSetsHashMap[hashValue];
     searchData.setsRefined++;
