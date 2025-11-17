@@ -1,4 +1,4 @@
-<!ENTITY removedupes.title "Fjarlægja endurtekin tölvupóstskeyti (Annað)">
+<!ENTITY removedupes.title "Fjarlægja endurtekin tölvupóstskeyti">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.label "Fjarlægja afrit">
 <!ENTITY removedupes.remove_duplicates_menuitems.set_originals.label "Veldu upprunalega möppu(r) fyrir næstu leit að afritum">
 <!ENTITY removedupes.remove_duplicates_menuitems.remove.accesskey "P">
