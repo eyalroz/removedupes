@@ -7,7 +7,7 @@
 <!ENTITY key-removedupes.keycode "p">
 <!ENTITY removedupes_dialog.dialog_title "重複メッセージの確認">
 <!ENTITY removedupes_dialog.id "Message ID">
-<!ENTITY removedupes_dialog.keep_label "重複ツリー内の保持選択：">
+<!ENTITY removedupes_dialog.keep_label "全重複したセット内：">
 <!ENTITY removedupes_dialog.subject "件名">
 <!ENTITY removedupes_dialog.sender "送信者">
 <!ENTITY removedupes_dialog.author "送信者">
@@ -20,9 +20,9 @@
 <!ENTITY removedupes_dialog.send_time "送信日時">
 <!ENTITY removedupes_dialog.size "サイズ (ヘッダーと本文)">
 <!ENTITY removedupes_dialog.keep_preset_originals.label "オリジナルのセット">
-<!ENTITY removedupes_dialog.keep_first.label "上段のメッセージのみ保持">
-<!ENTITY removedupes_dialog.keep_last.label "下段のメッセージのみ保持">
-<!ENTITY removedupes_dialog.keep_none.label "すべて保持しない（削除）">
+<!ENTITY removedupes_dialog.keep_first.label "最初を保持">
+<!ENTITY removedupes_dialog.keep_last.label "最後を保持">
+<!ENTITY removedupes_dialog.keep_none.label "何も残さない">
 <!ENTITY removedupes_dialog.keep_all.label "すべて保持">
 <!ENTITY removedupes_dialog.tree_label "重複メッセージの処理：">
 <!ENTITY removedupes_dialog.keep_flag "保持">
