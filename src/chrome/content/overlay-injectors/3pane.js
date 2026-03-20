@@ -5,11 +5,11 @@ function injectOtherElements() {
       <menuitem id="removeDuplicatesContextMenuItemsRemove"
         insertafter="folderPaneContext-copy-location"
         label="&removedupes.remove_duplicates_menuitems.remove.label;"
-        oncommand="window.top.RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages();" />
+        oncommand="window.top.RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages(event);" />
       <menuitem id="removeDuplicatesContextMenuItemsSetOriginals"
         insertafter="removeDuplicatesMenuItemsRemove"
         label="&removedupes.remove_duplicates_menuitems.set_originals.label;"
-        oncommand="window.top.RemoveDupes.MessengerOverlay.setOriginalsFolders();"/>
+        oncommand="window.top.RemoveDupes.MessengerOverlay.setOriginalsFolders(event);"/>
       <menuseparator id="folderPaneContext-removedupes-separator"
         insertafter="removeDuplicatesMenuItemsSetOriginals" />
     </popup>
