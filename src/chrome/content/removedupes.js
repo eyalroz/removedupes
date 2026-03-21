@@ -19,8 +19,8 @@ RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults = {
   body: false
 };
 
+// This is a Javascript Array
 RemoveDupes.MessengerOverlay.originalsFolders = null;
-RemoveDupes.MessengerOverlay.originalsFolderUris = null;
 
 // searchAndRemoveDuplicateMessages -
 // Called from the UI to trigger a new dupe search
@@ -29,15 +29,10 @@ RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages = function (event)
   // document.getElementById('progress-panel').removeAttribute('collapsed');
   RemoveDupes.StatusBar.statusFeedback(window)?.startMeteors();
   RemoveDupes.StatusBar.setNamedStatus(window, 'searching_for_dupes');
-
-  // we'll need this for some calls involving UrlListeners
-
   let searchData = new RemoveDupes.DupeSearchData();
-  // the marked 'originals folders' are only used as such
-  // for this coming search, not for subsequent searches
-  this.originalsFolders = null;
-  this.originalsFolderUris = null;
+  this.originalsFolders = null; // We've made use of the marking; and it only applies for one search
   if (typeof gFolderTreeView != 'undefined' && gFolderTreeView) {
+    // TODO: Do we really need this next command with newer versions of Thunderbird?
     gFolderTreeView._tree.invalidate();
   }
   searchData.keyPressEventListener = (ev) => { this.onKeyPress(ev, searchData); };
@@ -54,37 +49,42 @@ RemoveDupes.MessengerOverlay.onKeyPress = function (ev, searchData) {
   }
 };
 
-RemoveDupes.MessengerOverlay.beginSearchForDuplicateMessages = function (searchData, event) {
-  searchData.topFolders = RemoveDupes.MessengerOverlay.getActiveOrSelectedFolders(event);
+RemoveDupes.MessengerOverlay.isSkippedSpecialFolder = function (folder) {
+  // Note: Some folders are special but not skipped: The root folder and the Inbox.
+  return (!(folder.canRename)) &&
+         (folder.rootFolder != folder) &&
+         !(folder.flags & RemoveDupes.FolderFlags.Inbox);
+};
 
-  if (!searchData.topFolders || searchData.topFolders.length == 0) {
-    // no folders selected; we shouldn't get here
-    RemoveDupes.MessengerOverlay.abortDupeSearch(searchData, 'no_folders_selected');
+RemoveDupes.MessengerOverlay.beginSearchForDuplicateMessages = function (searchData, event) {
+  let topFolders = RemoveDupes.MessengerOverlay.getActiveOrSelectedFolders(event);
+  if (!(topFolders?.length > 0)) {
+    this.abortDupeSearch(searchData, 'no_folders_selected');
     return;
   }
 
-  for (const folder of searchData.topFolders) {
-    // TODO: nsIMsgFolder has a method for checking specialness...
-    if (searchData.skipSpecialFolders) {
-      if (!folder.canRename && (folder.rootFolder != folder)) {
-        // one of the top folders is a special folders; if it's not
-        // the Inbox (which we do search), skip it
-        if (!(folder.flags & RemoveDupes.FolderFlags.Inbox)) {
-          continue;
-        }
-      }
-    }
-    RemoveDupes.MessengerOverlay.addSearchFolders(folder, searchData);
+  if (searchData.skipSpecialFolders && topFolders.find(this.isSkippedSpecialFolder)) {
+    // With the topFolders - which the user explicitly selected/made active - we will be more
+    // strict regarding the presence of special folders (rather than silently ignoring them);
+    // but later, with descendent folders - we would be willing to silently skip special ones.
+    //
+    // TODO: Consider separating the error message between the case of _all_ top folders
+    // being skipped-special and the case of some-skipped-and-some-not.
+    this.abortDupeSearch(searchData, 'not_searching_special_folders');
   }
+
+  topFolders.forEach((folder) => this.addSearchFolders(folder, searchData));
+
+  // Note: There may be some overlap between the search folders and the folders
+  // with originals. This may not be super-intuitive, but it is possible; and it
+  // is the way in which the user can get dupe sets containing only messages from
+  // the originals folders.
 
   if (searchData.folders.size == 0) {
-    // all top folders were special folders and therefore skipped
-    RemoveDupes.MessengerOverlay.abortDupeSearch(searchData);
-    RemoveDupes.namedAlert(window, 'not_searching_special_folders');
+    this.abortDupeSearch(searchData);
+    RemoveDupes.namedAlert(window, 'no_valid_folders_to_search');
     return;
   }
-
-  delete searchData.topFolders;
 
   // At this point, one would expect searchData.folders to contain
   // all the folders and subfolders we're collecting messages from -
@@ -92,7 +92,7 @@ RemoveDupes.MessengerOverlay.beginSearchForDuplicateMessages = function (searchD
   // folders and subfolders to become ready and then be processed;
   // so let's call a sleep-poll function
 
-  RemoveDupes.MessengerOverlay.waitForFolderCollection(searchData);
+  this.waitForFolderCollection(searchData);
 };
 
 RemoveDupes.MessengerOverlay.abortDupeSearch = function (searchData, labelStringName) {
@@ -115,50 +115,46 @@ RemoveDupes.MessengerOverlay.abortDupeSearch = function (searchData, labelString
 // called either synchronously or asynchronously to complete its work
 
 RemoveDupes.MessengerOverlay.addSearchFolders = function (folder, searchData) {
-  if (!folder.canRename && (folder.rootFolder != folder)) {
-    // it's a special folder
-    if (searchData.skipSpecialFolders) {
-      if (!(folder.flags & RemoveDupes.FolderFlags.Inbox)) {
-        return;
-      }
-    }
+  if (searchData.skipSpecialFolders && this.isSkippedSpecialFolder(folder)) {
+    return; // skipping this folder
+    // Note: We assume that descendent folders of special folders, even if not explicitly marked special,
+    // _do_ share the need to skip their antecedents
   }
   if (folder.flags & RemoveDupes.FolderFlags.Virtual) {
-    // it's a virtual search folder, skip it
+    return; // skipping this folder
+    // Q: Why skip virtual folders?
+    // A: Because they expose what are essentially copies, duplicates, of messages which exists elsewhere.
+    //    While it's true that one could search for dupes in _just_ a search folder, the danger of this
+    //    causing data loss is rather high, so we avoid it.
+  }
+
+  if (folder.URI.substring(0, 7) == 'news://') {
+    return;
+    // TODO: Should we really avoid searching News folders? I wonder
+  }
+
+  searchData.numFoldersRemainingToTraverse++; // ... because we'll traverse this folder
+
+  if (folder.isServer) {
+    this.traverseSearchFolderSubfolders(folder, searchData);
     return;
   }
 
-
-  searchData.remainingFolders++;
-
-  // Skipping folders which are not special, but by definition cannot
-  // have duplicates
-
-  // TODO: There may theoretically be other URI prefixes which we need to avoid
-  // in addition to 'news://'
-
-  if (folder.URI.substring(0, 7) != 'news://') {
-    if (searchData.originalsFolderUris) {
-      if (!searchData.originalsFolderUris.has(folder.URI)) {
-        searchData.folders.add(folder);
-      }
-    } else {
-      searchData.folders.add(folder);
-    }
-  }
-
-  // is this an IMAP folder?
+  searchData.folders.add(folder);
 
   try {
     let listener = new RemoveDupes.UpdateFolderDoneListener(folder, searchData);
     MailServices.imap.liteSelectFolder(folder, listener, msgWindow);
     // no traversal of children - the listener will take care of that in due time
     return;
-  } catch (ex) {}
+  } catch (ex) {
+    searchData.numFoldersRemainingToTraverse--;
+  }
 
   // Is this a locally-stored folder with its DB out-of-date?
 
   try {
+    // TODO: Do we actually need this QI?
     let localFolder = folder.QueryInterface(Ci.nsIMsgLocalMailFolder);
     try {
       localFolder.getDatabaseWOReparse();
@@ -169,12 +165,13 @@ RemoveDupes.MessengerOverlay.addSearchFolders = function (folder, searchData) {
       return;
     }
   } catch (ex) {
+    searchData.numFoldersRemainingToTraverse--;
   }
 
   // We assume at this point the folder is locally-stored and its message db is up-to-date,
   // so we can traverse its subfolders without any more preparation
 
-  RemoveDupes.MessengerOverlay.traverseSearchFolderSubfolders(folder, searchData);
+  this.traverseSearchFolderSubfolders(folder, searchData);
 };
 
 // traverseSearchFolderSubfolders -
@@ -187,11 +184,11 @@ RemoveDupes.MessengerOverlay.traverseSearchFolderSubfolders = function (folder, 
 
   if (searchData.searchSubfolders && folder.hasSubFolders) {
     for (let subFolder of folder.subFolders) {
-      RemoveDupes.MessengerOverlay.addSearchFolders(subFolder, searchData);
+      this.addSearchFolders(subFolder, searchData);
     }
   }
 
-  searchData.remainingFolders--;
+  searchData.numFoldersRemainingToTraverse--;
 };
 
 // the folder collection for a dupe search happens asynchronously; this function
@@ -203,7 +200,7 @@ RemoveDupes.MessengerOverlay.waitForFolderCollection = function (searchData) {
   RemoveDupes.StatusBar.setNamedStatus(window, 'searching_for_dupes');
 
   if (searchData.userAborted) {
-    RemoveDupes.MessengerOverlay.abortDupeSearch(searchData, 'search_aborted');
+    this.abortDupeSearch(searchData, 'search_aborted');
     return;
   }
 
@@ -211,23 +208,30 @@ RemoveDupes.MessengerOverlay.waitForFolderCollection = function (searchData) {
   // traversing folders and collecting their subfolders for the dupe
   // search, so we may have to wait some more
 
-  if (searchData.remainingFolders > 0) {
+  if (searchData.numFoldersRemainingToTraverse > 0) {
     setTimeout(() => this.waitForFolderCollection(searchData), 100);
     return;
   }
-  RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase1(searchData);
+  this.processMessagesInCollectedFoldersPhase1(searchData);
 };
 
 // processMessagesInCollectedFoldersPhase1 -
-// Called after we've collected all the folders
-// we need to process messages in. The processing of messages has
-// two phases - first, all messages are hashed into a possible-dupe-sets
-// hash, then the sets of messages with the same hash values are
-// refined using more costly comparisons than the hashing itself.
-// The processing can take a long time; to allow the UI to remain
-// responsive and the user to be able to abort the dupe search, we
-// perform the first phase using a generator and a separate function
-// which occasionally yields
+// Called after we've collected all the folders we need to process messages in. The
+// processing of messages has two phases - first, all messages are hashed into a
+// possible-dupe-sets hash, then the sets of messages with the same hash values are
+// refined using more costly comparisons than the hashing itself. The processing can
+// take a long time; to allow the UI to remain responsive and the user to be able to
+// abort the dupe search, we perform the first phase using a generator and a separate
+// function which occasionally yields.
+//
+// ... but there's a second compilation: The first phase must be performed first for
+// originals folders (if those are defined), to collect the originals, and only then
+// on the non-original search folders, which can only add to existing dupe sets. So,
+// we apply the generator twice, with a flag in searchData indicating which set of
+// folders it needs to apply to.
+//
+// TODO: We could probably refactor this code to use Javascript async and await and
+// get rid of the generators and the timeouts.
 
 RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase1 = function (searchData) {
   // At this point all UrlListeners have finished their work, and all
@@ -240,6 +244,58 @@ RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase1 = function 
 
   searchData.generator = this.populateDupeSetsHash(searchData);
   setTimeout(this.processMessagesInCollectedFoldersPhase2, 10, searchData);
+};
+
+RemoveDupes.MessengerOverlay.refineDupeSets = function (searchData) {
+  // we'll split every dupe set into multiple sets based on additional comparison criteria
+  // (the more 'expensive' ones); size-1 dupe sets will be discarded of course.
+
+  // For now, our only 'expensive' criterion is the message body; if and when we get
+  // additional criteria, this should be rewritten so that each message-representing object
+  // gets keys for each of the expensive criteria in use, and those are reported for
+  // the groupBy() operation.
+
+  if (!searchData.useCriteria.body) return;
+
+  for (let hashValue in searchData.dupeSetsHashMap) {
+    let unrefinedDupeSet = searchData.dupeSetsHashMap[hashValue]; // and it's an array of URIs
+    let unrefinedDupeSetWithBodies = unrefinedDupeSet.map((dupeUri, idxInSet) => {
+      if (searchData.userAborted) return {};
+      this.reportRefinementProgress(searchData, 'getting_bodies', idxInSet, unrefinedDupeSet.length);
+      return {
+        uri: dupeUri,
+        body: this.messageBodyFromURI(dupeUri)
+      };
+    });
+    if (searchData.userAborted) return;
+    unrefinedDupeSetWithBodies.filter((uriAndBody) => (uriAndBody.body != null));
+    // We won't consider messages, whose bodies we can't obtain, to be null - as a safety
+    // precaution. But note that we _are_ willing to identify messages with empty-string
+    // bodies as duplicates.
+
+    let refinedDupeSets = Object
+      .groupBy(unrefinedDupeSetWithBodies, (uriAndBody) => uriAndBody.body);
+    // refinedDupeSets is now an object keyed by body, of arrays of { body, uri } - all sharing the same body
+    refinedDupeSets = Object.values(refinedDupeSets)
+      .filter((refinedDupeSet) => refinedDupeSet.length > 1)
+      // if a "single dupe" remains - it is not a dupe of anything...
+      .map((refinedDupeSet) => refinedDupeSet.map((uriAndBody) => uriAndBody.uri));
+
+    if (searchData.userAborted) return;
+
+    // TODO: We used to have this reporting code run inside a raw loop, and would report the
+    // index within the unrefined dupe set at which we were positioned; but that's no
+    // longer the case - while the .properties string has not yet changed. We should
+    // probably make it something like 'dupe_set_refined'.
+    this.reportRefinementProgress(searchData, 'building_subsets', unrefinedDupeSet.length, unrefinedDupeSet.length);
+
+    let subsetIndex = 0;
+    for (const refinedDupeSet of refinedDupeSets) {
+      searchData.dupeSetsHashMap[`${hashValue}|${subsetIndex++}`] = refinedDupeSet;
+    }
+    delete searchData.dupeSetsHashMap[hashValue];
+    searchData.setsRefined++;
+  }
 };
 
 // processMessagesInCollectedFoldersPhase2 -
@@ -257,9 +313,7 @@ RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2 = function 
   if (searchData.generator) {
     let next = searchData.generator.next();
     if (!next.done) {
-      setTimeout(
-        RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2,
-        100, searchData);
+      setTimeout(RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2, 100, searchData);
       return;
     }
     delete searchData.generator;
@@ -277,13 +331,8 @@ RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2 = function 
     return;
   }
 
-  function isEmpty(obj) {
-    for(var i in obj) { return false; }
-    return true;
-  };
-
   RemoveDupes.StatusBar.statusFeedback(window)?.stopMeteors();
-  if (isEmpty(searchData.dupeSetsHashMap)) {
+  if (Object.keys(searchData.dupeSetsHashMap).length === 0) {
     if (searchData.useReviewDialog) {
       // if the user wants a dialog to pop up for the dupes,
       // we can bother him/her with a message box for 'no dupes'
@@ -430,12 +479,12 @@ RemoveDupes.MessengerOverlay.sillyHash = function (searchData, messageHdr, folde
       return null;
     }
     let author = searchData.compareStrippedAndSortedAddresses ?
-      RemoveDupes.MessengerOverlay.stripAndSortAddresses(messageHdr.mime2DecodedAuthor) : messageHdr.author;
+      this.stripAndSortAddresses(messageHdr.mime2DecodedAuthor) : messageHdr.author;
     retVal += `${author}|^#=)A?mUi5|`;
   }
   if (searchData.useCriteria.recipients) {
     let recipients = searchData.compareStrippedAndSortedAddresses ?
-      RemoveDupes.MessengerOverlay.stripAndSortAddresses(messageHdr.mime2DecodedRecipients) : messageHdr.recipients;
+      this.stripAndSortAddresses(messageHdr.mime2DecodedRecipients) : messageHdr.recipients;
     retVal += `${recipients}|Ei4iXn=Iv*|`;
   }
   // note:
@@ -444,7 +493,7 @@ RemoveDupes.MessengerOverlay.sillyHash = function (searchData, messageHdr, folde
   // version...
   if (searchData.useCriteria.ccList) {
     let ccList = searchData.compareStrippedAndSortedAddresses ?
-      RemoveDupes.MessengerOverlay.stripAndSortAddresses(messageHdr.ccList) : messageHdr.ccList;
+      this.stripAndSortAddresses(messageHdr.ccList) : messageHdr.ccList;
     retVal += `${ccList}|w7Exh' s%k|`;
   }
   if (searchData.useCriteria.lineCount) {
@@ -465,122 +514,106 @@ RemoveDupes.MessengerOverlay.populateDupeSetsHash = function* (searchData) {
   // entries will be sets of dupes (technically, arrays of dupes)
   // rather than URIs
   let messageUriHashmap = { };
+  let dupeSetsOfOriginals = { };
 
-  // This next bit of code is super-ugly, because I need the `yield`ing to happen from
-  // this function - can't yield from a function you're calling; isn't life great?
-  // isn't lack of threading fun?
-  //
-  // Anyway, we want to have a function which takes an iterator into a collection of
-  // folders, populating the hash with the messages in each folder - and run it twice,
-  // first for the originals folders (allowing the creation of new dupe sets), then
-  // for the search folders (allowing the creation of dupe sets if there are no originals,
-  // and allowing the addition of dupes to existing sets
+  // This function is rather ugly super-ugly, because it's a generator, and apparently we need the
+  // `yield`ing to happen from within this function's body - can't yield from another function we're
+  // calling. And that means it's difficult to factor some things out. Annoying!
 
-  let allowNewDupeSets = true;
-  let doneWithOriginals;
-  let foldersIterator;
-  if (searchData.originalsFolders && searchData.originalsFolders.size != 0) {
-    doneWithOriginals = false;
-    foldersIterator = searchData.originalsFolders.values();
-  } else {
-    doneWithOriginals = true;
-    foldersIterator = searchData.folders.values();
-  }
-  let maybeNext = foldersIterator.next();
+  let getMessageWithFailureReporting = (folder) => {
+    if (folder?.messages) { return folder.messages; }
+    let formatted = `${RemoveDupes.Strings.format('failed_getting_messages', [folder.name])}\n`;
+    console.error(formatted);
+    dump(formatted);
+    return false;
+  };
 
-  while (!maybeNext.done || !doneWithOriginals) {
-    if (maybeNext.done) {
-      // ... we continued looping since !doneWithOriginals . Now
-      // let's move on to iterating the search folders.
-      doneWithOriginals = true;
-      if (searchData.folders.size == 0) {
-        // this should really not happen...
-        break;
-      }
-      foldersIterator = searchData.folders.values();
-      allowNewDupeSets = false;
-      maybeNext = foldersIterator.next();
+  let possiblyReportProgress = (time) => {
+    if (time - searchData.lastStatusBarReport > searchData.reportQuantum) {
+      searchData.lastStatusBarReport = time;
+      RemoveDupes.StatusBar.setNamedStatus(window, 'hashed_x_messages', [searchData.messagesHashed]);
     }
-    let folder = maybeNext.value.QueryInterface(Ci.nsIMsgFolder);
-    if (!folder) {
-      break;
+  };
+  let messageLimitReached = () => searchData.limitNumberOfMessages && (searchData.messagesHashed >= searchData.maxMessages);
+  let needToYield = (time) => time - searchData.lastYield > searchData.yieldQuantum;
+
+  // This is the heart of the entire extension!
+  let processSingleMessage = (messageHdr, folder, inOriginalsFolder, inSearchFolder) => {
+    // Some local helper functions to avoid repetition
+    const formNewDupeSet = (dupeSets, hash, secondDupeURI) => {
+      dupeSets[hash] = [messageUriHashmap[hash], secondDupeURI];
+    };
+    const formDupeSetWithOriginalsDupeSet = (hash, lastDupeURI) => {
+      searchData.dupeSetsHashMap[hash] = [...dupeSetsOfOriginals[hash], lastDupeURI];
+      searchData.dupeSetsHashMap[hash].push(lastDupeURI);
+    };
+
+    // TODO: Consider checking the time & possibly yielding here
+    if (searchData.skipIMAPDeletedMessages && (messageHdr.flags & RemoveDupes.MessageStatusFlags.IMAP_DELETED)) {
+      return;
     }
-    if (folder.isServer == true) {
-      // shouldn't get here - these should have been filtered out already
-      maybeNext = foldersIterator.next();
-      continue;
+    let messageHash = this.sillyHash(searchData, messageHdr, folder);
+    if (!messageHash) {
+      return;
     }
+    let uri = folder.getUriForMsg(messageHdr);
 
-    let folderMessageHdrsIterator;
-    try {
-      folderMessageHdrsIterator = folder.messages;
-    } catch (ex) {
-      try {
-        folderMessageHdrsIterator = folder.getMessages(msgWindow);
-      } catch (ex2) {
-        console.error(`Failed obtaining the messages iterator for folder ${folder.name}`);
-        let formatted = RemoveDupes.Strings.format('failed_getting_messages', [folder.name]);
-        console.error(`${formatted}\n`);
-        dump(`${formatted}\n`);
-      }
-    }
-
-    if (!folderMessageHdrsIterator) {
-      console.error(`The messages iterator for folder ${folder.name} is null`);
-      let formatted = `${RemoveDupes.Strings.format('failed_getting_messages', [folder.name])}\n`;
-      console.error(formatted);
-      dump(formatted);
-      maybeNext = foldersIterator.next();
-      continue;
-    }
-
-    while (folderMessageHdrsIterator.hasMoreElements() &&
-           (!searchData.limitNumberOfMessages ||
-               (searchData.messagesHashed < searchData.maxMessages))) {
-      let messageHdr = folderMessageHdrsIterator.getNext().QueryInterface(Ci.nsIMsgDBHdr);
-
-      if ((searchData.skipIMAPDeletedMessages) &&
-          (messageHdr.flags & RemoveDupes.MessageStatusFlags.IMAP_DELETED)) {
-        // TODO: Consider checking the time elapsed & possibly yielding, even when
-        //  iterating IMAP-deleted messages
-        continue;
-      }
-
-      let messageHash = this.sillyHash(searchData, messageHdr, folder);
-      if (messageHash == null) {
-        continue; // something about the message made us not be willing to compare it against other messages
-      }
-      let uri = folder.getUriForMsg(messageHdr);
-
-      if (messageHash in messageUriHashmap) {
-        if (messageHash in searchData.dupeSetsHashMap) {
-          // just add the current message's URI, no need to copy anything
-          searchData.dupeSetsHashMap[messageHash].push(uri);
-        } else {
-          // the URI in messageUriHashmap[messageHash] has not been copied to
-          // the dupes hash since until now we did not know it was a dupe;
-          // copy it together with our current message's URI
-          // TODO: use [blah, blah] as the array constructor
-          searchData.dupeSetsHashMap[messageHash] = [messageUriHashmap[messageHash], uri];
-          searchData.totalOriginalDupeSets++;
-        }
-      } else if (allowNewDupeSets) {
+    if (!(messageHash in messageUriHashmap)) {
+      // Have not yet seen a message like this before
+      if (inOriginalsFolder) {
         messageUriHashmap[messageHash] = uri;
       }
-
-      searchData.messagesHashed++;
-      let currentTime = (new Date()).getTime();
-      if (currentTime - searchData.lastStatusBarReport > searchData.reportQuantum) {
-        searchData.lastStatusBarReport = currentTime;
-        RemoveDupes.StatusBar.setNamedStatus(window, 'hashed_x_messages', [searchData.messagesHashed]);
+    } else {
+      // have already seen messages like this before
+      if (inSearchFolder) {
+        if (messageHash in searchData.dupeSetsHashMap) {
+          searchData.dupeSetsHashMap[messageHash].push(uri);
+        } else if (messageHash in dupeSetsOfOriginals) {
+          formDupeSetWithOriginalsDupeSet(messageHash, uri);
+          searchData.totalOriginalDupeSets++;
+        } else {
+          formNewDupeSet(searchData.dupeSetsHashMap, messageHash, uri);
+          searchData.totalOriginalDupeSets++;
+        }
+      } else {
+        // This is not a search folder, so it must be an originals folder
+        if (messageHash in dupeSetsOfOriginals) {
+          dupeSetsOfOriginals[messageHash].push(uri);
+        } else {
+          formNewDupeSet(dupeSetsOfOriginals, messageHash, uri);
+          // Note we're not counting this one towards the dupe sets total - until it's 'adopted'
+          // by a search folder dupe
+        }
       }
+    }
+    searchData.messagesHashed++;
+  }; // processSingleMessage
+
+  let allFolders = (() => {
+    if (!searchData.originalsFolders) { return searchData.folders; }
+    let originalsSearch =  searchData.originalsFolders.intersection(searchData.folders);
+    return [
+      ...searchData.originalsFolders.difference(originalsSearch),
+      ...originalsSearch,
+      ...searchData.folders.difference(originalsSearch)
+    ]; // This ordering ensures that no dupe sets are discarded due to the non-original being seen
+       // before the original; nor because a second non-search original is seen after a search original
+  })();
+  for (const folder of allFolders) {
+    let isOriginal = (!searchData?.originalsFolders) || searchData.originalsFolders.has(folder);
+    let isSearch = searchData.folders.has(folder);
+    for (const messageHdr of getMessageWithFailureReporting(folder)) {
+      processSingleMessage(messageHdr, folder, isOriginal, isSearch);
+      if (messageLimitReached()) { break; }
+      let currentTime = (new Date()).getTime();
+      possiblyReportProgress(currentTime);
       if (currentTime - searchData.lastYield > searchData.yieldQuantum) {
         searchData.lastYield = currentTime;
         yield undefined;
       }
-    }
-    maybeNext = foldersIterator.next();
-  }
+    } // for messageHdr
+    if (messageLimitReached()) { break; }
+  } // for folder
 };
 
 // messageBodyFromURI -
@@ -678,60 +711,6 @@ RemoveDupes.MessengerOverlay.groupArrayBy = function (arr, property) {
   }, {}); // {} is the initial value of the storage
 };
 
-RemoveDupes.MessengerOverlay.refineDupeSets = function (searchData) {
-  // we'll split every dupe set into multiple sets based on additional comparison criteria
-  // (the more 'expensive' ones); size-1 dupe sets will be discarded of course.
-
-  // For now, our only 'expensive' criterion is the message body; if and when we get
-  // additional criteria, this should be rewritten so that each message-representing object
-  // gets keys for each of the expensive criteria in use, and those are reported for
-  // the groupBy() operation.
-
-  if (!searchData.useCriteria.body) return;
-
-  for (let hashValue in searchData.dupeSetsHashMap) {
-    let unrefinedDupeSet = searchData.dupeSetsHashMap[hashValue]; // and it's an array of URIs
-
-    let unrefinedDupeSetWithBodies = unrefinedDupeSet.map((dupeUri, idxInSet) => {
-      if (searchData.userAborted) return {};
-      this.reportRefinementProgress(searchData, 'getting_bodies', idxInSet, unrefinedDupeSet.length);
-      return {
-        uri: dupeUri,
-        body: this.messageBodyFromURI(dupeUri)
-      };
-    });
-    if (searchData.userAborted) return;
-    unrefinedDupeSetWithBodies.filter((uriAndBody) => (uriAndBody.body != null));
-      // We won't consider messages, whose bodies we can't obtain, to be null - as a safety
-      // precaution. But note that we _are_ willing to identify messages with empty-string
-      // bodies as duplicates.
-
-    let refinedDupeSets = Object
-      .groupBy(unrefinedDupeSetWithBodies, (uriAndBody) => uriAndBody.body);
-      // refinedDupeSets is now an object keyed by body, of arrays of { body, uri } - all sharing the same body
-    refinedDupeSets = Object.values(refinedDupeSets)
-      .filter((refinedDupeSet) => refinedDupeSet.length > 1)
-        // if a "single dupe" remains - it is not a dupe of anything...
-      .map((refinedDupeSet) => refinedDupeSet.map((uriAndBody) => uriAndBody.uri));
-
-    if (searchData.userAborted) return;
-
-    // TODO: We used to have this reporting code run inside a raw loop, and would report the
-    // index within the unrefined dupe set at which we were positioned; but that's no
-    // longer the case - while the .properties string has not yet changed. We should
-    // probably make it something like 'dupe_set_refined'.
-    RemoveDupes.MessengerOverlay.reportRefinementProgress(
-      searchData, 'building_subsets', unrefinedDupeSet.length, unrefinedDupeSet.length);
-
-    let subsetIndex = 0;
-    for (const refinedDupeSet of refinedDupeSets) {
-      searchData.dupeSetsHashMap[`${hashValue}|${subsetIndex++}`] = refinedDupeSet;
-    }
-    delete searchData.dupeSetsHashMap[hashValue];
-    searchData.setsRefined++;
-  }
-};
-
 // reviewAndRemoveDupes -
 // This function either moves the dupes, erases them completely,
 // or fires the review dialog for the user to decide what to do
@@ -745,6 +724,8 @@ RemoveDupes.MessengerOverlay.reviewAndRemoveDupes = function (searchData) {
   if (searchData.useReviewDialog) {
     let dialogURI = "chrome://removedupes/content/removedupes-dialog.xhtml";
 
+    let originalFolderUris = searchData.originalsFolders ?
+      new Set([...searchData.originalsFolders].map((folder) => folder.URI)) : null;
     // open up a dialog in which the user sees all dupes we've found, and can decide which to delete
     window.openDialog(dialogURI, "removedupes", "chrome, resizable=yes",
       messenger, msgWindow, searchData.useCriteria,
@@ -799,7 +780,7 @@ RemoveDupes.MessengerOverlay.criteriaPopupMenuInit = function () {
     document.getElementById(`removedupesCriterionMenuItem_${criterion}`)
       .setAttribute("checked",
         (RemoveDupes.Prefs.get(`comparison_criteria.${criterion}`,
-          RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults[criterion]) ? "true" : "false"));
+          this.SearchCriterionUsageDefaults[criterion]) ? "true" : "false"));
   }
 };
 
@@ -831,6 +812,7 @@ RemoveDupes.MessengerOverlay.getActiveFolder = function (event) {
   // possibly for this function to return null
 };
 
+// Returns a JS Array
 RemoveDupes.MessengerOverlay.getSelectedFolderURIs = function (event) {
   // Notes:
   // 1. The _selected_ folders don't change if you right-click a different folder; that
@@ -860,37 +842,35 @@ RemoveDupes.MessengerOverlay.getActiveOrSelectedFolders = function (event) {
     if (!activeFolderIsSelected) {
       return [activeFolder];
     }
-  }return selectedFolderURIs.map((uri) => MailServices.folderLookup.getFolderForURL(uri));
+  }
+  return selectedFolderURIs.map((uri) => MailServices.folderLookup.getFolderForURL(uri));
 };
 
+// Note: The originalFolders this function sets is a JS Array (or null)
 RemoveDupes.MessengerOverlay.setOriginalsFolders = function (event) {
-
-  let selection = RemoveDupes.MessengerOverlay.getActiveOrSelectedFolders(event);
-  if (!selection || selection.length == 0) {
-    RemoveDupes.namedAlert(window, 'invalid_originals_folders');
+  delete this.originalsFolders;
+  let activeOrSelected = this.getActiveOrSelectedFolders(event);
+  if (activeOrSelected.length == 0) {
     return;
   }
-  this.originalsFolders = new Set();
-  this.originalsFolderUris = new Set();
-  let skipSpecialFolders = RemoveDupes.Prefs.get('skip_special_folders', 'true');
-  for (let folder of selection) {
-    if (skipSpecialFolders) {
-      if (!folder.canFileMessages ||
-        (folder.rootFolder == folder) ||
-        (!folder.canRename &&
-          (!(folder.flags & RemoveDupes.FolderFlags.Inbox)))) {
-        RemoveDupes.namedAlert(window, 'invalid_originals_folders');
-        continue;
-      }
-    }
-    this.originalsFolders.add(folder);
-    this.originalsFolderUris.add(folder.URI);
+  let skippingSpecialFolders = RemoveDupes.Prefs.get('skip_special_folders', 'true');
+  if (skippingSpecialFolders && activeOrSelected.find((folder) => this.isSkippedSpecialFolder(folder))) {
+    RemoveDupes.namedAlert(window, 'not_searching_special_folders');
+    // TODO: Use a distinct error message for reject special folders as originals folder
+    return;
   }
-  // TODO: How do I invalidate the selection?
 
-  // TODO: Think of what happens if the user first marks the originals folders,
-  // then changes the special folder skipping prefs; if we could clear the originals
-  // in that case somehow...
+  if (activeOrSelected.find((folder) => !(folder.canFileMessages && (folder.rootFolder != folder)))) {
+    RemoveDupes.namedAlert(window, 'invalid_originals_folders');
+    // TODO: Should we invalidate the selection?
+    return;
+  }
+  RemoveDupes.MessengerOverlay.originalsFolders = activeOrSelected;
+  // TODO: Should we invalidate the selection here?
+
+  // Note: It is possible for the user to first marks the originals folders,
+  // then changes the special folder skipping prefs; in that case, the special folders
+  // from among the originals _will_ be searched for originals.
 };
 
 
@@ -921,9 +901,10 @@ RemoveDupes.UpdateFolderDoneListener.prototype.OnStopRunningUrl = function (url,
 //---------------------------------------------------
 
 
-// a class for holding the search parameters (instead of
-// using a bunch of globals)
-//---------------------------------------------------
+// A class for holding the parameters of a duplicate message search
+//-----------------------------------------------------------------
+//
+// Note it is not initialized with any folders to search.
 RemoveDupes.DupeSearchData = function () {
   this.searchSubfolders = RemoveDupes.Prefs.get("search_subfolders");
 
@@ -998,7 +979,7 @@ RemoveDupes.DupeSearchData = function () {
   // we might have to trigger non-blocking IMAP folder updates;
   // each trigger will increase this, each folder update completing
   // will decrease this
-  this.remainingFolders = 0;
+  this.numFoldersRemainingToTraverse = 0;
 
   this.dupeSetsHashMap = { };
   this.folders = new Set();
@@ -1019,11 +1000,10 @@ RemoveDupes.DupeSearchData = function () {
   this.reportQuantum = RemoveDupes.Prefs.get("status_report_quantum", 1500);
 
   if (RemoveDupes.MessengerOverlay.originalsFolders) {
-    this.originalsFolderUris = RemoveDupes.MessengerOverlay.originalsFolderUris;
-    this.originalsFolders = RemoveDupes.MessengerOverlay.originalsFolders;
+    this.originalsFolders = new Set(RemoveDupes.MessengerOverlay.originalsFolders);
+    this.originalsFolderUris = new Set(RemoveDupes.MessengerOverlay.originalsFolders.map((folder) => folder.URI));
   } else {
-    // Just to avoid some JS warnings later about using a non-existent member
-    this.originalsFolderUris = null;
+    this.originalsFolders = null;
   }
 };
 
