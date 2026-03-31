@@ -27,7 +27,7 @@ RemoveDupes.MessengerOverlay.originalsFolderUris = null;
 
 RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages = function (event) {
   // document.getElementById('progress-panel').removeAttribute('collapsed');
-  window.statusFeedback.startMeteors();
+  RemoveDupes.StatusBar.statusFeedback(window)?.startMeteors();
   RemoveDupes.StatusBar.setNamedStatus(window, 'searching_for_dupes');
 
   // we'll need this for some calls involving UrlListeners
@@ -98,7 +98,7 @@ RemoveDupes.MessengerOverlay.beginSearchForDuplicateMessages = function (searchD
 RemoveDupes.MessengerOverlay.abortDupeSearch = function (searchData, labelStringName) {
   window.removeEventListener("keypress", searchData.keyPressEventListener, true);
   searchData = null;
-  window.statusFeedback.stopMeteors();
+  RemoveDupes.StatusBar.statusFeedback(window)?.stopMeteors();
   if (labelStringName) {
     RemoveDupes.StatusBar.setNamedStatus(window, labelStringName);
   } else {
@@ -282,7 +282,7 @@ RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2 = function 
     return true;
   };
 
-  window.statusFeedback?.stopMeteors?.();
+  RemoveDupes.StatusBar.statusFeedback(window)?.stopMeteors();
   if (isEmpty(searchData.dupeSetsHashMap)) {
     if (searchData.useReviewDialog) {
       // if the user wants a dialog to pop up for the dupes,

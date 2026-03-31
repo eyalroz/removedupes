@@ -81,7 +81,7 @@ ChromeUtils.defineLazyGetter(RemoveDupes, 'Prefs', () => {
 RemoveDupes.StatusBar = {};
 
 RemoveDupes.StatusBar.statusFeedback = function (window_) {
-  return window_.statusFeedback ?? window_.MessageStatusFeedback;
+  return window_.MsgStatusFeedback ?? window_.statusFeedback ?? window_.MessageStatusFeedback;
 };
 
 RemoveDupes.StatusBar.showProgress = function (window_, progressFraction) {
