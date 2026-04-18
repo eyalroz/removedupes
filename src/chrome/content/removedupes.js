@@ -75,8 +75,12 @@ RemoveDupes.MessengerOverlay.beginSearchForDuplicateMessages = function (searchD
 
   topFolders.forEach((folder) => this.addSearchFolders(folder, searchData));
 
-  if (searchData.folders.size == 0 &&
-      (!searchData.originalsFolders || searchData.originalsFolders.length == 0)) {
+  // Note: There may be some overlap between the search folders and the folders
+  // with originals. This may not be super-intuitive, but it is possible; and it
+  // is the way in which the user can get dupe sets containing only messages from
+  // the originals folders.
+
+  if (searchData.folders.size == 0) {
     this.abortDupeSearch(searchData);
     RemoveDupes.namedAlert(window, 'no_valid_folders_to_search');
     return;
@@ -136,26 +140,7 @@ RemoveDupes.MessengerOverlay.addSearchFolders = function (folder, searchData) {
     return;
   }
 
-  if (searchData.originalsFolders?.has(folder)) {
-    // We'll be searching this originals folder anyway; and at least for now - we're
-    // willing to delete some/all dupes even from the originals folders
-    this.traverseSearchFolderSubfolders(folder, searchData);
-    return;
-  }
-
   searchData.folders.add(folder);
-
-  // Q: Why do we not add search folders which are also originals folders?
-  // A: Because we have already saved those folders - as originals. No need
-  //    to keep them twice.
-  //
-  // Note that, since we don't traverse originals folders subfolders, we can
-  // never get into the situation of noticing a folder, which we have already
-  // added to the non-originals folders, actually having to be an originals
-  // folder. But if we did traverse originals subfolders - that would have
-  // been possible
-
-  // is this an IMAP folder?
 
   try {
     let listener = new RemoveDupes.UpdateFolderDoneListener(folder, searchData);
@@ -274,8 +259,8 @@ RemoveDupes.MessengerOverlay.refineDupeSets = function (searchData) {
 
   for (let hashValue in searchData.dupeSetsHashMap) {
     let unrefinedDupeSet = searchData.dupeSetsHashMap[hashValue]; // and it's an array of URIs
-
     let unrefinedDupeSetWithBodies = unrefinedDupeSet.map((dupeUri, idxInSet) => {
+      // console.log(`in get body loop, index ${idxInSet}, URI = ${dupeUri}`);
       if (searchData.userAborted) return {};
       this.reportRefinementProgress(searchData, 'getting_bodies', idxInSet, unrefinedDupeSet.length);
       return {
@@ -336,11 +321,15 @@ RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2 = function 
   }
   delete searchData.folders;
 
+  // console.log(`We have ${Object.keys(searchData.dupeSetsHashMap).length} unrefined dupe sets`);
+  // console.dir(searchData.dupeSetsHashMap);
   // some criteria are not used when messages are first collected, so the
   // hash map of dupe sets might be a 'rough' partition into dupe sets, which
   // still needs to be refined by additional comparison criteria
 
   RemoveDupes.MessengerOverlay.refineDupeSets(searchData);
+  // console.log(`We have ${Object.keys(searchData.dupeSetsHashMap).length} refined dupe sets`);
+  // console.dir(searchData.dupeSetsHashMap);
 
   if (searchData.userAborted) {
     RemoveDupes.MessengerOverlay.abortDupeSearch(searchData, 'search_aborted');
@@ -530,87 +519,119 @@ RemoveDupes.MessengerOverlay.populateDupeSetsHash = function* (searchData) {
   // entries will be sets of dupes (technically, arrays of dupes)
   // rather than URIs
   let messageUriHashmap = { };
+  let dupeSetsOfOriginals = { };
 
-  // This next bit of code is super-ugly, because I need the `yield`ing to happen from
-  // this function - can't yield from a function you're calling; isn't life great?
-  // isn't lack of threading fun?
-  //
-  // Anyway, we want to have a function which takes an iterator into a collection of
-  // folders, populating the hash with the messages in each folder - and run it twice,
-  // first for the originals folders (allowing the creation of new dupe sets), then
-  // for the search folders (allowing the creation of dupe sets if there are no originals,
-  // and allowing the addition of dupes to existing sets
+  // This function is rather ugly super-ugly, because it's a generator, and apparently we need the
+  // `yield`ing to happen from within this function's body - can't yield from another function we're
+  // calling. And that means it's difficult to factor some things out. Annoying!
 
-  const folders = searchData.originalsFolders ?
-    [...(searchData.originalsFolders || []), { stopFormingNewDupeSets: true }, ...searchData.folders] :
-    [...searchData.folders];
-  // the originals come first so as to form the dupe sets; then we use a sentry non-folder
-  // to indicate  that dupe set forming is over.
-  let formNewDupeSets = true;
-  for (const folder of folders)  {
-    if (Object.hasOwn(folder, 'stopFormingNewDupeSets')) {
-      formNewDupeSets = false;
-      continue;
+  let getMessageWithFailureReporting = (folder) => {
+    if (folder?.messages) { return folder.messages; }
+    let formatted = `${RemoveDupes.Strings.format('failed_getting_messages', [folder.name])}\n`;
+    console.error(formatted);
+    dump(formatted);
+    return false;
+  };
+
+  let possiblyReportProgress = (time) => {
+    if (time - searchData.lastStatusBarReport > searchData.reportQuantum) {
+      searchData.lastStatusBarReport = time;
+      RemoveDupes.StatusBar.setNamedStatus(window, 'hashed_x_messages', [searchData.messagesHashed]);
     }
-    if (!folder?.messages) {
-      let formatted = `${RemoveDupes.Strings.format('failed_getting_messages', [folder.name])}\n`;
-      console.error(formatted);
-      dump(formatted);
-      continue;
+  };
+  let messageLimitReached = () => searchData.limitNumberOfMessages && (searchData.messagesHashed >= searchData.maxMessages);
+  let needToYield = (time) => time - searchData.lastYield > searchData.yieldQuantum;
+
+  // This is the heart of the entire extension!
+  let processSingleMessage = (messageHdr, folder, inOriginalsFolder, inSearchFolder) => {
+    // Some local helper functions to avoid repetition
+    const formNewDupeSet = (dupeSets, hash, secondDupeURI) => {
+      dupeSets[hash] = [messageUriHashmap[hash], secondDupeURI];
+    };
+    const formDupeSetWithOriginalsDupeSet = (hash, lastDupeURI) => {
+      searchData.dupeSetsHashMap[hash] = [...dupeSetsOfOriginals[hash], lastDupeURI];
+      searchData.dupeSetsHashMap[hash].push(lastDupeURI);
+    };
+
+    // TODO: Consider checking the time & possibly yielding here
+    if (searchData.skipIMAPDeletedMessages && (messageHdr.flags & RemoveDupes.MessageStatusFlags.IMAP_DELETED)) {
+      // console.log(`skipping message ${messageHdr?.subject}`);
+      return;
     }
+    let messageHash = this.sillyHash(searchData, messageHdr, folder);
+    if (!messageHash) {
+      // console.log(`no hash for message ${messageHdr?.subject}`);
+      return;
+    }
+    let uri = folder.getUriForMsg(messageHdr);
 
-    for (const messageHdr of folder.messages) {
-      if ((searchData.skipIMAPDeletedMessages) &&
-          (messageHdr.flags & RemoveDupes.MessageStatusFlags.IMAP_DELETED)) {
-        // TODO: Consider checking the time elapsed & possibly yielding, even when
-        //  iterating IMAP-deleted messages
-        continue;
-      }
-
-      let messageHash = this.sillyHash(searchData, messageHdr, folder);
-      if (!messageHash) {
-        continue; // something about the message made us not be willing to compare it against other messages
-      }
-      let uri = folder.getUriForMsg(messageHdr);
-
-      if (messageHash in messageUriHashmap) {
+    if (!(messageHash in messageUriHashmap)) {
+      // Have not yet seen a message like this before
+      if (inOriginalsFolder) {
+        // console.log(`seeing message for the first time, remembering it: ${messageHdr?.subject}`);
+        messageUriHashmap[messageHash] = uri;
+      } // else console.log(`seeing message for the first time, ignoring it in non-originals folder: ${messageHdr?.subject}`);
+    } else {
+      // have already seen messages like this before
+      if (inSearchFolder) {
         if (messageHash in searchData.dupeSetsHashMap) {
-          // just add the current message's URI, no need to copy anything
-          //
+          // console.log(`adding message to existing (originals) dupe set: ${messageHdr?.subject}`);
           searchData.dupeSetsHashMap[messageHash].push(uri);
+        } else if (messageHash in dupeSetsOfOriginals) {
+          // console.log(`combining originals dupe set of size ` +
+          //   `${dupeSetsOfOriginals[messageHash].length} and message to ` +
+          //   `form a new dupe set: ${messageHdr?.subject}`);
+          formDupeSetWithOriginalsDupeSet(messageHash, uri);
+          searchData.totalOriginalDupeSets++;
         } else {
-          // the URI in messageUriHashmap[messageHash] has not been copied to
-          // the dupes hash since until now we did not know it was a dupe;
-          // copy it together with our current message's URI
-          // TODO: use [blah, blah] as the array constructor
-          searchData.dupeSetsHashMap[messageHash] = [messageUriHashmap[messageHash], uri];
+          // console.log(`forming a new dupe set: ${messageHdr?.subject}`);
+          formNewDupeSet(searchData.dupeSetsHashMap, messageHash, uri);
           searchData.totalOriginalDupeSets++;
         }
-        // Note: If we're in an originals folder, for which a search has not
-        // been requested, we have just added messages to dupe sets here here with
-        // no qualifications, later allowing it to potentially be deleted. We may
-        // want to consider "freezing" these messages in dupe sets so that they're
-        // never removed, or at least marking it as coming from the originals
-        // folders somehow
-      } else if (formNewDupeSets) {
-        messageUriHashmap[messageHash] = uri;
+      } else {
+        // This is not a search folder, so it must be an originals folder
+        if (messageHash in dupeSetsOfOriginals) {
+          // console.log(`adding message to existing originals dupe set: ${messageHdr?.subject}`);
+          dupeSetsOfOriginals[messageHash].push(uri);
+        } else {
+          // console.log(`forming a new originals dupe set: ${messageHdr?.subject}`);
+          formNewDupeSet(dupeSetsOfOriginals, messageHash, uri);
+          // Note we're not counting this one towards the dupe sets total - until it's 'adopted'
+          // by a search folder dupe
+        }
       }
+    }
+    searchData.messagesHashed++;
+  }; // processSingleMessage
 
-      searchData.messagesHashed++;
-      if (searchData.limitNumberOfMessages && (searchData.messagesHashed >= searchData.maxMessages)) {
-        break;
-      }
+  let allFolders = (() => {
+    if (!searchData.originalsFolders) { return searchData.folders; }
+    let originalsSearch =  searchData.originalsFolders.intersection(searchData.folders);
+    return [
+      ...searchData.originalsFolders.difference(originalsSearch),
+      ...originalsSearch,
+      ...searchData.folders.difference(originalsSearch)
+    ]; // This ordering ensures that no dupe sets are discarded due to the non-original being seen
+       // before the original; nor because a second non-search original is seen after a search original
+  })();
+  for (const folder of allFolders) {
+    let isOriginal = (!searchData?.originalsFolders) || searchData.originalsFolders.has(folder);
+    let isSearch = searchData.folders.has(folder);
+    // console.log(`populating with folder ${folder.name}: Originals? ${isOriginal} ; Search? ${isSearch}`);
+    for (const messageHdr of getMessageWithFailureReporting(folder)) {
+      processSingleMessage(messageHdr, folder, isOriginal, isSearch);
+      if (messageLimitReached()) { break; }
       let currentTime = (new Date()).getTime();
-      if (currentTime - searchData.lastStatusBarReport > searchData.reportQuantum) {
-        searchData.lastStatusBarReport = currentTime;
-        RemoveDupes.StatusBar.setNamedStatus(window, 'hashed_x_messages', [searchData.messagesHashed]);
-      }
+      possiblyReportProgress(currentTime);
       if (currentTime - searchData.lastYield > searchData.yieldQuantum) {
         searchData.lastYield = currentTime;
         yield undefined;
       }
     } // for messageHdr
+    if (messageLimitReached()) { break; }
   } // for folder
+
+  // console.log(`populateDupeSetsHash done`);
 };
 
 // messageBodyFromURI -
@@ -1001,7 +1022,6 @@ RemoveDupes.DupeSearchData = function () {
     this.originalsFolderUris = new Set(RemoveDupes.MessengerOverlay.originalsFolders.map((folder) => folder.URI));
   } else {
     this.originalsFolders = null;
-    this.originalsFolderUris = null;
   }
 };
 
