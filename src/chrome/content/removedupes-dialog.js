@@ -5,8 +5,10 @@ var msgWindow;
   // the 3-pane window which opened us
 var messenger;
   // msgWindow's messenger
-var dupeSetsHashMap;
-  // the sets of duplicate messages we're reviewing for deletion
+var dupeSets;
+  // the sets of duplicate messages we're reviewing for deletion; sets are represented
+  // by JS arrays, and are values of the properties of this object, with the common hash
+  // as the key of each such property
 var originalsFolderUris;
   // A set of the URIs of the folders containing the original
   // messages, if the search specified these
@@ -96,8 +98,8 @@ function flagsToString(flags) {
 // about the dupe message.
 function enrichDupeInfo() {
   let dupesKnownNotToHaveCommonAccount = false;
-  for (let hashValue in dupeSetsHashMap) {
-    dupeSetsHashMap[hashValue] = dupeSetsHashMap[hashValue].map(
+  for (let hashValue in dupeSets) {
+    dupeSets[hashValue] = dupeSets[hashValue].map(
       // eslint-disable-next-line no-loop-func
       (uri) => {
         let dmr = new DupeMessageRecord(uri);
@@ -118,11 +120,11 @@ function enrichDupeInfo() {
     if (!originalsFolderUris) {
       // if we don't have pre-set originals,
       // the default is to keep the first dupe in each set
-      dupeSetsHashMap[hashValue][0].toKeep = true;
+      dupeSets[hashValue][0].toKeep = true;
     }
-    totalNumberOfDupes += dupeSetsHashMap[hashValue].length;
+    totalNumberOfDupes += dupeSets[hashValue].length;
   }
-  numberOfDupeSets += Object.keys(dupeSetsHashMap).length;
+  numberOfDupeSets += Object.keys(dupeSets).length;
   return dupesKnownNotToHaveCommonAccount;
 }
 
@@ -150,7 +152,7 @@ function initDupeReviewDialog() {
   // XXX TO DO:
   // Do we need this argument?
   useCriteria            = window.arguments[2];
-  dupeSetsHashMap        = window.arguments[3];
+  dupeSets        = window.arguments[3];
   originalsFolderUris    = window.arguments[4];
   allowMD5IDSubstitutes  = window.arguments[5];
 
@@ -212,10 +214,10 @@ function initializeDuplicateSetsTree() {
     }
   }
 
-  for (let hashValue in dupeSetsHashMap) {
+  for (let hashValue in dupeSets) {
     if (originalsFolderUris) {
       // by default, dupes in the pre-set originals folders are kept
-      dupeSetsHashMap[hashValue][0].toKeep = true;
+      dupeSets[hashValue][0].toKeep = true;
     }
   }
 
@@ -279,8 +281,8 @@ function rebuildDuplicateSetsTree() {
 
   numberToKeep = 0;
 
-  for (let hashValue in dupeSetsHashMap) {
-    let dupeSet = dupeSetsHashMap[hashValue];
+  for (let hashValue in dupeSets) {
+    let dupeSet = dupeSets[hashValue];
 
     // Every XUL tree has a single treechildren element. The treechildren
     // for the global tree of the 'removedupes' dialog has a treeitem for every
@@ -342,7 +344,7 @@ function resetCheckboxValues() {
   let dupeSetTreeItem  = dupeSetsTreeChildren.firstChild;
   while (dupeSetTreeItem) {
     let hashValue = dupeSetTreeItem.getAttribute('commonHashValue');
-    let dupeSet = dupeSetsHashMap[hashValue];
+    let dupeSet = dupeSets[hashValue];
     let dupeInSetTreeItem = dupeSetTreeItem.firstChild.firstChild;
     while (dupeInSetTreeItem) {
       let indexInDupeSet = parseInt(dupeInSetTreeItem.getAttribute('indexInDupeSet'), 10);
@@ -470,7 +472,7 @@ function loadCurrentRowMessage() {
   let dupeSetHashValue = dupeSetTreeItem.getAttribute('commonHashValue');
   let dupeSetItem;
   try {
-    dupeSetItem = dupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
+    dupeSetItem = dupeSets[dupeSetHashValue][messageIndexInDupeSet];
   } catch (ex) {
     console.log(`Failed loading the currently-reviewed dupe message for display in the 3-pane window:\n${ex}`);
     return;
@@ -501,7 +503,7 @@ function toggleDeletionForCurrentRow() {
   let messageIndexInDupeSet = focusedTreeItem.getAttribute('indexInDupeSet');
   let dupeSetTreeItem = focusedTreeItem.parentNode.parentNode;
   let dupeSetHashValue = dupeSetTreeItem.getAttribute('commonHashValue');
-  let dupeSetItem = dupeSetsHashMap[dupeSetHashValue][messageIndexInDupeSet];
+  let dupeSetItem = dupeSets[dupeSetHashValue][messageIndexInDupeSet];
 
   if (dupeSetItem.toKeep) {
     dupeSetItem.toKeep = false;
@@ -518,7 +520,7 @@ function toggleDeletionForCurrentRow() {
 }
 
 function onCancel() {
-  dupeSetsHashMap = null;
+  dupeSets = null;
 }
 
 // Note: This function returns true if any messages were deleted and no
@@ -533,7 +535,7 @@ function onAccept() {
   let retVal;
 
   if (action == 'delete_permanently') {
-    retVal = RemoveDupes.Removal.deleteMessages(window, msgWindow, dupeSetsHashMap, HaveMessageRecords);
+    retVal = RemoveDupes.Removal.deleteMessages(window, msgWindow, dupeSets, HaveMessageRecords);
   } else {
     let moveTargetFolder = null;
     if (action == 'move_to_chosen_folder') {
@@ -553,16 +555,16 @@ function onAccept() {
       }
       moveTargetFolder = commonRootFolder.getFolderWithFlags(RemoveDupes.FolderFlags.Trash);
     }
-    retVal = RemoveDupes.Removal.moveMessages(window, msgWindow, dupeSetsHashMap, moveTargetFolder, HaveMessageRecords);
+    retVal = RemoveDupes.Removal.moveMessages(window, msgWindow, dupeSets, moveTargetFolder, HaveMessageRecords);
   }
   if (retVal == false) { return false; }
-  dupeSetsHashMap = null; // Is this necessary?
+  dupeSets = null; // Is this necessary?
   return true;
 }
 
 function markAllDupesForDeletion() {
-  for (let hashValue in dupeSetsHashMap) {
-    for (let dupe of dupeSetsHashMap[hashValue]) {
+  for (let hashValue in dupeSets) {
+    for (let dupe of dupeSets[hashValue]) {
       dupe.toKeep = false;
     }
   }
@@ -573,8 +575,8 @@ function markKeepOneInEveryDupeSet(keepFirst) {
   // we'll mark either the first of every dupe set for keeping,
   // or the last of every set, and mark the rest for deletion
 
-  for (let hashValue in dupeSetsHashMap) {
-    let dupeSet = dupeSetsHashMap[hashValue];
+  for (let hashValue in dupeSets) {
+    let dupeSet = dupeSets[hashValue];
     for (let dupe of dupeSet) {
       dupe.toKeep = false;
     }
@@ -585,8 +587,8 @@ function markKeepOneInEveryDupeSet(keepFirst) {
 }
 
 function markKeepPresetOriginals() {
-  for (let hashValue in dupeSetsHashMap) {
-    let dupeSet = dupeSetsHashMap[hashValue];
+  for (let hashValue in dupeSets) {
+    let dupeSet = dupeSets[hashValue];
     for (let dupe of dupeSet) {
       dupe.toKeep = originalsFolderUris.has(dupe.folderUri);
     }
@@ -596,8 +598,8 @@ function markKeepPresetOriginals() {
 
 
 function markNoDupesForDeletion() {
-  for (let hashValue in dupeSetsHashMap) {
-    for (let dupe of dupeSetsHashMap[hashValue]) {
+  for (let hashValue in dupeSets) {
+    for (let dupe of dupeSets[hashValue]) {
       dupe.toKeep = true;
     }
   }
@@ -684,8 +686,8 @@ function sortDupeSetsByField(field) {
   // TODO: see if you can't use the XUL tree's internal sorting mechanism; if we do that, we'll be able to
   // spare lots of tree-rebuilding
 
-  for (let hashValue in dupeSetsHashMap) {
-    dupeSetsHashMap[hashValue].sort(compareFunction);
+  for (let hashValue in dupeSets) {
+    dupeSets[hashValue].sort(compareFunction);
   }
 }
 

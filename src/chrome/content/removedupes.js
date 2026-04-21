@@ -257,8 +257,8 @@ RemoveDupes.MessengerOverlay.refineDupeSets = function (searchData) {
 
   if (!searchData.useCriteria.body) return;
 
-  for (let hashValue in searchData.dupeSetsHashMap) {
-    let unrefinedDupeSet = searchData.dupeSetsHashMap[hashValue]; // and it's an array of URIs
+  for (let hashValue in searchData.dupeSets) {
+    let unrefinedDupeSet = searchData.dupeSets[hashValue]; // and it's an array of URIs
     let unrefinedDupeSetWithBodies = unrefinedDupeSet.map((dupeUri, idxInSet) => {
       if (searchData.userAborted) return {};
       this.reportRefinementProgress(searchData, 'getting_bodies', idxInSet, unrefinedDupeSet.length);
@@ -291,9 +291,9 @@ RemoveDupes.MessengerOverlay.refineDupeSets = function (searchData) {
 
     let subsetIndex = 0;
     for (const refinedDupeSet of refinedDupeSets) {
-      searchData.dupeSetsHashMap[`${hashValue}|${subsetIndex++}`] = refinedDupeSet;
+      searchData.dupeSets[`${hashValue}|${subsetIndex++}`] = refinedDupeSet;
     }
-    delete searchData.dupeSetsHashMap[hashValue];
+    delete searchData.dupeSets[hashValue];
     searchData.setsRefined++;
   }
 };
@@ -332,7 +332,7 @@ RemoveDupes.MessengerOverlay.processMessagesInCollectedFoldersPhase2 = function 
   }
 
   RemoveDupes.StatusBar.statusFeedback(window)?.stopMeteors();
-  if (Object.keys(searchData.dupeSetsHashMap).length === 0) {
+  if (Object.keys(searchData.dupeSets).length === 0) {
     if (searchData.useReviewDialog) {
       // if the user wants a dialog to pop up for the dupes,
       // we can bother him/her with a message box for 'no dupes'
@@ -544,8 +544,8 @@ RemoveDupes.MessengerOverlay.populateDupeSetsHash = function* (searchData) {
       dupeSets[hash] = [messageUriHashmap[hash], secondDupeURI];
     };
     const formDupeSetWithOriginalsDupeSet = (hash, lastDupeURI) => {
-      searchData.dupeSetsHashMap[hash] = [...dupeSetsOfOriginals[hash], lastDupeURI];
-      searchData.dupeSetsHashMap[hash].push(lastDupeURI);
+      searchData.dupeSets[hash] = [...dupeSetsOfOriginals[hash], lastDupeURI];
+      searchData.dupeSets[hash].push(lastDupeURI);
     };
 
     // TODO: Consider checking the time & possibly yielding here
@@ -566,13 +566,13 @@ RemoveDupes.MessengerOverlay.populateDupeSetsHash = function* (searchData) {
     } else {
       // have already seen messages like this before
       if (inSearchFolder) {
-        if (messageHash in searchData.dupeSetsHashMap) {
-          searchData.dupeSetsHashMap[messageHash].push(uri);
+        if (messageHash in searchData.dupeSets) {
+          searchData.dupeSets[messageHash].push(uri);
         } else if (messageHash in dupeSetsOfOriginals) {
           formDupeSetWithOriginalsDupeSet(messageHash, uri);
           searchData.totalOriginalDupeSets++;
         } else {
-          formNewDupeSet(searchData.dupeSetsHashMap, messageHash, uri);
+          formNewDupeSet(searchData.dupeSets, messageHash, uri);
           searchData.totalOriginalDupeSets++;
         }
       } else {
@@ -729,17 +729,17 @@ RemoveDupes.MessengerOverlay.reviewAndRemoveDupes = function (searchData) {
     // open up a dialog in which the user sees all dupes we've found, and can decide which to delete
     window.openDialog(dialogURI, "removedupes", "chrome, resizable=yes",
       messenger, msgWindow, searchData.useCriteria,
-      searchData.dupeSetsHashMap, searchData.originalsFolderUris,
+      searchData.dupeSets, searchData.originalsFolderUris,
       searchData.allowMD5IDSubstitutes);
   } else {
     // We'll keep one message from each set - by the arbitrary order in which we found them
-    for (const messageHash in searchData.dupeSetsHashMap) {
-      searchData.dupeSetsHashMap[messageHash].shift();
+    for (const messageHash in searchData.dupeSets) {
+      searchData.dupeSets[messageHash].shift();
     }
     const DontHaveMessageRecords = false;
     let action = RemoveDupes.Prefs.get('default_action', null);
     if (action == 'delete_permanently') {
-      RemoveDupes.Removal.deleteMessages(window, msgWindow, searchData.dupeSetsHashMap, DontHaveMessageRecords);
+      RemoveDupes.Removal.deleteMessages(window, msgWindow, searchData.dupeSets, DontHaveMessageRecords);
     } else {
       let targetFolderURI = RemoveDupes.Prefs.get('default_target_folder', null);
       let targetFolder = (targetFolderURI ? MailUtils.getExistingFolder(targetFolderURI) : null) ??
@@ -758,7 +758,7 @@ RemoveDupes.MessengerOverlay.reviewAndRemoveDupes = function (searchData) {
       // without user confirmation or review; we're keeping the first dupe
       // in every sequence of dupes and deleting the rest
       RemoveDupes.Removal.moveMessages(
-        window, msgWindow, searchData.dupeSetsHashMap,
+        window, msgWindow, searchData.dupeSets,
         targetFolder, DontHaveMessageRecords);
     } // delete permanently?
   } // use the dialog?
@@ -981,7 +981,7 @@ RemoveDupes.DupeSearchData = function () {
   // will decrease this
   this.numFoldersRemainingToTraverse = 0;
 
-  this.dupeSetsHashMap = { };
+  this.dupeSets = { }; // The keys will be hash values, and the property values will be JS arrays
   this.folders = new Set();
 
   // these are used for reporting progress in the status bar
