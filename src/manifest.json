@@ -21,10 +21,7 @@
 		"pt-BR", "nl", "fr", "pl", "he-IL", "ru-RU", "da", "cs-CZ", "es-AR", "es-ES",
 		"is-IS", "sv-SE", "sl-SI"
 	],
-#expand		"version": "__VERSION__",
-#ifdef VERSION_NAME
-#expand	"version_name": "__VERSION_NAME__",
-#endif
+	"version": "__VERSION__",
 	"chrome_injectors": [
 		["messenger.xhtml",        "messenger.js"],
 		["about:3pane",            "3pane.js"],

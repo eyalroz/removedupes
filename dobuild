@@ -78,7 +78,6 @@ case "$(echo $BUILD_TYPE | tr [A-Z] [a-z])" in
 		;;
 	beta | b | "" )
 		VERSION="${VERSION}b${SUB_VERSION}"
-		PREPROCESSOR_PARAMS+=" -DIS_BETA_BUILD"
 		;;
 	rc | release-candidate | release_candidate)
 		VERSION="${VERSION}rc${SUB_VERSION}"
@@ -104,47 +103,31 @@ PREPROCESSOR_PARAMS+=" -DVERSION=$VERSION"
 #
 # to have your debugging code enabled
 
-if [ $# -ne 0 ]; then
-	PREPROCESSOR_PARAMS+=" -DDEBUG"
-	for def in "$@"; do
-		PREPROCESSOR_PARAMS="$PREPROCESSOR_PARAMS -DDEBUG_$def"
-	done
-else
-	PREPROCESSOR_PARAMS+=" --no-line-comments"
-fi
-
 BUILD_DIR="build/$TARGET"
 XPI_NAME="${SHORTNAME}_${VERSION}_${TARGET}.xpi"
 LINK_NAME="${SHORTNAME}_${TARGET}.xpi"
-BUILD_TOOLS_DIR="buildtools"
-export PERL5LIB="`pwd`/$BUILD_TOOLS_DIR"
 
 [[ -e "$BUILD_DIR" ]] && rm -r "$BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 
-# Our invocation of make-jars.pl doesn't literally make JAR files, it only preprocesses and copies.
-sed -r 's/#.*$//; /^\s*$/d' jar.mn > build/jar.mn || exit
-$BUILD_TOOLS_DIR/make-jars.pl -q -f flat -z zip -p "$BUILD_TOOLS_DIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < build/jar.mn || exit
-$BUILD_TOOLS_DIR/preprocessor.pl $PREPROCESSOR_PARAMS src/manifest.json > $BUILD_DIR/manifest.json
-# Difficult to use the XUL preprocessor with package.json, since npm and IDEs rely on it being well-formed, and JSON doesn't have #-comments
+sed -r "s/__VERSION__/${VERSION}/" src/manifest.json > $BUILD_DIR/manifest.json
 sed -r "s/__VERSION__/${VERSION}/" package.json > $BUILD_DIR/package.json
-rm -f installed-chrome.txt
-
+cp LICENSE $BUILD_DIR
+mkdir -p ${BUILD_DIR}/chrome
+cp -r src/chrome/content ${BUILD_DIR}/chrome/
+cp -r src/chrome/locale ${BUILD_DIR}/chrome/
+cp -r src/chrome/skin ${BUILD_DIR}/chrome/content/
 mkdir -p $BUILD_DIR/defaults/preferences
 cp src/defaults/preferences/${SHORTNAME}.js $BUILD_DIR/defaults/preferences
-mv ${SHORTNAME} $BUILD_DIR/chrome
-
-cp src/background.html src/background.js $BUILD_DIR/
+cp src/background.html src/background.js $BUILD_DIR
 mkdir -p $BUILD_DIR/api/WindowListener
 cp src/api/WindowListener/schema.json $BUILD_DIR/api/WindowListener
 cp src/api/WindowListener/implementation.js $BUILD_DIR/api/WindowListener
 
-cp LICENSE $BUILD_DIR
-
 cd $BUILD_DIR
 zip --quiet -r $XPI_NAME  \
 	chrome \
-	defaults/ \
+	defaults \
 	api \
 	background.html \
 	background.js \
