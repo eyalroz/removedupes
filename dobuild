@@ -2,8 +2,6 @@
 
 SHORTNAME="removedupes"
 TARGET="tbird" # We used to support multiple targets, but no longer
-PREPROCESSOR_PARAMS=" -DSHORTNAME=$SHORTNAME"
-PREPROCESSOR_PARAMS+=" -DMOZ_THUNDERBIRD"
 
 function die {
 	local error_message="$1"
@@ -121,15 +119,12 @@ LINK_NAME="${SHORTNAME}_${TARGET}.xpi"
 BUILD_TOOLS_DIR="buildtools"
 export PERL5LIB="`pwd`/$BUILD_TOOLS_DIR"
 
-if [[ ! -d "$BUILD_DIR" ]]; then
-	mkdir -p "$BUILD_DIR"
-else
-	rm -r "$BUILD_DIR"/*
-fi
+[[ -e "$BUILD_DIR" ]] && rm -r "$BUILD_DIR"
+mkdir -p "$BUILD_DIR"
 
-$BUILD_TOOLS_DIR/preprocessor.pl $PREPROCESSOR_PARAMS jar.mn > $BUILD_DIR/jar.mn
 # Our invocation of make-jars.pl doesn't literally make JAR files, it only preprocesses and copies.
-$BUILD_TOOLS_DIR/make-jars.pl -q -f flat -z zip -p "$BUILD_TOOLS_DIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < $BUILD_DIR/jar.mn || exit
+sed -r 's/#.*$//; /^\s*$/d' jar.mn > build/jar.mn || exit
+$BUILD_TOOLS_DIR/make-jars.pl -q -f flat -z zip -p "$BUILD_TOOLS_DIR/preprocessor.pl $PREPROCESSOR_PARAMS"  -s . -d . < build/jar.mn || exit
 $BUILD_TOOLS_DIR/preprocessor.pl $PREPROCESSOR_PARAMS src/manifest.json > $BUILD_DIR/manifest.json
 # Difficult to use the XUL preprocessor with package.json, since npm and IDEs rely on it being well-formed, and JSON doesn't have #-comments
 sed -r "s/__VERSION__/${VERSION}/" package.json > $BUILD_DIR/package.json
