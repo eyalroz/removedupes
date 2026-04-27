@@ -784,25 +784,6 @@ RemoveDupes.MessengerOverlay.criteriaPopupMenuInit = function () {
   }
 };
 
-// This function is only used if the gFolderTreeView object is available
-// (for now, in TBird 3.x and later but not in Seamonkey 2.1.x and earlier);
-// it replaces the callback for getting folder tree cell properties with
-// a function which also adds the property of being a removedupes originals
-// folder or not.
-
-RemoveDupes.MessengerOverlay.replaceGetCellProperties = function () {
-  if (typeof gFolderTreeView == 'undefined') return;
-  gFolderTreeView.preRDGetCellProperties = gFolderTreeView.getCellProperties;
-  gFolderTreeView.getCellProperties = function newGcp(aRow, aCol) {
-    let properties = gFolderTreeView.preRDGetCellProperties(aRow, aCol);
-    let row = gFolderTreeView._rowMap[aRow];
-    if (this.originalsFolderUris?.has(row._folder.URI)) {
-      properties += " isOriginalsFolder-true";
-    }
-    return properties;
-  };
-};
-
 RemoveDupes.MessengerOverlay.getActiveFolder = function (event) {
   const win = event?.target?.ownerGlobal;
   // ... but can't we use this code's "own" window instead?
@@ -1006,9 +987,3 @@ RemoveDupes.DupeSearchData = function () {
     this.originalsFolders = null;
   }
 };
-
-//---------------------------------------------------
-
-window.addEventListener("load", RemoveDupes.MessengerOverlay.replaceGetCellProperties, false);
-// this is not useful unless the event fires after all folders have
-// been created - which is not the case
