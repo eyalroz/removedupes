@@ -19,7 +19,7 @@ RemoveDupes.MessengerOverlay.SearchCriterionUsageDefaults = {
   body: false
 };
 
-// This is a Javascript Array
+// This is a Javascript Array of folders (not URIs).
 RemoveDupes.MessengerOverlay.originalsFolders = null;
 
 // searchAndRemoveDuplicateMessages -
@@ -31,6 +31,7 @@ RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages = function (event)
   RemoveDupes.StatusBar.setNamedStatus(window, 'searching_for_dupes');
   let searchData = new RemoveDupes.DupeSearchData();
   this.originalsFolders = null; // We've made use of the marking; and it only applies for one search
+  this.clearOriginalsFoldersMarking();
   if (typeof gFolderTreeView != 'undefined' && gFolderTreeView) {
     // TODO: Do we really need this next command with newer versions of Thunderbird?
     gFolderTreeView._tree.invalidate();
@@ -57,7 +58,7 @@ RemoveDupes.MessengerOverlay.isSkippedSpecialFolder = function (folder) {
 };
 
 RemoveDupes.MessengerOverlay.beginSearchForDuplicateMessages = function (searchData, event) {
-  let topFolders = RemoveDupes.MessengerOverlay.getActiveOrSelectedFolders(event);
+  let topFolders = RemoveDupes.MessengerOverlay.getActiveOrSelectedFoldersAndElements(event).folders;
   if (!(topFolders?.length > 0)) {
     this.abortDupeSearch(searchData, 'no_folders_selected');
     return;
@@ -784,17 +785,31 @@ RemoveDupes.MessengerOverlay.criteriaPopupMenuInit = function () {
   }
 };
 
-RemoveDupes.MessengerOverlay.getActiveFolder = function (event) {
+RemoveDupes.MessengerOverlay.getFolderTree = function () {
+  const tabMail = document.getElementById('tabmail');
+  if (tabMail?.currentTabInfo.mode.name != 'mail3PaneTab') { return null; }
+  return tabMail.currentAbout3Pane?.folderTree;
+};
+
+// Returns an object with two keys: element and folder
+RemoveDupes.MessengerOverlay.getActiveFolderAndTreeElement = function (event) {
+  let result = {};
   const win = event?.target?.ownerGlobal;
   // ... but can't we use this code's "own" window instead?
   const folderPaneContextMenu = win?.folderPaneContextMenu;
-  return folderPaneContextMenu?.activeFolder;
+  result.folder = folderPaneContextMenu?.activeFolder;
   // ...and note that there may be no active folder, i.e. it's quite
   // possibly for this function to return null
+  if (!result.folder) { return result; }
+  let folderTree = win?.document.getElementById("folderTree");
+  if (!folderTree) { return result; }
+  result.element = folderTree.querySelector(".context-menu-target");
+  return result;
 };
 
-// Returns a JS Array
-RemoveDupes.MessengerOverlay.getSelectedFolderURIs = function (event) {
+// Returns an object with two keys: elements and folders, with each value being a JS array
+RemoveDupes.MessengerOverlay.getSelectedFoldersAndTreeElements = function () {
+  let result = {};
   // Notes:
   // 1. The _selected_ folders don't change if you right-click a different folder; that
   //    one will just become the _active_ folder.
@@ -802,53 +817,67 @@ RemoveDupes.MessengerOverlay.getSelectedFolderURIs = function (event) {
   //    it's possible to get the folderTree via the event target; but - this doesn't
   //    work if we get here via the menubar.
 
-  let tabMail = document.getElementById('tabmail');
-  if (tabMail?.currentTabInfo.mode.name != 'mail3PaneTab') {
-    return null;
-  }
-  const selectionValues_ = tabMail.currentAbout3Pane?.folderTree?.selection?.values();
-  return [...selectionValues_].map((row) => row.uri);
+  let selection = this.getFolderTree()?.selection;
+  if (!selection) { return result; }
+  result.elements = [...selection];
+  result.folders = result.elements.map((row) => MailServices.folderLookup.getFolderForURL(row.uri));
+  return result;
 };
 
-RemoveDupes.MessengerOverlay.getActiveOrSelectedFolders = function (event) {
+RemoveDupes.MessengerOverlay.getActiveOrSelectedFoldersAndElements = function (event) {
   // We need to apply a bit of a complex logic, because we may be triggered by
   // a context menu in the folder tree; and that tree may have some folders
   // selected while another folder is "active" - the one the user right-clicked
   // for the context menu.
 
-  const activeFolder = this.getActiveFolder(event);
-  const selectedFolderURIs = this.getSelectedFolderURIs();
-  if (activeFolder) {
-    const activeFolderIsSelected = selectedFolderURIs.includes(activeFolder.URI);
-    if (!activeFolderIsSelected) {
-      return [activeFolder];
-    }
+  // TODO: Can we get the active folder without the event?
+  const active = this.getActiveFolderAndTreeElement(event);
+  const selected  = this.getSelectedFoldersAndTreeElements();
+  if (active.folder && !selected?.folders?.includes(active.folder)) {
+    return { folders: [active.folder], elements: [active.element] };
   }
-  return selectedFolderURIs.map((uri) => MailServices.folderLookup.getFolderForURL(uri));
+  return selected;
+};
+
+RemoveDupes.MessengerOverlay.clearOriginalsFoldersMarking = function () {
+  let folderTree = this.getFolderTree();
+  let allElements = folderTree.querySelectorAll('li[is="folder-tree-row"]');
+  // Note: These could be lots of folders. We could, in principle, limit ourselves to
+  // just those folders we had previously marked as originals; but - let's err on the
+  // side of caution for now.
+  allElements.forEach((e) => e?.classList?.remove('originals-folder'));
+};
+
+RemoveDupes.MessengerOverlay.markOriginalsFolders = function (foldersAndTreeElements) {
+  this.clearOriginalsFoldersMarking();
+  for (let e of foldersAndTreeElements.elements) { e?.classList?.add('originals-folder'); }
 };
 
 // Note: The originalFolders this function sets is a JS Array (or null)
 RemoveDupes.MessengerOverlay.setOriginalsFolders = function (event) {
   delete this.originalsFolders;
-  let activeOrSelected = this.getActiveOrSelectedFolders(event);
-  if (activeOrSelected.length == 0) {
+
+  let activeOrSelected = this.getActiveOrSelectedFoldersAndElements(event);
+  if (!activeOrSelected?.folders || activeOrSelected.folders.length == 0) {
     return;
   }
   let skippingSpecialFolders = RemoveDupes.Prefs.get('skip_special_folders', 'true');
-  if (skippingSpecialFolders && activeOrSelected.find((folder) => this.isSkippedSpecialFolder(folder))) {
+  if (skippingSpecialFolders && activeOrSelected.folders.find((folder) => this.isSkippedSpecialFolder(folder))) {
     RemoveDupes.namedAlert(window, 'not_searching_special_folders');
     // TODO: Use a distinct error message for reject special folders as originals folder
     return;
   }
 
-  if (activeOrSelected.find((folder) => !(folder.canFileMessages && (folder.rootFolder != folder)))) {
+  const folderIsInvalid = (folder) => !(folder.canFileMessages && (folder.rootFolder != folder));
+  if (activeOrSelected.folders.find(folderIsInvalid)) {
     RemoveDupes.namedAlert(window, 'invalid_originals_folders');
     // TODO: Should we invalidate the selection?
     return;
   }
-  RemoveDupes.MessengerOverlay.originalsFolders = activeOrSelected;
+  RemoveDupes.MessengerOverlay.originalsFolders = activeOrSelected.folders;
   // TODO: Should we invalidate the selection here?
 
+  RemoveDupes.MessengerOverlay.markOriginalsFolders(activeOrSelected);
   // Note: It is possible for the user to first marks the originals folders,
   // then changes the special folder skipping prefs; in that case, the special folders
   // from among the originals _will_ be searched for originals.
