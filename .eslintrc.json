@@ -75,6 +75,7 @@
         "exports": "only-multiline",
         "functions": "never"
     }],
+    "prefer-spread": ["off"],
     "func-names": ["off", "always"],
     "array-bracket-spacing": "off",
     "array-callback-return": "off",
