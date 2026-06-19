@@ -2,6 +2,7 @@ function injectOtherElements() {
    WL.injectElements(
     `
     <popup id="folderPaneContext">
+      <menuseparator id="removeDuplicatesContextMenuItemsSeparator" hidden="true"/>
       <menuitem id="removeDuplicatesContextMenuItemsRemove"
         label="&removedupes.remove_duplicates_menuitems.remove.label;"
         oncommand="window.top.RemoveDupes.MessengerOverlay.searchAndRemoveDuplicateMessages(event);" />
@@ -20,22 +21,37 @@ function injectOtherElements() {
   WL.injectCSS("chrome://removedupes/content/skin/classic/removedupes-messenger.css");
 }
 
-function unhideFolderContextMenuItems() {
-  const removeDupesFolderContextIds = [
-    "removeDuplicatesContextMenuItemsRemove",
-    "removeDuplicatesContextMenuItemsSetOriginals",
-  ];
+function getPreviousVisibleSibling(element) {
+  element = element?.previousElementSibling;
+  while (element) {
+    if (!(element.hasAttribute("hidden"))) {
+      return element;
+    }
+    element = element?.previousElementSibling;
+  }
+  return null;
+}
 
-  for (const id of removeDupesFolderContextIds) {
+function unhideFolderContextMenuItems() {
+  const itemIdsToUnhide = [
+    "removeDuplicatesContextMenuItemsRemove",
+    "removeDuplicatesContextMenuItemsSetOriginals"
+  ];
+  for (const id of itemIdsToUnhide) {
     document.getElementById(id)?.removeAttribute("hidden");
+  }
+  let separator = document.getElementById("removeDuplicatesContextMenuItemsSeparator");
+  let previousVisible = getPreviousVisibleSibling(separator);
+  if (previousVisible?.nodeName == "menuseparator") {
+    separator.setAttribute("hidden", "");
+  } else {
+    separator.removeAttribute("hidden");
   }
 }
 
 function onFolderPaneContextPopupShowing(event) {
   if (event.target?.id == "folderPaneContext") {
     unhideFolderContextMenuItems();
-    // TODO: Make sure that our two items are separated by a visible separator from the
-    // previous item
   }
 }
 
