@@ -187,6 +187,27 @@ RemoveDupes.Removal.moveMessagesFromFolder = function (msgWindow, sourceFolder, 
     MovingNotCopying, NoListener, msgWindow, AllowUndo);
 };
 
+RemoveDupes.Removal.deleteMessagesFromFolder = function (appWindow, msgWindow, removalMessageHdrs, folder, folderUri) {
+  try {
+    RemoveDupes.StatusBar.setNamedStatus(msgWindow, 'deleting_messages_from',
+      [removalMessageHdrs.length, folder.abbreviatedName]);
+
+    const DeletePermanently = true;
+    const DeleteStorage = true;
+    const NoListener = null;
+    const AllowUndo = true; // does this really work? I doubt it...
+    folder.deleteMessages(removalMessageHdrs, msgWindow,
+      DeletePermanently, DeleteStorage, NoListener, AllowUndo);
+    return true;
+  } catch (ex) {
+    appWindow.alert(RemoveDupes.Strings.getByName('failed_to_erase')); // todo: make this folder specific?
+    console.error(`Failed erasing ${removalMessageHdrs.length} messages from folder ${
+      folder.abbreviatedName}\n(${folderUri}):\n${ex}`);
+    RemoveDupes.StatusBar.setNamedStatus(msgWindow, 'failed_erasing_from_folder', [folder.abbreviatedName]);
+    return false;
+  }
+};
+
 RemoveDupes.Removal.deleteMessages = function (appWindow, msgWindow, messageSetsHashMap, haveMessageRecords)  {
   // note that messenger and msgWindow have to be defined! if we're running from the
   // overlay of the 3-pane window, then this is ensured; otherwise,
@@ -194,44 +215,26 @@ RemoveDupes.Removal.deleteMessages = function (appWindow, msgWindow, messageSets
   // and set a window-global variable of its own
 
   let messagesByFolder = this.arrangeMessagesByFolder(messageSetsHashMap, haveMessageRecords);
-
   let anyDeletionsPerformed = false; // if we abort right away, the dialog can stay open, so the "accept" is cancelled
-
   let needConfirmation = RemoveDupes.Prefs.get("confirm_permanent_deletion", true);
 
-  // TODO: iterate with field binding, e.g. for(const [key, { foo, bar }] of map) {
+// TODO: iterate with field binding, e.g. for(const [key, { foo, bar }] of map) {
   for (let folderUri in messagesByFolder) {
     let folder = messagesByFolder[folderUri].folder;
-    let folderMessageHdrs = messagesByFolder[folderUri].messageHeaders;
-    var numMessagesToDelete = folderMessageHdrs.length;
-    var confirmationRequestMessage = RemoveDupes.Strings.format('confirm_permanent_deletion_from_folder',
+    let numMessagesToDelete = folderMessageHdrs.length;
+    let confirmationRequestMessage = RemoveDupes.Strings.format('confirm_permanent_deletion_from_folder',
       [numMessagesToDelete, folder.abbreviatedName]);
     if (needConfirmation && !appWindow.confirm(confirmationRequestMessage)) {
       appWindow.alert(RemoveDupes.Strings.getByName('deletion_aborted'));
       break;
     }
-    try {
-      RemoveDupes.StatusBar.setNamedStatus(msgWindow, 'deleting_messages_from',
-        [folderMessageHdrs.length, folder.abbreviatedName]);
-      this.deleteMessagesFromFolder(msgWindow, folder, folderMessageHdrs);
-      anyDeletionsPerformed = true;
-    } catch (ex) {
-      appWindow.alert(RemoveDupes.Strings.getByName('failed_to_erase')); // todo: make this folder specific?
-      console.error(`Failed erasing ${folderMessageHdrs.length} messages from folder ${
-        folder.abbreviatedName}\n(${folderUri}):\n${ex}`);
-      RemoveDupes.StatusBar.setNamedStatus(msgWindow, 'failed_erasing_from_folder', [folder.abbreviatedName]);
-      break;
-    }
+    let folderMessageHdrs = messagesByFolder[folderUri].messageHeaders;
+    let deletionSucceeded = RemoveDupes.Removal.deleteMessagesFromFolder(
+      appWindow, msgWindow, folderMessageHdrs, folder, folderUri);
+    if (!deletionSucceeded) { break; }
+    anyDeletionsPerformed = true;
   }
   return anyDeletionsPerformed;
 };
 
-RemoveDupes.Removal.deleteMessagesFromFolder = function (msgWindow, folder, removalMessageHdrs) {
-  const DeletePermanently = true;
-  const DeleteStorage = true;
-  const NoListener = null;
-  const AllowUndo = true; // does this really work? I doubt it...
-  return folder.deleteMessages(removalMessageHdrs, msgWindow,
-    DeletePermanently, DeleteStorage, NoListener, AllowUndo);
-};
 
