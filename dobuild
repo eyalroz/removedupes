@@ -124,6 +124,10 @@ mkdir -p $BUILD_DIR/api/WindowListener
 cp src/api/WindowListener/schema.json $BUILD_DIR/api/WindowListener
 cp src/api/WindowListener/implementation.js $BUILD_DIR/api/WindowListener
 
+mkdir -p $BUILD_DIR/api/NotifyTools
+cp src/api/NotifyTools/schema.json $BUILD_DIR/api/NotifyTools
+cp src/api/NotifyTools/implementation.js $BUILD_DIR/api/NotifyTools
+
 cd $BUILD_DIR
 zip --quiet -r $XPI_NAME  \
 	chrome \

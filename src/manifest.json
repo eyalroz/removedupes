@@ -35,6 +35,22 @@
 				"paths": [["WindowListener"]],
 				"script": "api/WindowListener/implementation.js"
 			}
+    },
+    "NotifyTools": {
+      "schema": "api/NotifyTools/schema.json",
+      "parent": {
+        "scopes": ["addon_parent"],
+        "paths": [["NotifyTools"]],
+        "script": "api/NotifyTools/implementation.js",
+        "events": ["startup"]
+      }
+    }
+  },
+  "browser_action": {
+    "default_title": "Remove Duplicate Messages",
+    "default_icon": {
+      "32": "chrome/content/removedupes.png",
+      "16": "chrome/content/removedupes-button-16x16.png"
 		}
 	},
 	"background": {
