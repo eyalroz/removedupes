@@ -220,21 +220,18 @@ RemoveDupes.Removal.deleteMessages = function (appWindow, msgWindow, messageSets
 
 // TODO: iterate with field binding, e.g. for(const [key, { foo, bar }] of map) {
   for (let folderUri in messagesByFolder) {
-    let folder = messagesByFolder[folderUri].folder;
-    let numMessagesToDelete = folderMessageHdrs.length;
+    let { folder, messageHeaders } = messagesByFolder[folderUri];
+    let numMessagesToDelete = messageHeaders.length;
     let confirmationRequestMessage = RemoveDupes.Strings.format('confirm_permanent_deletion_from_folder',
       [numMessagesToDelete, folder.abbreviatedName]);
     if (needConfirmation && !appWindow.confirm(confirmationRequestMessage)) {
       appWindow.alert(RemoveDupes.Strings.getByName('deletion_aborted'));
       break;
     }
-    let folderMessageHdrs = messagesByFolder[folderUri].messageHeaders;
     let deletionSucceeded = RemoveDupes.Removal.deleteMessagesFromFolder(
-      appWindow, msgWindow, folderMessageHdrs, folder, folderUri);
+      appWindow, msgWindow, messageHeaders, folder, folderUri);
     if (!deletionSucceeded) { break; }
     anyDeletionsPerformed = true;
   }
   return anyDeletionsPerformed;
 };
-
-
