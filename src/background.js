@@ -66,4 +66,13 @@ function registerChromeInjectors(chromeInjectors) {
   registerDefaultPrefs();
   registerOptionsPage();
   messenger.WindowListener.startListening();
+
+  // Toolbar button triggers duplicate search via NotifyTools
+  browser.browserAction.onClicked.addListener((tab) => {
+    messenger.NotifyTools.notifyExperiment({
+      event: "searchAndRemoveDuplicateMessages",
+      tabId: tab?.id
+    });
+  });
+
 })();
