@@ -2,21 +2,22 @@
  * This file is provided by the addon-developer-support repository at
  * https://github.com/thundernest/addon-developer-support
  *
- * Version 1.65
+ * Version 1.66.1
  *
  * Authors (in alphabetical order by surname):
  *   John Bieling (john@thunderbird.net)
  *   Axel Grude (axel.grude@gmail.com)
+ *   Eyal Rozenberg (eyalroz1@gmx.com)
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-
 /*
+  1.66.1 Avoid logging the self-context
   1.66 add WL.context for all windows
-  1.65 force unsafe URL loading to enable compatibility after TB155 
+  1.65 force unsafe URL loading to enable compatibility after TB155
   1.64 removed dependencies on anything before Thunderbird 140
 */
 
@@ -27,7 +28,7 @@ var { ExtensionCommon } = ChromeUtils.importESModule(
 );
 var { ExtensionSupport } = ChromeUtils.importESModule("resource:///modules/ExtensionSupport.sys.mjs");
 
-var Services = globalThis.Services || 
+var Services = globalThis.Services ||
   ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 
 function getThunderbirdVersion() {
@@ -42,18 +43,124 @@ var WindowListener = class extends ExtensionCommon.ExtensionAPI {
     if (this.debug) console.log("WindowListener API: ", ...msg);
   }
 
-  /**
-   * Load a WindowListener-owned script from the extension package.
-   *
-   * Thunderbird 155 rejects jar: and file: URLs passed to loadSubScript() unless
-   * the caller explicitly opts in. loadSubScriptWithOptions() and the target
-   * option are available on Thunderbird 140; older versions ignore the new
-   * allowUnsafeURL option.
-   */
-  loadSubScript(url, target) {
-    return Services.scriptloader.loadSubScriptWithOptions(url, {
-      target,
-      allowUnsafeURL: true,
+  // Some tab/add-on-manager related functions
+  getTabMail(window) {
+    return window.document.getElementById("tabmail");
+  }
+
+  // returns the outer browser, not the nested browser of the add-on manager
+  // events must be attached to the outer browser
+  getAddonManagerFromTab(tab) {
+    if (tab.browser && tab.mode.name == "contentTab") {
+      let win = tab.browser.contentWindow;
+      if (win && win.location.href == "about:addons") {
+        return win;
+      }
+    }
+  }
+
+  getAddonManagerFromWindow(window) {
+    let tabMail = this.getTabMail(window);
+    for (let tab of tabMail.tabInfo) {
+      let managerWindow = this.getAddonManagerFromTab(tab);
+      if (managerWindow) {
+        return managerWindow;
+      }
+    }
+  }
+
+  async getAddonManagerFromWindowWaitForLoad(window) {
+    let { setTimeout } = Services.wm.getMostRecentWindow("mail:3pane");
+
+    let tabMail = this.getTabMail(window);
+    for (let tab of tabMail.tabInfo) {
+      if (tab.browser && tab.mode.name == "contentTab") {
+        // Instead of registering a load observer, wait until its loaded. Not nice,
+        // but gets aroud a lot of edge cases.
+        while(!tab.pageLoaded) {
+          await new Promise(r => setTimeout(r, 150));
+        }
+        let managerWindow = this.getAddonManagerFromTab(tab);
+        if (managerWindow) {
+          return managerWindow;
+        }
+      }
+    }
+  }
+
+  setupAddonManager(managerWindow, forceLoad = false) {
+    if (!managerWindow) return;
+    if (!(
+      managerWindow &&
+      managerWindow[this.uniqueRandomID] &&
+      managerWindow[this.uniqueRandomID].hasAddonManagerEventListeners
+    )) {
+      managerWindow.document.addEventListener("ViewChanged", this);
+      managerWindow.document.addEventListener("update", this);
+      managerWindow.document.addEventListener("view-loaded", this);
+      managerWindow[this.uniqueRandomID] = {};
+      managerWindow[this.uniqueRandomID].hasAddonManagerEventListeners = true;
+    }
+    if (forceLoad) this.handleEvent(managerWindow);
+  }
+
+  getMessenger(context) {
+    let apis = ["storage", "runtime", "extension", "i18n"];
+
+    function getStorage() {
+      let localstorage = null;
+      try {
+        localstorage = context.apiCan.findAPIPath("storage");
+        localstorage.local.get = (...args) =>
+          localstorage.local.callMethodInParentProcess("get", args);
+        localstorage.local.set = (...args) =>
+          localstorage.local.callMethodInParentProcess("set", args);
+        localstorage.local.remove = (...args) =>
+          localstorage.local.callMethodInParentProcess("remove", args);
+        localstorage.local.clear = (...args) =>
+          localstorage.local.callMethodInParentProcess("clear", args);
+      } catch (e) {
+        console.info("Storage permission is missing");
+      }
+      return localstorage;
+    }
+
+    let messenger = {};
+    for (let api of apis) {
+      switch (api) {
+        case "storage":
+          ChromeUtils.defineLazyGetter(messenger, "storage", () => getStorage());
+          break;
+
+        default:
+          ChromeUtils.defineLazyGetter(messenger, api, () =>
+            context.apiCan.findAPIPath(api)
+          );
+      }
+    }
+    return messenger;
+  }
+
+  error(msg) {
+    if (this.debug) console.error("WindowListener API: " + msg);
+  }
+
+  // async sleep function using Promise
+  async sleep(delay) {
+    let timer = Components.classes["@mozilla.org/timer;1"].createInstance(
+      Components.interfaces.nsITimer
+    );
+    return new Promise(function (resolve, reject) {
+      let event = {
+        notify: function (timer) {
+          resolve();
+        },
+      };
+      timer.initWithCallback(
+        event,
+        delay,
+        Components.interfaces.nsITimer.TYPE_ONE_SHOT
+      );
     });
   }
 
@@ -73,7 +180,6 @@ var WindowListener = class extends ExtensionCommon.ExtensionAPI {
           e.stopPropagation();
           let WL = {};
           WL.context = this.context;
-          self.log("[handleEvent (options)] context:", WL.context);
           WL.extension = this.extension;
           WL.messenger = this.getMessenger(this.context);
           let w = Services.wm.getMostRecentWindow("mail:3pane");
@@ -667,7 +773,7 @@ var WindowListener = class extends ExtensionCommon.ExtensionAPI {
                 insertBeforeElement.parentNode.insertBefore(elements[i], insertBeforeElement);
               } else if (elements[i].id && window.document.getElementById(elements[i].id)) {
                 // existing container match, dive into recursivly
-                if (debug) 
+                if (debug)
                   console.log(
                     elements[i].tagName +
                       "#" +
