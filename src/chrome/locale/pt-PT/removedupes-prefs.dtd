@@ -1,4 +1,4 @@
-<!ENTITY prefs_dialog_title "Remover mensagens duplicadas (Alternativo) - Definições">
+<!ENTITY prefs_dialog_title "Remover mensagens duplicadas - Definições">
 <!ENTITY guide-url "http://not.yet.written/">
 <!ENTITY message_comparison.tab_title "Comparação de Mensagens">
 <!ENTITY message_comparison.criteria_box.label "Elementos da mensagem utilizados como critério de comparação">
@@ -51,4 +51,4 @@
 <!ENTITY general_settings.search_subfolders.access_key "s">
 <!ENTITY general_settings.use_dialog_before_removal.access_key "c">
 <!ENTITY removedupes-preftree-label "Remover Duplicados">
-<!ENTITY removedupes-preftree-page-title "Remover Mensagens Duplicadas (Alternativo)">
+<!ENTITY removedupes-preftree-page-title "Remover Mensagens Duplicadas">
