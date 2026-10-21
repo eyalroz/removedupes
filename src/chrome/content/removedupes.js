@@ -729,7 +729,7 @@ RemoveDupes.MessengerOverlay.reviewAndRemoveDupes = function (searchData) {
       new Set([...searchData.originalsFolders].map((folder) => folder.URI)) : null;
     // open up a dialog in which the user sees all dupes we've found, and can decide which to delete
     window.openDialog(dialogURI, "removedupes", "chrome, resizable=yes",
-      messenger, msgWindow, searchData.useCriteria,
+      msgWindow, searchData.useCriteria,
       searchData.dupeSets, searchData.originalsFolderUris,
       searchData.allowMD5IDSubstitutes);
   } else {

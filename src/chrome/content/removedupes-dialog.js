@@ -148,14 +148,14 @@ function initDupeReviewDialog() {
   // so either we make the columns go away, or we show the non-compared
   // fields too by filling up the messageRecords...
 
-  messenger              = window.arguments[0];
-  msgWindow              = window.arguments[1];
+//  messenger              = window.arguments[0];
+  msgWindow              = window.arguments[0];
   // XXX TO DO:
   // Do we need this argument?
-  useCriteria            = window.arguments[2];
-  dupeSets        = window.arguments[3];
-  originalsFolderUris    = window.arguments[4];
-  allowMD5IDSubstitutes  = window.arguments[5];
+  useCriteria            = window.arguments[1];
+  dupeSets               = window.arguments[2];
+  originalsFolderUris    = window.arguments[3];
+  allowMD5IDSubstitutes  = window.arguments[4];
 
   // let's replace the URI's with all the necessary information
   // for the display dialog:
