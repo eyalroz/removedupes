@@ -1,5 +1,6 @@
 const { RemoveDupes } = ChromeUtils.importESModule("chrome://removedupes/content/removedupes-common.sys.mjs");
 const { MailUtils   } = ChromeUtils.importESModule("resource:///modules/MailUtils.sys.mjs");
+const { MailServices } = ChromeUtils.importESModule("resource:///modules/MailServices.sys.mjs");
 
 var msgWindow;
   // the 3-pane window which opened us
@@ -62,7 +63,7 @@ var formattingOptions = {
 // DupeMessageRecord - a self-describing class;
 // each dupe message in each dupe set will have a record built
 var DupeMessageRecord = function (messageUri) {
-  let messageHdr  = messenger.msgHdrFromURI(messageUri);
+  let messageHdr = MailServices.messageServiceFromURI(messageUri).messageURIToMsgHdr(messageUri);
 
   this.uri          = messageUri;
   this.folderName   = messageHdr.folder.abbreviatedName;
@@ -479,7 +480,7 @@ function loadCurrentRowMessage() {
   }
 
   let messageUri = dupeSetItem.uri;
-  let messageHeader = messenger.msgHdrFromURI(messageUri);
+  let messageHeader = MailServices.messageServiceFromURI(messageUri).messageURIToMsgHdr(messageUri);
 
   let mail3PaneWindow = Services.wm.getMostRecentWindow("mail:3pane");
   if (mail3PaneWindow) {
