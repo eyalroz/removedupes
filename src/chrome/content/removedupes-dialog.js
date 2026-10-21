@@ -1,5 +1,6 @@
 const { RemoveDupes } = ChromeUtils.importESModule("chrome://removedupes/content/removedupes-common.sys.mjs");
 const { MailUtils   } = ChromeUtils.importESModule("resource:///modules/MailUtils.sys.mjs");
+const { MailServices } = ChromeUtils.importESModule("resource:///modules/MailServices.sys.mjs");
 
 var msgWindow;
   // the 3-pane window which opened us
@@ -62,7 +63,7 @@ var formattingOptions = {
 // DupeMessageRecord - a self-describing class;
 // each dupe message in each dupe set will have a record built
 var DupeMessageRecord = function (messageUri) {
-  let messageHdr  = messenger.msgHdrFromURI(messageUri);
+  let messageHdr = MailServices.messageServiceFromURI(messageUri).messageURIToMsgHdr(messageUri);
 
   this.uri          = messageUri;
   this.folderName   = messageHdr.folder.abbreviatedName;
@@ -147,14 +148,14 @@ function initDupeReviewDialog() {
   // so either we make the columns go away, or we show the non-compared
   // fields too by filling up the messageRecords...
 
-  messenger              = window.arguments[0];
-  msgWindow              = window.arguments[1];
+//  messenger              = window.arguments[0];
+  msgWindow              = window.arguments[0];
   // XXX TO DO:
   // Do we need this argument?
-  useCriteria            = window.arguments[2];
-  dupeSets        = window.arguments[3];
-  originalsFolderUris    = window.arguments[4];
-  allowMD5IDSubstitutes  = window.arguments[5];
+  useCriteria            = window.arguments[1];
+  dupeSets               = window.arguments[2];
+  originalsFolderUris    = window.arguments[3];
+  allowMD5IDSubstitutes  = window.arguments[4];
 
   // let's replace the URI's with all the necessary information
   // for the display dialog:
@@ -479,7 +480,7 @@ function loadCurrentRowMessage() {
   }
 
   let messageUri = dupeSetItem.uri;
-  let messageHeader = messenger.msgHdrFromURI(messageUri);
+  let messageHeader = MailServices.messageServiceFromURI(messageUri).messageURIToMsgHdr(messageUri);
 
   let mail3PaneWindow = Services.wm.getMostRecentWindow("mail:3pane");
   if (mail3PaneWindow) {

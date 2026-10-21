@@ -4,8 +4,6 @@ RemoveDupes = {};
 const { MailServices } = ChromeUtils.importESModule("resource:///modules/MailServices.sys.mjs");
 const { XPCOMUtils   } = ChromeUtils.importESModule("resource://gre/modules/XPCOMUtils.sys.mjs");
 
-globalThis.messenger ??= Cc["@mozilla.org/messenger;1"].createInstance(Ci.nsIMessenger);
-
 // for some reason this is no longer defined recent Seamonkey trunk versions
 RemoveDupes.FolderFlags = {
   Inbox:   Ci.nsMsgFolderFlags?.Inbox   ?? 0x1000,
@@ -134,10 +132,10 @@ RemoveDupes.Removal.arrangeMessagesByFolder = function (messageSetsHashMap, have
       if (haveMessageRecords) {
         const dupeMessageRecord = messageInfo;
         if (dupeMessageRecord.toKeep) { continue; }
-        messageHeader = messenger.msgHdrFromURI(dupeMessageRecord.uri);
+        messageHeader = MailServices.messageServiceFromURI(dupeMessageRecord.uri).messageURIToMsgHdr(dupeMessageRecord.uri);
       } else {
         const messageUri = messageInfo;
-        messageHeader = messenger.msgHdrFromURI(messageUri);
+        messageHeader = MailServices.messageServiceFromURI(messageUri).messageURIToMsgHdr(messageUri);
       }
 
       let folderEntry = messagesByFolder[folderUri];
