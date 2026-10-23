@@ -58,7 +58,7 @@ RemoveDupes.MessengerOverlay.isSkippedSpecialFolder = function (folder) {
 };
 
 RemoveDupes.MessengerOverlay.beginSearchForDuplicateMessages = function (searchData, event) {
-  let topFolders = RemoveDupes.MessengerOverlay.getActiveOrSelectedFoldersAndElements(event).folders;
+  let topFolders = RemoveDupes.MessengerOverlay.getActiveOrSelectedFolders();
   if (!(topFolders?.length > 0)) {
     this.abortDupeSearch(searchData, 'no_folders_selected');
     return;
@@ -785,62 +785,61 @@ RemoveDupes.MessengerOverlay.criteriaPopupMenuInit = function () {
   }
 };
 
-RemoveDupes.MessengerOverlay.getFolderTree = function () {
+RemoveDupes.MessengerOverlay.getAbout3Pane = function () {
   const tabMail = document.getElementById('tabmail');
   if (tabMail?.currentTabInfo.mode.name != 'mail3PaneTab') { return null; }
-  return tabMail.currentAbout3Pane?.folderTree;
+  return tabMail.currentAbout3Pane;
 };
 
-// Returns an object with two keys: element and folder
-RemoveDupes.MessengerOverlay.getActiveFolderAndTreeElement = function (event) {
-  let result = {};
-  const win = event?.target?.ownerGlobal;
-  // ... but can't we use this code's "own" window instead?
-  const folderPaneContextMenu = win?.folderPaneContextMenu;
-  result.folder = folderPaneContextMenu?.activeFolder;
-  // ...and note that there may be no active folder, i.e. it's quite
-  // possibly for this function to return null
-  if (!result.folder) { return result; }
-  let folderTree = win?.document.getElementById("folderTree");
-  if (!folderTree) { return result; }
-  result.element = folderTree.querySelector(".context-menu-target");
-  return result;
+// Returns an object with two keys: A folder and an element (or null on failure)
+RemoveDupes.MessengerOverlay.getActiveFolderAndTreeElement = function () {
+  let about3Pane = RemoveDupes.MessengerOverlay.getAbout3Pane();
+  let folder = about3Pane?.folderPaneContextMenu?.activeFolder;
+  if (!folder) { return null; }
+  // Note there may be no active folder
+  let element = about3Pane.folderPane.getRowForFolder(folder);
+  // Note: we ignore folder pane modes; if multiple modes are actively, weird things might happen here
+  return { folder, element };
 };
 
-// Returns an object with two keys: elements and folders, with each value being a JS array
+// Returns an object with two keys: An array of folders, and an array of their corresponding elements in the folder tree;
+// returns null on failure
 RemoveDupes.MessengerOverlay.getSelectedFoldersAndTreeElements = function () {
-  let result = {};
-  // Notes:
-  // 1. The _selected_ folders don't change if you right-click a different folder; that
-  //    one will just become the _active_ folder.
-  // 2. When we get here via a context menu click for a folder tree folder,
-  //    it's possible to get the folderTree via the event target; but - this doesn't
-  //    work if we get here via the menubar.
-
-  let selection = this.getFolderTree()?.selection;
-  if (!selection) { return result; }
-  result.elements = [...selection];
-  result.folders = result.elements.map((row) => MailServices.folderLookup.getFolderForURL(row.uri));
-  return result;
+  // Note: The _selected_ folders don't change if you right-click a different folder; that
+  //       one will just become the _active_ folder.
+  let selection = this.getAbout3Pane()?.folderTree?.selection;
+  if (!selection) { return null; }
+  let elements = [...(selection.values?.() ?? selection)];
+  let folders = elements.map((row) => MailServices.folderLookup.getFolderForURL(row.uri));
+  return { folders, elements };
 };
 
-RemoveDupes.MessengerOverlay.getActiveOrSelectedFoldersAndElements = function (event) {
-  // We need to apply a bit of a complex logic, because we may be triggered by
-  // a context menu in the folder tree; and that tree may have some folders
-  // selected while another folder is "active" - the one the user right-clicked
-  // for the context menu.
+// Returns an Array of folders
+RemoveDupes.MessengerOverlay.getActiveOrSelectedFolders = function () {
+  // Not we may be triggered through a context menu in the folder tree; and that tree
+  // may have some folders selected while another folder is "active" - the one the user
+  // right-clicked for the context menu. The logic of which folders to return in this
+  // case is non-trivial. We choose the implicit logic with which TB filters the
+  // context menu
 
-  // TODO: Can we get the active folder without the event?
-  const active = this.getActiveFolderAndTreeElement(event);
-  const selected  = this.getSelectedFoldersAndTreeElements();
-  if (active.folder && !selected?.folders?.includes(active.folder)) {
-    return { folders: [active.folder], elements: [active.element] };
-  }
-  return selected;
+  let selected  = this.getSelectedFoldersAndTreeElements()?.folders;
+  let active =  RemoveDupes.MessengerOverlay.getAbout3Pane()?.folderPaneContextMenu?.activeFolder;
+  if (!active || selected?.includes(active)) { return selected; }
+  return [ active ];
+};
+
+// Returns an object with two keys: An array of folders, and an array of their corresponding elements in the folder tree
+RemoveDupes.MessengerOverlay.getActiveOrSelectedFoldersAndTreeElements = function () {
+  // See comment in getActiveOrSelectedFolders()
+
+  let selected = this.getSelectedFoldersAndTreeElements();
+  const active = this.getActiveFolderAndTreeElement();
+  if (!active || selected?.folders?.includes(active.folder)) { return selected; }
+  return { folders: [ active.folder ], elements: [ active.element ] };
 };
 
 RemoveDupes.MessengerOverlay.clearOriginalsFoldersMarking = function () {
-  let folderTree = this.getFolderTree();
+  let folderTree = this.getAbout3Pane().folderTree;
   let allElements = folderTree.querySelectorAll('li[is="folder-tree-row"]');
   // Note: These could be lots of folders. We could, in principle, limit ourselves to
   // just those folders we had previously marked as originals; but - let's err on the
@@ -857,7 +856,7 @@ RemoveDupes.MessengerOverlay.markOriginalsFolders = function (foldersAndTreeElem
 RemoveDupes.MessengerOverlay.setOriginalsFolders = function (event) {
   delete this.originalsFolders;
 
-  let activeOrSelected = this.getActiveOrSelectedFoldersAndElements(event);
+  let activeOrSelected = this.getActiveOrSelectedFoldersAndTreeElements(event);
   if (!activeOrSelected?.folders || activeOrSelected.folders.length == 0) {
     return;
   }
