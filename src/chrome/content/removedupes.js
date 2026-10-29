@@ -72,6 +72,7 @@ RemoveDupes.MessengerOverlay.beginSearchForDuplicateMessages = function (searchD
     // TODO: Consider separating the error message between the case of _all_ top folders
     // being skipped-special and the case of some-skipped-and-some-not.
     this.abortDupeSearch(searchData, 'not_searching_special_folders');
+    return;
   }
 
   topFolders.forEach((folder) => this.addSearchFolders(folder, searchData));
