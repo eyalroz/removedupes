@@ -528,11 +528,16 @@ RemoveDupes.MessengerOverlay.populateDupeSetsHash = function* (searchData) {
   // calling. And that means it's difficult to factor some things out. Annoying!
 
   let getMessageWithFailureReporting = (folder) => {
-    if (folder?.messages) { return folder.messages; }
+    try {
+      let messages = folder?.messages;
+      if (messages) { return messages; }
+    } catch (ex) {
+      // nsIMsgFolder.messages throws when the folder's database cannot be opened
+    }
     let formatted = `${RemoveDupes.Strings.format('failed_getting_messages', [folder.name])}\n`;
     console.error(formatted);
     dump(formatted);
-    return false;
+    return []; // skip this folder, but keep searching the others
   };
 
   let possiblyReportProgress = (time) => {
