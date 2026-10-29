@@ -731,6 +731,7 @@ RemoveDupes.MessengerOverlay.groupArrayBy = function (arr, property) {
 RemoveDupes.MessengerOverlay.reviewAndRemoveDupes = function (searchData) {
   if (searchData.userAborted) {
     this.abortDupeSearch(searchData, 'search_aborted');
+    return;
   }
   window.removeEventListener("keypress", searchData.keyPressEventListener, true);
 
