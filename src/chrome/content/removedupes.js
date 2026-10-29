@@ -529,15 +529,28 @@ RemoveDupes.MessengerOverlay.populateDupeSetsHash = function* (searchData) {
   // calling. And that means it's difficult to factor some things out. Annoying!
 
   let getMessageWithFailureReporting = (folder) => {
+    let messages = null;
     try {
-      let messages = folder?.messages;
-      if (messages) { return messages; }
+      messages = folder?.messages;
     } catch (ex) {
-      // nsIMsgFolder.messages throws when the folder's database cannot be opened
+      // nsIMsgFolder.messages throws when the folder's message database can't be opened
     }
-    let formatted = `${RemoveDupes.Strings.format('failed_getting_messages', [folder.name])}\n`;
-    console.error(formatted);
-    dump(formatted);
+    if (messages) { return messages; }
+
+    // No message enumerator for this folder. A folder that merely holds
+    // subfolders (an empty container with no messages of its own) legitimately
+    // has no message database - that is not a failure worth reporting. Only flag
+    // folders whose cached count says they ought to contain messages, so that a
+    // genuinely broken database on a non-empty folder is still surfaced.
+    // getTotalMessages(false) reads the cached count without opening the DB and
+    // returns -1 when unknown, 0 when empty, or a positive count.
+    let total = -1;
+    try { total = folder.getTotalMessages(false); } catch (countEx) { }
+    if (total > 0) {
+      let formatted = `${RemoveDupes.Strings.format('failed_getting_messages', [folder.name])}\n`;
+      console.error(formatted);
+      dump(formatted);
+    }
     return []; // skip this folder, but keep searching the others
   };
 
