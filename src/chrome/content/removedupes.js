@@ -149,7 +149,9 @@ RemoveDupes.MessengerOverlay.addSearchFolders = function (folder, searchData) {
     // no traversal of children - the listener will take care of that in due time
     return;
   } catch (ex) {
-    searchData.numFoldersRemainingToTraverse--;
+    // Not an IMAP folder, or an IMAP folder which can't be selected now (e.g. offline);
+    // the listener will not be called, so fall through. Note: Do not decrement the
+    // pending-traversal counter here - traverseSearchFolderSubfolders() does that, once.
   }
 
   // Is this a locally-stored folder with its DB out-of-date?
@@ -161,12 +163,16 @@ RemoveDupes.MessengerOverlay.addSearchFolders = function (folder, searchData) {
       localFolder.getDatabaseWOReparse();
     } catch (ex) {
       let listener = new RemoveDupes.UpdateFolderDoneListener(folder, searchData);
-      folder.parseFolder(msgWindow, listener);
+      try {
+        folder.parseFolder(msgWindow, listener);
+      } catch (parseEx) {
+        // When indexing fails, parseFolder() still notifies the listener (asynchronously)
+      }
       // no traversal of children - the listener will take care of that in due time
       return;
     }
   } catch (ex) {
-    searchData.numFoldersRemainingToTraverse--;
+    // Not a local folder (e.g. an offline IMAP folder); fall through, without decrementing
   }
 
   // We assume at this point the folder is locally-stored and its message db is up-to-date,
