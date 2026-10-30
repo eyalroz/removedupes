@@ -107,6 +107,18 @@ RemoveDupes.MessengerOverlay.abortDupeSearch = function (searchData, labelString
   }
 };
 
+RemoveDupes.MessengerOverlay.dupeSearchShouldSkip = function (folder, searchData) {
+  // Note: We assume that descendent folders of special folders, even if not explicitly marked special,
+  // _do_ share the need to skip their antecedents
+  // Q: Why skip virtual folders?
+  // A: Because they expose what are essentially copies, duplicates, of messages which exists elsewhere.
+  //    While it's true that one could search for dupes in _just_ a search folder, the danger of this
+  //    causing data loss is rather high, so we avoid it.
+  // TODO: Should we really avoid searching News folders? I wonder
+  return (searchData.skipSpecialFolders && this.isSkippedSpecialFolder(folder)) ||
+    (folder.flags & RemoveDupes.FolderFlags.Virtual) ||  (folder.URI.substring(0, 7) == 'news://');
+};
+
 // addSearchFolders -
 // supposed to recursively traverse the subfolders of a
 // given folder, marking them for inclusion in the dupe search;
@@ -116,24 +128,7 @@ RemoveDupes.MessengerOverlay.abortDupeSearch = function (searchData, labelString
 // called either synchronously or asynchronously to complete its work
 
 RemoveDupes.MessengerOverlay.addSearchFolders = function (folder, searchData) {
-  if (searchData.skipSpecialFolders && this.isSkippedSpecialFolder(folder)) {
-    return; // skipping this folder
-    // Note: We assume that descendent folders of special folders, even if not explicitly marked special,
-    // _do_ share the need to skip their antecedents
-  }
-  if (folder.flags & RemoveDupes.FolderFlags.Virtual) {
-    return; // skipping this folder
-    // Q: Why skip virtual folders?
-    // A: Because they expose what are essentially copies, duplicates, of messages which exists elsewhere.
-    //    While it's true that one could search for dupes in _just_ a search folder, the danger of this
-    //    causing data loss is rather high, so we avoid it.
-  }
-
-  if (folder.URI.substring(0, 7) == 'news://') {
-    return;
-    // TODO: Should we really avoid searching News folders? I wonder
-  }
-
+  if (this.dupeSearchShouldSkip(folder, searchData)) { return; }
   searchData.numFoldersRemainingToTraverse++; // ... because we'll traverse this folder
 
   if (folder.isServer) {
