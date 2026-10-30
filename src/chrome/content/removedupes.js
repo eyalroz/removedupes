@@ -108,13 +108,13 @@ RemoveDupes.MessengerOverlay.abortDupeSearch = function (searchData, labelString
 };
 
 RemoveDupes.MessengerOverlay.dupeSearchShouldSkip = function (folder, searchData) {
-  // Note: We assume that descendent folders of special folders, even if not explicitly marked special,
-  // _do_ share the need to skip their antecedents
-  // Q: Why skip virtual folders?
-  // A: Because they expose what are essentially copies, duplicates, of messages which exists elsewhere.
-  //    While it's true that one could search for dupes in _just_ a search folder, the danger of this
-  //    causing data loss is rather high, so we avoid it.
-  // TODO: Should we really avoid searching News folders? I wonder
+  // Notes:
+  // * We assume that descendent folders of special folders, even if not explicitly marked special,
+  //   _do_ share the need to skip their antecedents
+  // * We skip virtual folders, because they expose what are essentially copies, duplicates, of
+  //   messages which exists elsewhere. While it's true that one could search for dupes in _just_
+  //   a search folder, the danger of this causing data loss is rather high.
+  // * NNTP message deletion is not the same as email deletion and we're not getting into that
   return (searchData.skipSpecialFolders && this.isSkippedSpecialFolder(folder)) ||
     (folder.flags & RemoveDupes.FolderFlags.Virtual) ||  (folder.URI.substring(0, 7) == 'news://');
 };
@@ -138,36 +138,41 @@ RemoveDupes.MessengerOverlay.addSearchFolders = function (folder, searchData) {
 
   searchData.folders.add(folder);
 
-  try {
+  if (folder.URI.substring(0, 7) == 'imap://') {
     let listener = new RemoveDupes.UpdateFolderDoneListener(folder, searchData);
-    MailServices.imap.liteSelectFolder(folder, listener, msgWindow);
-    // no traversal of children - the listener will take care of that in due time
+    try {
+      MailServices.imap.liteSelectFolder(folder, listener, msgWindow);
+      // no traversal of children - the listener will take care of that in due time
+    } catch (ex) {
+      searchData.numFoldersRemainingToTraverse--;
+    }
     return;
-  } catch (ex) {
-    searchData.numFoldersRemainingToTraverse--;
   }
 
-  // Is this a locally-stored folder with its DB out-of-date?
-
   try {
-    // TODO: Do we actually need this QI?
     let localFolder = folder.QueryInterface(Ci.nsIMsgLocalMailFolder);
+    // Is this a locally-stored folder with its DB out-of-date?
     try {
       localFolder.getDatabaseWOReparse();
     } catch (ex) {
+      // ok, let's go the reparse route then - at the price of asynchronicity
       let listener = new RemoveDupes.UpdateFolderDoneListener(folder, searchData);
       try {
         folder.parseFolder(msgWindow, listener);
-      } catch (parseEx) { }
+      } catch (parseEx) {
+        searchData.numFoldersRemainingToTraverse--;
+      }
       // no traversal of children - the listener will take care of that in due time
       return;
     }
   } catch (ex) {
-    searchData.numFoldersRemainingToTraverse--;
+    // Not a local folder. We could just give up; and perhaps we can't even ever get
+    // here, but - let's try anyway
   }
 
-  // We assume at this point the folder is locally-stored and its message db is up-to-date,
-  // so we can traverse its subfolders without any more preparation
+  // At this point, the folder either local and with an up-to-date message DB,
+  // or of a kind we are unfamiliar with - in which case we'll try the following
+  // as a "hail-mary" action, having nothing better we can do
 
   this.traverseSearchFolderSubfolders(folder, searchData);
 };
