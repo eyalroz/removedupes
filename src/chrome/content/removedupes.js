@@ -161,7 +161,9 @@ RemoveDupes.MessengerOverlay.addSearchFolders = function (folder, searchData) {
       localFolder.getDatabaseWOReparse();
     } catch (ex) {
       let listener = new RemoveDupes.UpdateFolderDoneListener(folder, searchData);
-      folder.parseFolder(msgWindow, listener);
+      try {
+        folder.parseFolder(msgWindow, listener);
+      } catch (parseEx) { }
       // no traversal of children - the listener will take care of that in due time
       return;
     }
